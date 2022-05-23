@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package pando.v1; 
-option go_package = "github.com/fox-one/pando-protos/pando/v1";
+option go_package = "github.com/fox-one/pando-protos/pando/v1;pando";
 
 message Asset {
   string asset_id = 1;

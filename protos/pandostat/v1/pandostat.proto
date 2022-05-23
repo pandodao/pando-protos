@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package pandostat.v1; 
-option go_package = "github.com/fox-one/pando-protos/pandostat/v1";
+option go_package = "github.com/fox-one/pando-protos/pandostat/v1;pandostat";
 
 // import "google/protobuf/timestamp.proto";
 import "pando/v1/pando.proto";
