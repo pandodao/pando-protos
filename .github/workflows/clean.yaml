@@ -1,0 +1,17 @@
+name: delete-branches
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'main'
+
+jobs:
+  build-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Delete branches
+        run: |
+          git push origin :${GITHUB_HEAD_REF}_gen-go
+          git push origin :${GITHUB_HEAD_REF}_gen-ts

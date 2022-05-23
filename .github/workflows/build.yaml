@@ -1,0 +1,69 @@
+name: buf-build-commit
+on:
+  push:
+    # branches:
+    #   - 'master'
+    branches-ignore:
+      - 'gen-go'
+      - 'gen-ts'
+      - '**_gen-go'
+      - '**_gen-ts'
+
+env:
+  COMMIT_USER_NAME: 'github-actions[bot]'
+  COMMIT_USER_EMAIL: 'github-actions[bot]@users.noreply.github.com'
+
+jobs:
+  build-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: '1.4.0'
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          version: '3.9.1'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.18'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 17
+      - name: Install Deps
+        run: |
+          make gen-go-cmds
+          make gen-ts-cmds
+      - name: Make
+        run: make
+      - name: Set environment for branch
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/main' ]]; then
+              echo "PUBLISH_GO_BRANCH=gen-go" >> "$GITHUB_ENV"
+              echo "PUBLISH_TS_BRANCH=gen-ts" >> "$GITHUB_ENV"
+          else
+              echo "PUBLISH_GO_BRANCH=${GITHUB_REF#refs/heads/}_gen-go" >> "$GITHUB_ENV"
+              echo "PUBLISH_TS_BRANCH=${GITHUB_REF#refs/heads/}_gen-ts" >> "$GITHUB_ENV"
+          fi
+      - name: Publish Go Files
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          user_name: ${{ env.COMMIT_USER_NAME }}
+          user_email:  ${{ env.COMMIT_USER_EMAIL }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          disable_nojekyll: true
+          commit_message: ${{ github.event.head_commit.message }}
+          publish_branch: ${{ env.PUBLISH_GO_BRANCH }}
+          publish_dir: ./gen/go
+      - name: Publish TS Files
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          user_name: ${{ env.COMMIT_USER_NAME }}
+          user_email:  ${{ env.COMMIT_USER_EMAIL }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          disable_nojekyll: true
+          commit_message: ${{ github.event.head_commit.message }}
+          publish_branch: ${{ env.PUBLISH_TS_BRANCH }}
+          publish_dir: ./gen/ts

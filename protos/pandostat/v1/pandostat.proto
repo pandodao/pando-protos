@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package pandostat.v1; 
+option go_package = "github.com/fox-one/pando-protos/pandostat/v1";
+
+// import "google/protobuf/timestamp.proto";
+import "pando/v1/pando.proto";
+
+service PandostatService {
+    rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
+}
+
+message ListAssetsRequest {
+    repeated pando.v1.Asset assets = 1;
+}
+
+message ListAssetsResponse {
+    repeated pando.v1.Asset assets = 1;
+}

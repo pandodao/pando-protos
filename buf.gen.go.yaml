@@ -1,0 +1,10 @@
+version: v1
+plugins:
+  - name: go
+    out: gen/go
+    opt:
+      - module=github.com/fox-one/pando-protos
+  - name: twirp
+    out: gen/go
+    opt:
+      - module=github.com/fox-one/pando-protos
