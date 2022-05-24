@@ -2,7 +2,6 @@
 
 all: clean lint gen-go gen-ts
 
-TEMPDIR:= $(shell mktemp -d)
 gen-go-cmds:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.0
 	go install github.com/twitchtv/twirp/protoc-gen-twirp@v8.1.2
