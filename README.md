@@ -111,8 +111,19 @@ make
 
 For Go, you can specify the path in `go.mod`.
 
+- go version < 1.18
+
 ```
 go mod edit -replace github.com/fox-one/pando-protos=$YOUR_PROTOS_PATH/gen/go
+```
+
+- go version >=1.18
+
+go 1.18 added [workspace feature](https://go.dev/doc/tutorial/workspaces), compared with the way of changing `go.mod`, it will not bring any git difference.
+
+```
+# add go.work to .gitignore
+go work init $YOUR_PROTOS_PATH/gen/go
 ```
 
 For TS, you can create a soft link point to your local protos.
