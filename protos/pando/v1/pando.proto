@@ -4,18 +4,10 @@ package pando.v1;
 option go_package = "github.com/fox-one/pando-protos/pando/v1;pando";
 
 message Asset {
-  string id = 1;
-  string name = 2;
+  string asset_id = 1;
+  string chain_id = 2;
   string symbol = 3;
-  string logo = 4;
-  string chain_id = 5;
-  Asset chain = 6;
-  string price = 7;
-  string display_symbol = 8;
-  string extra = 9;
-}
-
-message Pagination {
-  string next_cursor = 1;
-  bool has_next = 2;
+  string name = 4;
+  string logo = 5;
+  string price = 6;
 }
