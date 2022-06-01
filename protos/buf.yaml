@@ -10,4 +10,6 @@ lint:
   except:
     - ENUM_VALUE_PREFIX
   enum_zero_value_suffix: NOT_SET
+  ignore:
+    - fswap/v1/fswap.proto
 
