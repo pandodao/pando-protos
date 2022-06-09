@@ -12,4 +12,5 @@ lint:
   enum_zero_value_suffix: NOT_SET
   ignore:
     - fswap/v1/fswap.proto
+    - pando/v1/pando.proto
 

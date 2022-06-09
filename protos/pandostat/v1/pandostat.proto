@@ -4,16 +4,16 @@ package pandostat.v1;
 option go_package = "github.com/fox-one/pando-protos/pandostat/v1;pandostat";
 
 // import "google/protobuf/timestamp.proto";
-import "pando/v1/pando.proto";
+import "common/v1/common.proto";
 
 service PandostatService {
     rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
 }
 
 message ListAssetsRequest {
-    repeated pando.v1.Asset assets = 1;
+    repeated common.v1.Asset assets = 1;
 }
 
 message ListAssetsResponse {
-    repeated pando.v1.Asset assets = 1;
+    repeated common.v1.Asset assets = 1;
 }

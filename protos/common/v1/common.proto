@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.v1; 
+option go_package = "github.com/fox-one/pando-protos/common/v1;common";
+
+message Asset {
+  string asset_id = 1;
+  string chain_id = 2;
+  string symbol = 3;
+  string name = 4;
+  string logo = 5;
+  string price = 6;
+}
