@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package swaplp.v1;
+option go_package = "github.com/fox-one/pando-protos/swaplp/v1;swaplp";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message Asset {
+  string asset_id = 1;
+  string chain_id = 2;
+  string symbol = 3;
+  string name = 4;
+  string logo = 5;
+  string price = 6;
+  int64 weight = 7;
+}
+
+message Pair {
+  enum State {
+    Pending = 0;
+    Proposing = 1;
+    Trading = 2;
+  }
+
+  string base_asset_id = 1;
+  string quote_asset_id = 2;
+  string lp_asset_id = 3;
+  State state = 4;
+}
+
+message Transfer {
+  string trace_id = 1;
+  string asset_id = 2;
+  string amount = 3;
+  string opponent_id = 4;
+  string memo = 5;
+}
+
+message Order {
+  enum State {
+    Pending = 0;
+    Rejected = 1;
+    Processed = 2;
+    Proposing = 3;
+  }
+  string id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  string pay_asset_id = 3;
+  string pay_amount = 4;
+  string lp_name = 5;
+  string lp_symbol = 6;
+  int64 lp_supply = 7;
+  State state = 8;
+}
+
+message ListPairsResp {
+  repeated Pair pairs = 1;
+}
+
+message ListAssetsResp {
+  repeated Asset assets = 1;
+}
+
+message CreateOrderReq {
+  string base_asset_id = 1;
+  string quote_asset_id = 2;
+}
+
+message CreateOrderResp {
+  Order order = 1;
+  Transfer transfer = 2;
+}
+
+message FindOrderReq {
+  string id = 1;
+}
+
+service SwaplpService {
+  rpc ListPairs(google.protobuf.Empty) returns (ListPairsResp);
+  rpc ListAssets(google.protobuf.Empty) returns (ListAssetsResp);
+  rpc CreateOrder(CreateOrderReq) returns (CreateOrderResp);
+  rpc FindOrder(FindOrderReq) returns (Order);
+}
