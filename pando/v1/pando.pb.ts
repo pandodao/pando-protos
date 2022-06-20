@@ -283,6 +283,21 @@ export async function ListAggregatedStats(
   return Resp.ListAggregatedStats.decode(response);
 }
 
+/**
+ * info
+ */
+export async function GetInfo(
+  getInfo: Req.GetInfo,
+  config?: ClientConfiguration
+): Promise<Resp.GetInfo> {
+  const response = await PBrequest(
+    "/fox.pando.service.Pando/GetInfo",
+    Req.GetInfo.encode(getInfo),
+    config
+  );
+  return Resp.GetInfo.decode(response);
+}
+
 //========================================//
 //           Pando JSON Client            //
 //========================================//
@@ -551,6 +566,21 @@ export async function ListAggregatedStatsJSON(
   return Resp.ListAggregatedStatsJSON.decode(response);
 }
 
+/**
+ * info
+ */
+export async function GetInfoJSON(
+  getInfo: Req.GetInfo,
+  config?: ClientConfiguration
+): Promise<Resp.GetInfo> {
+  const response = await JSONrequest(
+    "/fox.pando.service.Pando/GetInfo",
+    Req.GetInfoJSON.encode(getInfo),
+    config
+  );
+  return Resp.GetInfoJSON.decode(response);
+}
+
 //========================================//
 //                 Pando                  //
 //========================================//
@@ -657,6 +687,13 @@ export interface Pando<Context = unknown> {
     listAggregatedStats: Req.ListAggregatedStats,
     context: Context
   ) => Promise<Resp.ListAggregatedStats> | Resp.ListAggregatedStats;
+  /**
+   * info
+   */
+  GetInfo: (
+    getInfo: Req.GetInfo,
+    context: Context
+  ) => Promise<Resp.GetInfo> | Resp.GetInfo;
 }
 
 export function createPando<Context>(service: Pando<Context>) {
@@ -803,6 +840,12 @@ export function createPando<Context>(service: Pando<Context>) {
           protobuf: Resp.ListAggregatedStats,
           json: Resp.ListAggregatedStatsJSON,
         },
+      },
+      GetInfo: {
+        name: "GetInfo",
+        handler: service.GetInfo,
+        input: { protobuf: Req.GetInfo, json: Req.GetInfoJSON },
+        output: { protobuf: Resp.GetInfo, json: Resp.GetInfoJSON },
       },
     },
   } as const;
@@ -1174,6 +1217,8 @@ export declare namespace Req {
     from: bigint;
     to: bigint;
   }
+
+  export interface GetInfo {}
 }
 
 export interface Resp {}
@@ -1234,6 +1279,13 @@ export declare namespace Resp {
 
   export interface ListAggregatedStats {
     stats: AggregatedStat[];
+  }
+
+  export interface GetInfo {
+    oauthClientId: string;
+    members: string[];
+    threshold: number;
+    publicKey: string;
   }
 }
 
@@ -4537,6 +4589,49 @@ export const Req = {
       return msg;
     },
   },
+
+  GetInfo: {
+    /**
+     * Serializes Req.GetInfo to protobuf.
+     */
+    encode: function (_msg?: Partial<Req.GetInfo>): Uint8Array {
+      return new Uint8Array();
+    },
+
+    /**
+     * Deserializes Req.GetInfo from protobuf.
+     */
+    decode: function (_bytes?: ByteSource): Req.GetInfo {
+      return {};
+    },
+
+    /**
+     * Initializes Req.GetInfo with all fields set to their default value.
+     */
+    initialize: function (): Req.GetInfo {
+      return {};
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      _msg: Partial<Req.GetInfo>,
+      writer: BinaryWriter
+    ): BinaryWriter {
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      _msg: Req.GetInfo,
+      _reader: BinaryReader
+    ): Req.GetInfo {
+      return _msg;
+    },
+  },
 };
 
 export const Resp = {
@@ -5531,6 +5626,97 @@ export const Resp = {
             const m = AggregatedStat.initialize();
             reader.readMessage(m, AggregatedStat._readMessage);
             msg.stats.push(m);
+            break;
+          }
+          default: {
+            reader.skipField();
+            break;
+          }
+        }
+      }
+      return msg;
+    },
+  },
+
+  GetInfo: {
+    /**
+     * Serializes Resp.GetInfo to protobuf.
+     */
+    encode: function (msg: Partial<Resp.GetInfo>): Uint8Array {
+      return Resp.GetInfo._writeMessage(
+        msg,
+        new BinaryWriter()
+      ).getResultBuffer();
+    },
+
+    /**
+     * Deserializes Resp.GetInfo from protobuf.
+     */
+    decode: function (bytes: ByteSource): Resp.GetInfo {
+      return Resp.GetInfo._readMessage(
+        Resp.GetInfo.initialize(),
+        new BinaryReader(bytes)
+      );
+    },
+
+    /**
+     * Initializes Resp.GetInfo with all fields set to their default value.
+     */
+    initialize: function (): Resp.GetInfo {
+      return {
+        oauthClientId: "",
+        members: [],
+        threshold: 0,
+        publicKey: "",
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Resp.GetInfo>,
+      writer: BinaryWriter
+    ): BinaryWriter {
+      if (msg.oauthClientId) {
+        writer.writeString(1, msg.oauthClientId);
+      }
+      if (msg.members?.length) {
+        writer.writeRepeatedString(2, msg.members);
+      }
+      if (msg.threshold) {
+        writer.writeInt32(3, msg.threshold);
+      }
+      if (msg.publicKey) {
+        writer.writeString(4, msg.publicKey);
+      }
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: Resp.GetInfo,
+      reader: BinaryReader
+    ): Resp.GetInfo {
+      while (reader.nextField()) {
+        const field = reader.getFieldNumber();
+        switch (field) {
+          case 1: {
+            msg.oauthClientId = reader.readString();
+            break;
+          }
+          case 2: {
+            msg.members.push(reader.readString());
+            break;
+          }
+          case 3: {
+            msg.threshold = reader.readInt32();
+            break;
+          }
+          case 4: {
+            msg.publicKey = reader.readString();
             break;
           }
           default: {
@@ -8517,6 +8703,45 @@ export const ReqJSON = {
       return msg;
     },
   },
+
+  GetInfo: {
+    /**
+     * Serializes Req.GetInfo to JSON.
+     */
+    encode: function (_msg?: Partial<Req.GetInfo>): string {
+      return "{}";
+    },
+
+    /**
+     * Deserializes Req.GetInfo from JSON.
+     */
+    decode: function (_json?: string): Req.GetInfo {
+      return {};
+    },
+
+    /**
+     * Initializes Req.GetInfo with all fields set to their default value.
+     */
+    initialize: function (): Req.GetInfo {
+      return {};
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      _msg: Partial<Req.GetInfo>
+    ): Record<string, unknown> {
+      return {};
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (msg: Req.GetInfo, _json: any): Req.GetInfo {
+      return msg;
+    },
+  },
 };
 
 export const RespJSON = {
@@ -9362,6 +9587,82 @@ export const RespJSON = {
           AggregatedStatJSON._readMessage(m, item);
           msg.stats.push(m);
         }
+      }
+      return msg;
+    },
+  },
+
+  GetInfo: {
+    /**
+     * Serializes Resp.GetInfo to JSON.
+     */
+    encode: function (msg: Partial<Resp.GetInfo>): string {
+      return JSON.stringify(RespJSON.GetInfo._writeMessage(msg));
+    },
+
+    /**
+     * Deserializes Resp.GetInfo from JSON.
+     */
+    decode: function (json: string): Resp.GetInfo {
+      return RespJSON.GetInfo._readMessage(
+        RespJSON.GetInfo.initialize(),
+        JSON.parse(json)
+      );
+    },
+
+    /**
+     * Initializes Resp.GetInfo with all fields set to their default value.
+     */
+    initialize: function (): Resp.GetInfo {
+      return {
+        oauthClientId: "",
+        members: [],
+        threshold: 0,
+        publicKey: "",
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Resp.GetInfo>
+    ): Record<string, unknown> {
+      const json: Record<string, unknown> = {};
+      if (msg.oauthClientId) {
+        json.oauthClientId = msg.oauthClientId;
+      }
+      if (msg.members?.length) {
+        json.members = msg.members;
+      }
+      if (msg.threshold) {
+        json.threshold = msg.threshold;
+      }
+      if (msg.publicKey) {
+        json.publicKey = msg.publicKey;
+      }
+      return json;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (msg: Resp.GetInfo, json: any): Resp.GetInfo {
+      const _oauthClientId = json.oauthClientId ?? json.oauth_client_id;
+      if (_oauthClientId) {
+        msg.oauthClientId = _oauthClientId;
+      }
+      const _members = json.members;
+      if (_members) {
+        msg.members = _members;
+      }
+      const _threshold = json.threshold;
+      if (_threshold) {
+        msg.threshold = _threshold;
+      }
+      const _publicKey = json.publicKey ?? json.public_key;
+      if (_publicKey) {
+        msg.publicKey = _publicKey;
       }
       return msg;
     },
