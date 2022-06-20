@@ -315,6 +315,8 @@ message Req {
         int64 from = 1;
         int64 to = 2;
     }
+
+    message GetInfo {}
 }
 
 message Resp {
@@ -374,6 +376,13 @@ message Resp {
     message ListAggregatedStats {
         repeated AggregatedStat stats = 1;
     }
+
+    message GetInfo {
+        string oauth_client_id = 1;
+        repeated string members = 2;
+        int32 threshold = 3;
+        string public_key = 4;
+    }
 }
 
 service Pando {
@@ -405,4 +414,6 @@ service Pando {
     // stats
     rpc ListStats(Req.ListStats) returns (Resp.ListStats);
     rpc ListAggregatedStats(Req.ListAggregatedStats) returns (Resp.ListAggregatedStats);
+    // info
+    rpc GetInfo(Req.GetInfo) returns (Resp.GetInfo);
 }
