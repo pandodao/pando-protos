@@ -3,11 +3,12 @@ syntax = "proto3";
 package pandostat.v1; 
 option go_package = "github.com/fox-one/pando-protos/pandostat/v1;pandostat";
 
-// import "google/protobuf/timestamp.proto";
+import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
 
 service PandostatService {
     rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
+    rpc Statistics(StatisticsRequest) returns (StatisticsResponse);
 }
 
 message ListAssetsRequest {
@@ -17,3 +18,41 @@ message ListAssetsRequest {
 message ListAssetsResponse {
     repeated common.v1.Asset assets = 1;
 }
+
+message ChartData {
+    string v = 1;
+    google.protobuf.Timestamp ts = 2;
+}
+
+enum Product {
+    PRODUCT_NOT_SET = 0;
+    FSWAP = 1;
+    LAKE = 2;
+    LEAF = 3;
+    RINGS = 4;
+}
+
+enum DataType {
+    DATE_TYPE_NOT_SET = 0;
+    SUPPLY = 1; // leaf, rings
+    BORROW = 2; // rings
+    COLLATERAL = 3; // leaf
+    LIQUIDITY = 4; // 4swap, lake
+    VOLUME = 5; // 4swap, lake
+}
+
+message Time {
+    int32 from = 1;
+    int32 to = 2;
+}
+
+message StatisticsRequest {
+    Product product = 1;
+    Time time = 2;
+    DataType data_type = 3;
+}
+
+message StatisticsResponse {
+    repeated ChartData data = 1;
+}
+
