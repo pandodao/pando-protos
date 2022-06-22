@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package swapnode.v1; 
+option go_package = "github.com/fox-one/pando-protos/swapnode/v1;swapnode";
+
+import "google/protobuf/timestamp.proto";
+
+enum Action {
+    NOT_SET = 0;
+    ADD = 1;
+    REMOVE = 2;
+    SWAP = 3;
+    EXPIRE_DEPOSIT = 4;
+}
+
+message Pair {
+    string base_asset_id = 1;
+    string quote_asset_id = 2;
+    string base_amount = 3;
+    string quote_amount = 4;
+    string liquidity = 5;
+    string liquidity_asset_id = 6;
+    int32 route_id = 7;
+    string fee_percent = 8;
+    string max_liquidity = 9;
+    string swap_method = 10;
+    int32 version = 11;
+}
+
+message Output {
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    string asset_id = 3;
+    string amount = 4;
+    string sender = 5;
+    Action action = 6;
+    string user_id = 7;
+    string follow_id = 8;
+    string body = 9;
+}
+
+message Order {
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    string user_id = 3;
+    string follow_id = 4;
+    string pay_asset_id = 5;
+    string pay_amount = 6;
+    string fill_asset_id = 7;
+    string fill_amount = 8;
+    string fee_asset_id = 9;
+    string fee_amount = 10;
+    string min_amount = 11;
+    string routes = 12;
+}
+
+message Deposit {
+    enum Status {
+        NOT_SET = 0;
+        PENDING = 1;
+        CANCELLED = 2;
+        DONE = 3;
+    }
+
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    google.protobuf.Timestamp expired_at = 3;
+    string user_id = 4;
+    string follow_id = 5;
+    Status status = 6;
+    string base_asset_id = 7;
+    string base_amount = 8;
+    string quote_asset_id = 9;
+    string quote_amount = 10;
+    string slippage = 11;
+}
+
+message Transaction {
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    string user_id = 3;
+    string follow_id = 4;
+    Action action = 5;
+    string base_asset_id = 6;
+    string base_amount = 7;
+    string quote_asset_id = 8;
+    string quote_amount = 9;
+    string fee_asset_id = 10;
+    string fee_amount = 11;
+    string liquidity_amount = 12;
+}

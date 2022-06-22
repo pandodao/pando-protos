@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package swapnode.v1; 
+option go_package = "github.com/fox-one/pando-protos/swapnode/v1;swapnode";
+
+import "swapnode/v1/core.proto";
+
+message ListPairsRequest {}
+
+message ListPairsResponse {
+  repeated Pair pairs = 1;
+}
+
+message ListOutputsRequest {
+  string cursor = 1;
+}
+
+message ListOutputsResponse {
+  repeated Output outputs = 1;
+  string cursor = 2;
+}
+
+message FindOrderRequest {
+  string trace_id = 1;
+}
+
+message FindOrderResponse {
+  Order order = 1;
+}
+
+message FindDepositRequest {
+  string user_id = 1;
+  string follow_id = 2;
+}
+
+message FindDepositResponse {
+  Deposit deposit = 1;
+}
+
+message FindTransactionsRequest {
+  string group_id = 1;
+}
+
+message FindTransactionsResponse {
+  repeated Transaction transactions = 1;
+}
+
+message GetRequest {}
+
+message GetInfoResponse {
+  repeated string members = 1;
+  int32 threshold = 2;
+  string public_key = 3;
+}
+
+service SwapNodeService {
+    rpc ListPairs(ListPairsRequest) returns (ListPairsResponse);
+    rpc ListOutputs(ListOutputsRequest) returns (ListOutputsResponse);
+    rpc FindOrder(FindOrderRequest) returns (FindOrderResponse);
+    rpc FindDeposit(FindDepositRequest) returns (FindDepositResponse);
+    rpc FindTransactions(FindTransactionsRequest) returns (FindTransactionsResponse);
+    rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
+}
