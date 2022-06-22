@@ -24,32 +24,25 @@ message ChartData {
     google.protobuf.Timestamp ts = 2;
 }
 
-enum Product {
-    PRODUCT_NOT_SET = 0;
-    FSWAP = 1;
-    LAKE = 2;
-    LEAF = 3;
-    RINGS = 4;
-}
-
 enum DataType {
     DATE_TYPE_NOT_SET = 0;
-    SUPPLY = 1; // leaf, rings
-    BORROW = 2; // rings
-    COLLATERAL = 3; // leaf
-    LIQUIDITY = 4; // 4swap, lake
-    VOLUME = 5; // 4swap, lake
-}
-
-message Time {
-    int32 from = 1;
-    int32 to = 2;
+    LEAF_SUPPLY = 1; 
+    LEAF_COLLATERAL = 2;
+    reserved 3 to 20;  
+    RINGS_SUPPLY = 21;
+    RINGS_BORROW = 22; 
+    reserved 23 to 40;
+    FSWAP_LIQUIDITY = 41; 
+    FSWAP_VOLUME = 42;
+    reserved 43 to 60;
+    LAKE_LIQUIDITY = 61;
+    LAKE_VOLUME = 62;
 }
 
 message StatisticsRequest {
-    Product product = 1;
-    Time time = 2;
-    DataType data_type = 3;
+    DataType data_type = 1;
+    google.protobuf.Timestamp from = 2;
+    google.protobuf.Timestamp to = 3;
 }
 
 message StatisticsResponse {
