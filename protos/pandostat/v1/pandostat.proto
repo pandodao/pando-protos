@@ -26,15 +26,16 @@ message ChartData {
 
 enum DataType {
     DATE_TYPE_NOT_SET = 0;
+    // leaf
     LEAF_SUPPLY = 1; 
     LEAF_COLLATERAL = 2;
-    reserved 3 to 20;  
+    // rings
     RINGS_SUPPLY = 21;
     RINGS_BORROW = 22; 
-    reserved 23 to 40;
+    // fswap
     FSWAP_LIQUIDITY = 41; 
     FSWAP_VOLUME = 42;
-    reserved 43 to 60;
+    // lake
     LAKE_LIQUIDITY = 61;
     LAKE_VOLUME = 62;
 }
