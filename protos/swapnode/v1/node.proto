@@ -45,7 +45,7 @@ message FindTransactionsResponse {
   repeated Transaction transactions = 1;
 }
 
-message GetRequest {}
+message GetInfoRequest {}
 
 message GetInfoResponse {
   repeated string members = 1;
