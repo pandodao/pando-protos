@@ -48,10 +48,8 @@ message Order {
     string pay_amount = 6;
     string fill_asset_id = 7;
     string fill_amount = 8;
-    string fee_asset_id = 9;
-    string fee_amount = 10;
-    string min_amount = 11;
-    string routes = 12;
+    string min_amount = 9;
+    string routes = 10;
 }
 
 message Deposit {
