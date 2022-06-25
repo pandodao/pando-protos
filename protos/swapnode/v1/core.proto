@@ -33,10 +33,7 @@ message Output {
     string asset_id = 3;
     string amount = 4;
     string sender = 5;
-    Action action = 6;
-    string user_id = 7;
-    string follow_id = 8;
-    string body = 9;
+    string memo = 6;
 }
 
 message Order {

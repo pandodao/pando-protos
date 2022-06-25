@@ -13,11 +13,11 @@ message ListPairsResponse {
 
 message ListOutputsRequest {
   string cursor = 1;
+  int32 limit = 2;
 }
 
 message ListOutputsResponse {
   repeated Output outputs = 1;
-  string cursor = 2;
 }
 
 message FindOrderRequest {
