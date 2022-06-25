@@ -49,22 +49,23 @@ message ChartData {
     google.protobuf.Timestamp ts = 2;
 }
 
+enum OverviewChartType {
+    TYPE_NOT_SET = 0;
+    // leaf
+    LEAF_SUPPLY = 1; 
+    LEAF_COLLATERAL = 2;
+    // rings
+    RINGS_SUPPLY = 21;
+    RINGS_BORROW = 22; 
+    // fswap
+    FSWAP_LIQUIDITY = 41; 
+    FSWAP_VOLUME = 42;
+    // lake
+    LAKE_LIQUIDITY = 61;
+    LAKE_VOLUME = 62;
+}
+
 message StatisticsRequest {
-    enum OverviewChartType {
-        TYPE_NOT_SET = 0;
-        // leaf
-        LEAF_SUPPLY = 1; 
-        LEAF_COLLATERAL = 2;
-        // rings
-        RINGS_SUPPLY = 21;
-        RINGS_BORROW = 22; 
-        // fswap
-        FSWAP_LIQUIDITY = 41; 
-        FSWAP_VOLUME = 42;
-        // lake
-        LAKE_LIQUIDITY = 61;
-        LAKE_VOLUME = 62;
-    }
 
     OverviewChartType type = 1;
     google.protobuf.Timestamp from = 2;
@@ -73,9 +74,6 @@ message StatisticsRequest {
 
 message StatisticsResponse {
     repeated ChartData data = 1;
-}
-
-message EmptyRequest {
 }
 
 message SwapStatsInfo {
@@ -92,26 +90,17 @@ message SwapAssetStats {
     int32 volume_24h = 4;
     int32 volume_7d = 5;
     int32 trades = 6;
-} 
+}
 
-enum MarketChartType {
-    TYPE_NOT_SET = 0;
-    // leaf 
-    LEAF_MINTED = 1;
-    LEAF_BURNED = 2;
-    // rings 
-    RINGS_SUPPLY_APY = 21;
-    RINGS_SUPPLY_VOLUME = 22;
-    RINGS_BORROW_APY = 23;
-    RINGS_BORROW_VOLUME = 24;
-    // fswap 
-    FSWAP_LIQUIDITY = 41;
-    FSWAP_VOLUME = 42;
-    FSWAP_PRICE = 43;
-    // lake
-    LAKE_LIQUIDITY = 61;
-    LAKE_VOLUME = 62;
-    LAKE_PRICE = 63;
+message SwapAssetDetail {
+    string price = 1;
+    string total_supply = 2;
+    string market_cap = 3;
+    string volume_24h = 4;
+    string trades_24h = 5;
+    string description = 6;
+    string website = 7;
+    google.protobuf.Timestamp issue_time = 8;
 }
 /* ----------  GENERAL   -----------*/
 
@@ -145,14 +134,7 @@ message FswapAssetDetailRequest {
 }
 
 message FswapAssetDetailResponse {
-    string price = 1;
-    string total_supply = 2;
-    string market_cap = 3;
-    string volume_24h = 4;
-    string trades_24h = 5;
-    string description = 6;
-    string website = 7;
-    google.protobuf.Timestamp issue_time = 8;
+    SwapAssetDetail detail = 1;
 }
 
 message FswapAssetStatisticsRequest {
@@ -204,14 +186,7 @@ message LakeAssetDetailRequest {
 }
 
 message LakeAssetDetailResponse {
-    string price = 1;
-    string total_supply = 2;
-    string market_cap = 3;
-    string volume_24h = 4;
-    string trades_24h = 5;
-    string description = 6;
-    string website = 7;
-    google.protobuf.Timestamp issue_time = 8;
+    SwapAssetDetail detail = 1;
 }
 
 message LakeAssetStatisticsRequest {
