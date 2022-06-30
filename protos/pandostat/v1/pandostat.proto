@@ -15,12 +15,6 @@ service PandostatService {
     rpc FswapAssetDetail(FswapAssetDetailRequest) returns (FswapAssetDetailResponse);
     rpc FswapAssetStatistics(FswapAssetStatisticsRequest) returns (FswapAssetStatisticsResponse);
 
-    rpc LakeStatsInfo(LakeStatsInfoRequest) returns (LakeStatsInfoResponse);
-    rpc LakeAssets(LakeAssetsRequest) returns (LakeAssetsResponse);
-    rpc LakeAssetVolume(LakeAssetVolumeRequest) returns (LakeAssetVolumeResponse); // 7d volume chart data
-    rpc LakeAssetDetail(LakeAssetDetailRequest) returns (LakeAssetDetailResponse);
-    rpc LakeAssetStatistics(LakeAssetStatisticsRequest) returns (LakeAssetStatisticsResponse);
-
     rpc LeafStatsInfo(LeafStatsInfoRequest) returns (LeafStatsInfoResponse);
     rpc LeafCollaterals(LeafCollateralsRequest) returns (LeafCollateralsResponse); 
     rpc LeafCollateralDetail(LeafCollateralDetailRequest) returns (LeafCollateralDetailResponse);
@@ -65,7 +59,6 @@ enum OverviewChartType {
 }
 
 message StatisticsRequest {
-
     OverviewChartType type = 1;
     uint32 from = 2;
     uint32 to = 3;
@@ -73,33 +66,6 @@ message StatisticsRequest {
 
 message StatisticsResponse {
     repeated ChartData data = 1;
-}
-
-message SwapStatsInfo {
-    string volume_24h = 1;
-    string fee_24h = 2;
-    string trades_24h =3;
-    string turn_over_24h = 4;
-}
-
-message SwapAssetStats {
-    string id = 1; // asset id
-    string liquidity = 2;
-    string volume = 3;
-    string volume_24h = 4;
-    string volume_7d = 5;
-    string trades = 6;
-}
-
-message SwapAssetDetail {
-    string price = 1;
-    string total_supply = 2;
-    string market_cap = 3;
-    string volume_24h = 4;
-    string trades_24h = 5;
-    string description = 6;
-    string website = 7;
-    uint32 issue_time = 8;
 }
 /* ----------  GENERAL   -----------*/
 
@@ -110,14 +76,22 @@ message FswapStatsInfoRequest {
 }
 
 message FswapStatsInfoResponse {
-    SwapStatsInfo info = 1;
+    string volume_24h = 1;
+    string fee_24h = 2;
+    string trades_24h =3;
+    string turn_over_24h = 4;
 }
 
 message FswapAssetsRequest {
 }
 
 message FswapAssetsResponse{
-    repeated SwapAssetStats stats = 1;
+    string id = 1; // asset id
+    string liquidity = 2;
+    string volume = 3;
+    string volume_24h = 4;
+    string volume_7d = 5;
+    string trades = 6;
 }
 
 message FswapAssetVolumeRequest {
@@ -133,7 +107,14 @@ message FswapAssetDetailRequest {
 }
 
 message FswapAssetDetailResponse {
-    SwapAssetDetail detail = 1;
+    string price = 1;
+    string total_supply = 2;
+    string market_cap = 3;
+    string volume_24h = 4;
+    string trades_24h = 5;
+    string description = 6;
+    string website = 7;
+    uint32 issue_time = 8;
 }
 
 message FswapAssetStatisticsRequest {
@@ -154,59 +135,6 @@ message FswapAssetStatisticsResponse {
     repeated ChartData data = 1;
 }
 /* ----------  4SWAP    -----------*/
-
-
-
-/* ----------  LAKE     -----------*/
-message LakeStatsInfoRequest {
-}
-
-message LakeStatsInfoResponse {
-    SwapStatsInfo info = 1;
-}
-
-message LakeAssetsRequest {
-}
-
-message LakeAssetsResponse {
-    repeated SwapAssetStats stats = 1;
-}
-
-message LakeAssetVolumeRequest {
-    string asset_id = 1;
-}
-
-message LakeAssetVolumeResponse {
-    repeated ChartData volumes = 1;
-}
-
-message LakeAssetDetailRequest {
-    string asset_id = 1;    
-}
-
-message LakeAssetDetailResponse {
-    SwapAssetDetail detail = 1;
-}
-
-message LakeAssetStatisticsRequest {
-    enum LakeAssetChartType {
-        TYPE_NOT_SET = 0;
-        LAKE_LIQUIDITY = 1;
-        LAKE_VOLUME = 2;
-        LAKE_PRICE = 3;
-    }
-    
-    LakeAssetChartType type = 1;
-    uint32 from = 2;
-    uint32 to = 3;
-    string asset_id = 4;
-}
-
-message LakeAssetStatisticsResponse {
-    repeated ChartData data = 1;
-}
-/* ----------  LAKE     -----------*/
-
 
 
 /* ----------  LEAF     -----------*/
