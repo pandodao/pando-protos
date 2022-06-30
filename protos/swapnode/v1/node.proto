@@ -55,6 +55,14 @@ message GetInfoResponse {
   string version = 4;
 }
 
+message FindTransferRequest {
+  string id = 1;
+}
+
+message FindTransferResponse {
+  Transfer transfer = 1;
+}
+
 service SwapNodeService {
     rpc ListPairs(ListPairsRequest) returns (ListPairsResponse);
     rpc ListOutputs(ListOutputsRequest) returns (ListOutputsResponse);
@@ -62,4 +70,5 @@ service SwapNodeService {
     rpc FindDeposit(FindDepositRequest) returns (FindDepositResponse);
     rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse);
     rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
+    rpc FindTransfer(FindTransferRequest) returns (FindTransferResponse);
 }

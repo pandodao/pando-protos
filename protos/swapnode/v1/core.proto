@@ -84,3 +84,14 @@ message Transaction {
     string fee_amount = 11;
     string liquidity_amount = 12;
 }
+
+message Transfer {
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    string asset_id = 3;
+    string amount = 4;
+    repeated string opponents = 5;
+    int32 threshold = 6;
+    string memo = 7;
+    string signed_tx = 8;
+}
