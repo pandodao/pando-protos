@@ -15,7 +15,6 @@ service PandostatService {
     rpc FswapAssetDetail(FswapAssetDetailRequest) returns (FswapAssetDetailResponse);
     rpc FswapAssetStatistics(FswapAssetStatisticsRequest) returns (FswapAssetStatisticsResponse);
 
-    rpc LeafStatsInfo(LeafStatsInfoRequest) returns (LeafStatsInfoResponse);
     rpc LeafCollaterals(LeafCollateralsRequest) returns (LeafCollateralsResponse); 
     rpc LeafCollateralDetail(LeafCollateralDetailRequest) returns (LeafCollateralDetailResponse);
     rpc LeafCollateralStatistics(LeafCollateralStatisticsRequest) returns (LeafCollateralStatisticsResponse);
@@ -138,13 +137,6 @@ message FswapAssetStatisticsResponse {
 
 
 /* ----------  LEAF     -----------*/
-message LeafStatsInfoRequest {
-}
-
-message LeafStatsInfoResponse {
-    int32 avg_collateral_ratio = 1;
-}
-
 message LeafCollateralsRequest {
 
 }
