@@ -84,13 +84,17 @@ message FswapStatsInfoResponse {
 message FswapAssetsRequest {
 }
 
-message FswapAssetsResponse{
+message FswapAsset {
     string id = 1; // asset id
     string liquidity = 2;
     string volume = 3;
     string volume_24h = 4;
     string volume_7d = 5;
     string trades = 6;
+}
+
+message FswapAssetsResponse{
+    repeated FswapAsset assets = 1;
 }
 
 message FswapAssetVolumeRequest {
