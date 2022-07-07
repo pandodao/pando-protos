@@ -27,6 +27,17 @@ service PandostatService {
 }
 
 /* ----------  GENERAL   -----------*/
+
+enum TimeRange {
+    TIME_RANGE_NOT_SET = 0;
+    DAY = 1;
+    WEEK = 2;
+    MONTH = 3;
+    HARF_YEAR = 4;
+    YEAR = 5;
+}
+
+
 message ListAssetsRequest {
     repeated common.v1.Asset assets = 1;
 }
@@ -58,8 +69,7 @@ enum OverviewChartType {
 
 message StatisticsRequest {
     OverviewChartType type = 1;
-    uint32 from = 2;
-    uint32 to = 3;
+    TimeRange range = 2;
 }
 
 message StatisticsResponse {
@@ -128,9 +138,8 @@ message FswapAssetStatisticsRequest {
     }
     
     FswapAssetChartType type = 1;
-    uint32 from = 2;
-    uint32 to = 3;
-    string asset_id = 4;
+    TimeRange range = 2;
+    string asset_id = 3;
 }
 
 message FswapAssetStatisticsResponse {
@@ -196,9 +205,8 @@ message LeafCollateralStatisticsRequest{
     }
     
     CollateralChartType type = 1;
-    uint32 from = 2;
-    uint32 to = 3;
-    string collateral_id = 4;
+    TimeRange range = 2;
+    string collateral_id = 3;
 }
 
 message LeafCollateralStatisticsResponse {
@@ -233,9 +241,8 @@ message LeafMintTokenStatisticsRequest{
     }
     
     MintTokenChartType type = 1;
-    uint32 from = 2;
-    uint32 to = 3;
-    string asset_id = 4;
+    TimeRange range = 2;
+    string asset_id = 3;
 }
 
 message LeafMintTokenStatisticsResponse {
@@ -278,9 +285,8 @@ message RingsMarketStatisticsRequest{
     }
     
     MarketChartType type = 1;
-    uint32 from = 2;
-    uint32 to = 3;
-    string asset_id = 4;
+    TimeRange range = 2;
+    string asset_id = 3;
 }
 
 message RingsMarketStatisticsResponse {
