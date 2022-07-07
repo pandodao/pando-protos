@@ -185,7 +185,7 @@ message LeafCollateralDetailResponse {
     string min_collateral_ratio = 7;
     // price oracle
     string next_price = 8;
-    string peek_at = 9;
+    uint32 peek_at = 9;
 }
 
 message LeafCollateralStatisticsRequest{
