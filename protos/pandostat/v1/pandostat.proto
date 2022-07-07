@@ -20,7 +20,6 @@ service PandostatService {
     rpc LeafCollateralStatistics(LeafCollateralStatisticsRequest) returns (LeafCollateralStatisticsResponse);
     rpc LeafMintTokenDetail(LeafMintTokenDetailRequest) returns (LeafMintTokenDetailResponse);
     rpc LeafMintTokenStatistics(LeafMintTokenStatisticsRequest) returns (LeafMintTokenStatisticsResponse);
-    rpc LeafPriceOracle(LeafPriceOracleRequest) returns (LeafPriceOracleResponse);
 
     rpc RingsAssets(RingsAssetsRequest) returns (RingsAssetsResponse);
     rpc RingsMarketStatistics(RingsMarketStatisticsRequest) returns (RingsMarketStatisticsResponse);
@@ -241,19 +240,6 @@ message LeafMintTokenStatisticsRequest{
 
 message LeafMintTokenStatisticsResponse {
     repeated ChartData data = 1;
-}
-
-message LeafPriceOracleRequest {
-    string asset_id = 1;
-}
-
-message LeafPriceOracleResponse {
-    string current = 1;
-    repeated string governors = 2;
-    string hop  = 3;
-    string next = 4;
-    uint32 peek_at = 5;
-    string threshold = 6;
 }
 /* ----------  LEAF     -----------*/
 
