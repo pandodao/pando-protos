@@ -152,6 +152,18 @@ export async function ListVaultEvents(
   return Resp.ListVaultEvents.decode(response);
 }
 
+export async function QueryVaultEvents(
+  queryVaultEvents: Req.QueryVaultEvents,
+  config?: ClientConfiguration
+): Promise<Resp.QueryVaultEvents> {
+  const response = await PBrequest(
+    "/fox.pando.service.Pando/QueryVaultEvents",
+    Req.QueryVaultEvents.encode(queryVaultEvents),
+    config
+  );
+  return Resp.QueryVaultEvents.decode(response);
+}
+
 /**
  * flips
  */
@@ -435,6 +447,18 @@ export async function ListVaultEventsJSON(
   return RespJSON.ListVaultEvents.decode(response);
 }
 
+export async function QueryVaultEventsJSON(
+  queryVaultEvents: Req.QueryVaultEvents,
+  config?: ClientConfiguration
+): Promise<Resp.QueryVaultEvents> {
+  const response = await JSONrequest(
+    "/fox.pando.service.Pando/QueryVaultEvents",
+    ReqJSON.QueryVaultEvents.encode(queryVaultEvents),
+    config
+  );
+  return RespJSON.QueryVaultEvents.decode(response);
+}
+
 /**
  * flips
  */
@@ -639,6 +663,10 @@ export interface Pando<Context = unknown> {
     listVaultEvents: Req.ListVaultEvents,
     context: Context
   ) => Promise<Resp.ListVaultEvents> | Resp.ListVaultEvents;
+  QueryVaultEvents: (
+    queryVaultEvents: Req.QueryVaultEvents,
+    context: Context
+  ) => Promise<Resp.QueryVaultEvents> | Resp.QueryVaultEvents;
   /**
    * flips
    */
@@ -765,6 +793,18 @@ export function createPando<Context>(service: Pando<Context>) {
         output: {
           protobuf: Resp.ListVaultEvents,
           json: RespJSON.ListVaultEvents,
+        },
+      },
+      QueryVaultEvents: {
+        name: "QueryVaultEvents",
+        handler: service.QueryVaultEvents,
+        input: {
+          protobuf: Req.QueryVaultEvents,
+          json: ReqJSON.QueryVaultEvents,
+        },
+        output: {
+          protobuf: Resp.QueryVaultEvents,
+          json: RespJSON.QueryVaultEvents,
         },
       },
       FindFlip: {
@@ -959,6 +999,7 @@ export declare namespace Vault {
     dink: string;
     dart: string;
     debt: string;
+    id: string;
   }
 }
 
@@ -1153,6 +1194,11 @@ export declare namespace Req {
     id: string;
   }
 
+  export interface QueryVaultEvents {
+    cursor: string;
+    limit: bigint;
+  }
+
   export interface FindFlip {
     /**
      * @inject_tag: valid:"uuid,required"
@@ -1248,6 +1294,11 @@ export declare namespace Resp {
 
   export interface ListVaultEvents {
     events: Vault.Event[];
+  }
+
+  export interface QueryVaultEvents {
+    events: Vault.Event[];
+    pagination: Pagination;
   }
 
   export interface ListFlips {
@@ -2076,6 +2127,7 @@ export const Vault = {
         dink: "",
         dart: "",
         debt: "",
+        id: "",
       };
     },
 
@@ -2103,6 +2155,9 @@ export const Vault = {
       }
       if (msg.debt) {
         writer.writeString(6, msg.debt);
+      }
+      if (msg.id) {
+        writer.writeString(7, msg.id);
       }
       return writer;
     },
@@ -2139,6 +2194,10 @@ export const Vault = {
           }
           case 6: {
             msg.debt = reader.readString();
+            break;
+          }
+          case 7: {
+            msg.id = reader.readString();
             break;
           }
           default: {
@@ -3841,6 +3900,81 @@ export const Req = {
     },
   },
 
+  QueryVaultEvents: {
+    /**
+     * Serializes Req.QueryVaultEvents to protobuf.
+     */
+    encode: function (msg: Partial<Req.QueryVaultEvents>): Uint8Array {
+      return Req.QueryVaultEvents._writeMessage(
+        msg,
+        new BinaryWriter()
+      ).getResultBuffer();
+    },
+
+    /**
+     * Deserializes Req.QueryVaultEvents from protobuf.
+     */
+    decode: function (bytes: ByteSource): Req.QueryVaultEvents {
+      return Req.QueryVaultEvents._readMessage(
+        Req.QueryVaultEvents.initialize(),
+        new BinaryReader(bytes)
+      );
+    },
+
+    /**
+     * Initializes Req.QueryVaultEvents with all fields set to their default value.
+     */
+    initialize: function (): Req.QueryVaultEvents {
+      return {
+        cursor: "",
+        limit: 0n,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Req.QueryVaultEvents>,
+      writer: BinaryWriter
+    ): BinaryWriter {
+      if (msg.cursor) {
+        writer.writeString(1, msg.cursor);
+      }
+      if (msg.limit) {
+        writer.writeInt64String(2, msg.limit.toString() as any);
+      }
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: Req.QueryVaultEvents,
+      reader: BinaryReader
+    ): Req.QueryVaultEvents {
+      while (reader.nextField()) {
+        const field = reader.getFieldNumber();
+        switch (field) {
+          case 1: {
+            msg.cursor = reader.readString();
+            break;
+          }
+          case 2: {
+            msg.limit = BigInt(reader.readInt64String());
+            break;
+          }
+          default: {
+            reader.skipField();
+            break;
+          }
+        }
+      }
+      return msg;
+    },
+  },
+
   FindFlip: {
     /**
      * Serializes Req.FindFlip to protobuf.
@@ -5096,6 +5230,87 @@ export const Resp = {
             const m = Vault.Event.initialize();
             reader.readMessage(m, Vault.Event._readMessage);
             msg.events.push(m);
+            break;
+          }
+          default: {
+            reader.skipField();
+            break;
+          }
+        }
+      }
+      return msg;
+    },
+  },
+
+  QueryVaultEvents: {
+    /**
+     * Serializes Resp.QueryVaultEvents to protobuf.
+     */
+    encode: function (msg: Partial<Resp.QueryVaultEvents>): Uint8Array {
+      return Resp.QueryVaultEvents._writeMessage(
+        msg,
+        new BinaryWriter()
+      ).getResultBuffer();
+    },
+
+    /**
+     * Deserializes Resp.QueryVaultEvents from protobuf.
+     */
+    decode: function (bytes: ByteSource): Resp.QueryVaultEvents {
+      return Resp.QueryVaultEvents._readMessage(
+        Resp.QueryVaultEvents.initialize(),
+        new BinaryReader(bytes)
+      );
+    },
+
+    /**
+     * Initializes Resp.QueryVaultEvents with all fields set to their default value.
+     */
+    initialize: function (): Resp.QueryVaultEvents {
+      return {
+        events: [],
+        pagination: Pagination.initialize(),
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Resp.QueryVaultEvents>,
+      writer: BinaryWriter
+    ): BinaryWriter {
+      if (msg.events?.length) {
+        writer.writeRepeatedMessage(
+          1,
+          msg.events as any,
+          Vault.Event._writeMessage
+        );
+      }
+      if (msg.pagination) {
+        writer.writeMessage(2, msg.pagination, Pagination._writeMessage);
+      }
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: Resp.QueryVaultEvents,
+      reader: BinaryReader
+    ): Resp.QueryVaultEvents {
+      while (reader.nextField()) {
+        const field = reader.getFieldNumber();
+        switch (field) {
+          case 1: {
+            const m = Vault.Event.initialize();
+            reader.readMessage(m, Vault.Event._readMessage);
+            msg.events.push(m);
+            break;
+          }
+          case 2: {
+            reader.readMessage(msg.pagination, Pagination._readMessage);
             break;
           }
           default: {
@@ -6490,6 +6705,7 @@ export const VaultJSON = {
         dink: "",
         dart: "",
         debt: "",
+        id: "",
       };
     },
 
@@ -6520,6 +6736,9 @@ export const VaultJSON = {
       }
       if (msg.debt) {
         json.debt = msg.debt;
+      }
+      if (msg.id) {
+        json.id = msg.id;
       }
       return json;
     },
@@ -6553,6 +6772,10 @@ export const VaultJSON = {
       const _debt = json.debt;
       if (_debt) {
         msg.debt = _debt;
+      }
+      const _id = json.id;
+      if (_id) {
+        msg.id = _id;
       }
       return msg;
     },
@@ -8087,6 +8310,69 @@ export const ReqJSON = {
     },
   },
 
+  QueryVaultEvents: {
+    /**
+     * Serializes Req.QueryVaultEvents to JSON.
+     */
+    encode: function (msg: Partial<Req.QueryVaultEvents>): string {
+      return JSON.stringify(ReqJSON.QueryVaultEvents._writeMessage(msg));
+    },
+
+    /**
+     * Deserializes Req.QueryVaultEvents from JSON.
+     */
+    decode: function (json: string): Req.QueryVaultEvents {
+      return ReqJSON.QueryVaultEvents._readMessage(
+        ReqJSON.QueryVaultEvents.initialize(),
+        JSON.parse(json)
+      );
+    },
+
+    /**
+     * Initializes Req.QueryVaultEvents with all fields set to their default value.
+     */
+    initialize: function (): Req.QueryVaultEvents {
+      return {
+        cursor: "",
+        limit: 0n,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Req.QueryVaultEvents>
+    ): Record<string, unknown> {
+      const json: Record<string, unknown> = {};
+      if (msg.cursor) {
+        json.cursor = msg.cursor;
+      }
+      if (msg.limit) {
+        json.limit = msg.limit.toString();
+      }
+      return json;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: Req.QueryVaultEvents,
+      json: any
+    ): Req.QueryVaultEvents {
+      const _cursor = json.cursor;
+      if (_cursor) {
+        msg.cursor = _cursor;
+      }
+      const _limit = json.limit;
+      if (_limit) {
+        msg.limit = BigInt(_limit);
+      }
+      return msg;
+    },
+  },
+
   FindFlip: {
     /**
      * Serializes Req.FindFlip to JSON.
@@ -9137,6 +9423,78 @@ export const RespJSON = {
           VaultJSON.Event._readMessage(m, item);
           msg.events.push(m);
         }
+      }
+      return msg;
+    },
+  },
+
+  QueryVaultEvents: {
+    /**
+     * Serializes Resp.QueryVaultEvents to JSON.
+     */
+    encode: function (msg: Partial<Resp.QueryVaultEvents>): string {
+      return JSON.stringify(RespJSON.QueryVaultEvents._writeMessage(msg));
+    },
+
+    /**
+     * Deserializes Resp.QueryVaultEvents from JSON.
+     */
+    decode: function (json: string): Resp.QueryVaultEvents {
+      return RespJSON.QueryVaultEvents._readMessage(
+        RespJSON.QueryVaultEvents.initialize(),
+        JSON.parse(json)
+      );
+    },
+
+    /**
+     * Initializes Resp.QueryVaultEvents with all fields set to their default value.
+     */
+    initialize: function (): Resp.QueryVaultEvents {
+      return {
+        events: [],
+        pagination: Pagination.initialize(),
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Resp.QueryVaultEvents>
+    ): Record<string, unknown> {
+      const json: Record<string, unknown> = {};
+      if (msg.events?.length) {
+        json.events = msg.events.map(VaultJSON.Event._writeMessage);
+      }
+      if (msg.pagination) {
+        const pagination = PaginationJSON._writeMessage(msg.pagination);
+        if (Object.keys(pagination).length > 0) {
+          json.pagination = pagination;
+        }
+      }
+      return json;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: Resp.QueryVaultEvents,
+      json: any
+    ): Resp.QueryVaultEvents {
+      const _events = json.events;
+      if (_events) {
+        for (const item of _events) {
+          const m = Vault.Event.initialize();
+          VaultJSON.Event._readMessage(m, item);
+          msg.events.push(m);
+        }
+      }
+      const _pagination = json.pagination;
+      if (_pagination) {
+        const m = Pagination.initialize();
+        PaginationJSON._readMessage(m, _pagination);
+        msg.pagination = m;
       }
       return msg;
     },
