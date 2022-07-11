@@ -95,6 +95,7 @@ message Vault {
         string dink = 4;
         string dart = 5;
         string debt = 6;
+        string id = 7;
     }
 
     string id = 1;
@@ -260,6 +261,11 @@ message Req {
         string id = 1;
     }
 
+    message QueryVaultEvents {
+        string cursor = 1;
+        int64 limit = 2;
+    }
+
     message FindFlip {
         // @inject_tag: valid:"uuid,required"
         string id = 1;
@@ -345,6 +351,11 @@ message Resp {
         repeated Vault.Event events = 1;
     }
 
+    message QueryVaultEvents {
+        repeated Vault.Event events = 1;
+        Pagination pagination = 2;
+    }
+
     message ListFlips {
         repeated Flip flips = 1;
         Pagination pagination = 2;
@@ -400,6 +411,7 @@ service Pando {
     rpc ListVaults(Req.ListVaults) returns (Resp.ListVaults);
     rpc ListMyVaults(Req.ListMyVaults) returns (Resp.ListMyVaults);
     rpc ListVaultEvents(Req.ListVaultEvents) returns (Resp.ListVaultEvents);
+    rpc QueryVaultEvents(Req.QueryVaultEvents) returns (Resp.QueryVaultEvents);
     // flips
     rpc FindFlip(Req.FindFlip) returns (Flip);
     rpc ListFlips(Req.ListFlips) returns (Resp.ListFlips);
