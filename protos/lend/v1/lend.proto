@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package lend.v1; 
+option go_package = "github.com/fox-one/pando-protos/lend/v1;lend";
+
+import "common/v1/common.proto";
+
+service LendService {
+    rpc Loan(LoanRequest) returns (LoanResponse);
+    rpc Repay(RepayRequest) returns (RepayResponse);
+    rpc Info(InfoRequest) returns (InfoResponse);
+    rpc OperationLog(OperationLogRequest) returns (OperationLogResponse);
+}
+
+enum PledgeType {
+  PLEDGE_TYPE_NOT_SET = 0;
+  BOX = 1;
+  XIN = 2;
+  TOKEN = 3;
+}
+
+enum OperationType {
+  OPERATION_TYPE_NOT_SET = 0;
+  LOAN = 1;
+  REPAY = 2;
+}
+
+message LoanRequest {
+  string amount = 1;
+  PledgeType pledge_type = 2;
+  string asset_id = 3;
+  string count = 4;
+  string trace_id = 5;
+}
+
+message LoanResponse {}
+
+message RepayRequest {
+  string amount = 1;
+  string trace_id = 2;
+}
+
+message RepayResponse {}
+
+message PledgeItem {
+  PledgeType pledge_type = 1;
+  string asset_id = 2;
+  string count = 3;
+}
+
+message InfoRequest {}
+
+message InfoResponse {
+  string loan_amount = 1;
+  string loan_interest = 2;
+  repeated PledgeItem items = 3;
+}
+
+message OperationLogRequest {
+  common.v1.PaginationRequest pagination = 1;
+}
+
+message OperationLogResponse {
+  message Item {
+    OperationType type = 1;
+    PledgeItem item = 2;
+    string repayment_amount = 3;
+  }
+  common.v1.PaginationResponse pagination = 1;
+  repeated Item items = 2;
+}
