@@ -7,6 +7,13 @@ service LendService {
     rpc Info(InfoRequest) returns (InfoResponse);
 }
 
+enum OperationType {
+  OPERATION_TYPE_NOT_SET = 0;
+  PLEDGE = 1;
+  LOAN = 2;
+  REPAY = 3;
+}
+
 enum PledgeType {
   PLEDGE_TYPE_NOT_SET = 0;
   NODE = 1;
