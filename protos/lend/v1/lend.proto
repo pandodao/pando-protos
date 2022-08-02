@@ -17,7 +17,9 @@ enum PledgeType {
 message PledgeItem {
   PledgeType pledge_type = 1;
   string asset_id = 2;
-  string count = 3;
+  string amount = 3;
+  string price = 4;
+  int32 price_at = 5;
 }
 
 message InfoRequest {}
@@ -26,4 +28,5 @@ message InfoResponse {
   string loan_amount = 1;
   string loan_interest = 2;
   repeated PledgeItem items = 3;
+  string pledge_amount = 4;
 }
