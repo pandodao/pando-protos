@@ -7,6 +7,27 @@ service LendService {
     rpc Info(InfoRequest) returns (InfoResponse);
 }
 
+message TransferData {
+  OperationType operation_type = 1;
+  oneof data {
+    TransferPledgeData pledge = 2;
+    TransferLoanData loan = 3;
+    TransferRepayData repay = 4;
+  }
+}
+
+message TransferPledgeData {
+  PledgeType pledge_type = 1;
+}
+
+message TransferLoanData {
+  string amount = 1;
+}
+
+message TransferRepayData {
+  string amount = 1;
+}
+
 enum OperationType {
   OPERATION_TYPE_NOT_SET = 0;
   PLEDGE = 1;
