@@ -24,9 +24,7 @@ message TransferLoanData {
   string amount = 1;
 }
 
-message TransferRepayData {
-  string amount = 1;
-}
+message TransferRepayData {}
 
 enum OperationType {
   OPERATION_TYPE_NOT_SET = 0;
