@@ -12,6 +12,13 @@ message TransferData {
   TransferPledgeData pledge = 2;
   TransferLoanData loan = 3;
   TransferRepayData repay = 4;
+  TransferWithdrawData withdraw = 5;
+}
+
+message TransferWithdrawData {
+  PledgeType pledge_type = 1;
+  string asset_id = 2;
+  string amount = 3;
 }
 
 message TransferPledgeData {
@@ -27,8 +34,9 @@ message TransferRepayData {}
 enum OperationType {
   OPERATION_TYPE_NOT_SET = 0;
   PLEDGE = 1;
-  LOAN = 2;
-  REPAY = 3;
+  WITHDRAW = 2;
+  LOAN = 3;
+  REPAY = 4;
 }
 
 enum PledgeType {
