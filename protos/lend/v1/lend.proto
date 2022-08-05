@@ -9,11 +9,9 @@ service LendService {
 
 message TransferData {
   OperationType operation_type = 1;
-  oneof data {
-    TransferPledgeData pledge = 2;
-    TransferLoanData loan = 3;
-    TransferRepayData repay = 4;
-  }
+  TransferPledgeData pledge = 2;
+  TransferLoanData loan = 3;
+  TransferRepayData repay = 4;
 }
 
 message TransferPledgeData {
