@@ -5,6 +5,8 @@ option go_package = "github.com/fox-one/pando-protos/lend/v1;lend";
 
 service LendService {
     rpc Info(InfoRequest) returns (InfoResponse);
+    rpc CreateOperationLog(CreateOperationLogRequest) returns (CreateOperationLogResponse);
+    rpc GetOperationLog(GetOperationLogRequest) returns (GetOperationLogResponse);
 }
 
 message TransferData {
@@ -39,6 +41,13 @@ enum OperationType {
   REPAY = 4;
 }
 
+enum OperationStatus {
+  OPERATION_STATUS_NOT_SET = 0;
+  PENDING = 1;
+  SUCCESS = 2;
+  FAILED = 3;
+}
+
 enum PledgeType {
   PLEDGE_TYPE_NOT_SET = 0;
   NODE = 1;
@@ -61,4 +70,30 @@ message InfoResponse {
   string loan_interest = 2;
   repeated PledgeItem items = 3;
   string pledge_amount = 4;
+}
+
+message CreateOperationLogRequest {
+  string trace_id = 1;
+}
+
+message CreateOperationLogResponse {}
+
+message GetOperationLogRequest {
+  string trace_id = 1;
+}
+
+message OperationLog {
+  string trace_id = 1;
+  OperationType operation_type = 2;
+  string loan_amount = 3;
+  string repay_amount = 4;
+  PledgeType pledge_type = 5;
+  string pledge_amount = 6;
+  string pledge_asset_id = 7;
+  OperationStatus status = 8;
+  int32 created_at = 9;
+}
+
+message GetOperationLogResponse {
+  OperationLog operation_log = 1;
 }
