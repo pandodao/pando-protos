@@ -63,6 +63,7 @@ message PledgeItem {
   string amount = 3;
   string price = 4;
   int32 price_at = 5;
+  bool active = 6;
 }
 
 message InfoRequest {}
