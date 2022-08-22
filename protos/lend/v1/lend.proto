@@ -134,7 +134,7 @@ message GetOperationLogResponse {
 }
 
 message ListOperationLogsRequest {
-  string cursor = 1;
+  int64 cursor = 1;
   int64 limit = 2;
 }
 
