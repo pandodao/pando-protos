@@ -3,13 +3,16 @@ syntax = "proto3";
 package lend.v1; 
 option go_package = "github.com/fox-one/pando-protos/lend/v1;lend";
 
-import "common/v1/common.proto";
-
 service LendService {
+    rpc Config(ConfigRequest) returns (ConfigResponse);
     rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
+
+    // --- auth required
+
     rpc Info(InfoRequest) returns (InfoResponse);
     rpc CreateOperationLog(CreateOperationLogRequest) returns (CreateOperationLogResponse);
     rpc GetOperationLog(GetOperationLogRequest) returns (GetOperationLogResponse);
+    rpc ListOperationLogs(ListOperationLogsRequest) returns (ListOperationLogsResponse);
 }
 
 message TransferData {
@@ -36,6 +39,18 @@ message TransferLoanData {
 
 message TransferRepayData {}
 
+message ConfigRequest {}
+
+message ConfigResponse {
+  string security_pledge_rate = 1;
+  string clearing_pledge_rate = 2;
+}
+
+message Pagination {
+  string next_cursor = 1;
+  bool has_next = 2;
+}
+
 enum OperationType {
   OPERATION_TYPE_NOT_SET = 0;
   PLEDGE = 1;
@@ -58,19 +73,28 @@ enum PledgeType {
   LOCAL = 3;
 }
 
+message Asset {
+  string asset_id = 1;
+  string chain_id = 2;
+  string symbol = 3;
+  string name = 4;
+  string logo = 5;
+  string price = 6;
+  int32  price_at = 7;
+  string pledge_rate = 8;
+}
+
 message ListAssetsRequest {}
 
 message ListAssetsResponse {
-  repeated common.v1.Asset assets = 1;
+  repeated Asset assets = 1;
 }
 
 message PledgeItem {
   PledgeType pledge_type = 1;
-  common.v1.Asset asset = 2;
+  Asset asset = 2;
   string amount = 3;
-  string price = 4;
-  int32 price_at = 5;
-  bool active = 6;
+  bool active = 4;
 }
 
 message InfoRequest {}
@@ -99,11 +123,21 @@ message OperationLog {
   string repay_amount = 4;
   PledgeType pledge_type = 5;
   string pledge_amount = 6;
-  common.v1.Asset pledge_asset = 7;
+  Asset pledge_asset = 7;
   OperationStatus status = 8;
   int32 created_at = 9;
 }
 
 message GetOperationLogResponse {
   OperationLog operation_log = 1;
+}
+
+message ListOperationLogsRequest {
+  string cursor = 1;
+  int64 limit = 2;
+}
+
+message ListOperationLogsResponse {
+  repeated OperationLog operation_logs = 1;
+  Pagination pagination = 2;
 }
