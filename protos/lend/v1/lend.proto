@@ -71,6 +71,7 @@ enum PledgeType {
   NODE = 1;
   POOL = 2;
   LOCAL = 3;
+  DUALNODE = 4;
 }
 
 message Asset {
