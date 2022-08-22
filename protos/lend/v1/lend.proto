@@ -6,6 +6,7 @@ option go_package = "github.com/fox-one/pando-protos/lend/v1;lend";
 import "common/v1/common.proto";
 
 service LendService {
+    rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
     rpc Info(InfoRequest) returns (InfoResponse);
     rpc CreateOperationLog(CreateOperationLogRequest) returns (CreateOperationLogResponse);
     rpc GetOperationLog(GetOperationLogRequest) returns (GetOperationLogResponse);
@@ -55,6 +56,12 @@ enum PledgeType {
   NODE = 1;
   POOL = 2;
   LOCAL = 3;
+}
+
+message ListAssetsRequest {}
+
+message ListAssetsResponse {
+  repeated common.v1.Asset assets = 1;
 }
 
 message PledgeItem {
