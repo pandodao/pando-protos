@@ -109,7 +109,7 @@ message InfoResponse {
   string loan_amount = 1;
   string loan_interest = 2;
   repeated PledgeGroup groups = 3;
-  string pledge_amount = 4;
+  string loan_limit = 4;
 }
 
 message CreateOperationLogRequest {
