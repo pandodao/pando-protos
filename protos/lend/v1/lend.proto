@@ -116,6 +116,9 @@ message InfoResponse {
 
 message CreateOperationLogRequest {
   string trace_id = 1;
+  string memo_json = 2;
+  string asset_id = 3;
+  string amount = 4;
 }
 
 message CreateOperationLogResponse {}
@@ -135,7 +138,7 @@ message OperationLog {
   OperationStatus status = 8;
   int32 created_at = 9;
   string failed_reason = 10;
-  string transfer_memo = 11;
+  string transfer_memo_json = 11;
   string transfer_asset_id = 12;
   string transfer_amount = 13;
 }
