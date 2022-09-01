@@ -13,6 +13,7 @@ service LendService {
     rpc CreateOperationLog(CreateOperationLogRequest) returns (CreateOperationLogResponse);
     rpc GetOperationLog(GetOperationLogRequest) returns (GetOperationLogResponse);
     rpc ListOperationLogs(ListOperationLogsRequest) returns (ListOperationLogsResponse);
+    rpc CancelOperationLog(CancelOperationLogRequest) returns (CancelOperationLogResponse);
 }
 
 message TransferData {
@@ -65,6 +66,7 @@ enum OperationStatus {
   PENDING = 1;
   SUCCESS = 2;
   FAILED = 3;
+  CANCELLED = 4;
 }
 
 enum PledgeType {
@@ -133,6 +135,9 @@ message OperationLog {
   OperationStatus status = 8;
   int32 created_at = 9;
   string failed_reason = 10;
+  string transfer_memo = 11;
+  string transfer_asset_id = 12;
+  string transfer_amount = 13;
 }
 
 message GetOperationLogResponse {
@@ -148,3 +153,9 @@ message ListOperationLogsResponse {
   repeated OperationLog operation_logs = 1;
   Pagination pagination = 2;
 }
+
+message CancelOperationLogRequest {
+  string trace_id = 1;
+}
+
+message CancelOperationLogResponse {}
