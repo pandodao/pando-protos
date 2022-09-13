@@ -110,8 +110,8 @@ message PledgeGroup {
 message InfoRequest {}
 
 message InfoResponse {
+  reserved 2;
   string loan_amount = 1;
-  string loan_interest = 2;
   repeated PledgeGroup groups = 3;
   string loan_limit = 4;
   uint32 last_loan_activity_at = 5;
