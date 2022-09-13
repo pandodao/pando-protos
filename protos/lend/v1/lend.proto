@@ -47,7 +47,6 @@ message ConfigResponse {
   string security_pledge_rate = 1;
   string clearing_pledge_rate = 2;
   string interest_rate = 3;
-  uint32 last_loan_activity_at = 4;
 }
 
 message Pagination {
@@ -115,6 +114,7 @@ message InfoResponse {
   string loan_interest = 2;
   repeated PledgeGroup groups = 3;
   string loan_limit = 4;
+  uint32 last_loan_activity_at = 5;
 }
 
 message CreateOperationLogRequest {
