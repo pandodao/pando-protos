@@ -47,6 +47,7 @@ message ConfigResponse {
   string security_pledge_rate = 1;
   string clearing_pledge_rate = 2;
   string interest_rate = 3;
+  uint32 interest_duration = 4;
 }
 
 message Pagination {
