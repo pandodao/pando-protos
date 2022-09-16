@@ -116,8 +116,7 @@ message InfoResponse {
   repeated PledgeGroup groups = 3;
   string loan_limit = 4;
   uint32 last_loan_activity_at = 5;
-  string interest_factor = 6;
-  uint32 interest_facor_updated_at = 7;
+  uint32 interest_facor_updated_at = 6;
 }
 
 message CreateOperationLogRequest {
