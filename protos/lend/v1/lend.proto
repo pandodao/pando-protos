@@ -56,6 +56,11 @@ message Pagination {
   bool has_next = 2;
 }
 
+enum UserStatus {
+  USER_STATUS_NOT_SET = 0;
+  LIQUIDATING = 1;
+}
+
 enum OperationType {
   OPERATION_TYPE_NOT_SET = 0;
   PLEDGE = 1;
@@ -63,6 +68,7 @@ enum OperationType {
   LOAN = 3;
   REPAY = 4;
   REFUND = 5;
+  LIQUIDATION = 6;
 }
 
 enum OperationStatus {
@@ -126,6 +132,7 @@ message InfoResponse {
   string loan_limit = 4;
   uint32 last_loan_activity_at = 5;
   uint32 interest_facor_updated_at = 6;
+  UserStatus user_status = 7;
 }
 
 message CreateOperationLogRequest {
