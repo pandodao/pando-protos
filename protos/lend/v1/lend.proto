@@ -9,6 +9,7 @@ service LendService {
 
     // --- auth required
 
+    rpc State(StateRequest) returns (StateResponse);
     rpc Info(InfoRequest) returns (InfoResponse);
     rpc CreateOperationLog(CreateOperationLogRequest) returns (CreateOperationLogResponse);
     rpc GetOperationLog(GetOperationLogRequest) returns (GetOperationLogResponse);
@@ -108,6 +109,12 @@ message PledgeGroup {
   PledgeType pledge_type = 1;
   bool active = 2;
   repeated PledgeItem items = 3;
+}
+
+message StateRequest {}
+
+message StateResponse {
+  string loan_amount_queued = 1;
 }
 
 message InfoRequest {}
