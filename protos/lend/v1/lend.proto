@@ -67,9 +67,11 @@ enum OperationType {
 enum OperationStatus {
   OPERATION_STATUS_NOT_SET = 0;
   PENDING = 1;
-  SUCCESS = 2;
-  FAILED = 3;
-  CANCELLED = 4;
+  // only for LOAN operation
+  QUEUED = 2;
+  SUCCESS = 3;
+  FAILED = 4;
+  CANCELLED = 5;
 }
 
 enum PledgeType {
