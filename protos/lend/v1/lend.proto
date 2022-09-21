@@ -58,7 +58,8 @@ message Pagination {
 
 enum UserStatus {
   USER_STATUS_NOT_SET = 0;
-  LIQUIDATING = 1;
+  NORMAL = 1;
+  LIQUIDATING = 2;
 }
 
 enum OperationType {
