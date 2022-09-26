@@ -163,6 +163,9 @@ message OperationLog {
   string transfer_memo = 11;
   string transfer_asset_id = 12;
   string transfer_amount = 13;
+  bool is_system = 14;
+  string before_loan_amount = 15;
+  string after_loan_amount = 16;
 }
 
 message GetOperationLogResponse {
