@@ -127,13 +127,10 @@ message StateResponse {
 message InfoRequest {}
 
 message InfoResponse {
-  reserved 2;
   string loan_amount = 1;
-  repeated PledgeGroup groups = 3;
-  string loan_limit = 4;
-  uint32 last_loan_activity_at = 5;
-  uint32 interest_facor_updated_at = 6;
-  UserStatus user_status = 7;
+  repeated PledgeGroup groups = 2;
+  string loan_limit = 3;
+  UserStatus user_status = 4;
 }
 
 message CreateOperationLogRequest {
