@@ -24,6 +24,7 @@ message TransferData {
   TransferRepayData repay = 4;
   TransferWithdrawData withdraw = 5;
   string trace_id = 6;
+  bool charge = 7;
 }
 
 message TransferWithdrawData {
