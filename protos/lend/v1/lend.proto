@@ -119,7 +119,9 @@ message PledgeGroup {
   repeated PledgeItem items = 3;
 }
 
-message StateRequest {}
+message StateRequest {
+  uint64 operation_id = 1;
+}
 
 message StateResponse {
   string loan_amount_queued = 1;
