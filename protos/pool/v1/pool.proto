@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+package pool.v1; 
+option go_package = "github.com/fox-one/pando-protos/pool/v1;pool";
+
+service PoolService {}
