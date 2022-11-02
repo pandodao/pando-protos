@@ -1,0 +1,191 @@
+syntax = "proto3";
+
+package lend.v1; 
+option go_package = "github.com/fox-one/pando-protos/lend/v1;lend";
+
+service LendService {
+    rpc Config(ConfigRequest) returns (ConfigResponse);
+    rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
+
+    // --- auth required
+
+    rpc State(StateRequest) returns (StateResponse);
+    rpc Info(InfoRequest) returns (InfoResponse);
+    rpc CreateOperationLog(CreateOperationLogRequest) returns (CreateOperationLogResponse);
+    rpc GetOperationLog(GetOperationLogRequest) returns (GetOperationLogResponse);
+    rpc ListOperationLogs(ListOperationLogsRequest) returns (ListOperationLogsResponse);
+    rpc CancelOperationLog(CancelOperationLogRequest) returns (CancelOperationLogResponse);
+}
+
+message TransferData {
+  OperationType operation_type = 1;
+  TransferPledgeData pledge = 2;
+  TransferLoanData loan = 3;
+  TransferRepayData repay = 4;
+  TransferWithdrawData withdraw = 5;
+  string trace_id = 6;
+  bool charge = 7;
+}
+
+message TransferWithdrawData {
+  PledgeType pledge_type = 1;
+  string asset_id = 2;
+  string amount = 3;
+}
+
+message TransferPledgeData {
+  PledgeType pledge_type = 1;
+}
+
+message TransferLoanData {
+  string amount = 1;
+}
+
+message TransferRepayData {}
+
+message ConfigRequest {}
+
+message ConfigResponse {
+  string security_pledge_rate = 1;
+  string clearing_pledge_rate = 2;
+  string interest_rate = 3;
+  uint32 interest_duration = 4;
+}
+
+message Pagination {
+  string next_cursor = 1;
+  bool has_next = 2;
+}
+
+enum UserStatus {
+  USER_STATUS_NOT_SET = 0;
+  NORMAL = 1;
+  LIQUIDATING = 2;
+}
+
+enum OperationType {
+  OPERATION_TYPE_NOT_SET = 0;
+  PLEDGE = 1;
+  WITHDRAW = 2;
+  LOAN = 3;
+  REPAY = 4;
+  REFUND = 5;
+  LIQUIDATION = 6;
+}
+
+enum OperationStatus {
+  OPERATION_STATUS_NOT_SET = 0;
+  PENDING = 1;
+  // only for LOAN operation
+  QUEUED = 2;
+  PROCESSING = 3;
+  SUCCESS = 4;
+  FAILED = 5;
+  CANCELLED = 6;
+}
+
+enum PledgeType {
+  PLEDGE_TYPE_NOT_SET = 0;
+  NODE = 1;
+  POOL = 2;
+  LOCAL = 3;
+}
+
+message Asset {
+  string asset_id = 1;
+  string chain_id = 2;
+  string symbol = 3;
+  string name = 4;
+  string logo = 5;
+  string price = 6;
+  int32  price_at = 7;
+  string pledge_rate = 8;
+}
+
+message ListAssetsRequest {}
+
+message ListAssetsResponse {
+  repeated Asset assets = 1;
+}
+
+message PledgeItem {
+  Asset asset = 1;
+  string amount = 2;
+  string name = 3;
+}
+
+message PledgeGroup {
+  PledgeType pledge_type = 1;
+  bool active = 2;
+  repeated PledgeItem items = 3;
+}
+
+message StateRequest {
+  uint64 operation_id = 1;
+}
+
+message StateResponse {
+  string loan_amount_queued = 1;
+}
+
+message InfoRequest {}
+
+message InfoResponse {
+  string loan_amount = 1;
+  repeated PledgeGroup groups = 2;
+  string loan_limit = 3;
+  UserStatus user_status = 4;
+}
+
+message CreateOperationLogRequest {
+  string trace_id = 1;
+  string memo = 2;
+  string asset_id = 3;
+  string amount = 4;
+}
+
+message CreateOperationLogResponse {}
+
+message GetOperationLogRequest {
+  string trace_id = 1;
+}
+
+message OperationLog {
+  uint64 id = 17;
+  string trace_id = 1;
+  OperationType operation_type = 2;
+  string loan_amount = 3;
+  string repay_amount = 4;
+  PledgeType pledge_type = 5;
+  string pledge_amount = 6;
+  Asset pledge_asset = 7;
+  OperationStatus status = 8;
+  int32 created_at = 9;
+  string failed_reason = 10;
+  string transfer_memo = 11;
+  string transfer_asset_id = 12;
+  string transfer_amount = 13;
+  bool is_system = 14;
+  string before_loan_amount = 15;
+  string after_loan_amount = 16;
+}
+
+message GetOperationLogResponse {
+  OperationLog operation_log = 1;
+}
+
+message ListOperationLogsRequest {
+  int64 cursor = 1;
+  int64 limit = 2;
+}
+
+message ListOperationLogsResponse {
+  repeated OperationLog operation_logs = 1;
+  Pagination pagination = 2;
+}
+
+message CancelOperationLogRequest {
+  string trace_id = 1;
+}
+
+message CancelOperationLogResponse {}
