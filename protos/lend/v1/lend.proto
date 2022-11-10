@@ -79,9 +79,10 @@ enum OperationStatus {
   // only for LOAN operation
   QUEUED = 2;
   PROCESSING = 3;
-  SUCCESS = 4;
-  FAILED = 5;
-  CANCELLED = 6;
+  REVIEWING = 4;
+  SUCCESS = 5;
+  FAILED = 6;
+  CANCELLED = 7;
 }
 
 enum PledgeType {
