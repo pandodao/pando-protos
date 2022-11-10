@@ -353,6 +353,7 @@ export type OperationStatus =
   | "PENDING"
   | "QUEUED"
   | "PROCESSING"
+  | "REVIEWING"
   | "SUCCESS"
   | "FAILED"
   | "CANCELLED";
@@ -630,6 +631,7 @@ export const OperationStatus = {
    */
   QUEUED: "QUEUED",
   PROCESSING: "PROCESSING",
+  REVIEWING: "REVIEWING",
   SUCCESS: "SUCCESS",
   FAILED: "FAILED",
   CANCELLED: "CANCELLED",
@@ -651,12 +653,15 @@ export const OperationStatus = {
         return "PROCESSING";
       }
       case 4: {
-        return "SUCCESS";
+        return "REVIEWING";
       }
       case 5: {
-        return "FAILED";
+        return "SUCCESS";
       }
       case 6: {
+        return "FAILED";
+      }
+      case 7: {
         return "CANCELLED";
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
@@ -682,14 +687,17 @@ export const OperationStatus = {
       case "PROCESSING": {
         return 3;
       }
-      case "SUCCESS": {
+      case "REVIEWING": {
         return 4;
       }
-      case "FAILED": {
+      case "SUCCESS": {
         return 5;
       }
-      case "CANCELLED": {
+      case "FAILED": {
         return 6;
+      }
+      case "CANCELLED": {
+        return 7;
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -2851,6 +2859,7 @@ export const OperationStatusJSON = {
    */
   QUEUED: "QUEUED",
   PROCESSING: "PROCESSING",
+  REVIEWING: "REVIEWING",
   SUCCESS: "SUCCESS",
   FAILED: "FAILED",
   CANCELLED: "CANCELLED",
@@ -2872,12 +2881,15 @@ export const OperationStatusJSON = {
         return "PROCESSING";
       }
       case 4: {
-        return "SUCCESS";
+        return "REVIEWING";
       }
       case 5: {
-        return "FAILED";
+        return "SUCCESS";
       }
       case 6: {
+        return "FAILED";
+      }
+      case 7: {
         return "CANCELLED";
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
@@ -2903,14 +2915,17 @@ export const OperationStatusJSON = {
       case "PROCESSING": {
         return 3;
       }
-      case "SUCCESS": {
+      case "REVIEWING": {
         return 4;
       }
-      case "FAILED": {
+      case "SUCCESS": {
         return 5;
       }
-      case "CANCELLED": {
+      case "FAILED": {
         return 6;
+      }
+      case "CANCELLED": {
+        return 7;
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
