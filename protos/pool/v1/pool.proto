@@ -56,11 +56,19 @@ message GetEarningProductResponse {
   EarningProduct product = 1;
 }
 
+message UserEarningProductStatus {
+  enum Enum {
+    NOT_SET = 0;
+    ACTIVE = 1;
+    INACTIVE = 2;
+  }
+}
+
 message UserEarningProduct {
   int64 id = 1;
   string user_id = 2;
   int64 earning_product_id = 3;
-  string status = 4;
+  UserEarningProductStatus.Enum status = 4;
   string normalized_amount = 5;
   string total_buy_amount = 6;
   string total_redeem_amount = 7;
