@@ -9,6 +9,9 @@ service PoolService {
   rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
   rpc ListEarningProducts(ListEarningProductsRequest) returns (ListEarningProductsResponse);
   rpc GetEarningProduct(GetEarningProductRequest) returns (GetEarningProductResponse);
+
+  rpc ListMyEarningProducts(ListMyEarningProductsRequest) returns (ListMyEarningProductsResponse);
+  rpc GetMyEarningProduct(GetMyEarningProductRequest) returns (GetMyEarningProductResponse);
 }
 
 message ListAssetsRequest {}
@@ -51,4 +54,31 @@ message GetEarningProductRequest {
 
 message GetEarningProductResponse {
   EarningProduct product = 1;
+}
+
+message UserEarningProduct {
+  int64 id = 1;
+  string user_id = 2;
+  int64 earning_product_id = 3;
+  string status = 4;
+  string normalized_amount = 5;
+  string total_buy_amount = 6;
+  string total_redeem_amount = 7;
+  int64 version = 8;
+  int32 created_at = 9;
+  int32 updated_at = 10;
+}
+
+message ListMyEarningProductsRequest {}
+
+message ListMyEarningProductsResponse {
+  repeated UserEarningProduct products = 1;
+}
+
+message GetMyEarningProductRequest {
+  int64 id = 1;
+}
+
+message GetMyEarningProductResponse {
+  UserEarningProduct product = 1;
 }
