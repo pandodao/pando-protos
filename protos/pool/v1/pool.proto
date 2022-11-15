@@ -3,4 +3,52 @@ syntax = "proto3";
 package pool.v1; 
 option go_package = "github.com/fox-one/pando-protos/pool/v1;pool";
 
-service PoolService {}
+import "common/v1/common.proto";
+
+service PoolService {
+  rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
+  rpc ListEarningProducts(ListEarningProductsRequest) returns (ListEarningProductsResponse);
+  rpc GetEarningProduct(GetEarningProductRequest) returns (GetEarningProductResponse);
+}
+
+message ListAssetsRequest {}
+
+message ListAssetsResponse {
+  repeated common.v1.Asset assets = 1;
+}
+
+message EarningProduct {
+  int64 id = 1;
+  string account_id = 2;
+  string name = 3;
+  string description = 4;
+  string asset_id = 5;
+  string interest_rate =6;
+  int64 period = 7;
+  string min_amount_per_order = 8;
+  string max_amount_per_order = 9;
+  string sold = 10;
+  string redeemed = 11;
+  string capacity = 12;
+  string normalized_amount = 13;
+  string borrow_rate = 14;
+  int64 borrow_rate_circle = 15;
+  int64 redemption_period = 16;
+  int64 version = 17;
+  int32 borrow_rate_updated_at = 18;
+  int32 created_at = 19;
+}
+
+message ListEarningProductsRequest {}
+
+message ListEarningProductsResponse {
+  repeated EarningProduct products = 1;
+}
+
+message GetEarningProductRequest {
+  int64 id = 1;
+}
+
+message GetEarningProductResponse {
+  EarningProduct product = 1;
+}
