@@ -15,18 +15,21 @@ service PoolService {
 }
 
 
+enum EarningAction {
+  NOT_SET = 0;
+  BUY = 1;
+  REDEEM = 2;
+  DEPOSIT = 3;
+}
+
+message EarningSnapshotBuyData {
+  int64 product_id = 1;
+  string follow_id = 2;
+}
+
 message EarningSnapshotData {
-  enum Enum {
-    NOT_SET = 0;
-    BUY = 1;
-    REDEEM = 2;
-    DEPOSIT = 3;
-  }
-  Enum a = 1;
-  string p1 = 2;
-  string p2 = 3;
-  string p3 = 4;
-  string p4 = 5;
+  EarningAction action = 1;
+  EarningSnapshotBuyData buy_data = 2;
 }
 
 message ListAssetsRequest {}
