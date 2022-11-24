@@ -114,6 +114,30 @@ export async function CancelOperationLog(
   return CancelOperationLogResponse.decode(response);
 }
 
+export async function GetLiquidation(
+  getLiquidationRequest: GetLiquidationRequest,
+  config?: ClientConfiguration
+): Promise<GetLiquidationResponse> {
+  const response = await PBrequest(
+    "/lend.v1.LendService/GetLiquidation",
+    GetLiquidationRequest.encode(getLiquidationRequest),
+    config
+  );
+  return GetLiquidationResponse.decode(response);
+}
+
+export async function HandleReviewingOperation(
+  handleReviewingOperationRequest: HandleReviewingOperationRequest,
+  config?: ClientConfiguration
+): Promise<HandleReviewingOperationResponse> {
+  const response = await PBrequest(
+    "/lend.v1.LendService/HandleReviewingOperation",
+    HandleReviewingOperationRequest.encode(handleReviewingOperationRequest),
+    config
+  );
+  return HandleReviewingOperationResponse.decode(response);
+}
+
 //========================================//
 //        LendService JSON Client         //
 //========================================//
@@ -214,6 +238,30 @@ export async function CancelOperationLogJSON(
   return CancelOperationLogResponseJSON.decode(response);
 }
 
+export async function GetLiquidationJSON(
+  getLiquidationRequest: GetLiquidationRequest,
+  config?: ClientConfiguration
+): Promise<GetLiquidationResponse> {
+  const response = await JSONrequest(
+    "/lend.v1.LendService/GetLiquidation",
+    GetLiquidationRequestJSON.encode(getLiquidationRequest),
+    config
+  );
+  return GetLiquidationResponseJSON.decode(response);
+}
+
+export async function HandleReviewingOperationJSON(
+  handleReviewingOperationRequest: HandleReviewingOperationRequest,
+  config?: ClientConfiguration
+): Promise<HandleReviewingOperationResponse> {
+  const response = await JSONrequest(
+    "/lend.v1.LendService/HandleReviewingOperation",
+    HandleReviewingOperationRequestJSON.encode(handleReviewingOperationRequest),
+    config
+  );
+  return HandleReviewingOperationResponseJSON.decode(response);
+}
+
 //========================================//
 //              LendService               //
 //========================================//
@@ -251,6 +299,16 @@ export interface LendService<Context = unknown> {
     cancelOperationLogRequest: CancelOperationLogRequest,
     context: Context
   ) => Promise<CancelOperationLogResponse> | CancelOperationLogResponse;
+  GetLiquidation: (
+    getLiquidationRequest: GetLiquidationRequest,
+    context: Context
+  ) => Promise<GetLiquidationResponse> | GetLiquidationResponse;
+  HandleReviewingOperation: (
+    handleReviewingOperationRequest: HandleReviewingOperationRequest,
+    context: Context
+  ) =>
+    | Promise<HandleReviewingOperationResponse>
+    | HandleReviewingOperationResponse;
 }
 
 export function createLendService<Context>(service: LendService<Context>) {
@@ -327,6 +385,30 @@ export function createLendService<Context>(service: LendService<Context>) {
         output: {
           protobuf: CancelOperationLogResponse,
           json: CancelOperationLogResponseJSON,
+        },
+      },
+      GetLiquidation: {
+        name: "GetLiquidation",
+        handler: service.GetLiquidation,
+        input: {
+          protobuf: GetLiquidationRequest,
+          json: GetLiquidationRequestJSON,
+        },
+        output: {
+          protobuf: GetLiquidationResponse,
+          json: GetLiquidationResponseJSON,
+        },
+      },
+      HandleReviewingOperation: {
+        name: "HandleReviewingOperation",
+        handler: service.HandleReviewingOperation,
+        input: {
+          protobuf: HandleReviewingOperationRequest,
+          json: HandleReviewingOperationRequestJSON,
+        },
+        output: {
+          protobuf: HandleReviewingOperationResponse,
+          json: HandleReviewingOperationResponseJSON,
         },
       },
     },
@@ -498,6 +580,38 @@ export interface CancelOperationLogRequest {
 }
 
 export interface CancelOperationLogResponse {}
+
+export interface GetLiquidationRequest {
+  traceId: string;
+}
+
+export interface LiquidationPledge {
+  id: bigint;
+  userId: string;
+  type: PledgeType;
+  assetId: string;
+  amount: string;
+  contractId: string;
+  name: string;
+  traceId: string;
+  assetPrice: string;
+  assetPriceUpdatedAt: number;
+  done: boolean;
+  createdAt: number;
+}
+
+export interface GetLiquidationResponse {
+  op: OperationLog;
+  pledges: LiquidationPledge[];
+}
+
+export interface HandleReviewingOperationRequest {
+  traceId: string;
+  passed: boolean;
+  failedReason: string;
+}
+
+export interface HandleReviewingOperationResponse {}
 
 //========================================//
 //        Protobuf Encode / Decode        //
@@ -2727,6 +2841,437 @@ export const CancelOperationLogResponse = {
   },
 };
 
+export const GetLiquidationRequest = {
+  /**
+   * Serializes GetLiquidationRequest to protobuf.
+   */
+  encode: function (msg: Partial<GetLiquidationRequest>): Uint8Array {
+    return GetLiquidationRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetLiquidationRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetLiquidationRequest {
+    return GetLiquidationRequest._readMessage(
+      GetLiquidationRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetLiquidationRequest with all fields set to their default value.
+   */
+  initialize: function (): GetLiquidationRequest {
+    return {
+      traceId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetLiquidationRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.traceId) {
+      writer.writeString(1, msg.traceId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetLiquidationRequest,
+    reader: BinaryReader
+  ): GetLiquidationRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.traceId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const LiquidationPledge = {
+  /**
+   * Serializes LiquidationPledge to protobuf.
+   */
+  encode: function (msg: Partial<LiquidationPledge>): Uint8Array {
+    return LiquidationPledge._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LiquidationPledge from protobuf.
+   */
+  decode: function (bytes: ByteSource): LiquidationPledge {
+    return LiquidationPledge._readMessage(
+      LiquidationPledge.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LiquidationPledge with all fields set to their default value.
+   */
+  initialize: function (): LiquidationPledge {
+    return {
+      id: 0n,
+      userId: "",
+      type: PledgeType._fromInt(0),
+      assetId: "",
+      amount: "",
+      contractId: "",
+      name: "",
+      traceId: "",
+      assetPrice: "",
+      assetPriceUpdatedAt: 0,
+      done: false,
+      createdAt: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LiquidationPledge>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.id) {
+      writer.writeInt64String(1, msg.id.toString() as any);
+    }
+    if (msg.userId) {
+      writer.writeString(2, msg.userId);
+    }
+    if (msg.type && PledgeType._toInt(msg.type)) {
+      writer.writeEnum(3, PledgeType._toInt(msg.type));
+    }
+    if (msg.assetId) {
+      writer.writeString(4, msg.assetId);
+    }
+    if (msg.amount) {
+      writer.writeString(5, msg.amount);
+    }
+    if (msg.contractId) {
+      writer.writeString(6, msg.contractId);
+    }
+    if (msg.name) {
+      writer.writeString(7, msg.name);
+    }
+    if (msg.traceId) {
+      writer.writeString(8, msg.traceId);
+    }
+    if (msg.assetPrice) {
+      writer.writeString(9, msg.assetPrice);
+    }
+    if (msg.assetPriceUpdatedAt) {
+      writer.writeUint32(10, msg.assetPriceUpdatedAt);
+    }
+    if (msg.done) {
+      writer.writeBool(11, msg.done);
+    }
+    if (msg.createdAt) {
+      writer.writeUint32(12, msg.createdAt);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LiquidationPledge,
+    reader: BinaryReader
+  ): LiquidationPledge {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = BigInt(reader.readInt64String());
+          break;
+        }
+        case 2: {
+          msg.userId = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.type = PledgeType._fromInt(reader.readEnum());
+          break;
+        }
+        case 4: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.amount = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.contractId = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.name = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.traceId = reader.readString();
+          break;
+        }
+        case 9: {
+          msg.assetPrice = reader.readString();
+          break;
+        }
+        case 10: {
+          msg.assetPriceUpdatedAt = reader.readUint32();
+          break;
+        }
+        case 11: {
+          msg.done = reader.readBool();
+          break;
+        }
+        case 12: {
+          msg.createdAt = reader.readUint32();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const GetLiquidationResponse = {
+  /**
+   * Serializes GetLiquidationResponse to protobuf.
+   */
+  encode: function (msg: Partial<GetLiquidationResponse>): Uint8Array {
+    return GetLiquidationResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetLiquidationResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetLiquidationResponse {
+    return GetLiquidationResponse._readMessage(
+      GetLiquidationResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetLiquidationResponse with all fields set to their default value.
+   */
+  initialize: function (): GetLiquidationResponse {
+    return {
+      op: OperationLog.initialize(),
+      pledges: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetLiquidationResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.op) {
+      writer.writeMessage(1, msg.op, OperationLog._writeMessage);
+    }
+    if (msg.pledges?.length) {
+      writer.writeRepeatedMessage(
+        2,
+        msg.pledges as any,
+        LiquidationPledge._writeMessage
+      );
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetLiquidationResponse,
+    reader: BinaryReader
+  ): GetLiquidationResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          reader.readMessage(msg.op, OperationLog._readMessage);
+          break;
+        }
+        case 2: {
+          const m = LiquidationPledge.initialize();
+          reader.readMessage(m, LiquidationPledge._readMessage);
+          msg.pledges.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const HandleReviewingOperationRequest = {
+  /**
+   * Serializes HandleReviewingOperationRequest to protobuf.
+   */
+  encode: function (msg: Partial<HandleReviewingOperationRequest>): Uint8Array {
+    return HandleReviewingOperationRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes HandleReviewingOperationRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): HandleReviewingOperationRequest {
+    return HandleReviewingOperationRequest._readMessage(
+      HandleReviewingOperationRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes HandleReviewingOperationRequest with all fields set to their default value.
+   */
+  initialize: function (): HandleReviewingOperationRequest {
+    return {
+      traceId: "",
+      passed: false,
+      failedReason: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<HandleReviewingOperationRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.traceId) {
+      writer.writeString(1, msg.traceId);
+    }
+    if (msg.passed) {
+      writer.writeBool(2, msg.passed);
+    }
+    if (msg.failedReason) {
+      writer.writeString(3, msg.failedReason);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: HandleReviewingOperationRequest,
+    reader: BinaryReader
+  ): HandleReviewingOperationRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.traceId = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.passed = reader.readBool();
+          break;
+        }
+        case 3: {
+          msg.failedReason = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const HandleReviewingOperationResponse = {
+  /**
+   * Serializes HandleReviewingOperationResponse to protobuf.
+   */
+  encode: function (
+    _msg?: Partial<HandleReviewingOperationResponse>
+  ): Uint8Array {
+    return new Uint8Array();
+  },
+
+  /**
+   * Deserializes HandleReviewingOperationResponse from protobuf.
+   */
+  decode: function (_bytes?: ByteSource): HandleReviewingOperationResponse {
+    return {};
+  },
+
+  /**
+   * Initializes HandleReviewingOperationResponse with all fields set to their default value.
+   */
+  initialize: function (): HandleReviewingOperationResponse {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<HandleReviewingOperationResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    _msg: HandleReviewingOperationResponse,
+    _reader: BinaryReader
+  ): HandleReviewingOperationResponse {
+    return _msg;
+  },
+};
+
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
@@ -4722,6 +5267,392 @@ export const CancelOperationLogResponseJSON = {
     msg: CancelOperationLogResponse,
     _json: any
   ): CancelOperationLogResponse {
+    return msg;
+  },
+};
+
+export const GetLiquidationRequestJSON = {
+  /**
+   * Serializes GetLiquidationRequest to JSON.
+   */
+  encode: function (msg: Partial<GetLiquidationRequest>): string {
+    return JSON.stringify(GetLiquidationRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes GetLiquidationRequest from JSON.
+   */
+  decode: function (json: string): GetLiquidationRequest {
+    return GetLiquidationRequestJSON._readMessage(
+      GetLiquidationRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetLiquidationRequest with all fields set to their default value.
+   */
+  initialize: function (): GetLiquidationRequest {
+    return {
+      traceId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetLiquidationRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetLiquidationRequest,
+    json: any
+  ): GetLiquidationRequest {
+    const _traceId = json.traceId ?? json.trace_id;
+    if (_traceId) {
+      msg.traceId = _traceId;
+    }
+    return msg;
+  },
+};
+
+export const LiquidationPledgeJSON = {
+  /**
+   * Serializes LiquidationPledge to JSON.
+   */
+  encode: function (msg: Partial<LiquidationPledge>): string {
+    return JSON.stringify(LiquidationPledgeJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes LiquidationPledge from JSON.
+   */
+  decode: function (json: string): LiquidationPledge {
+    return LiquidationPledgeJSON._readMessage(
+      LiquidationPledgeJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LiquidationPledge with all fields set to their default value.
+   */
+  initialize: function (): LiquidationPledge {
+    return {
+      id: 0n,
+      userId: "",
+      type: PledgeType._fromInt(0),
+      assetId: "",
+      amount: "",
+      contractId: "",
+      name: "",
+      traceId: "",
+      assetPrice: "",
+      assetPriceUpdatedAt: 0,
+      done: false,
+      createdAt: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LiquidationPledge>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json.id = msg.id.toString();
+    }
+    if (msg.userId) {
+      json.userId = msg.userId;
+    }
+    if (msg.type && PledgeTypeJSON._toInt(msg.type)) {
+      json.type = msg.type;
+    }
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    if (msg.amount) {
+      json.amount = msg.amount;
+    }
+    if (msg.contractId) {
+      json.contractId = msg.contractId;
+    }
+    if (msg.name) {
+      json.name = msg.name;
+    }
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
+    }
+    if (msg.assetPrice) {
+      json.assetPrice = msg.assetPrice;
+    }
+    if (msg.assetPriceUpdatedAt) {
+      json.assetPriceUpdatedAt = msg.assetPriceUpdatedAt;
+    }
+    if (msg.done) {
+      json.done = msg.done;
+    }
+    if (msg.createdAt) {
+      json.createdAt = msg.createdAt;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LiquidationPledge,
+    json: any
+  ): LiquidationPledge {
+    const _id = json.id;
+    if (_id) {
+      msg.id = BigInt(_id);
+    }
+    const _userId = json.userId ?? json.user_id;
+    if (_userId) {
+      msg.userId = _userId;
+    }
+    const _type = json.type;
+    if (_type) {
+      msg.type = _type;
+    }
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    const _amount = json.amount;
+    if (_amount) {
+      msg.amount = _amount;
+    }
+    const _contractId = json.contractId ?? json.contract_id;
+    if (_contractId) {
+      msg.contractId = _contractId;
+    }
+    const _name = json.name;
+    if (_name) {
+      msg.name = _name;
+    }
+    const _traceId = json.traceId ?? json.trace_id;
+    if (_traceId) {
+      msg.traceId = _traceId;
+    }
+    const _assetPrice = json.assetPrice ?? json.asset_price;
+    if (_assetPrice) {
+      msg.assetPrice = _assetPrice;
+    }
+    const _assetPriceUpdatedAt =
+      json.assetPriceUpdatedAt ?? json.asset_price_updated_at;
+    if (_assetPriceUpdatedAt) {
+      msg.assetPriceUpdatedAt = _assetPriceUpdatedAt;
+    }
+    const _done = json.done;
+    if (_done) {
+      msg.done = _done;
+    }
+    const _createdAt = json.createdAt ?? json.created_at;
+    if (_createdAt) {
+      msg.createdAt = _createdAt;
+    }
+    return msg;
+  },
+};
+
+export const GetLiquidationResponseJSON = {
+  /**
+   * Serializes GetLiquidationResponse to JSON.
+   */
+  encode: function (msg: Partial<GetLiquidationResponse>): string {
+    return JSON.stringify(GetLiquidationResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes GetLiquidationResponse from JSON.
+   */
+  decode: function (json: string): GetLiquidationResponse {
+    return GetLiquidationResponseJSON._readMessage(
+      GetLiquidationResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetLiquidationResponse with all fields set to their default value.
+   */
+  initialize: function (): GetLiquidationResponse {
+    return {
+      op: OperationLog.initialize(),
+      pledges: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetLiquidationResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.op) {
+      const op = OperationLogJSON._writeMessage(msg.op);
+      if (Object.keys(op).length > 0) {
+        json.op = op;
+      }
+    }
+    if (msg.pledges?.length) {
+      json.pledges = msg.pledges.map(LiquidationPledgeJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetLiquidationResponse,
+    json: any
+  ): GetLiquidationResponse {
+    const _op = json.op;
+    if (_op) {
+      const m = OperationLog.initialize();
+      OperationLogJSON._readMessage(m, _op);
+      msg.op = m;
+    }
+    const _pledges = json.pledges;
+    if (_pledges) {
+      for (const item of _pledges) {
+        const m = LiquidationPledge.initialize();
+        LiquidationPledgeJSON._readMessage(m, item);
+        msg.pledges.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const HandleReviewingOperationRequestJSON = {
+  /**
+   * Serializes HandleReviewingOperationRequest to JSON.
+   */
+  encode: function (msg: Partial<HandleReviewingOperationRequest>): string {
+    return JSON.stringify(
+      HandleReviewingOperationRequestJSON._writeMessage(msg)
+    );
+  },
+
+  /**
+   * Deserializes HandleReviewingOperationRequest from JSON.
+   */
+  decode: function (json: string): HandleReviewingOperationRequest {
+    return HandleReviewingOperationRequestJSON._readMessage(
+      HandleReviewingOperationRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes HandleReviewingOperationRequest with all fields set to their default value.
+   */
+  initialize: function (): HandleReviewingOperationRequest {
+    return {
+      traceId: "",
+      passed: false,
+      failedReason: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<HandleReviewingOperationRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
+    }
+    if (msg.passed) {
+      json.passed = msg.passed;
+    }
+    if (msg.failedReason) {
+      json.failedReason = msg.failedReason;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: HandleReviewingOperationRequest,
+    json: any
+  ): HandleReviewingOperationRequest {
+    const _traceId = json.traceId ?? json.trace_id;
+    if (_traceId) {
+      msg.traceId = _traceId;
+    }
+    const _passed = json.passed;
+    if (_passed) {
+      msg.passed = _passed;
+    }
+    const _failedReason = json.failedReason ?? json.failed_reason;
+    if (_failedReason) {
+      msg.failedReason = _failedReason;
+    }
+    return msg;
+  },
+};
+
+export const HandleReviewingOperationResponseJSON = {
+  /**
+   * Serializes HandleReviewingOperationResponse to JSON.
+   */
+  encode: function (_msg?: Partial<HandleReviewingOperationResponse>): string {
+    return "{}";
+  },
+
+  /**
+   * Deserializes HandleReviewingOperationResponse from JSON.
+   */
+  decode: function (_json?: string): HandleReviewingOperationResponse {
+    return {};
+  },
+
+  /**
+   * Initializes HandleReviewingOperationResponse with all fields set to their default value.
+   */
+  initialize: function (): HandleReviewingOperationResponse {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<HandleReviewingOperationResponse>
+  ): Record<string, unknown> {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: HandleReviewingOperationResponse,
+    _json: any
+  ): HandleReviewingOperationResponse {
     return msg;
   },
 };
