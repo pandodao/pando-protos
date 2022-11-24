@@ -15,6 +15,11 @@ service LendService {
     rpc GetOperationLog(GetOperationLogRequest) returns (GetOperationLogResponse);
     rpc ListOperationLogs(ListOperationLogsRequest) returns (ListOperationLogsResponse);
     rpc CancelOperationLog(CancelOperationLogRequest) returns (CancelOperationLogResponse);
+
+    // for admin
+
+    rpc GetLiquidation(GetLiquidationRequest) returns (GetLiquidationResponse);
+    rpc HandleReviewingOperation(HandleReviewingOperationRequest) returns (HandleReviewingOperationResponse);
 }
 
 message TransferData {
@@ -190,3 +195,35 @@ message CancelOperationLogRequest {
 }
 
 message CancelOperationLogResponse {}
+
+message GetLiquidationRequest {
+  string trace_id = 1;
+}
+
+message LiquidationPledge {
+  int64 id = 1;
+  string user_id = 2;
+  PledgeType type = 3;
+  string asset_id = 4;
+  string amount = 5;
+  string contract_id = 6;
+  string name = 7;
+  string trace_id = 8;
+  string asset_price = 9;
+  uint32 asset_price_updated_at = 10;
+  bool done = 11;
+  uint32 created_at = 12;
+}
+
+message GetLiquidationResponse {
+  OperationLog op = 1;
+  repeated LiquidationPledge pledges = 2;
+}
+
+message HandleReviewingOperationRequest {
+  string trace_id = 1;
+  bool passed = 2;
+  string failed_reason = 3;
+}
+
+message HandleReviewingOperationResponse {}
