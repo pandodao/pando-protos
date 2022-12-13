@@ -78,6 +78,18 @@ export async function CreateOperationLog(
   return CreateOperationLogResponse.decode(response);
 }
 
+export async function CreatePayment(
+  createPaymentRequest: CreatePaymentRequest,
+  config?: ClientConfiguration
+): Promise<CreatePaymentResponse> {
+  const response = await PBrequest(
+    "/lend.v1.LendService/CreatePayment",
+    CreatePaymentRequest.encode(createPaymentRequest),
+    config
+  );
+  return CreatePaymentResponse.decode(response);
+}
+
 export async function GetOperationLog(
   getOperationLogRequest: GetOperationLogRequest,
   config?: ClientConfiguration
@@ -202,6 +214,18 @@ export async function CreateOperationLogJSON(
   return CreateOperationLogResponseJSON.decode(response);
 }
 
+export async function CreatePaymentJSON(
+  createPaymentRequest: CreatePaymentRequest,
+  config?: ClientConfiguration
+): Promise<CreatePaymentResponse> {
+  const response = await JSONrequest(
+    "/lend.v1.LendService/CreatePayment",
+    CreatePaymentRequestJSON.encode(createPaymentRequest),
+    config
+  );
+  return CreatePaymentResponseJSON.decode(response);
+}
+
 export async function GetOperationLogJSON(
   getOperationLogRequest: GetOperationLogRequest,
   config?: ClientConfiguration
@@ -287,6 +311,10 @@ export interface LendService<Context = unknown> {
     createOperationLogRequest: CreateOperationLogRequest,
     context: Context
   ) => Promise<CreateOperationLogResponse> | CreateOperationLogResponse;
+  CreatePayment: (
+    createPaymentRequest: CreatePaymentRequest,
+    context: Context
+  ) => Promise<CreatePaymentResponse> | CreatePaymentResponse;
   GetOperationLog: (
     getOperationLogRequest: GetOperationLogRequest,
     context: Context
@@ -349,6 +377,18 @@ export function createLendService<Context>(service: LendService<Context>) {
         output: {
           protobuf: CreateOperationLogResponse,
           json: CreateOperationLogResponseJSON,
+        },
+      },
+      CreatePayment: {
+        name: "CreatePayment",
+        handler: service.CreatePayment,
+        input: {
+          protobuf: CreatePaymentRequest,
+          json: CreatePaymentRequestJSON,
+        },
+        output: {
+          protobuf: CreatePaymentResponse,
+          json: CreatePaymentResponseJSON,
         },
       },
       GetOperationLog: {
@@ -536,6 +576,18 @@ export interface CreateOperationLogRequest {
 }
 
 export interface CreateOperationLogResponse {}
+
+export interface CreatePaymentRequest {
+  operationTraceId: string;
+  traceId: string;
+  memo: string;
+  assetId: string;
+  amount: string;
+}
+
+export interface CreatePaymentResponse {
+  code: string;
+}
 
 export interface GetOperationLogRequest {
   traceId: string;
@@ -2243,6 +2295,172 @@ export const CreateOperationLogResponse = {
     _reader: BinaryReader
   ): CreateOperationLogResponse {
     return _msg;
+  },
+};
+
+export const CreatePaymentRequest = {
+  /**
+   * Serializes CreatePaymentRequest to protobuf.
+   */
+  encode: function (msg: Partial<CreatePaymentRequest>): Uint8Array {
+    return CreatePaymentRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes CreatePaymentRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): CreatePaymentRequest {
+    return CreatePaymentRequest._readMessage(
+      CreatePaymentRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes CreatePaymentRequest with all fields set to their default value.
+   */
+  initialize: function (): CreatePaymentRequest {
+    return {
+      operationTraceId: "",
+      traceId: "",
+      memo: "",
+      assetId: "",
+      amount: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<CreatePaymentRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.operationTraceId) {
+      writer.writeString(1, msg.operationTraceId);
+    }
+    if (msg.traceId) {
+      writer.writeString(2, msg.traceId);
+    }
+    if (msg.memo) {
+      writer.writeString(3, msg.memo);
+    }
+    if (msg.assetId) {
+      writer.writeString(4, msg.assetId);
+    }
+    if (msg.amount) {
+      writer.writeString(5, msg.amount);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: CreatePaymentRequest,
+    reader: BinaryReader
+  ): CreatePaymentRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.operationTraceId = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.traceId = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.memo = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.amount = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const CreatePaymentResponse = {
+  /**
+   * Serializes CreatePaymentResponse to protobuf.
+   */
+  encode: function (msg: Partial<CreatePaymentResponse>): Uint8Array {
+    return CreatePaymentResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes CreatePaymentResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): CreatePaymentResponse {
+    return CreatePaymentResponse._readMessage(
+      CreatePaymentResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes CreatePaymentResponse with all fields set to their default value.
+   */
+  initialize: function (): CreatePaymentResponse {
+    return {
+      code: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<CreatePaymentResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.code) {
+      writer.writeString(1, msg.code);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: CreatePaymentResponse,
+    reader: BinaryReader
+  ): CreatePaymentResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.code = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
   },
 };
 
@@ -4733,6 +4951,148 @@ export const CreateOperationLogResponseJSON = {
     msg: CreateOperationLogResponse,
     _json: any
   ): CreateOperationLogResponse {
+    return msg;
+  },
+};
+
+export const CreatePaymentRequestJSON = {
+  /**
+   * Serializes CreatePaymentRequest to JSON.
+   */
+  encode: function (msg: Partial<CreatePaymentRequest>): string {
+    return JSON.stringify(CreatePaymentRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes CreatePaymentRequest from JSON.
+   */
+  decode: function (json: string): CreatePaymentRequest {
+    return CreatePaymentRequestJSON._readMessage(
+      CreatePaymentRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes CreatePaymentRequest with all fields set to their default value.
+   */
+  initialize: function (): CreatePaymentRequest {
+    return {
+      operationTraceId: "",
+      traceId: "",
+      memo: "",
+      assetId: "",
+      amount: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<CreatePaymentRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.operationTraceId) {
+      json.operationTraceId = msg.operationTraceId;
+    }
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
+    }
+    if (msg.memo) {
+      json.memo = msg.memo;
+    }
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    if (msg.amount) {
+      json.amount = msg.amount;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: CreatePaymentRequest,
+    json: any
+  ): CreatePaymentRequest {
+    const _operationTraceId = json.operationTraceId ?? json.operation_trace_id;
+    if (_operationTraceId) {
+      msg.operationTraceId = _operationTraceId;
+    }
+    const _traceId = json.traceId ?? json.trace_id;
+    if (_traceId) {
+      msg.traceId = _traceId;
+    }
+    const _memo = json.memo;
+    if (_memo) {
+      msg.memo = _memo;
+    }
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    const _amount = json.amount;
+    if (_amount) {
+      msg.amount = _amount;
+    }
+    return msg;
+  },
+};
+
+export const CreatePaymentResponseJSON = {
+  /**
+   * Serializes CreatePaymentResponse to JSON.
+   */
+  encode: function (msg: Partial<CreatePaymentResponse>): string {
+    return JSON.stringify(CreatePaymentResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes CreatePaymentResponse from JSON.
+   */
+  decode: function (json: string): CreatePaymentResponse {
+    return CreatePaymentResponseJSON._readMessage(
+      CreatePaymentResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes CreatePaymentResponse with all fields set to their default value.
+   */
+  initialize: function (): CreatePaymentResponse {
+    return {
+      code: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<CreatePaymentResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.code) {
+      json.code = msg.code;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: CreatePaymentResponse,
+    json: any
+  ): CreatePaymentResponse {
+    const _code = json.code;
+    if (_code) {
+      msg.code = _code;
+    }
     return msg;
   },
 };
