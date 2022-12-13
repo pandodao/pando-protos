@@ -12,6 +12,7 @@ service LendService {
     rpc State(StateRequest) returns (StateResponse);
     rpc Info(InfoRequest) returns (InfoResponse);
     rpc CreateOperationLog(CreateOperationLogRequest) returns (CreateOperationLogResponse);
+    rpc CreatePayment(CreatePaymentRequest) returns (CreatePaymentResponse);
     rpc GetOperationLog(GetOperationLogRequest) returns (GetOperationLogResponse);
     rpc ListOperationLogs(ListOperationLogsRequest) returns (ListOperationLogsResponse);
     rpc CancelOperationLog(CancelOperationLogRequest) returns (CancelOperationLogResponse);
@@ -151,6 +152,19 @@ message CreateOperationLogRequest {
 }
 
 message CreateOperationLogResponse {}
+
+message CreatePaymentRequest {
+  string operation_trace_id = 1;
+
+  string trace_id = 2;
+  string memo = 3;
+  string asset_id = 4;
+  string amount = 5;
+}
+
+message CreatePaymentResponse {
+  string code = 1;
+}
 
 message GetOperationLogRequest {
   string trace_id = 1;
