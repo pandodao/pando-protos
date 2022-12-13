@@ -24,13 +24,27 @@ service LendService {
 }
 
 message TransferData {
-  OperationType operation_type = 1;
-  TransferPledgeData pledge = 2;
-  TransferLoanData loan = 3;
-  TransferRepayData repay = 4;
-  TransferWithdrawData withdraw = 5;
-  string trace_id = 6;
-  bool charge = 7;
+  enum Type {
+    NOT_SET = 0;
+    OPERATION = 1;
+    CHARGE = 2;
+    REVIEW = 3;
+  }
+  Type type = 1;
+
+  OperationType operation_type = 2;
+  TransferPledgeData pledge = 3;
+  TransferLoanData loan = 4;
+  TransferRepayData repay = 5;
+  TransferWithdrawData withdraw = 6;
+  string trace_id = 7;
+
+  ReviewData review_data = 20;
+}
+
+message ReviewData {
+  bool passed = 1;
+  string failed_reason = 2;
 }
 
 message TransferWithdrawData {
