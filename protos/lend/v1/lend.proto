@@ -55,6 +55,8 @@ message ConfigResponse {
   string clearing_pledge_rate = 2;
   string interest_rate = 3;
   uint32 interest_duration = 4;
+  repeated string members = 5;
+  uint32 threshold = 6;
 }
 
 message Pagination {
