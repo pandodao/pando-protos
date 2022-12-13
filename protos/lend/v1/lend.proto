@@ -20,7 +20,6 @@ service LendService {
     // for admin
 
     rpc GetLiquidation(GetLiquidationRequest) returns (GetLiquidationResponse);
-    rpc HandleReviewingOperation(HandleReviewingOperationRequest) returns (HandleReviewingOperationResponse);
 }
 
 message TransferData {
@@ -31,20 +30,21 @@ message TransferData {
     REVIEW = 3;
   }
   Type type = 1;
+  string trace_id = 2;
 
-  OperationType operation_type = 2;
-  TransferPledgeData pledge = 3;
-  TransferLoanData loan = 4;
-  TransferRepayData repay = 5;
-  TransferWithdrawData withdraw = 6;
-  string trace_id = 7;
+  OperationType operation_type = 3;
+  TransferPledgeData pledge = 4;
+  TransferLoanData loan = 5;
+  TransferRepayData repay = 6;
+  TransferWithdrawData withdraw = 7;
 
   ReviewData review_data = 20;
 }
 
 message ReviewData {
-  bool passed = 1;
-  string failed_reason = 2;
+  string trace_id = 1;
+  bool passed = 2;
+  string failed_reason = 3;
 }
 
 message TransferWithdrawData {
@@ -247,11 +247,3 @@ message GetLiquidationResponse {
   OperationLog op = 1;
   repeated LiquidationPledge pledges = 2;
 }
-
-message HandleReviewingOperationRequest {
-  string trace_id = 1;
-  bool passed = 2;
-  string failed_reason = 3;
-}
-
-message HandleReviewingOperationResponse {}
