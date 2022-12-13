@@ -475,8 +475,6 @@ export interface ConfigResponse {
   clearingPledgeRate: string;
   interestRate: string;
   interestDuration: number;
-  members: string[];
-  threshold: number;
 }
 
 export interface Pagination {
@@ -1324,8 +1322,6 @@ export const ConfigResponse = {
       clearingPledgeRate: "",
       interestRate: "",
       interestDuration: 0,
-      members: [],
-      threshold: 0,
     };
   },
 
@@ -1347,12 +1343,6 @@ export const ConfigResponse = {
     }
     if (msg.interestDuration) {
       writer.writeUint32(4, msg.interestDuration);
-    }
-    if (msg.members?.length) {
-      writer.writeRepeatedString(5, msg.members);
-    }
-    if (msg.threshold) {
-      writer.writeUint32(6, msg.threshold);
     }
     return writer;
   },
@@ -1381,14 +1371,6 @@ export const ConfigResponse = {
         }
         case 4: {
           msg.interestDuration = reader.readUint32();
-          break;
-        }
-        case 5: {
-          msg.members.push(reader.readString());
-          break;
-        }
-        case 6: {
-          msg.threshold = reader.readUint32();
           break;
         }
         default: {
@@ -3957,8 +3939,6 @@ export const ConfigResponseJSON = {
       clearingPledgeRate: "",
       interestRate: "",
       interestDuration: 0,
-      members: [],
-      threshold: 0,
     };
   },
 
@@ -3980,12 +3960,6 @@ export const ConfigResponseJSON = {
     }
     if (msg.interestDuration) {
       json.interestDuration = msg.interestDuration;
-    }
-    if (msg.members?.length) {
-      json.members = msg.members;
-    }
-    if (msg.threshold) {
-      json.threshold = msg.threshold;
     }
     return json;
   },
@@ -4011,14 +3985,6 @@ export const ConfigResponseJSON = {
     const _interestDuration = json.interestDuration ?? json.interest_duration;
     if (_interestDuration) {
       msg.interestDuration = _interestDuration;
-    }
-    const _members = json.members;
-    if (_members) {
-      msg.members = _members;
-    }
-    const _threshold = json.threshold;
-    if (_threshold) {
-      msg.threshold = _threshold;
     }
     return msg;
   },
