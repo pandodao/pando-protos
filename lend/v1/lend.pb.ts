@@ -138,18 +138,6 @@ export async function GetLiquidation(
   return GetLiquidationResponse.decode(response);
 }
 
-export async function HandleReviewingOperation(
-  handleReviewingOperationRequest: HandleReviewingOperationRequest,
-  config?: ClientConfiguration
-): Promise<HandleReviewingOperationResponse> {
-  const response = await PBrequest(
-    "/lend.v1.LendService/HandleReviewingOperation",
-    HandleReviewingOperationRequest.encode(handleReviewingOperationRequest),
-    config
-  );
-  return HandleReviewingOperationResponse.decode(response);
-}
-
 //========================================//
 //        LendService JSON Client         //
 //========================================//
@@ -274,18 +262,6 @@ export async function GetLiquidationJSON(
   return GetLiquidationResponseJSON.decode(response);
 }
 
-export async function HandleReviewingOperationJSON(
-  handleReviewingOperationRequest: HandleReviewingOperationRequest,
-  config?: ClientConfiguration
-): Promise<HandleReviewingOperationResponse> {
-  const response = await JSONrequest(
-    "/lend.v1.LendService/HandleReviewingOperation",
-    HandleReviewingOperationRequestJSON.encode(handleReviewingOperationRequest),
-    config
-  );
-  return HandleReviewingOperationResponseJSON.decode(response);
-}
-
 //========================================//
 //              LendService               //
 //========================================//
@@ -331,12 +307,6 @@ export interface LendService<Context = unknown> {
     getLiquidationRequest: GetLiquidationRequest,
     context: Context
   ) => Promise<GetLiquidationResponse> | GetLiquidationResponse;
-  HandleReviewingOperation: (
-    handleReviewingOperationRequest: HandleReviewingOperationRequest,
-    context: Context
-  ) =>
-    | Promise<HandleReviewingOperationResponse>
-    | HandleReviewingOperationResponse;
 }
 
 export function createLendService<Context>(service: LendService<Context>) {
@@ -439,18 +409,6 @@ export function createLendService<Context>(service: LendService<Context>) {
           json: GetLiquidationResponseJSON,
         },
       },
-      HandleReviewingOperation: {
-        name: "HandleReviewingOperation",
-        handler: service.HandleReviewingOperation,
-        input: {
-          protobuf: HandleReviewingOperationRequest,
-          json: HandleReviewingOperationRequestJSON,
-        },
-        output: {
-          protobuf: HandleReviewingOperationResponse,
-          json: HandleReviewingOperationResponseJSON,
-        },
-      },
     },
   } as const;
 }
@@ -483,13 +441,24 @@ export type OperationStatus =
 export type PledgeType = "PLEDGE_TYPE_NOT_SET" | "NODE" | "POOL" | "LOCAL";
 
 export interface TransferData {
+  type: TransferData.Type;
+  traceId: string;
   operationType: OperationType;
   pledge: TransferPledgeData;
   loan: TransferLoanData;
   repay: TransferRepayData;
   withdraw: TransferWithdrawData;
+  reviewData: ReviewData;
+}
+
+export declare namespace TransferData {
+  export type Type = "NOT_SET" | "OPERATION" | "CHARGE" | "REVIEW";
+}
+
+export interface ReviewData {
   traceId: string;
-  charge: boolean;
+  passed: boolean;
+  failedReason: string;
 }
 
 export interface TransferWithdrawData {
@@ -656,14 +625,6 @@ export interface GetLiquidationResponse {
   op: OperationLog;
   pledges: LiquidationPledge[];
 }
-
-export interface HandleReviewingOperationRequest {
-  traceId: string;
-  passed: boolean;
-  failedReason: string;
-}
-
-export interface HandleReviewingOperationResponse {}
 
 //========================================//
 //        Protobuf Encode / Decode        //
@@ -952,13 +913,14 @@ export const TransferData = {
    */
   initialize: function (): TransferData {
     return {
+      type: TransferData.Type._fromInt(0),
+      traceId: "",
       operationType: OperationType._fromInt(0),
       pledge: TransferPledgeData.initialize(),
       loan: TransferLoanData.initialize(),
       repay: TransferRepayData.initialize(),
       withdraw: TransferWithdrawData.initialize(),
-      traceId: "",
-      charge: false,
+      reviewData: ReviewData.initialize(),
     };
   },
 
@@ -969,26 +931,29 @@ export const TransferData = {
     msg: Partial<TransferData>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.operationType && OperationType._toInt(msg.operationType)) {
-      writer.writeEnum(1, OperationType._toInt(msg.operationType));
-    }
-    if (msg.pledge) {
-      writer.writeMessage(2, msg.pledge, TransferPledgeData._writeMessage);
-    }
-    if (msg.loan) {
-      writer.writeMessage(3, msg.loan, TransferLoanData._writeMessage);
-    }
-    if (msg.repay) {
-      writer.writeMessage(4, msg.repay, TransferRepayData._writeMessage);
-    }
-    if (msg.withdraw) {
-      writer.writeMessage(5, msg.withdraw, TransferWithdrawData._writeMessage);
+    if (msg.type && TransferData.Type._toInt(msg.type)) {
+      writer.writeEnum(1, TransferData.Type._toInt(msg.type));
     }
     if (msg.traceId) {
-      writer.writeString(6, msg.traceId);
+      writer.writeString(2, msg.traceId);
     }
-    if (msg.charge) {
-      writer.writeBool(7, msg.charge);
+    if (msg.operationType && OperationType._toInt(msg.operationType)) {
+      writer.writeEnum(3, OperationType._toInt(msg.operationType));
+    }
+    if (msg.pledge) {
+      writer.writeMessage(4, msg.pledge, TransferPledgeData._writeMessage);
+    }
+    if (msg.loan) {
+      writer.writeMessage(5, msg.loan, TransferLoanData._writeMessage);
+    }
+    if (msg.repay) {
+      writer.writeMessage(6, msg.repay, TransferRepayData._writeMessage);
+    }
+    if (msg.withdraw) {
+      writer.writeMessage(7, msg.withdraw, TransferWithdrawData._writeMessage);
+    }
+    if (msg.reviewData) {
+      writer.writeMessage(20, msg.reviewData, ReviewData._writeMessage);
     }
     return writer;
   },
@@ -1004,31 +969,165 @@ export const TransferData = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.operationType = OperationType._fromInt(reader.readEnum());
+          msg.type = TransferData.Type._fromInt(reader.readEnum());
           break;
         }
         case 2: {
-          reader.readMessage(msg.pledge, TransferPledgeData._readMessage);
-          break;
-        }
-        case 3: {
-          reader.readMessage(msg.loan, TransferLoanData._readMessage);
-          break;
-        }
-        case 4: {
-          reader.readMessage(msg.repay, TransferRepayData._readMessage);
-          break;
-        }
-        case 5: {
-          reader.readMessage(msg.withdraw, TransferWithdrawData._readMessage);
-          break;
-        }
-        case 6: {
           msg.traceId = reader.readString();
           break;
         }
+        case 3: {
+          msg.operationType = OperationType._fromInt(reader.readEnum());
+          break;
+        }
+        case 4: {
+          reader.readMessage(msg.pledge, TransferPledgeData._readMessage);
+          break;
+        }
+        case 5: {
+          reader.readMessage(msg.loan, TransferLoanData._readMessage);
+          break;
+        }
+        case 6: {
+          reader.readMessage(msg.repay, TransferRepayData._readMessage);
+          break;
+        }
         case 7: {
-          msg.charge = reader.readBool();
+          reader.readMessage(msg.withdraw, TransferWithdrawData._readMessage);
+          break;
+        }
+        case 20: {
+          reader.readMessage(msg.reviewData, ReviewData._readMessage);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+
+  Type: {
+    NOT_SET: "NOT_SET",
+    OPERATION: "OPERATION",
+    CHARGE: "CHARGE",
+    REVIEW: "REVIEW",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): TransferData.Type {
+      switch (i) {
+        case 0: {
+          return "NOT_SET";
+        }
+        case 1: {
+          return "OPERATION";
+        }
+        case 2: {
+          return "CHARGE";
+        }
+        case 3: {
+          return "REVIEW";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as TransferData.Type;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: TransferData.Type): number {
+      switch (i) {
+        case "NOT_SET": {
+          return 0;
+        }
+        case "OPERATION": {
+          return 1;
+        }
+        case "CHARGE": {
+          return 2;
+        }
+        case "REVIEW": {
+          return 3;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
+export const ReviewData = {
+  /**
+   * Serializes ReviewData to protobuf.
+   */
+  encode: function (msg: Partial<ReviewData>): Uint8Array {
+    return ReviewData._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ReviewData from protobuf.
+   */
+  decode: function (bytes: ByteSource): ReviewData {
+    return ReviewData._readMessage(
+      ReviewData.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes ReviewData with all fields set to their default value.
+   */
+  initialize: function (): ReviewData {
+    return {
+      traceId: "",
+      passed: false,
+      failedReason: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ReviewData>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.traceId) {
+      writer.writeString(1, msg.traceId);
+    }
+    if (msg.passed) {
+      writer.writeBool(2, msg.passed);
+    }
+    if (msg.failedReason) {
+      writer.writeString(3, msg.failedReason);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: ReviewData, reader: BinaryReader): ReviewData {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.traceId = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.passed = reader.readBool();
+          break;
+        }
+        case 3: {
+          msg.failedReason = reader.readString();
           break;
         }
         default: {
@@ -3362,134 +3461,6 @@ export const GetLiquidationResponse = {
   },
 };
 
-export const HandleReviewingOperationRequest = {
-  /**
-   * Serializes HandleReviewingOperationRequest to protobuf.
-   */
-  encode: function (msg: Partial<HandleReviewingOperationRequest>): Uint8Array {
-    return HandleReviewingOperationRequest._writeMessage(
-      msg,
-      new BinaryWriter()
-    ).getResultBuffer();
-  },
-
-  /**
-   * Deserializes HandleReviewingOperationRequest from protobuf.
-   */
-  decode: function (bytes: ByteSource): HandleReviewingOperationRequest {
-    return HandleReviewingOperationRequest._readMessage(
-      HandleReviewingOperationRequest.initialize(),
-      new BinaryReader(bytes)
-    );
-  },
-
-  /**
-   * Initializes HandleReviewingOperationRequest with all fields set to their default value.
-   */
-  initialize: function (): HandleReviewingOperationRequest {
-    return {
-      traceId: "",
-      passed: false,
-      failedReason: "",
-    };
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    msg: Partial<HandleReviewingOperationRequest>,
-    writer: BinaryWriter
-  ): BinaryWriter {
-    if (msg.traceId) {
-      writer.writeString(1, msg.traceId);
-    }
-    if (msg.passed) {
-      writer.writeBool(2, msg.passed);
-    }
-    if (msg.failedReason) {
-      writer.writeString(3, msg.failedReason);
-    }
-    return writer;
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    msg: HandleReviewingOperationRequest,
-    reader: BinaryReader
-  ): HandleReviewingOperationRequest {
-    while (reader.nextField()) {
-      const field = reader.getFieldNumber();
-      switch (field) {
-        case 1: {
-          msg.traceId = reader.readString();
-          break;
-        }
-        case 2: {
-          msg.passed = reader.readBool();
-          break;
-        }
-        case 3: {
-          msg.failedReason = reader.readString();
-          break;
-        }
-        default: {
-          reader.skipField();
-          break;
-        }
-      }
-    }
-    return msg;
-  },
-};
-
-export const HandleReviewingOperationResponse = {
-  /**
-   * Serializes HandleReviewingOperationResponse to protobuf.
-   */
-  encode: function (
-    _msg?: Partial<HandleReviewingOperationResponse>
-  ): Uint8Array {
-    return new Uint8Array();
-  },
-
-  /**
-   * Deserializes HandleReviewingOperationResponse from protobuf.
-   */
-  decode: function (_bytes?: ByteSource): HandleReviewingOperationResponse {
-    return {};
-  },
-
-  /**
-   * Initializes HandleReviewingOperationResponse with all fields set to their default value.
-   */
-  initialize: function (): HandleReviewingOperationResponse {
-    return {};
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    _msg: Partial<HandleReviewingOperationResponse>,
-    writer: BinaryWriter
-  ): BinaryWriter {
-    return writer;
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    _msg: HandleReviewingOperationResponse,
-    _reader: BinaryReader
-  ): HandleReviewingOperationResponse {
-    return _msg;
-  },
-};
-
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
@@ -3774,13 +3745,14 @@ export const TransferDataJSON = {
    */
   initialize: function (): TransferData {
     return {
+      type: TransferData.Type._fromInt(0),
+      traceId: "",
       operationType: OperationType._fromInt(0),
       pledge: TransferPledgeData.initialize(),
       loan: TransferLoanData.initialize(),
       repay: TransferRepayData.initialize(),
       withdraw: TransferWithdrawData.initialize(),
-      traceId: "",
-      charge: false,
+      reviewData: ReviewData.initialize(),
     };
   },
 
@@ -3791,6 +3763,12 @@ export const TransferDataJSON = {
     msg: Partial<TransferData>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
+    if (msg.type && TransferDataJSON.Type._toInt(msg.type)) {
+      json.type = msg.type;
+    }
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
+    }
     if (msg.operationType && OperationTypeJSON._toInt(msg.operationType)) {
       json.operationType = msg.operationType;
     }
@@ -3818,11 +3796,11 @@ export const TransferDataJSON = {
         json.withdraw = withdraw;
       }
     }
-    if (msg.traceId) {
-      json.traceId = msg.traceId;
-    }
-    if (msg.charge) {
-      json.charge = msg.charge;
+    if (msg.reviewData) {
+      const reviewData = ReviewDataJSON._writeMessage(msg.reviewData);
+      if (Object.keys(reviewData).length > 0) {
+        json.reviewData = reviewData;
+      }
     }
     return json;
   },
@@ -3831,6 +3809,14 @@ export const TransferDataJSON = {
    * @private
    */
   _readMessage: function (msg: TransferData, json: any): TransferData {
+    const _type = json.type;
+    if (_type) {
+      msg.type = _type;
+    }
+    const _traceId = json.traceId ?? json.trace_id;
+    if (_traceId) {
+      msg.traceId = _traceId;
+    }
     const _operationType = json.operationType ?? json.operation_type;
     if (_operationType) {
       msg.operationType = _operationType;
@@ -3859,13 +3845,130 @@ export const TransferDataJSON = {
       TransferWithdrawDataJSON._readMessage(m, _withdraw);
       msg.withdraw = m;
     }
+    const _reviewData = json.reviewData ?? json.review_data;
+    if (_reviewData) {
+      const m = ReviewData.initialize();
+      ReviewDataJSON._readMessage(m, _reviewData);
+      msg.reviewData = m;
+    }
+    return msg;
+  },
+
+  Type: {
+    NOT_SET: "NOT_SET",
+    OPERATION: "OPERATION",
+    CHARGE: "CHARGE",
+    REVIEW: "REVIEW",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): TransferData.Type {
+      switch (i) {
+        case 0: {
+          return "NOT_SET";
+        }
+        case 1: {
+          return "OPERATION";
+        }
+        case 2: {
+          return "CHARGE";
+        }
+        case 3: {
+          return "REVIEW";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as TransferData.Type;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: TransferData.Type): number {
+      switch (i) {
+        case "NOT_SET": {
+          return 0;
+        }
+        case "OPERATION": {
+          return 1;
+        }
+        case "CHARGE": {
+          return 2;
+        }
+        case "REVIEW": {
+          return 3;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
+export const ReviewDataJSON = {
+  /**
+   * Serializes ReviewData to JSON.
+   */
+  encode: function (msg: Partial<ReviewData>): string {
+    return JSON.stringify(ReviewDataJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ReviewData from JSON.
+   */
+  decode: function (json: string): ReviewData {
+    return ReviewDataJSON._readMessage(
+      ReviewDataJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes ReviewData with all fields set to their default value.
+   */
+  initialize: function (): ReviewData {
+    return {
+      traceId: "",
+      passed: false,
+      failedReason: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<ReviewData>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
+    }
+    if (msg.passed) {
+      json.passed = msg.passed;
+    }
+    if (msg.failedReason) {
+      json.failedReason = msg.failedReason;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: ReviewData, json: any): ReviewData {
     const _traceId = json.traceId ?? json.trace_id;
     if (_traceId) {
       msg.traceId = _traceId;
     }
-    const _charge = json.charge;
-    if (_charge) {
-      msg.charge = _charge;
+    const _passed = json.passed;
+    if (_passed) {
+      msg.passed = _passed;
+    }
+    const _failedReason = json.failedReason ?? json.failed_reason;
+    if (_failedReason) {
+      msg.failedReason = _failedReason;
     }
     return msg;
   },
@@ -5898,121 +6001,6 @@ export const GetLiquidationResponseJSON = {
         msg.pledges.push(m);
       }
     }
-    return msg;
-  },
-};
-
-export const HandleReviewingOperationRequestJSON = {
-  /**
-   * Serializes HandleReviewingOperationRequest to JSON.
-   */
-  encode: function (msg: Partial<HandleReviewingOperationRequest>): string {
-    return JSON.stringify(
-      HandleReviewingOperationRequestJSON._writeMessage(msg)
-    );
-  },
-
-  /**
-   * Deserializes HandleReviewingOperationRequest from JSON.
-   */
-  decode: function (json: string): HandleReviewingOperationRequest {
-    return HandleReviewingOperationRequestJSON._readMessage(
-      HandleReviewingOperationRequestJSON.initialize(),
-      JSON.parse(json)
-    );
-  },
-
-  /**
-   * Initializes HandleReviewingOperationRequest with all fields set to their default value.
-   */
-  initialize: function (): HandleReviewingOperationRequest {
-    return {
-      traceId: "",
-      passed: false,
-      failedReason: "",
-    };
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    msg: Partial<HandleReviewingOperationRequest>
-  ): Record<string, unknown> {
-    const json: Record<string, unknown> = {};
-    if (msg.traceId) {
-      json.traceId = msg.traceId;
-    }
-    if (msg.passed) {
-      json.passed = msg.passed;
-    }
-    if (msg.failedReason) {
-      json.failedReason = msg.failedReason;
-    }
-    return json;
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    msg: HandleReviewingOperationRequest,
-    json: any
-  ): HandleReviewingOperationRequest {
-    const _traceId = json.traceId ?? json.trace_id;
-    if (_traceId) {
-      msg.traceId = _traceId;
-    }
-    const _passed = json.passed;
-    if (_passed) {
-      msg.passed = _passed;
-    }
-    const _failedReason = json.failedReason ?? json.failed_reason;
-    if (_failedReason) {
-      msg.failedReason = _failedReason;
-    }
-    return msg;
-  },
-};
-
-export const HandleReviewingOperationResponseJSON = {
-  /**
-   * Serializes HandleReviewingOperationResponse to JSON.
-   */
-  encode: function (_msg?: Partial<HandleReviewingOperationResponse>): string {
-    return "{}";
-  },
-
-  /**
-   * Deserializes HandleReviewingOperationResponse from JSON.
-   */
-  decode: function (_json?: string): HandleReviewingOperationResponse {
-    return {};
-  },
-
-  /**
-   * Initializes HandleReviewingOperationResponse with all fields set to their default value.
-   */
-  initialize: function (): HandleReviewingOperationResponse {
-    return {};
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    _msg: Partial<HandleReviewingOperationResponse>
-  ): Record<string, unknown> {
-    return {};
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    msg: HandleReviewingOperationResponse,
-    _json: any
-  ): HandleReviewingOperationResponse {
     return msg;
   },
 };
