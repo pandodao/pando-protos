@@ -538,7 +538,6 @@ export interface InfoResponse {
 }
 
 export interface CreateOperationLogRequest {
-  traceId: string;
   memo: string;
   assetId: string;
   amount: string;
@@ -2289,7 +2288,6 @@ export const CreateOperationLogRequest = {
    */
   initialize: function (): CreateOperationLogRequest {
     return {
-      traceId: "",
       memo: "",
       assetId: "",
       amount: "",
@@ -2303,17 +2301,14 @@ export const CreateOperationLogRequest = {
     msg: Partial<CreateOperationLogRequest>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.traceId) {
-      writer.writeString(1, msg.traceId);
-    }
     if (msg.memo) {
-      writer.writeString(2, msg.memo);
+      writer.writeString(1, msg.memo);
     }
     if (msg.assetId) {
-      writer.writeString(3, msg.assetId);
+      writer.writeString(2, msg.assetId);
     }
     if (msg.amount) {
-      writer.writeString(4, msg.amount);
+      writer.writeString(3, msg.amount);
     }
     return writer;
   },
@@ -2329,18 +2324,14 @@ export const CreateOperationLogRequest = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.traceId = reader.readString();
-          break;
-        }
-        case 2: {
           msg.memo = reader.readString();
           break;
         }
-        case 3: {
+        case 2: {
           msg.assetId = reader.readString();
           break;
         }
-        case 4: {
+        case 3: {
           msg.amount = reader.readString();
           break;
         }
@@ -4960,7 +4951,6 @@ export const CreateOperationLogRequestJSON = {
    */
   initialize: function (): CreateOperationLogRequest {
     return {
-      traceId: "",
       memo: "",
       assetId: "",
       amount: "",
@@ -4974,9 +4964,6 @@ export const CreateOperationLogRequestJSON = {
     msg: Partial<CreateOperationLogRequest>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.traceId) {
-      json.traceId = msg.traceId;
-    }
     if (msg.memo) {
       json.memo = msg.memo;
     }
@@ -4996,10 +4983,6 @@ export const CreateOperationLogRequestJSON = {
     msg: CreateOperationLogRequest,
     json: any
   ): CreateOperationLogRequest {
-    const _traceId = json.traceId ?? json.trace_id;
-    if (_traceId) {
-      msg.traceId = _traceId;
-    }
     const _memo = json.memo;
     if (_memo) {
       msg.memo = _memo;
