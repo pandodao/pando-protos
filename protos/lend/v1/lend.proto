@@ -145,10 +145,9 @@ message InfoResponse {
 }
 
 message CreateOperationLogRequest {
-  string trace_id = 1;
-  string memo = 2;
-  string asset_id = 3;
-  string amount = 4;
+  string memo = 1;
+  string asset_id = 2;
+  string amount = 3;
 }
 
 message CreateOperationLogResponse {}
