@@ -29,36 +29,36 @@ message TransferData {
     CHARGE = 2;
     REVIEW = 3;
   }
-  Type type = 1;
-  string trace_id = 2;
+  Type t = 1;
+  string tid = 2;
 
-  OperationType operation_type = 3;
-  TransferPledgeData pledge = 4;
-  TransferLoanData loan = 5;
-  TransferRepayData repay = 6;
-  TransferWithdrawData withdraw = 7;
+  OperationType ot = 3;
+  TransferPledgeData p = 4;
+  TransferLoanData l= 5;
+  TransferRepayData r = 6;
+  TransferWithdrawData w = 7;
 
-  ReviewData review_data = 20;
+  ReviewData rd = 20;
 }
 
 message ReviewData {
-  string trace_id = 1;
-  bool passed = 2;
-  string failed_reason = 3;
+  string tid = 1;
+  bool p = 2;
+  string fr = 3;
 }
 
 message TransferWithdrawData {
-  PledgeType pledge_type = 1;
-  string asset_id = 2;
-  string amount = 3;
+  PledgeType pt = 1;
+  string aid = 2;
+  string a = 3;
 }
 
 message TransferPledgeData {
-  PledgeType pledge_type = 1;
+  PledgeType pt = 1;
 }
 
 message TransferLoanData {
-  string amount = 1;
+  string a = 1;
 }
 
 message TransferRepayData {}
