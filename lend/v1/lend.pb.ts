@@ -441,14 +441,14 @@ export type OperationStatus =
 export type PledgeType = "PLEDGE_TYPE_NOT_SET" | "NODE" | "POOL" | "LOCAL";
 
 export interface TransferData {
-  type: TransferData.Type;
-  traceId: string;
-  operationType: OperationType;
-  pledge: TransferPledgeData;
-  loan: TransferLoanData;
-  repay: TransferRepayData;
-  withdraw: TransferWithdrawData;
-  reviewData: ReviewData;
+  t: TransferData.Type;
+  tid: string;
+  ot: OperationType;
+  p: TransferPledgeData;
+  l: TransferLoanData;
+  r: TransferRepayData;
+  w: TransferWithdrawData;
+  rd: ReviewData;
 }
 
 export declare namespace TransferData {
@@ -456,23 +456,23 @@ export declare namespace TransferData {
 }
 
 export interface ReviewData {
-  traceId: string;
-  passed: boolean;
-  failedReason: string;
+  tid: string;
+  p: boolean;
+  fr: string;
 }
 
 export interface TransferWithdrawData {
-  pledgeType: PledgeType;
-  assetId: string;
-  amount: string;
+  pt: PledgeType;
+  aid: string;
+  a: string;
 }
 
 export interface TransferPledgeData {
-  pledgeType: PledgeType;
+  pt: PledgeType;
 }
 
 export interface TransferLoanData {
-  amount: string;
+  a: string;
 }
 
 export interface TransferRepayData {}
@@ -912,14 +912,14 @@ export const TransferData = {
    */
   initialize: function (): TransferData {
     return {
-      type: TransferData.Type._fromInt(0),
-      traceId: "",
-      operationType: OperationType._fromInt(0),
-      pledge: TransferPledgeData.initialize(),
-      loan: TransferLoanData.initialize(),
-      repay: TransferRepayData.initialize(),
-      withdraw: TransferWithdrawData.initialize(),
-      reviewData: ReviewData.initialize(),
+      t: TransferData.Type._fromInt(0),
+      tid: "",
+      ot: OperationType._fromInt(0),
+      p: TransferPledgeData.initialize(),
+      l: TransferLoanData.initialize(),
+      r: TransferRepayData.initialize(),
+      w: TransferWithdrawData.initialize(),
+      rd: ReviewData.initialize(),
     };
   },
 
@@ -930,29 +930,29 @@ export const TransferData = {
     msg: Partial<TransferData>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.type && TransferData.Type._toInt(msg.type)) {
-      writer.writeEnum(1, TransferData.Type._toInt(msg.type));
+    if (msg.t && TransferData.Type._toInt(msg.t)) {
+      writer.writeEnum(1, TransferData.Type._toInt(msg.t));
     }
-    if (msg.traceId) {
-      writer.writeString(2, msg.traceId);
+    if (msg.tid) {
+      writer.writeString(2, msg.tid);
     }
-    if (msg.operationType && OperationType._toInt(msg.operationType)) {
-      writer.writeEnum(3, OperationType._toInt(msg.operationType));
+    if (msg.ot && OperationType._toInt(msg.ot)) {
+      writer.writeEnum(3, OperationType._toInt(msg.ot));
     }
-    if (msg.pledge) {
-      writer.writeMessage(4, msg.pledge, TransferPledgeData._writeMessage);
+    if (msg.p) {
+      writer.writeMessage(4, msg.p, TransferPledgeData._writeMessage);
     }
-    if (msg.loan) {
-      writer.writeMessage(5, msg.loan, TransferLoanData._writeMessage);
+    if (msg.l) {
+      writer.writeMessage(5, msg.l, TransferLoanData._writeMessage);
     }
-    if (msg.repay) {
-      writer.writeMessage(6, msg.repay, TransferRepayData._writeMessage);
+    if (msg.r) {
+      writer.writeMessage(6, msg.r, TransferRepayData._writeMessage);
     }
-    if (msg.withdraw) {
-      writer.writeMessage(7, msg.withdraw, TransferWithdrawData._writeMessage);
+    if (msg.w) {
+      writer.writeMessage(7, msg.w, TransferWithdrawData._writeMessage);
     }
-    if (msg.reviewData) {
-      writer.writeMessage(20, msg.reviewData, ReviewData._writeMessage);
+    if (msg.rd) {
+      writer.writeMessage(20, msg.rd, ReviewData._writeMessage);
     }
     return writer;
   },
@@ -968,35 +968,35 @@ export const TransferData = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.type = TransferData.Type._fromInt(reader.readEnum());
+          msg.t = TransferData.Type._fromInt(reader.readEnum());
           break;
         }
         case 2: {
-          msg.traceId = reader.readString();
+          msg.tid = reader.readString();
           break;
         }
         case 3: {
-          msg.operationType = OperationType._fromInt(reader.readEnum());
+          msg.ot = OperationType._fromInt(reader.readEnum());
           break;
         }
         case 4: {
-          reader.readMessage(msg.pledge, TransferPledgeData._readMessage);
+          reader.readMessage(msg.p, TransferPledgeData._readMessage);
           break;
         }
         case 5: {
-          reader.readMessage(msg.loan, TransferLoanData._readMessage);
+          reader.readMessage(msg.l, TransferLoanData._readMessage);
           break;
         }
         case 6: {
-          reader.readMessage(msg.repay, TransferRepayData._readMessage);
+          reader.readMessage(msg.r, TransferRepayData._readMessage);
           break;
         }
         case 7: {
-          reader.readMessage(msg.withdraw, TransferWithdrawData._readMessage);
+          reader.readMessage(msg.w, TransferWithdrawData._readMessage);
           break;
         }
         case 20: {
-          reader.readMessage(msg.reviewData, ReviewData._readMessage);
+          reader.readMessage(msg.rd, ReviewData._readMessage);
           break;
         }
         default: {
@@ -1085,9 +1085,9 @@ export const ReviewData = {
    */
   initialize: function (): ReviewData {
     return {
-      traceId: "",
-      passed: false,
-      failedReason: "",
+      tid: "",
+      p: false,
+      fr: "",
     };
   },
 
@@ -1098,14 +1098,14 @@ export const ReviewData = {
     msg: Partial<ReviewData>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.traceId) {
-      writer.writeString(1, msg.traceId);
+    if (msg.tid) {
+      writer.writeString(1, msg.tid);
     }
-    if (msg.passed) {
-      writer.writeBool(2, msg.passed);
+    if (msg.p) {
+      writer.writeBool(2, msg.p);
     }
-    if (msg.failedReason) {
-      writer.writeString(3, msg.failedReason);
+    if (msg.fr) {
+      writer.writeString(3, msg.fr);
     }
     return writer;
   },
@@ -1118,15 +1118,15 @@ export const ReviewData = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.traceId = reader.readString();
+          msg.tid = reader.readString();
           break;
         }
         case 2: {
-          msg.passed = reader.readBool();
+          msg.p = reader.readBool();
           break;
         }
         case 3: {
-          msg.failedReason = reader.readString();
+          msg.fr = reader.readString();
           break;
         }
         default: {
@@ -1165,9 +1165,9 @@ export const TransferWithdrawData = {
    */
   initialize: function (): TransferWithdrawData {
     return {
-      pledgeType: PledgeType._fromInt(0),
-      assetId: "",
-      amount: "",
+      pt: PledgeType._fromInt(0),
+      aid: "",
+      a: "",
     };
   },
 
@@ -1178,14 +1178,14 @@ export const TransferWithdrawData = {
     msg: Partial<TransferWithdrawData>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.pledgeType && PledgeType._toInt(msg.pledgeType)) {
-      writer.writeEnum(1, PledgeType._toInt(msg.pledgeType));
+    if (msg.pt && PledgeType._toInt(msg.pt)) {
+      writer.writeEnum(1, PledgeType._toInt(msg.pt));
     }
-    if (msg.assetId) {
-      writer.writeString(2, msg.assetId);
+    if (msg.aid) {
+      writer.writeString(2, msg.aid);
     }
-    if (msg.amount) {
-      writer.writeString(3, msg.amount);
+    if (msg.a) {
+      writer.writeString(3, msg.a);
     }
     return writer;
   },
@@ -1201,15 +1201,15 @@ export const TransferWithdrawData = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.pledgeType = PledgeType._fromInt(reader.readEnum());
+          msg.pt = PledgeType._fromInt(reader.readEnum());
           break;
         }
         case 2: {
-          msg.assetId = reader.readString();
+          msg.aid = reader.readString();
           break;
         }
         case 3: {
-          msg.amount = reader.readString();
+          msg.a = reader.readString();
           break;
         }
         default: {
@@ -1248,7 +1248,7 @@ export const TransferPledgeData = {
    */
   initialize: function (): TransferPledgeData {
     return {
-      pledgeType: PledgeType._fromInt(0),
+      pt: PledgeType._fromInt(0),
     };
   },
 
@@ -1259,8 +1259,8 @@ export const TransferPledgeData = {
     msg: Partial<TransferPledgeData>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.pledgeType && PledgeType._toInt(msg.pledgeType)) {
-      writer.writeEnum(1, PledgeType._toInt(msg.pledgeType));
+    if (msg.pt && PledgeType._toInt(msg.pt)) {
+      writer.writeEnum(1, PledgeType._toInt(msg.pt));
     }
     return writer;
   },
@@ -1276,7 +1276,7 @@ export const TransferPledgeData = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.pledgeType = PledgeType._fromInt(reader.readEnum());
+          msg.pt = PledgeType._fromInt(reader.readEnum());
           break;
         }
         default: {
@@ -1315,7 +1315,7 @@ export const TransferLoanData = {
    */
   initialize: function (): TransferLoanData {
     return {
-      amount: "",
+      a: "",
     };
   },
 
@@ -1326,8 +1326,8 @@ export const TransferLoanData = {
     msg: Partial<TransferLoanData>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.amount) {
-      writer.writeString(1, msg.amount);
+    if (msg.a) {
+      writer.writeString(1, msg.a);
     }
     return writer;
   },
@@ -1343,7 +1343,7 @@ export const TransferLoanData = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.amount = reader.readString();
+          msg.a = reader.readString();
           break;
         }
         default: {
@@ -3736,14 +3736,14 @@ export const TransferDataJSON = {
    */
   initialize: function (): TransferData {
     return {
-      type: TransferData.Type._fromInt(0),
-      traceId: "",
-      operationType: OperationType._fromInt(0),
-      pledge: TransferPledgeData.initialize(),
-      loan: TransferLoanData.initialize(),
-      repay: TransferRepayData.initialize(),
-      withdraw: TransferWithdrawData.initialize(),
-      reviewData: ReviewData.initialize(),
+      t: TransferData.Type._fromInt(0),
+      tid: "",
+      ot: OperationType._fromInt(0),
+      p: TransferPledgeData.initialize(),
+      l: TransferLoanData.initialize(),
+      r: TransferRepayData.initialize(),
+      w: TransferWithdrawData.initialize(),
+      rd: ReviewData.initialize(),
     };
   },
 
@@ -3754,43 +3754,43 @@ export const TransferDataJSON = {
     msg: Partial<TransferData>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.type && TransferDataJSON.Type._toInt(msg.type)) {
-      json.type = msg.type;
+    if (msg.t && TransferDataJSON.Type._toInt(msg.t)) {
+      json.t = msg.t;
     }
-    if (msg.traceId) {
-      json.traceId = msg.traceId;
+    if (msg.tid) {
+      json.tid = msg.tid;
     }
-    if (msg.operationType && OperationTypeJSON._toInt(msg.operationType)) {
-      json.operationType = msg.operationType;
+    if (msg.ot && OperationTypeJSON._toInt(msg.ot)) {
+      json.ot = msg.ot;
     }
-    if (msg.pledge) {
-      const pledge = TransferPledgeDataJSON._writeMessage(msg.pledge);
-      if (Object.keys(pledge).length > 0) {
-        json.pledge = pledge;
+    if (msg.p) {
+      const p = TransferPledgeDataJSON._writeMessage(msg.p);
+      if (Object.keys(p).length > 0) {
+        json.p = p;
       }
     }
-    if (msg.loan) {
-      const loan = TransferLoanDataJSON._writeMessage(msg.loan);
-      if (Object.keys(loan).length > 0) {
-        json.loan = loan;
+    if (msg.l) {
+      const l = TransferLoanDataJSON._writeMessage(msg.l);
+      if (Object.keys(l).length > 0) {
+        json.l = l;
       }
     }
-    if (msg.repay) {
-      const repay = TransferRepayDataJSON._writeMessage(msg.repay);
-      if (Object.keys(repay).length > 0) {
-        json.repay = repay;
+    if (msg.r) {
+      const r = TransferRepayDataJSON._writeMessage(msg.r);
+      if (Object.keys(r).length > 0) {
+        json.r = r;
       }
     }
-    if (msg.withdraw) {
-      const withdraw = TransferWithdrawDataJSON._writeMessage(msg.withdraw);
-      if (Object.keys(withdraw).length > 0) {
-        json.withdraw = withdraw;
+    if (msg.w) {
+      const w = TransferWithdrawDataJSON._writeMessage(msg.w);
+      if (Object.keys(w).length > 0) {
+        json.w = w;
       }
     }
-    if (msg.reviewData) {
-      const reviewData = ReviewDataJSON._writeMessage(msg.reviewData);
-      if (Object.keys(reviewData).length > 0) {
-        json.reviewData = reviewData;
+    if (msg.rd) {
+      const rd = ReviewDataJSON._writeMessage(msg.rd);
+      if (Object.keys(rd).length > 0) {
+        json.rd = rd;
       }
     }
     return json;
@@ -3800,47 +3800,47 @@ export const TransferDataJSON = {
    * @private
    */
   _readMessage: function (msg: TransferData, json: any): TransferData {
-    const _type = json.type;
-    if (_type) {
-      msg.type = _type;
+    const _t = json.t;
+    if (_t) {
+      msg.t = _t;
     }
-    const _traceId = json.traceId ?? json.trace_id;
-    if (_traceId) {
-      msg.traceId = _traceId;
+    const _tid = json.tid;
+    if (_tid) {
+      msg.tid = _tid;
     }
-    const _operationType = json.operationType ?? json.operation_type;
-    if (_operationType) {
-      msg.operationType = _operationType;
+    const _ot = json.ot;
+    if (_ot) {
+      msg.ot = _ot;
     }
-    const _pledge = json.pledge;
-    if (_pledge) {
+    const _p = json.p;
+    if (_p) {
       const m = TransferPledgeData.initialize();
-      TransferPledgeDataJSON._readMessage(m, _pledge);
-      msg.pledge = m;
+      TransferPledgeDataJSON._readMessage(m, _p);
+      msg.p = m;
     }
-    const _loan = json.loan;
-    if (_loan) {
+    const _l = json.l;
+    if (_l) {
       const m = TransferLoanData.initialize();
-      TransferLoanDataJSON._readMessage(m, _loan);
-      msg.loan = m;
+      TransferLoanDataJSON._readMessage(m, _l);
+      msg.l = m;
     }
-    const _repay = json.repay;
-    if (_repay) {
+    const _r = json.r;
+    if (_r) {
       const m = TransferRepayData.initialize();
-      TransferRepayDataJSON._readMessage(m, _repay);
-      msg.repay = m;
+      TransferRepayDataJSON._readMessage(m, _r);
+      msg.r = m;
     }
-    const _withdraw = json.withdraw;
-    if (_withdraw) {
+    const _w = json.w;
+    if (_w) {
       const m = TransferWithdrawData.initialize();
-      TransferWithdrawDataJSON._readMessage(m, _withdraw);
-      msg.withdraw = m;
+      TransferWithdrawDataJSON._readMessage(m, _w);
+      msg.w = m;
     }
-    const _reviewData = json.reviewData ?? json.review_data;
-    if (_reviewData) {
+    const _rd = json.rd;
+    if (_rd) {
       const m = ReviewData.initialize();
-      ReviewDataJSON._readMessage(m, _reviewData);
-      msg.reviewData = m;
+      ReviewDataJSON._readMessage(m, _rd);
+      msg.rd = m;
     }
     return msg;
   },
@@ -3922,9 +3922,9 @@ export const ReviewDataJSON = {
    */
   initialize: function (): ReviewData {
     return {
-      traceId: "",
-      passed: false,
-      failedReason: "",
+      tid: "",
+      p: false,
+      fr: "",
     };
   },
 
@@ -3933,14 +3933,14 @@ export const ReviewDataJSON = {
    */
   _writeMessage: function (msg: Partial<ReviewData>): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.traceId) {
-      json.traceId = msg.traceId;
+    if (msg.tid) {
+      json.tid = msg.tid;
     }
-    if (msg.passed) {
-      json.passed = msg.passed;
+    if (msg.p) {
+      json.p = msg.p;
     }
-    if (msg.failedReason) {
-      json.failedReason = msg.failedReason;
+    if (msg.fr) {
+      json.fr = msg.fr;
     }
     return json;
   },
@@ -3949,17 +3949,17 @@ export const ReviewDataJSON = {
    * @private
    */
   _readMessage: function (msg: ReviewData, json: any): ReviewData {
-    const _traceId = json.traceId ?? json.trace_id;
-    if (_traceId) {
-      msg.traceId = _traceId;
+    const _tid = json.tid;
+    if (_tid) {
+      msg.tid = _tid;
     }
-    const _passed = json.passed;
-    if (_passed) {
-      msg.passed = _passed;
+    const _p = json.p;
+    if (_p) {
+      msg.p = _p;
     }
-    const _failedReason = json.failedReason ?? json.failed_reason;
-    if (_failedReason) {
-      msg.failedReason = _failedReason;
+    const _fr = json.fr;
+    if (_fr) {
+      msg.fr = _fr;
     }
     return msg;
   },
@@ -3988,9 +3988,9 @@ export const TransferWithdrawDataJSON = {
    */
   initialize: function (): TransferWithdrawData {
     return {
-      pledgeType: PledgeType._fromInt(0),
-      assetId: "",
-      amount: "",
+      pt: PledgeType._fromInt(0),
+      aid: "",
+      a: "",
     };
   },
 
@@ -4001,14 +4001,14 @@ export const TransferWithdrawDataJSON = {
     msg: Partial<TransferWithdrawData>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.pledgeType && PledgeTypeJSON._toInt(msg.pledgeType)) {
-      json.pledgeType = msg.pledgeType;
+    if (msg.pt && PledgeTypeJSON._toInt(msg.pt)) {
+      json.pt = msg.pt;
     }
-    if (msg.assetId) {
-      json.assetId = msg.assetId;
+    if (msg.aid) {
+      json.aid = msg.aid;
     }
-    if (msg.amount) {
-      json.amount = msg.amount;
+    if (msg.a) {
+      json.a = msg.a;
     }
     return json;
   },
@@ -4020,17 +4020,17 @@ export const TransferWithdrawDataJSON = {
     msg: TransferWithdrawData,
     json: any
   ): TransferWithdrawData {
-    const _pledgeType = json.pledgeType ?? json.pledge_type;
-    if (_pledgeType) {
-      msg.pledgeType = _pledgeType;
+    const _pt = json.pt;
+    if (_pt) {
+      msg.pt = _pt;
     }
-    const _assetId = json.assetId ?? json.asset_id;
-    if (_assetId) {
-      msg.assetId = _assetId;
+    const _aid = json.aid;
+    if (_aid) {
+      msg.aid = _aid;
     }
-    const _amount = json.amount;
-    if (_amount) {
-      msg.amount = _amount;
+    const _a = json.a;
+    if (_a) {
+      msg.a = _a;
     }
     return msg;
   },
@@ -4059,7 +4059,7 @@ export const TransferPledgeDataJSON = {
    */
   initialize: function (): TransferPledgeData {
     return {
-      pledgeType: PledgeType._fromInt(0),
+      pt: PledgeType._fromInt(0),
     };
   },
 
@@ -4070,8 +4070,8 @@ export const TransferPledgeDataJSON = {
     msg: Partial<TransferPledgeData>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.pledgeType && PledgeTypeJSON._toInt(msg.pledgeType)) {
-      json.pledgeType = msg.pledgeType;
+    if (msg.pt && PledgeTypeJSON._toInt(msg.pt)) {
+      json.pt = msg.pt;
     }
     return json;
   },
@@ -4083,9 +4083,9 @@ export const TransferPledgeDataJSON = {
     msg: TransferPledgeData,
     json: any
   ): TransferPledgeData {
-    const _pledgeType = json.pledgeType ?? json.pledge_type;
-    if (_pledgeType) {
-      msg.pledgeType = _pledgeType;
+    const _pt = json.pt;
+    if (_pt) {
+      msg.pt = _pt;
     }
     return msg;
   },
@@ -4114,7 +4114,7 @@ export const TransferLoanDataJSON = {
    */
   initialize: function (): TransferLoanData {
     return {
-      amount: "",
+      a: "",
     };
   },
 
@@ -4125,8 +4125,8 @@ export const TransferLoanDataJSON = {
     msg: Partial<TransferLoanData>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.amount) {
-      json.amount = msg.amount;
+    if (msg.a) {
+      json.a = msg.a;
     }
     return json;
   },
@@ -4135,9 +4135,9 @@ export const TransferLoanDataJSON = {
    * @private
    */
   _readMessage: function (msg: TransferLoanData, json: any): TransferLoanData {
-    const _amount = json.amount;
-    if (_amount) {
-      msg.amount = _amount;
+    const _a = json.a;
+    if (_a) {
+      msg.a = _a;
     }
     return msg;
   },
