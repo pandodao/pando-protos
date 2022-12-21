@@ -417,7 +417,7 @@ message Resp {
         int32 threshold = 3;
         string public_key = 4;
         int32 mode = 5;
-        int32 composed_mode = 6;
+        int32 compose_mode = 6;
     }
 
     message ListAudit {
