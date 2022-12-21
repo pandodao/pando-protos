@@ -314,16 +314,16 @@ export async function GetInfo(
 /**
  * audit
  */
-export async function ListAudit(
-  listAudit: Req.ListAudit,
+export async function ListAudits(
+  listAudits: Req.ListAudits,
   config?: ClientConfiguration
-): Promise<Resp.ListAudit> {
+): Promise<Resp.ListAudits> {
   const response = await PBrequest(
-    "/fox.pando.service.Pando/ListAudit",
-    Req.ListAudit.encode(listAudit),
+    "/fox.pando.service.Pando/ListAudits",
+    Req.ListAudits.encode(listAudits),
     config
   );
-  return Resp.ListAudit.decode(response);
+  return Resp.ListAudits.decode(response);
 }
 
 //========================================//
@@ -624,16 +624,16 @@ export async function GetInfoJSON(
 /**
  * audit
  */
-export async function ListAuditJSON(
-  listAudit: Req.ListAudit,
+export async function ListAuditsJSON(
+  listAudits: Req.ListAudits,
   config?: ClientConfiguration
-): Promise<Resp.ListAudit> {
+): Promise<Resp.ListAudits> {
   const response = await JSONrequest(
-    "/fox.pando.service.Pando/ListAudit",
-    ReqJSON.ListAudit.encode(listAudit),
+    "/fox.pando.service.Pando/ListAudits",
+    ReqJSON.ListAudits.encode(listAudits),
     config
   );
-  return RespJSON.ListAudit.decode(response);
+  return RespJSON.ListAudits.decode(response);
 }
 
 //========================================//
@@ -756,10 +756,10 @@ export interface Pando<Context = unknown> {
   /**
    * audit
    */
-  ListAudit: (
-    listAudit: Req.ListAudit,
+  ListAudits: (
+    listAudits: Req.ListAudits,
     context: Context
-  ) => Promise<Resp.ListAudit> | Resp.ListAudit;
+  ) => Promise<Resp.ListAudits> | Resp.ListAudits;
 }
 
 export function createPando<Context>(service: Pando<Context>) {
@@ -925,11 +925,11 @@ export function createPando<Context>(service: Pando<Context>) {
         input: { protobuf: Req.GetInfo, json: ReqJSON.GetInfo },
         output: { protobuf: Resp.GetInfo, json: RespJSON.GetInfo },
       },
-      ListAudit: {
-        name: "ListAudit",
-        handler: service.ListAudit,
-        input: { protobuf: Req.ListAudit, json: ReqJSON.ListAudit },
-        output: { protobuf: Resp.ListAudit, json: RespJSON.ListAudit },
+      ListAudits: {
+        name: "ListAudits",
+        handler: service.ListAudits,
+        input: { protobuf: Req.ListAudits, json: ReqJSON.ListAudits },
+        output: { protobuf: Resp.ListAudits, json: RespJSON.ListAudits },
       },
     },
   } as const;
@@ -1328,7 +1328,7 @@ export declare namespace Req {
 
   export interface GetInfo {}
 
-  export interface ListAudit {
+  export interface ListAudits {
     cursor: string;
     limit: bigint;
   }
@@ -1408,7 +1408,7 @@ export declare namespace Resp {
     composeMode: number;
   }
 
-  export interface ListAudit {
+  export interface ListAudits {
     audits: Audit[];
     pagination: Pagination;
   }
@@ -5001,31 +5001,31 @@ export const Req = {
     },
   },
 
-  ListAudit: {
+  ListAudits: {
     /**
-     * Serializes Req.ListAudit to protobuf.
+     * Serializes Req.ListAudits to protobuf.
      */
-    encode: function (msg: Partial<Req.ListAudit>): Uint8Array {
-      return Req.ListAudit._writeMessage(
+    encode: function (msg: Partial<Req.ListAudits>): Uint8Array {
+      return Req.ListAudits._writeMessage(
         msg,
         new BinaryWriter()
       ).getResultBuffer();
     },
 
     /**
-     * Deserializes Req.ListAudit from protobuf.
+     * Deserializes Req.ListAudits from protobuf.
      */
-    decode: function (bytes: ByteSource): Req.ListAudit {
-      return Req.ListAudit._readMessage(
-        Req.ListAudit.initialize(),
+    decode: function (bytes: ByteSource): Req.ListAudits {
+      return Req.ListAudits._readMessage(
+        Req.ListAudits.initialize(),
         new BinaryReader(bytes)
       );
     },
 
     /**
-     * Initializes Req.ListAudit with all fields set to their default value.
+     * Initializes Req.ListAudits with all fields set to their default value.
      */
-    initialize: function (): Req.ListAudit {
+    initialize: function (): Req.ListAudits {
       return {
         cursor: "",
         limit: 0n,
@@ -5036,7 +5036,7 @@ export const Req = {
      * @private
      */
     _writeMessage: function (
-      msg: Partial<Req.ListAudit>,
+      msg: Partial<Req.ListAudits>,
       writer: BinaryWriter
     ): BinaryWriter {
       if (msg.cursor) {
@@ -5052,9 +5052,9 @@ export const Req = {
      * @private
      */
     _readMessage: function (
-      msg: Req.ListAudit,
+      msg: Req.ListAudits,
       reader: BinaryReader
-    ): Req.ListAudit {
+    ): Req.ListAudits {
       while (reader.nextField()) {
         const field = reader.getFieldNumber();
         switch (field) {
@@ -6269,31 +6269,31 @@ export const Resp = {
     },
   },
 
-  ListAudit: {
+  ListAudits: {
     /**
-     * Serializes Resp.ListAudit to protobuf.
+     * Serializes Resp.ListAudits to protobuf.
      */
-    encode: function (msg: Partial<Resp.ListAudit>): Uint8Array {
-      return Resp.ListAudit._writeMessage(
+    encode: function (msg: Partial<Resp.ListAudits>): Uint8Array {
+      return Resp.ListAudits._writeMessage(
         msg,
         new BinaryWriter()
       ).getResultBuffer();
     },
 
     /**
-     * Deserializes Resp.ListAudit from protobuf.
+     * Deserializes Resp.ListAudits from protobuf.
      */
-    decode: function (bytes: ByteSource): Resp.ListAudit {
-      return Resp.ListAudit._readMessage(
-        Resp.ListAudit.initialize(),
+    decode: function (bytes: ByteSource): Resp.ListAudits {
+      return Resp.ListAudits._readMessage(
+        Resp.ListAudits.initialize(),
         new BinaryReader(bytes)
       );
     },
 
     /**
-     * Initializes Resp.ListAudit with all fields set to their default value.
+     * Initializes Resp.ListAudits with all fields set to their default value.
      */
-    initialize: function (): Resp.ListAudit {
+    initialize: function (): Resp.ListAudits {
       return {
         audits: [],
         pagination: Pagination.initialize(),
@@ -6304,7 +6304,7 @@ export const Resp = {
      * @private
      */
     _writeMessage: function (
-      msg: Partial<Resp.ListAudit>,
+      msg: Partial<Resp.ListAudits>,
       writer: BinaryWriter
     ): BinaryWriter {
       if (msg.audits?.length) {
@@ -6320,9 +6320,9 @@ export const Resp = {
      * @private
      */
     _readMessage: function (
-      msg: Resp.ListAudit,
+      msg: Resp.ListAudits,
       reader: BinaryReader
-    ): Resp.ListAudit {
+    ): Resp.ListAudits {
       while (reader.nextField()) {
         const field = reader.getFieldNumber();
         switch (field) {
@@ -9585,28 +9585,28 @@ export const ReqJSON = {
     },
   },
 
-  ListAudit: {
+  ListAudits: {
     /**
-     * Serializes Req.ListAudit to JSON.
+     * Serializes Req.ListAudits to JSON.
      */
-    encode: function (msg: Partial<Req.ListAudit>): string {
-      return JSON.stringify(ReqJSON.ListAudit._writeMessage(msg));
+    encode: function (msg: Partial<Req.ListAudits>): string {
+      return JSON.stringify(ReqJSON.ListAudits._writeMessage(msg));
     },
 
     /**
-     * Deserializes Req.ListAudit from JSON.
+     * Deserializes Req.ListAudits from JSON.
      */
-    decode: function (json: string): Req.ListAudit {
-      return ReqJSON.ListAudit._readMessage(
-        ReqJSON.ListAudit.initialize(),
+    decode: function (json: string): Req.ListAudits {
+      return ReqJSON.ListAudits._readMessage(
+        ReqJSON.ListAudits.initialize(),
         JSON.parse(json)
       );
     },
 
     /**
-     * Initializes Req.ListAudit with all fields set to their default value.
+     * Initializes Req.ListAudits with all fields set to their default value.
      */
-    initialize: function (): Req.ListAudit {
+    initialize: function (): Req.ListAudits {
       return {
         cursor: "",
         limit: 0n,
@@ -9617,7 +9617,7 @@ export const ReqJSON = {
      * @private
      */
     _writeMessage: function (
-      msg: Partial<Req.ListAudit>
+      msg: Partial<Req.ListAudits>
     ): Record<string, unknown> {
       const json: Record<string, unknown> = {};
       if (msg.cursor) {
@@ -9632,7 +9632,7 @@ export const ReqJSON = {
     /**
      * @private
      */
-    _readMessage: function (msg: Req.ListAudit, json: any): Req.ListAudit {
+    _readMessage: function (msg: Req.ListAudits, json: any): Req.ListAudits {
       const _cursor = json.cursor;
       if (_cursor) {
         msg.cursor = _cursor;
@@ -10658,28 +10658,28 @@ export const RespJSON = {
     },
   },
 
-  ListAudit: {
+  ListAudits: {
     /**
-     * Serializes Resp.ListAudit to JSON.
+     * Serializes Resp.ListAudits to JSON.
      */
-    encode: function (msg: Partial<Resp.ListAudit>): string {
-      return JSON.stringify(RespJSON.ListAudit._writeMessage(msg));
+    encode: function (msg: Partial<Resp.ListAudits>): string {
+      return JSON.stringify(RespJSON.ListAudits._writeMessage(msg));
     },
 
     /**
-     * Deserializes Resp.ListAudit from JSON.
+     * Deserializes Resp.ListAudits from JSON.
      */
-    decode: function (json: string): Resp.ListAudit {
-      return RespJSON.ListAudit._readMessage(
-        RespJSON.ListAudit.initialize(),
+    decode: function (json: string): Resp.ListAudits {
+      return RespJSON.ListAudits._readMessage(
+        RespJSON.ListAudits.initialize(),
         JSON.parse(json)
       );
     },
 
     /**
-     * Initializes Resp.ListAudit with all fields set to their default value.
+     * Initializes Resp.ListAudits with all fields set to their default value.
      */
-    initialize: function (): Resp.ListAudit {
+    initialize: function (): Resp.ListAudits {
       return {
         audits: [],
         pagination: Pagination.initialize(),
@@ -10690,7 +10690,7 @@ export const RespJSON = {
      * @private
      */
     _writeMessage: function (
-      msg: Partial<Resp.ListAudit>
+      msg: Partial<Resp.ListAudits>
     ): Record<string, unknown> {
       const json: Record<string, unknown> = {};
       if (msg.audits?.length) {
@@ -10708,7 +10708,7 @@ export const RespJSON = {
     /**
      * @private
      */
-    _readMessage: function (msg: Resp.ListAudit, json: any): Resp.ListAudit {
+    _readMessage: function (msg: Resp.ListAudits, json: any): Resp.ListAudits {
       const _audits = json.audits;
       if (_audits) {
         for (const item of _audits) {
