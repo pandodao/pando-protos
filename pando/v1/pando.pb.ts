@@ -311,6 +311,21 @@ export async function GetInfo(
   return Resp.GetInfo.decode(response);
 }
 
+/**
+ * audit
+ */
+export async function ListAudit(
+  listAudit: Req.ListAudit,
+  config?: ClientConfiguration
+): Promise<Resp.ListAudit> {
+  const response = await PBrequest(
+    "/fox.pando.service.Pando/ListAudit",
+    Req.ListAudit.encode(listAudit),
+    config
+  );
+  return Resp.ListAudit.decode(response);
+}
+
 //========================================//
 //           Pando JSON Client            //
 //========================================//
@@ -606,6 +621,21 @@ export async function GetInfoJSON(
   return RespJSON.GetInfo.decode(response);
 }
 
+/**
+ * audit
+ */
+export async function ListAuditJSON(
+  listAudit: Req.ListAudit,
+  config?: ClientConfiguration
+): Promise<Resp.ListAudit> {
+  const response = await JSONrequest(
+    "/fox.pando.service.Pando/ListAudit",
+    ReqJSON.ListAudit.encode(listAudit),
+    config
+  );
+  return RespJSON.ListAudit.decode(response);
+}
+
 //========================================//
 //                 Pando                  //
 //========================================//
@@ -723,6 +753,13 @@ export interface Pando<Context = unknown> {
     getInfo: Req.GetInfo,
     context: Context
   ) => Promise<Resp.GetInfo> | Resp.GetInfo;
+  /**
+   * audit
+   */
+  ListAudit: (
+    listAudit: Req.ListAudit,
+    context: Context
+  ) => Promise<Resp.ListAudit> | Resp.ListAudit;
 }
 
 export function createPando<Context>(service: Pando<Context>) {
@@ -887,6 +924,12 @@ export function createPando<Context>(service: Pando<Context>) {
         handler: service.GetInfo,
         input: { protobuf: Req.GetInfo, json: ReqJSON.GetInfo },
         output: { protobuf: Resp.GetInfo, json: RespJSON.GetInfo },
+      },
+      ListAudit: {
+        name: "ListAudit",
+        handler: service.ListAudit,
+        input: { protobuf: Req.ListAudit, json: ReqJSON.ListAudit },
+        output: { protobuf: Resp.ListAudit, json: RespJSON.ListAudit },
       },
     },
   } as const;
@@ -1129,6 +1172,24 @@ export interface AggregatedStat {
   daiValue: string;
 }
 
+export interface Audit {
+  id: string;
+  /**
+   * @inject_tag: swaggertype:"string" format:"date"
+   */
+  createdAt: Timestamp;
+  assetId: string;
+  amount: string;
+  userId: string;
+  status: Audit.Status;
+  memo: string;
+  reviewedBy: string;
+}
+
+export declare namespace Audit {
+  export type Status = "Pending" | "Rejected" | "Approved";
+}
+
 export interface Req {}
 
 export declare namespace Req {
@@ -1266,6 +1327,11 @@ export declare namespace Req {
   }
 
   export interface GetInfo {}
+
+  export interface ListAudit {
+    cursor: string;
+    limit: bigint;
+  }
 }
 
 export interface Resp {}
@@ -1338,6 +1404,13 @@ export declare namespace Resp {
     members: string[];
     threshold: number;
     publicKey: string;
+    mode: number;
+    composedMode: number;
+  }
+
+  export interface ListAudit {
+    audits: Audit[];
+    pagination: Pagination;
   }
 }
 
@@ -3231,6 +3304,166 @@ export const AggregatedStat = {
   },
 };
 
+export const Audit = {
+  /**
+   * Serializes Audit to protobuf.
+   */
+  encode: function (msg: Partial<Audit>): Uint8Array {
+    return Audit._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes Audit from protobuf.
+   */
+  decode: function (bytes: ByteSource): Audit {
+    return Audit._readMessage(Audit.initialize(), new BinaryReader(bytes));
+  },
+
+  /**
+   * Initializes Audit with all fields set to their default value.
+   */
+  initialize: function (): Audit {
+    return {
+      id: "",
+      createdAt: Timestamp.initialize(),
+      assetId: "",
+      amount: "",
+      userId: "",
+      status: Audit.Status._fromInt(0),
+      memo: "",
+      reviewedBy: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<Audit>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.id) {
+      writer.writeString(1, msg.id);
+    }
+    if (msg.createdAt) {
+      writer.writeMessage(2, msg.createdAt, Timestamp._writeMessage);
+    }
+    if (msg.assetId) {
+      writer.writeString(3, msg.assetId);
+    }
+    if (msg.amount) {
+      writer.writeString(4, msg.amount);
+    }
+    if (msg.userId) {
+      writer.writeString(5, msg.userId);
+    }
+    if (msg.status && Audit.Status._toInt(msg.status)) {
+      writer.writeEnum(6, Audit.Status._toInt(msg.status));
+    }
+    if (msg.memo) {
+      writer.writeString(7, msg.memo);
+    }
+    if (msg.reviewedBy) {
+      writer.writeString(8, msg.reviewedBy);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Audit, reader: BinaryReader): Audit {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readString();
+          break;
+        }
+        case 2: {
+          reader.readMessage(msg.createdAt, Timestamp._readMessage);
+          break;
+        }
+        case 3: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.amount = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.userId = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.status = Audit.Status._fromInt(reader.readEnum());
+          break;
+        }
+        case 7: {
+          msg.memo = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.reviewedBy = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+
+  Status: {
+    Pending: "Pending",
+    Rejected: "Rejected",
+    Approved: "Approved",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): Audit.Status {
+      switch (i) {
+        case 0: {
+          return "Pending";
+        }
+        case 1: {
+          return "Rejected";
+        }
+        case 2: {
+          return "Approved";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as Audit.Status;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: Audit.Status): number {
+      switch (i) {
+        case "Pending": {
+          return 0;
+        }
+        case "Rejected": {
+          return 1;
+        }
+        case "Approved": {
+          return 2;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
 export const Req = {
   /**
    * Serializes Req to protobuf.
@@ -4767,6 +5000,81 @@ export const Req = {
       return _msg;
     },
   },
+
+  ListAudit: {
+    /**
+     * Serializes Req.ListAudit to protobuf.
+     */
+    encode: function (msg: Partial<Req.ListAudit>): Uint8Array {
+      return Req.ListAudit._writeMessage(
+        msg,
+        new BinaryWriter()
+      ).getResultBuffer();
+    },
+
+    /**
+     * Deserializes Req.ListAudit from protobuf.
+     */
+    decode: function (bytes: ByteSource): Req.ListAudit {
+      return Req.ListAudit._readMessage(
+        Req.ListAudit.initialize(),
+        new BinaryReader(bytes)
+      );
+    },
+
+    /**
+     * Initializes Req.ListAudit with all fields set to their default value.
+     */
+    initialize: function (): Req.ListAudit {
+      return {
+        cursor: "",
+        limit: 0n,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Req.ListAudit>,
+      writer: BinaryWriter
+    ): BinaryWriter {
+      if (msg.cursor) {
+        writer.writeString(1, msg.cursor);
+      }
+      if (msg.limit) {
+        writer.writeInt64String(2, msg.limit.toString() as any);
+      }
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: Req.ListAudit,
+      reader: BinaryReader
+    ): Req.ListAudit {
+      while (reader.nextField()) {
+        const field = reader.getFieldNumber();
+        switch (field) {
+          case 1: {
+            msg.cursor = reader.readString();
+            break;
+          }
+          case 2: {
+            msg.limit = BigInt(reader.readInt64String());
+            break;
+          }
+          default: {
+            reader.skipField();
+            break;
+          }
+        }
+      }
+      return msg;
+    },
+  },
 };
 
 export const Resp = {
@@ -5884,6 +6192,8 @@ export const Resp = {
         members: [],
         threshold: 0,
         publicKey: "",
+        mode: 0,
+        composedMode: 0,
       };
     },
 
@@ -5905,6 +6215,12 @@ export const Resp = {
       }
       if (msg.publicKey) {
         writer.writeString(4, msg.publicKey);
+      }
+      if (msg.mode) {
+        writer.writeInt32(5, msg.mode);
+      }
+      if (msg.composedMode) {
+        writer.writeInt32(6, msg.composedMode);
       }
       return writer;
     },
@@ -5933,6 +6249,91 @@ export const Resp = {
           }
           case 4: {
             msg.publicKey = reader.readString();
+            break;
+          }
+          case 5: {
+            msg.mode = reader.readInt32();
+            break;
+          }
+          case 6: {
+            msg.composedMode = reader.readInt32();
+            break;
+          }
+          default: {
+            reader.skipField();
+            break;
+          }
+        }
+      }
+      return msg;
+    },
+  },
+
+  ListAudit: {
+    /**
+     * Serializes Resp.ListAudit to protobuf.
+     */
+    encode: function (msg: Partial<Resp.ListAudit>): Uint8Array {
+      return Resp.ListAudit._writeMessage(
+        msg,
+        new BinaryWriter()
+      ).getResultBuffer();
+    },
+
+    /**
+     * Deserializes Resp.ListAudit from protobuf.
+     */
+    decode: function (bytes: ByteSource): Resp.ListAudit {
+      return Resp.ListAudit._readMessage(
+        Resp.ListAudit.initialize(),
+        new BinaryReader(bytes)
+      );
+    },
+
+    /**
+     * Initializes Resp.ListAudit with all fields set to their default value.
+     */
+    initialize: function (): Resp.ListAudit {
+      return {
+        audits: [],
+        pagination: Pagination.initialize(),
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Resp.ListAudit>,
+      writer: BinaryWriter
+    ): BinaryWriter {
+      if (msg.audits?.length) {
+        writer.writeRepeatedMessage(1, msg.audits as any, Audit._writeMessage);
+      }
+      if (msg.pagination) {
+        writer.writeMessage(2, msg.pagination, Pagination._writeMessage);
+      }
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: Resp.ListAudit,
+      reader: BinaryReader
+    ): Resp.ListAudit {
+      while (reader.nextField()) {
+        const field = reader.getFieldNumber();
+        switch (field) {
+          case 1: {
+            const m = Audit.initialize();
+            reader.readMessage(m, Audit._readMessage);
+            msg.audits.push(m);
+            break;
+          }
+          case 2: {
+            reader.readMessage(msg.pagination, Pagination._readMessage);
             break;
           }
           default: {
@@ -7749,6 +8150,160 @@ export const AggregatedStatJSON = {
   },
 };
 
+export const AuditJSON = {
+  /**
+   * Serializes Audit to JSON.
+   */
+  encode: function (msg: Partial<Audit>): string {
+    return JSON.stringify(AuditJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes Audit from JSON.
+   */
+  decode: function (json: string): Audit {
+    return AuditJSON._readMessage(AuditJSON.initialize(), JSON.parse(json));
+  },
+
+  /**
+   * Initializes Audit with all fields set to their default value.
+   */
+  initialize: function (): Audit {
+    return {
+      id: "",
+      createdAt: Timestamp.initialize(),
+      assetId: "",
+      amount: "",
+      userId: "",
+      status: Audit.Status._fromInt(0),
+      memo: "",
+      reviewedBy: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<Audit>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json.id = msg.id;
+    }
+    if (msg.createdAt) {
+      const createdAt = TimestampJSON._writeMessage(msg.createdAt);
+      if (Object.keys(createdAt).length > 0) {
+        json.createdAt = createdAt;
+      }
+    }
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    if (msg.amount) {
+      json.amount = msg.amount;
+    }
+    if (msg.userId) {
+      json.userId = msg.userId;
+    }
+    if (msg.status && AuditJSON.Status._toInt(msg.status)) {
+      json.status = msg.status;
+    }
+    if (msg.memo) {
+      json.memo = msg.memo;
+    }
+    if (msg.reviewedBy) {
+      json.reviewedBy = msg.reviewedBy;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Audit, json: any): Audit {
+    const _id = json.id;
+    if (_id) {
+      msg.id = _id;
+    }
+    const _createdAt = json.createdAt ?? json.created_at;
+    if (_createdAt) {
+      const m = Timestamp.initialize();
+      TimestampJSON._readMessage(m, _createdAt);
+      msg.createdAt = m;
+    }
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    const _amount = json.amount;
+    if (_amount) {
+      msg.amount = _amount;
+    }
+    const _userId = json.userId ?? json.user_id;
+    if (_userId) {
+      msg.userId = _userId;
+    }
+    const _status = json.status;
+    if (_status) {
+      msg.status = _status;
+    }
+    const _memo = json.memo;
+    if (_memo) {
+      msg.memo = _memo;
+    }
+    const _reviewedBy = json.reviewedBy ?? json.reviewed_by;
+    if (_reviewedBy) {
+      msg.reviewedBy = _reviewedBy;
+    }
+    return msg;
+  },
+
+  Status: {
+    Pending: "Pending",
+    Rejected: "Rejected",
+    Approved: "Approved",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): Audit.Status {
+      switch (i) {
+        case 0: {
+          return "Pending";
+        }
+        case 1: {
+          return "Rejected";
+        }
+        case 2: {
+          return "Approved";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as Audit.Status;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: Audit.Status): number {
+      switch (i) {
+        case "Pending": {
+          return 0;
+        }
+        case "Rejected": {
+          return 1;
+        }
+        case "Approved": {
+          return 2;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
 export const ReqJSON = {
   /**
    * Serializes Req to JSON.
@@ -9029,6 +9584,66 @@ export const ReqJSON = {
       return msg;
     },
   },
+
+  ListAudit: {
+    /**
+     * Serializes Req.ListAudit to JSON.
+     */
+    encode: function (msg: Partial<Req.ListAudit>): string {
+      return JSON.stringify(ReqJSON.ListAudit._writeMessage(msg));
+    },
+
+    /**
+     * Deserializes Req.ListAudit from JSON.
+     */
+    decode: function (json: string): Req.ListAudit {
+      return ReqJSON.ListAudit._readMessage(
+        ReqJSON.ListAudit.initialize(),
+        JSON.parse(json)
+      );
+    },
+
+    /**
+     * Initializes Req.ListAudit with all fields set to their default value.
+     */
+    initialize: function (): Req.ListAudit {
+      return {
+        cursor: "",
+        limit: 0n,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Req.ListAudit>
+    ): Record<string, unknown> {
+      const json: Record<string, unknown> = {};
+      if (msg.cursor) {
+        json.cursor = msg.cursor;
+      }
+      if (msg.limit) {
+        json.limit = msg.limit.toString();
+      }
+      return json;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (msg: Req.ListAudit, json: any): Req.ListAudit {
+      const _cursor = json.cursor;
+      if (_cursor) {
+        msg.cursor = _cursor;
+      }
+      const _limit = json.limit;
+      if (_limit) {
+        msg.limit = BigInt(_limit);
+      }
+      return msg;
+    },
+  },
 };
 
 export const RespJSON = {
@@ -9978,6 +10593,8 @@ export const RespJSON = {
         members: [],
         threshold: 0,
         publicKey: "",
+        mode: 0,
+        composedMode: 0,
       };
     },
 
@@ -9999,6 +10616,12 @@ export const RespJSON = {
       }
       if (msg.publicKey) {
         json.publicKey = msg.publicKey;
+      }
+      if (msg.mode) {
+        json.mode = msg.mode;
+      }
+      if (msg.composedMode) {
+        json.composedMode = msg.composedMode;
       }
       return json;
     },
@@ -10022,6 +10645,83 @@ export const RespJSON = {
       const _publicKey = json.publicKey ?? json.public_key;
       if (_publicKey) {
         msg.publicKey = _publicKey;
+      }
+      const _mode = json.mode;
+      if (_mode) {
+        msg.mode = _mode;
+      }
+      const _composedMode = json.composedMode ?? json.composed_mode;
+      if (_composedMode) {
+        msg.composedMode = _composedMode;
+      }
+      return msg;
+    },
+  },
+
+  ListAudit: {
+    /**
+     * Serializes Resp.ListAudit to JSON.
+     */
+    encode: function (msg: Partial<Resp.ListAudit>): string {
+      return JSON.stringify(RespJSON.ListAudit._writeMessage(msg));
+    },
+
+    /**
+     * Deserializes Resp.ListAudit from JSON.
+     */
+    decode: function (json: string): Resp.ListAudit {
+      return RespJSON.ListAudit._readMessage(
+        RespJSON.ListAudit.initialize(),
+        JSON.parse(json)
+      );
+    },
+
+    /**
+     * Initializes Resp.ListAudit with all fields set to their default value.
+     */
+    initialize: function (): Resp.ListAudit {
+      return {
+        audits: [],
+        pagination: Pagination.initialize(),
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Resp.ListAudit>
+    ): Record<string, unknown> {
+      const json: Record<string, unknown> = {};
+      if (msg.audits?.length) {
+        json.audits = msg.audits.map(AuditJSON._writeMessage);
+      }
+      if (msg.pagination) {
+        const pagination = PaginationJSON._writeMessage(msg.pagination);
+        if (Object.keys(pagination).length > 0) {
+          json.pagination = pagination;
+        }
+      }
+      return json;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (msg: Resp.ListAudit, json: any): Resp.ListAudit {
+      const _audits = json.audits;
+      if (_audits) {
+        for (const item of _audits) {
+          const m = Audit.initialize();
+          AuditJSON._readMessage(m, item);
+          msg.audits.push(m);
+        }
+      }
+      const _pagination = json.pagination;
+      if (_pagination) {
+        const m = Pagination.initialize();
+        PaginationJSON._readMessage(m, _pagination);
+        msg.pagination = m;
       }
       return msg;
     },
