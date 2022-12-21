@@ -1405,7 +1405,7 @@ export declare namespace Resp {
     threshold: number;
     publicKey: string;
     mode: number;
-    composedMode: number;
+    composeMode: number;
   }
 
   export interface ListAudit {
@@ -6193,7 +6193,7 @@ export const Resp = {
         threshold: 0,
         publicKey: "",
         mode: 0,
-        composedMode: 0,
+        composeMode: 0,
       };
     },
 
@@ -6219,8 +6219,8 @@ export const Resp = {
       if (msg.mode) {
         writer.writeInt32(5, msg.mode);
       }
-      if (msg.composedMode) {
-        writer.writeInt32(6, msg.composedMode);
+      if (msg.composeMode) {
+        writer.writeInt32(6, msg.composeMode);
       }
       return writer;
     },
@@ -6256,7 +6256,7 @@ export const Resp = {
             break;
           }
           case 6: {
-            msg.composedMode = reader.readInt32();
+            msg.composeMode = reader.readInt32();
             break;
           }
           default: {
@@ -10594,7 +10594,7 @@ export const RespJSON = {
         threshold: 0,
         publicKey: "",
         mode: 0,
-        composedMode: 0,
+        composeMode: 0,
       };
     },
 
@@ -10620,8 +10620,8 @@ export const RespJSON = {
       if (msg.mode) {
         json.mode = msg.mode;
       }
-      if (msg.composedMode) {
-        json.composedMode = msg.composedMode;
+      if (msg.composeMode) {
+        json.composeMode = msg.composeMode;
       }
       return json;
     },
@@ -10650,9 +10650,9 @@ export const RespJSON = {
       if (_mode) {
         msg.mode = _mode;
       }
-      const _composedMode = json.composedMode ?? json.composed_mode;
-      if (_composedMode) {
-        msg.composedMode = _composedMode;
+      const _composeMode = json.composeMode ?? json.compose_mode;
+      if (_composeMode) {
+        msg.composeMode = _composeMode;
       }
       return msg;
     },
