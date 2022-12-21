@@ -214,6 +214,24 @@ message AggregatedStat {
     string dai_value = 5;
 }
 
+message Audit {
+    enum Status {
+        Pending = 0;
+        Rejected = 1;
+        Approved = 2;
+    }
+
+    string id = 1;
+    // @inject_tag: swaggertype:"string" format:"date"
+    google.protobuf.Timestamp created_at = 2;
+    string asset_id = 3;
+    string amount = 4;
+    string user_id = 5;
+    Status status = 6;
+    string memo = 7;
+    string reviewed_by = 8;
+}
+
 message Req {
     message FindAsset {
         // @inject_tag: valid:"uuid,required"
@@ -323,6 +341,11 @@ message Req {
     }
 
     message GetInfo {}
+
+    message ListAudit {
+        string cursor = 1;
+        int64 limit = 2;
+    }
 }
 
 message Resp {
@@ -393,6 +416,13 @@ message Resp {
         repeated string members = 2;
         int32 threshold = 3;
         string public_key = 4;
+        int32 mode = 5;
+        int32 composed_mode = 6;
+    }
+
+    message ListAudit {
+        repeated Audit audits = 1;
+        Pagination pagination = 2;
     }
 }
 
@@ -428,4 +458,6 @@ service Pando {
     rpc ListAggregatedStats(Req.ListAggregatedStats) returns (Resp.ListAggregatedStats);
     // info
     rpc GetInfo(Req.GetInfo) returns (Resp.GetInfo);
+    // audit
+    rpc ListAudit(Req.ListAudit) returns (Resp.ListAudit);
 }
