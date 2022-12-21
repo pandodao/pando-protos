@@ -342,7 +342,7 @@ message Req {
 
     message GetInfo {}
 
-    message ListAudit {
+    message ListAudits {
         string cursor = 1;
         int64 limit = 2;
     }
@@ -420,7 +420,7 @@ message Resp {
         int32 compose_mode = 6;
     }
 
-    message ListAudit {
+    message ListAudits {
         repeated Audit audits = 1;
         Pagination pagination = 2;
     }
@@ -459,5 +459,5 @@ service Pando {
     // info
     rpc GetInfo(Req.GetInfo) returns (Resp.GetInfo);
     // audit
-    rpc ListAudit(Req.ListAudit) returns (Resp.ListAudit);
+    rpc ListAudits(Req.ListAudits) returns (Resp.ListAudits);
 }
