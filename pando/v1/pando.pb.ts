@@ -314,6 +314,18 @@ export async function GetInfo(
 /**
  * audit
  */
+export async function FindAudit(
+  findAudit: Req.FindAudit,
+  config?: ClientConfiguration
+): Promise<Audit> {
+  const response = await PBrequest(
+    "/fox.pando.service.Pando/FindAudit",
+    Req.FindAudit.encode(findAudit),
+    config
+  );
+  return Audit.decode(response);
+}
+
 export async function ListAudits(
   listAudits: Req.ListAudits,
   config?: ClientConfiguration
@@ -624,6 +636,18 @@ export async function GetInfoJSON(
 /**
  * audit
  */
+export async function FindAuditJSON(
+  findAudit: Req.FindAudit,
+  config?: ClientConfiguration
+): Promise<Audit> {
+  const response = await JSONrequest(
+    "/fox.pando.service.Pando/FindAudit",
+    ReqJSON.FindAudit.encode(findAudit),
+    config
+  );
+  return AuditJSON.decode(response);
+}
+
 export async function ListAuditsJSON(
   listAudits: Req.ListAudits,
   config?: ClientConfiguration
@@ -756,6 +780,10 @@ export interface Pando<Context = unknown> {
   /**
    * audit
    */
+  FindAudit: (
+    findAudit: Req.FindAudit,
+    context: Context
+  ) => Promise<Audit> | Audit;
   ListAudits: (
     listAudits: Req.ListAudits,
     context: Context
@@ -924,6 +952,12 @@ export function createPando<Context>(service: Pando<Context>) {
         handler: service.GetInfo,
         input: { protobuf: Req.GetInfo, json: ReqJSON.GetInfo },
         output: { protobuf: Resp.GetInfo, json: RespJSON.GetInfo },
+      },
+      FindAudit: {
+        name: "FindAudit",
+        handler: service.FindAudit,
+        input: { protobuf: Req.FindAudit, json: ReqJSON.FindAudit },
+        output: { protobuf: Audit, json: AuditJSON },
       },
       ListAudits: {
         name: "ListAudits",
@@ -1327,6 +1361,13 @@ export declare namespace Req {
   }
 
   export interface GetInfo {}
+
+  export interface FindAudit {
+    /**
+     * @inject_tag: valid:"uuid,required"
+     */
+    id: string;
+  }
 
   export interface ListAudits {
     cursor: string;
@@ -4998,6 +5039,73 @@ export const Req = {
       _reader: BinaryReader
     ): Req.GetInfo {
       return _msg;
+    },
+  },
+
+  FindAudit: {
+    /**
+     * Serializes Req.FindAudit to protobuf.
+     */
+    encode: function (msg: Partial<Req.FindAudit>): Uint8Array {
+      return Req.FindAudit._writeMessage(
+        msg,
+        new BinaryWriter()
+      ).getResultBuffer();
+    },
+
+    /**
+     * Deserializes Req.FindAudit from protobuf.
+     */
+    decode: function (bytes: ByteSource): Req.FindAudit {
+      return Req.FindAudit._readMessage(
+        Req.FindAudit.initialize(),
+        new BinaryReader(bytes)
+      );
+    },
+
+    /**
+     * Initializes Req.FindAudit with all fields set to their default value.
+     */
+    initialize: function (): Req.FindAudit {
+      return {
+        id: "",
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Req.FindAudit>,
+      writer: BinaryWriter
+    ): BinaryWriter {
+      if (msg.id) {
+        writer.writeString(1, msg.id);
+      }
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: Req.FindAudit,
+      reader: BinaryReader
+    ): Req.FindAudit {
+      while (reader.nextField()) {
+        const field = reader.getFieldNumber();
+        switch (field) {
+          case 1: {
+            msg.id = reader.readString();
+            break;
+          }
+          default: {
+            reader.skipField();
+            break;
+          }
+        }
+      }
+      return msg;
     },
   },
 
@@ -9581,6 +9689,58 @@ export const ReqJSON = {
      * @private
      */
     _readMessage: function (msg: Req.GetInfo, _json: any): Req.GetInfo {
+      return msg;
+    },
+  },
+
+  FindAudit: {
+    /**
+     * Serializes Req.FindAudit to JSON.
+     */
+    encode: function (msg: Partial<Req.FindAudit>): string {
+      return JSON.stringify(ReqJSON.FindAudit._writeMessage(msg));
+    },
+
+    /**
+     * Deserializes Req.FindAudit from JSON.
+     */
+    decode: function (json: string): Req.FindAudit {
+      return ReqJSON.FindAudit._readMessage(
+        ReqJSON.FindAudit.initialize(),
+        JSON.parse(json)
+      );
+    },
+
+    /**
+     * Initializes Req.FindAudit with all fields set to their default value.
+     */
+    initialize: function (): Req.FindAudit {
+      return {
+        id: "",
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: Partial<Req.FindAudit>
+    ): Record<string, unknown> {
+      const json: Record<string, unknown> = {};
+      if (msg.id) {
+        json.id = msg.id;
+      }
+      return json;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (msg: Req.FindAudit, json: any): Req.FindAudit {
+      const _id = json.id;
+      if (_id) {
+        msg.id = _id;
+      }
       return msg;
     },
   },
