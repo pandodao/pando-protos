@@ -342,6 +342,11 @@ message Req {
 
     message GetInfo {}
 
+    message FindAudit{
+        // @inject_tag: valid:"uuid,required"
+        string id = 1;
+    }
+
     message ListAudits {
         string cursor = 1;
         int64 limit = 2;
@@ -459,5 +464,6 @@ service Pando {
     // info
     rpc GetInfo(Req.GetInfo) returns (Resp.GetInfo);
     // audit
+    rpc FindAudit(Req.FindAudit) returns (Audit);
     rpc ListAudits(Req.ListAudits) returns (Resp.ListAudits);
 }
