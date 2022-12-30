@@ -4,6 +4,7 @@ package swapnode.v1;
 option go_package = "github.com/fox-one/pando-protos/swapnode/v1;swapnode";
 
 import "swapnode/v1/core.proto";
+import "google/protobuf/timestamp.proto";
 
 message ListPairsRequest {}
 
@@ -63,6 +64,31 @@ message FindTransferResponse {
   Transfer transfer = 1;
 }
 
+message FindAuditRequest {
+  string id = 1;
+}
+
+message FindAuditResponse {
+  Audit audit = 1;
+}
+
+message ListAuditsRequest {
+  google.protobuf.Timestamp offset = 1;
+  int64 limit = 2;
+}
+
+message ListAuditsResponse {
+  repeated Audit audits = 1;
+}
+
+message ListExpiredDepositsRequest {
+  int64 limit = 1;
+}
+
+message ListExpiredDepositsResponse {
+  repeated Deposit deposits = 1;
+}
+
 service SwapNodeService {
     rpc ListPairs(ListPairsRequest) returns (ListPairsResponse);
     rpc ListOutputs(ListOutputsRequest) returns (ListOutputsResponse);
@@ -71,4 +97,7 @@ service SwapNodeService {
     rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse);
     rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
     rpc FindTransfer(FindTransferRequest) returns (FindTransferResponse);
+    rpc FindAudit(FindAuditRequest) returns (FindAuditResponse);
+    rpc ListAudits(ListAuditsRequest) returns (ListAuditsResponse);
+    rpc ListExpiredDeposits(ListExpiredDepositsRequest) returns (ListExpiredDepositsResponse);
 }
