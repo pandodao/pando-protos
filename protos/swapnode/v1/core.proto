@@ -99,9 +99,9 @@ message Transfer {
 
 message Audit {
     enum Status {
-        Pending = 0;
-        Rejected = 1;
-        Approved = 2;
+        PENDING_NOT_SET = 0;
+        REJECTED = 1;
+        APPROVED = 2;
     }
 
     string id = 1;
