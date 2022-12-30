@@ -1370,7 +1370,7 @@ export declare namespace Req {
   }
 
   export interface ListAudits {
-    cursor: string;
+    offset: Timestamp;
     limit: bigint;
   }
 }
@@ -1451,7 +1451,6 @@ export declare namespace Resp {
 
   export interface ListAudits {
     audits: Audit[];
-    pagination: Pagination;
   }
 }
 
@@ -5135,7 +5134,7 @@ export const Req = {
      */
     initialize: function (): Req.ListAudits {
       return {
-        cursor: "",
+        offset: Timestamp.initialize(),
         limit: 0n,
       };
     },
@@ -5147,8 +5146,8 @@ export const Req = {
       msg: Partial<Req.ListAudits>,
       writer: BinaryWriter
     ): BinaryWriter {
-      if (msg.cursor) {
-        writer.writeString(1, msg.cursor);
+      if (msg.offset) {
+        writer.writeMessage(1, msg.offset, Timestamp._writeMessage);
       }
       if (msg.limit) {
         writer.writeInt64String(2, msg.limit.toString() as any);
@@ -5167,7 +5166,7 @@ export const Req = {
         const field = reader.getFieldNumber();
         switch (field) {
           case 1: {
-            msg.cursor = reader.readString();
+            reader.readMessage(msg.offset, Timestamp._readMessage);
             break;
           }
           case 2: {
@@ -6404,7 +6403,6 @@ export const Resp = {
     initialize: function (): Resp.ListAudits {
       return {
         audits: [],
-        pagination: Pagination.initialize(),
       };
     },
 
@@ -6417,9 +6415,6 @@ export const Resp = {
     ): BinaryWriter {
       if (msg.audits?.length) {
         writer.writeRepeatedMessage(1, msg.audits as any, Audit._writeMessage);
-      }
-      if (msg.pagination) {
-        writer.writeMessage(2, msg.pagination, Pagination._writeMessage);
       }
       return writer;
     },
@@ -6438,10 +6433,6 @@ export const Resp = {
             const m = Audit.initialize();
             reader.readMessage(m, Audit._readMessage);
             msg.audits.push(m);
-            break;
-          }
-          case 2: {
-            reader.readMessage(msg.pagination, Pagination._readMessage);
             break;
           }
           default: {
@@ -9768,7 +9759,7 @@ export const ReqJSON = {
      */
     initialize: function (): Req.ListAudits {
       return {
-        cursor: "",
+        offset: Timestamp.initialize(),
         limit: 0n,
       };
     },
@@ -9780,8 +9771,11 @@ export const ReqJSON = {
       msg: Partial<Req.ListAudits>
     ): Record<string, unknown> {
       const json: Record<string, unknown> = {};
-      if (msg.cursor) {
-        json.cursor = msg.cursor;
+      if (msg.offset) {
+        const offset = TimestampJSON._writeMessage(msg.offset);
+        if (Object.keys(offset).length > 0) {
+          json.offset = offset;
+        }
       }
       if (msg.limit) {
         json.limit = msg.limit.toString();
@@ -9793,9 +9787,11 @@ export const ReqJSON = {
      * @private
      */
     _readMessage: function (msg: Req.ListAudits, json: any): Req.ListAudits {
-      const _cursor = json.cursor;
-      if (_cursor) {
-        msg.cursor = _cursor;
+      const _offset = json.offset;
+      if (_offset) {
+        const m = Timestamp.initialize();
+        TimestampJSON._readMessage(m, _offset);
+        msg.offset = m;
       }
       const _limit = json.limit;
       if (_limit) {
@@ -10842,7 +10838,6 @@ export const RespJSON = {
     initialize: function (): Resp.ListAudits {
       return {
         audits: [],
-        pagination: Pagination.initialize(),
       };
     },
 
@@ -10855,12 +10850,6 @@ export const RespJSON = {
       const json: Record<string, unknown> = {};
       if (msg.audits?.length) {
         json.audits = msg.audits.map(AuditJSON._writeMessage);
-      }
-      if (msg.pagination) {
-        const pagination = PaginationJSON._writeMessage(msg.pagination);
-        if (Object.keys(pagination).length > 0) {
-          json.pagination = pagination;
-        }
       }
       return json;
     },
@@ -10876,12 +10865,6 @@ export const RespJSON = {
           AuditJSON._readMessage(m, item);
           msg.audits.push(m);
         }
-      }
-      const _pagination = json.pagination;
-      if (_pagination) {
-        const m = Pagination.initialize();
-        PaginationJSON._readMessage(m, _pagination);
-        msg.pagination = m;
       }
       return msg;
     },
