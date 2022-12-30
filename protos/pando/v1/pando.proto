@@ -348,7 +348,7 @@ message Req {
     }
 
     message ListAudits {
-        string cursor = 1;
+        google.protobuf.Timestamp offset = 1;
         int64 limit = 2;
     }
 }
@@ -427,7 +427,6 @@ message Resp {
 
     message ListAudits {
         repeated Audit audits = 1;
-        Pagination pagination = 2;
     }
 }
 
