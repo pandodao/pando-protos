@@ -11,7 +11,13 @@ import { Timestamp, TimestampJSON } from "../../google/protobuf/timestamp.pb";
 //                 Types                  //
 //========================================//
 
-export type Action = "NOT_SET" | "ADD" | "REMOVE" | "SWAP" | "EXPIRE_DEPOSIT";
+export type Action =
+  | "NOT_SET"
+  | "ADD"
+  | "REMOVE"
+  | "SWAP"
+  | "EXPIRE_DEPOSIT"
+  | "AUDIT";
 
 export interface Pair {
   baseAssetId: string;
@@ -93,6 +99,21 @@ export interface Transfer {
   signedTx: string;
 }
 
+export interface Audit {
+  id: string;
+  createdAt: Timestamp;
+  assetId: string;
+  amount: string;
+  userId: string;
+  status: Audit.Status;
+  memo: string;
+  reviewedBy: string;
+}
+
+export declare namespace Audit {
+  export type Status = "PENDING_NOT_SET" | "REJECTED" | "APPROVED";
+}
+
 //========================================//
 //        Protobuf Encode / Decode        //
 //========================================//
@@ -103,6 +124,7 @@ export const Action = {
   REMOVE: "REMOVE",
   SWAP: "SWAP",
   EXPIRE_DEPOSIT: "EXPIRE_DEPOSIT",
+  AUDIT: "AUDIT",
   /**
    * @private
    */
@@ -122,6 +144,9 @@ export const Action = {
       }
       case 4: {
         return "EXPIRE_DEPOSIT";
+      }
+      case 5: {
+        return "AUDIT";
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -148,6 +173,9 @@ export const Action = {
       }
       case "EXPIRE_DEPOSIT": {
         return 4;
+      }
+      case "AUDIT": {
+        return 5;
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -980,6 +1008,166 @@ export const Transfer = {
   },
 };
 
+export const Audit = {
+  /**
+   * Serializes Audit to protobuf.
+   */
+  encode: function (msg: Partial<Audit>): Uint8Array {
+    return Audit._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes Audit from protobuf.
+   */
+  decode: function (bytes: ByteSource): Audit {
+    return Audit._readMessage(Audit.initialize(), new BinaryReader(bytes));
+  },
+
+  /**
+   * Initializes Audit with all fields set to their default value.
+   */
+  initialize: function (): Audit {
+    return {
+      id: "",
+      createdAt: Timestamp.initialize(),
+      assetId: "",
+      amount: "",
+      userId: "",
+      status: Audit.Status._fromInt(0),
+      memo: "",
+      reviewedBy: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<Audit>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.id) {
+      writer.writeString(1, msg.id);
+    }
+    if (msg.createdAt) {
+      writer.writeMessage(2, msg.createdAt, Timestamp._writeMessage);
+    }
+    if (msg.assetId) {
+      writer.writeString(3, msg.assetId);
+    }
+    if (msg.amount) {
+      writer.writeString(4, msg.amount);
+    }
+    if (msg.userId) {
+      writer.writeString(5, msg.userId);
+    }
+    if (msg.status && Audit.Status._toInt(msg.status)) {
+      writer.writeEnum(6, Audit.Status._toInt(msg.status));
+    }
+    if (msg.memo) {
+      writer.writeString(7, msg.memo);
+    }
+    if (msg.reviewedBy) {
+      writer.writeString(8, msg.reviewedBy);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Audit, reader: BinaryReader): Audit {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readString();
+          break;
+        }
+        case 2: {
+          reader.readMessage(msg.createdAt, Timestamp._readMessage);
+          break;
+        }
+        case 3: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.amount = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.userId = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.status = Audit.Status._fromInt(reader.readEnum());
+          break;
+        }
+        case 7: {
+          msg.memo = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.reviewedBy = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+
+  Status: {
+    PENDING_NOT_SET: "PENDING_NOT_SET",
+    REJECTED: "REJECTED",
+    APPROVED: "APPROVED",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): Audit.Status {
+      switch (i) {
+        case 0: {
+          return "PENDING_NOT_SET";
+        }
+        case 1: {
+          return "REJECTED";
+        }
+        case 2: {
+          return "APPROVED";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as Audit.Status;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: Audit.Status): number {
+      switch (i) {
+        case "PENDING_NOT_SET": {
+          return 0;
+        }
+        case "REJECTED": {
+          return 1;
+        }
+        case "APPROVED": {
+          return 2;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
@@ -990,6 +1178,7 @@ export const ActionJSON = {
   REMOVE: "REMOVE",
   SWAP: "SWAP",
   EXPIRE_DEPOSIT: "EXPIRE_DEPOSIT",
+  AUDIT: "AUDIT",
   /**
    * @private
    */
@@ -1009,6 +1198,9 @@ export const ActionJSON = {
       }
       case 4: {
         return "EXPIRE_DEPOSIT";
+      }
+      case 5: {
+        return "AUDIT";
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -1035,6 +1227,9 @@ export const ActionJSON = {
       }
       case "EXPIRE_DEPOSIT": {
         return 4;
+      }
+      case "AUDIT": {
+        return 5;
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -1829,4 +2024,158 @@ export const TransferJSON = {
     }
     return msg;
   },
+};
+
+export const AuditJSON = {
+  /**
+   * Serializes Audit to JSON.
+   */
+  encode: function (msg: Partial<Audit>): string {
+    return JSON.stringify(AuditJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes Audit from JSON.
+   */
+  decode: function (json: string): Audit {
+    return AuditJSON._readMessage(AuditJSON.initialize(), JSON.parse(json));
+  },
+
+  /**
+   * Initializes Audit with all fields set to their default value.
+   */
+  initialize: function (): Audit {
+    return {
+      id: "",
+      createdAt: Timestamp.initialize(),
+      assetId: "",
+      amount: "",
+      userId: "",
+      status: Audit.Status._fromInt(0),
+      memo: "",
+      reviewedBy: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<Audit>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json.id = msg.id;
+    }
+    if (msg.createdAt) {
+      const createdAt = TimestampJSON._writeMessage(msg.createdAt);
+      if (Object.keys(createdAt).length > 0) {
+        json.createdAt = createdAt;
+      }
+    }
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    if (msg.amount) {
+      json.amount = msg.amount;
+    }
+    if (msg.userId) {
+      json.userId = msg.userId;
+    }
+    if (msg.status && AuditJSON.Status._toInt(msg.status)) {
+      json.status = msg.status;
+    }
+    if (msg.memo) {
+      json.memo = msg.memo;
+    }
+    if (msg.reviewedBy) {
+      json.reviewedBy = msg.reviewedBy;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Audit, json: any): Audit {
+    const _id = json.id;
+    if (_id) {
+      msg.id = _id;
+    }
+    const _createdAt = json.createdAt ?? json.created_at;
+    if (_createdAt) {
+      const m = Timestamp.initialize();
+      TimestampJSON._readMessage(m, _createdAt);
+      msg.createdAt = m;
+    }
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    const _amount = json.amount;
+    if (_amount) {
+      msg.amount = _amount;
+    }
+    const _userId = json.userId ?? json.user_id;
+    if (_userId) {
+      msg.userId = _userId;
+    }
+    const _status = json.status;
+    if (_status) {
+      msg.status = _status;
+    }
+    const _memo = json.memo;
+    if (_memo) {
+      msg.memo = _memo;
+    }
+    const _reviewedBy = json.reviewedBy ?? json.reviewed_by;
+    if (_reviewedBy) {
+      msg.reviewedBy = _reviewedBy;
+    }
+    return msg;
+  },
+
+  Status: {
+    PENDING_NOT_SET: "PENDING_NOT_SET",
+    REJECTED: "REJECTED",
+    APPROVED: "APPROVED",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): Audit.Status {
+      switch (i) {
+        case 0: {
+          return "PENDING_NOT_SET";
+        }
+        case 1: {
+          return "REJECTED";
+        }
+        case 2: {
+          return "APPROVED";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as Audit.Status;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: Audit.Status): number {
+      switch (i) {
+        case "PENDING_NOT_SET": {
+          return 0;
+        }
+        case "REJECTED": {
+          return 1;
+        }
+        case "APPROVED": {
+          return 2;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
 };

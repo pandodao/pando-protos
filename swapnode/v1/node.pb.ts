@@ -27,7 +27,10 @@ import {
   TransactionJSON,
   Transfer,
   TransferJSON,
+  Audit,
+  AuditJSON,
 } from "./core.pb";
+import { Timestamp, TimestampJSON } from "../../google/protobuf/timestamp.pb";
 
 //========================================//
 //    SwapNodeService Protobuf Client     //
@@ -115,6 +118,42 @@ export async function FindTransfer(
     config
   );
   return FindTransferResponse.decode(response);
+}
+
+export async function FindAudit(
+  findAuditRequest: FindAuditRequest,
+  config?: ClientConfiguration
+): Promise<FindAuditResponse> {
+  const response = await PBrequest(
+    "/swapnode.v1.SwapNodeService/FindAudit",
+    FindAuditRequest.encode(findAuditRequest),
+    config
+  );
+  return FindAuditResponse.decode(response);
+}
+
+export async function ListAudits(
+  listAuditsRequest: ListAuditsRequest,
+  config?: ClientConfiguration
+): Promise<ListAuditsResponse> {
+  const response = await PBrequest(
+    "/swapnode.v1.SwapNodeService/ListAudits",
+    ListAuditsRequest.encode(listAuditsRequest),
+    config
+  );
+  return ListAuditsResponse.decode(response);
+}
+
+export async function ListExpiredDeposits(
+  listExpiredDepositsRequest: ListExpiredDepositsRequest,
+  config?: ClientConfiguration
+): Promise<ListExpiredDepositsResponse> {
+  const response = await PBrequest(
+    "/swapnode.v1.SwapNodeService/ListExpiredDeposits",
+    ListExpiredDepositsRequest.encode(listExpiredDepositsRequest),
+    config
+  );
+  return ListExpiredDepositsResponse.decode(response);
 }
 
 //========================================//
@@ -205,6 +244,42 @@ export async function FindTransferJSON(
   return FindTransferResponseJSON.decode(response);
 }
 
+export async function FindAuditJSON(
+  findAuditRequest: FindAuditRequest,
+  config?: ClientConfiguration
+): Promise<FindAuditResponse> {
+  const response = await JSONrequest(
+    "/swapnode.v1.SwapNodeService/FindAudit",
+    FindAuditRequestJSON.encode(findAuditRequest),
+    config
+  );
+  return FindAuditResponseJSON.decode(response);
+}
+
+export async function ListAuditsJSON(
+  listAuditsRequest: ListAuditsRequest,
+  config?: ClientConfiguration
+): Promise<ListAuditsResponse> {
+  const response = await JSONrequest(
+    "/swapnode.v1.SwapNodeService/ListAudits",
+    ListAuditsRequestJSON.encode(listAuditsRequest),
+    config
+  );
+  return ListAuditsResponseJSON.decode(response);
+}
+
+export async function ListExpiredDepositsJSON(
+  listExpiredDepositsRequest: ListExpiredDepositsRequest,
+  config?: ClientConfiguration
+): Promise<ListExpiredDepositsResponse> {
+  const response = await JSONrequest(
+    "/swapnode.v1.SwapNodeService/ListExpiredDeposits",
+    ListExpiredDepositsRequestJSON.encode(listExpiredDepositsRequest),
+    config
+  );
+  return ListExpiredDepositsResponseJSON.decode(response);
+}
+
 //========================================//
 //            SwapNodeService             //
 //========================================//
@@ -238,6 +313,18 @@ export interface SwapNodeService<Context = unknown> {
     findTransferRequest: FindTransferRequest,
     context: Context
   ) => Promise<FindTransferResponse> | FindTransferResponse;
+  FindAudit: (
+    findAuditRequest: FindAuditRequest,
+    context: Context
+  ) => Promise<FindAuditResponse> | FindAuditResponse;
+  ListAudits: (
+    listAuditsRequest: ListAuditsRequest,
+    context: Context
+  ) => Promise<ListAuditsResponse> | ListAuditsResponse;
+  ListExpiredDeposits: (
+    listExpiredDepositsRequest: ListExpiredDepositsRequest,
+    context: Context
+  ) => Promise<ListExpiredDepositsResponse> | ListExpiredDepositsResponse;
 }
 
 export function createSwapNodeService<Context>(
@@ -301,6 +388,30 @@ export function createSwapNodeService<Context>(
         output: {
           protobuf: FindTransferResponse,
           json: FindTransferResponseJSON,
+        },
+      },
+      FindAudit: {
+        name: "FindAudit",
+        handler: service.FindAudit,
+        input: { protobuf: FindAuditRequest, json: FindAuditRequestJSON },
+        output: { protobuf: FindAuditResponse, json: FindAuditResponseJSON },
+      },
+      ListAudits: {
+        name: "ListAudits",
+        handler: service.ListAudits,
+        input: { protobuf: ListAuditsRequest, json: ListAuditsRequestJSON },
+        output: { protobuf: ListAuditsResponse, json: ListAuditsResponseJSON },
+      },
+      ListExpiredDeposits: {
+        name: "ListExpiredDeposits",
+        handler: service.ListExpiredDeposits,
+        input: {
+          protobuf: ListExpiredDepositsRequest,
+          json: ListExpiredDepositsRequestJSON,
+        },
+        output: {
+          protobuf: ListExpiredDepositsResponse,
+          json: ListExpiredDepositsResponseJSON,
         },
       },
     },
@@ -367,6 +478,31 @@ export interface FindTransferRequest {
 
 export interface FindTransferResponse {
   transfer: Transfer;
+}
+
+export interface FindAuditRequest {
+  id: string;
+}
+
+export interface FindAuditResponse {
+  audit: Audit;
+}
+
+export interface ListAuditsRequest {
+  offset: Timestamp;
+  limit: bigint;
+}
+
+export interface ListAuditsResponse {
+  audits: Audit[];
+}
+
+export interface ListExpiredDepositsRequest {
+  limit: bigint;
+}
+
+export interface ListExpiredDepositsResponse {
+  deposits: Deposit[];
 }
 
 //========================================//
@@ -1321,6 +1457,424 @@ export const FindTransferResponse = {
   },
 };
 
+export const FindAuditRequest = {
+  /**
+   * Serializes FindAuditRequest to protobuf.
+   */
+  encode: function (msg: Partial<FindAuditRequest>): Uint8Array {
+    return FindAuditRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FindAuditRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): FindAuditRequest {
+    return FindAuditRequest._readMessage(
+      FindAuditRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FindAuditRequest with all fields set to their default value.
+   */
+  initialize: function (): FindAuditRequest {
+    return {
+      id: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FindAuditRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.id) {
+      writer.writeString(1, msg.id);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FindAuditRequest,
+    reader: BinaryReader
+  ): FindAuditRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const FindAuditResponse = {
+  /**
+   * Serializes FindAuditResponse to protobuf.
+   */
+  encode: function (msg: Partial<FindAuditResponse>): Uint8Array {
+    return FindAuditResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FindAuditResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): FindAuditResponse {
+    return FindAuditResponse._readMessage(
+      FindAuditResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FindAuditResponse with all fields set to their default value.
+   */
+  initialize: function (): FindAuditResponse {
+    return {
+      audit: Audit.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FindAuditResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.audit) {
+      writer.writeMessage(1, msg.audit, Audit._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FindAuditResponse,
+    reader: BinaryReader
+  ): FindAuditResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          reader.readMessage(msg.audit, Audit._readMessage);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const ListAuditsRequest = {
+  /**
+   * Serializes ListAuditsRequest to protobuf.
+   */
+  encode: function (msg: Partial<ListAuditsRequest>): Uint8Array {
+    return ListAuditsRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ListAuditsRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): ListAuditsRequest {
+    return ListAuditsRequest._readMessage(
+      ListAuditsRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes ListAuditsRequest with all fields set to their default value.
+   */
+  initialize: function (): ListAuditsRequest {
+    return {
+      offset: Timestamp.initialize(),
+      limit: 0n,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListAuditsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.offset) {
+      writer.writeMessage(1, msg.offset, Timestamp._writeMessage);
+    }
+    if (msg.limit) {
+      writer.writeInt64String(2, msg.limit.toString() as any);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListAuditsRequest,
+    reader: BinaryReader
+  ): ListAuditsRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          reader.readMessage(msg.offset, Timestamp._readMessage);
+          break;
+        }
+        case 2: {
+          msg.limit = BigInt(reader.readInt64String());
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const ListAuditsResponse = {
+  /**
+   * Serializes ListAuditsResponse to protobuf.
+   */
+  encode: function (msg: Partial<ListAuditsResponse>): Uint8Array {
+    return ListAuditsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ListAuditsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): ListAuditsResponse {
+    return ListAuditsResponse._readMessage(
+      ListAuditsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes ListAuditsResponse with all fields set to their default value.
+   */
+  initialize: function (): ListAuditsResponse {
+    return {
+      audits: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListAuditsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.audits?.length) {
+      writer.writeRepeatedMessage(1, msg.audits as any, Audit._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListAuditsResponse,
+    reader: BinaryReader
+  ): ListAuditsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = Audit.initialize();
+          reader.readMessage(m, Audit._readMessage);
+          msg.audits.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const ListExpiredDepositsRequest = {
+  /**
+   * Serializes ListExpiredDepositsRequest to protobuf.
+   */
+  encode: function (msg: Partial<ListExpiredDepositsRequest>): Uint8Array {
+    return ListExpiredDepositsRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ListExpiredDepositsRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): ListExpiredDepositsRequest {
+    return ListExpiredDepositsRequest._readMessage(
+      ListExpiredDepositsRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes ListExpiredDepositsRequest with all fields set to their default value.
+   */
+  initialize: function (): ListExpiredDepositsRequest {
+    return {
+      limit: 0n,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListExpiredDepositsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.limit) {
+      writer.writeInt64String(1, msg.limit.toString() as any);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListExpiredDepositsRequest,
+    reader: BinaryReader
+  ): ListExpiredDepositsRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.limit = BigInt(reader.readInt64String());
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const ListExpiredDepositsResponse = {
+  /**
+   * Serializes ListExpiredDepositsResponse to protobuf.
+   */
+  encode: function (msg: Partial<ListExpiredDepositsResponse>): Uint8Array {
+    return ListExpiredDepositsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ListExpiredDepositsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): ListExpiredDepositsResponse {
+    return ListExpiredDepositsResponse._readMessage(
+      ListExpiredDepositsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes ListExpiredDepositsResponse with all fields set to their default value.
+   */
+  initialize: function (): ListExpiredDepositsResponse {
+    return {
+      deposits: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListExpiredDepositsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.deposits?.length) {
+      writer.writeRepeatedMessage(
+        1,
+        msg.deposits as any,
+        Deposit._writeMessage
+      );
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListExpiredDepositsResponse,
+    reader: BinaryReader
+  ): ListExpiredDepositsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = Deposit.initialize();
+          reader.readMessage(m, Deposit._readMessage);
+          msg.deposits.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
@@ -2127,6 +2681,359 @@ export const FindTransferResponseJSON = {
       const m = Transfer.initialize();
       TransferJSON._readMessage(m, _transfer);
       msg.transfer = m;
+    }
+    return msg;
+  },
+};
+
+export const FindAuditRequestJSON = {
+  /**
+   * Serializes FindAuditRequest to JSON.
+   */
+  encode: function (msg: Partial<FindAuditRequest>): string {
+    return JSON.stringify(FindAuditRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FindAuditRequest from JSON.
+   */
+  decode: function (json: string): FindAuditRequest {
+    return FindAuditRequestJSON._readMessage(
+      FindAuditRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FindAuditRequest with all fields set to their default value.
+   */
+  initialize: function (): FindAuditRequest {
+    return {
+      id: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FindAuditRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json.id = msg.id;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: FindAuditRequest, json: any): FindAuditRequest {
+    const _id = json.id;
+    if (_id) {
+      msg.id = _id;
+    }
+    return msg;
+  },
+};
+
+export const FindAuditResponseJSON = {
+  /**
+   * Serializes FindAuditResponse to JSON.
+   */
+  encode: function (msg: Partial<FindAuditResponse>): string {
+    return JSON.stringify(FindAuditResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FindAuditResponse from JSON.
+   */
+  decode: function (json: string): FindAuditResponse {
+    return FindAuditResponseJSON._readMessage(
+      FindAuditResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FindAuditResponse with all fields set to their default value.
+   */
+  initialize: function (): FindAuditResponse {
+    return {
+      audit: Audit.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FindAuditResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.audit) {
+      const audit = AuditJSON._writeMessage(msg.audit);
+      if (Object.keys(audit).length > 0) {
+        json.audit = audit;
+      }
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FindAuditResponse,
+    json: any
+  ): FindAuditResponse {
+    const _audit = json.audit;
+    if (_audit) {
+      const m = Audit.initialize();
+      AuditJSON._readMessage(m, _audit);
+      msg.audit = m;
+    }
+    return msg;
+  },
+};
+
+export const ListAuditsRequestJSON = {
+  /**
+   * Serializes ListAuditsRequest to JSON.
+   */
+  encode: function (msg: Partial<ListAuditsRequest>): string {
+    return JSON.stringify(ListAuditsRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ListAuditsRequest from JSON.
+   */
+  decode: function (json: string): ListAuditsRequest {
+    return ListAuditsRequestJSON._readMessage(
+      ListAuditsRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes ListAuditsRequest with all fields set to their default value.
+   */
+  initialize: function (): ListAuditsRequest {
+    return {
+      offset: Timestamp.initialize(),
+      limit: 0n,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListAuditsRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.offset) {
+      const offset = TimestampJSON._writeMessage(msg.offset);
+      if (Object.keys(offset).length > 0) {
+        json.offset = offset;
+      }
+    }
+    if (msg.limit) {
+      json.limit = msg.limit.toString();
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListAuditsRequest,
+    json: any
+  ): ListAuditsRequest {
+    const _offset = json.offset;
+    if (_offset) {
+      const m = Timestamp.initialize();
+      TimestampJSON._readMessage(m, _offset);
+      msg.offset = m;
+    }
+    const _limit = json.limit;
+    if (_limit) {
+      msg.limit = BigInt(_limit);
+    }
+    return msg;
+  },
+};
+
+export const ListAuditsResponseJSON = {
+  /**
+   * Serializes ListAuditsResponse to JSON.
+   */
+  encode: function (msg: Partial<ListAuditsResponse>): string {
+    return JSON.stringify(ListAuditsResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ListAuditsResponse from JSON.
+   */
+  decode: function (json: string): ListAuditsResponse {
+    return ListAuditsResponseJSON._readMessage(
+      ListAuditsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes ListAuditsResponse with all fields set to their default value.
+   */
+  initialize: function (): ListAuditsResponse {
+    return {
+      audits: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListAuditsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.audits?.length) {
+      json.audits = msg.audits.map(AuditJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListAuditsResponse,
+    json: any
+  ): ListAuditsResponse {
+    const _audits = json.audits;
+    if (_audits) {
+      for (const item of _audits) {
+        const m = Audit.initialize();
+        AuditJSON._readMessage(m, item);
+        msg.audits.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const ListExpiredDepositsRequestJSON = {
+  /**
+   * Serializes ListExpiredDepositsRequest to JSON.
+   */
+  encode: function (msg: Partial<ListExpiredDepositsRequest>): string {
+    return JSON.stringify(ListExpiredDepositsRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ListExpiredDepositsRequest from JSON.
+   */
+  decode: function (json: string): ListExpiredDepositsRequest {
+    return ListExpiredDepositsRequestJSON._readMessage(
+      ListExpiredDepositsRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes ListExpiredDepositsRequest with all fields set to their default value.
+   */
+  initialize: function (): ListExpiredDepositsRequest {
+    return {
+      limit: 0n,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListExpiredDepositsRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.limit) {
+      json.limit = msg.limit.toString();
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListExpiredDepositsRequest,
+    json: any
+  ): ListExpiredDepositsRequest {
+    const _limit = json.limit;
+    if (_limit) {
+      msg.limit = BigInt(_limit);
+    }
+    return msg;
+  },
+};
+
+export const ListExpiredDepositsResponseJSON = {
+  /**
+   * Serializes ListExpiredDepositsResponse to JSON.
+   */
+  encode: function (msg: Partial<ListExpiredDepositsResponse>): string {
+    return JSON.stringify(ListExpiredDepositsResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ListExpiredDepositsResponse from JSON.
+   */
+  decode: function (json: string): ListExpiredDepositsResponse {
+    return ListExpiredDepositsResponseJSON._readMessage(
+      ListExpiredDepositsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes ListExpiredDepositsResponse with all fields set to their default value.
+   */
+  initialize: function (): ListExpiredDepositsResponse {
+    return {
+      deposits: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListExpiredDepositsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.deposits?.length) {
+      json.deposits = msg.deposits.map(DepositJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListExpiredDepositsResponse,
+    json: any
+  ): ListExpiredDepositsResponse {
+    const _deposits = json.deposits;
+    if (_deposits) {
+      for (const item of _deposits) {
+        const m = Deposit.initialize();
+        DepositJSON._readMessage(m, item);
+        msg.deposits.push(m);
+      }
     }
     return msg;
   },
