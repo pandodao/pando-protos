@@ -650,6 +650,7 @@ export interface Asset {
   price: string;
   displaySymbol: string;
   extra: string;
+  tag: string;
 }
 
 export interface Pair {
@@ -987,6 +988,7 @@ export const Asset = {
       price: "",
       displaySymbol: "",
       extra: "",
+      tag: "",
     };
   },
 
@@ -1023,6 +1025,9 @@ export const Asset = {
     }
     if (msg.extra) {
       writer.writeString(9, msg.extra);
+    }
+    if (msg.tag) {
+      writer.writeString(10, msg.tag);
     }
     return writer;
   },
@@ -1068,6 +1073,10 @@ export const Asset = {
         }
         case 9: {
           msg.extra = reader.readString();
+          break;
+        }
+        case 10: {
+          msg.tag = reader.readString();
           break;
         }
         default: {
@@ -3909,6 +3918,7 @@ export const AssetJSON = {
       price: "",
       displaySymbol: "",
       extra: "",
+      tag: "",
     };
   },
 
@@ -3946,6 +3956,9 @@ export const AssetJSON = {
     }
     if (msg.extra) {
       json.extra = msg.extra;
+    }
+    if (msg.tag) {
+      json.tag = msg.tag;
     }
     return json;
   },
@@ -3991,6 +4004,10 @@ export const AssetJSON = {
     const _extra = json.extra;
     if (_extra) {
       msg.extra = _extra;
+    }
+    const _tag = json.tag;
+    if (_tag) {
+      msg.tag = _tag;
     }
     return msg;
   },
