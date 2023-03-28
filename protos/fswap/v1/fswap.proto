@@ -20,7 +20,7 @@ message Asset {
     string price = 7;
     string display_symbol = 8;
     string extra = 9;
-    string Tag = 10;
+    string tag = 10;
 }
 
 message Pair {
