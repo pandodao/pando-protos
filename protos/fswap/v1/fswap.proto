@@ -23,6 +23,11 @@ message Asset {
     string tag = 10;
 }
 
+message Stat {
+    string dur = 1; // 24h 7d 30d
+    string ror = 2;
+}
+
 message Pair {
     string base_asset_id = 1;
     string quote_asset_id = 2;
@@ -43,6 +48,7 @@ message Pair {
     int32 version = 17;
     string base_volume_24h = 18;
     string quote_volume_24h = 19;
+    repeated Stat stats = 20;
 }
 
 message Deposit {
