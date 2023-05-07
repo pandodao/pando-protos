@@ -24,6 +24,7 @@ message ListOutputsResponse {
 message FindOrderRequest {
   string user_id = 1;
   string follow_id = 2;
+  string trace_id = 3;
 }
 
 message FindOrderResponse {
