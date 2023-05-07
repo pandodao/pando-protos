@@ -440,6 +440,7 @@ export interface ListOutputsResponse {
 export interface FindOrderRequest {
   userId: string;
   followId: string;
+  traceId: string;
 }
 
 export interface FindOrderResponse {
@@ -793,6 +794,7 @@ export const FindOrderRequest = {
     return {
       userId: "",
       followId: "",
+      traceId: "",
     };
   },
 
@@ -808,6 +810,9 @@ export const FindOrderRequest = {
     }
     if (msg.followId) {
       writer.writeString(2, msg.followId);
+    }
+    if (msg.traceId) {
+      writer.writeString(3, msg.traceId);
     }
     return writer;
   },
@@ -828,6 +833,10 @@ export const FindOrderRequest = {
         }
         case 2: {
           msg.followId = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.traceId = reader.readString();
           break;
         }
         default: {
@@ -2124,6 +2133,7 @@ export const FindOrderRequestJSON = {
     return {
       userId: "",
       followId: "",
+      traceId: "",
     };
   },
 
@@ -2140,6 +2150,9 @@ export const FindOrderRequestJSON = {
     if (msg.followId) {
       json.followId = msg.followId;
     }
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
+    }
     return json;
   },
 
@@ -2154,6 +2167,10 @@ export const FindOrderRequestJSON = {
     const _followId = json.followId ?? json.follow_id;
     if (_followId) {
       msg.followId = _followId;
+    }
+    const _traceId = json.traceId ?? json.trace_id;
+    if (_traceId) {
+      msg.traceId = _traceId;
     }
     return msg;
   },
