@@ -23,6 +23,11 @@ enum EarningAction {
   DEPOSIT = 3;
 }
 
+enum EarningProductType {
+  NOT_SET = 0;
+  DEFI_NODE = 1;
+}
+
 message EarningSnapshotBuyData {
   int64 product_id = 1;
 }
@@ -45,10 +50,6 @@ message ListAssetsResponse {
 }
 
 message EarningProduct {
-  enum Type {
-    NOT_SET = 0;
-    DEFI_NODE = 1;
-  }
   int64 id = 1;
   string account_id = 2;
   string name = 3;
@@ -68,10 +69,12 @@ message EarningProduct {
   int64 version = 17;
   int32 borrow_rate_updated_at = 18;
   int32 created_at = 19;
-  Type type = 20;
+  EarningProductType type = 20;
 }
 
-message ListEarningProductsRequest {}
+message ListEarningProductsRequest {
+  EarningProductType type = 1;
+}
 
 message ListEarningProductsResponse {
   repeated EarningProduct products = 1;
