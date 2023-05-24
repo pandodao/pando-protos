@@ -16,16 +16,20 @@ service PoolService {
 }
 
 
-enum EarningAction {
-  NOT_SET = 0;
-  BUY = 1;
-  REDEEM = 2;
-  DEPOSIT = 3;
+message EarningAction {
+  enum Enum {
+    NOT_SET = 0;
+    BUY = 1;
+    REDEEM = 2;
+    DEPOSIT = 3;
+  }
 }
 
-enum EarningProductType {
-  NOT_SET = 0;
-  DEFI_NODE = 1;
+message EarningProductType {
+  enum Enum {
+    NOT_SET = 0;
+    DEFI_NODE = 1;
+  }
 }
 
 message EarningSnapshotBuyData {
@@ -35,12 +39,6 @@ message EarningSnapshotBuyData {
 message EarningSnapshotRedeemData {
   int64 earning_id = 1;
   int64 amount = 2; // fixedDecimalPrecision = 8
-}
-
-message EarningSnapshotData {
-  EarningAction action = 1;
-  EarningSnapshotBuyData buy_data = 2;
-  EarningSnapshotRedeemData redeem_data = 3;
 }
 
 message ListAssetsRequest {}
@@ -69,11 +67,11 @@ message EarningProduct {
   int64 version = 17;
   int32 borrow_rate_updated_at = 18;
   int32 created_at = 19;
-  EarningProductType type = 20;
+  EarningProductType.Enum type = 20;
 }
 
 message ListEarningProductsRequest {
-  EarningProductType type = 1;
+  EarningProductType.Enum type = 1;
 }
 
 message ListEarningProductsResponse {
@@ -132,7 +130,7 @@ message Event {
   }
   int64 id = 1;
   string user_id = 2;
-  EarningAction action = 3;
+  EarningAction.Enum action = 3;
   int64 product_id = 4;
   string asset_id = 5;
   string amount = 6;
