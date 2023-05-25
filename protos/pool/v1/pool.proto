@@ -3,8 +3,6 @@ syntax = "proto3";
 package pool.v1; 
 option go_package = "github.com/fox-one/pando-protos/pool/v1;pool";
 
-import "common/v1/common.proto";
-
 service PoolService {
   rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
   rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
@@ -43,8 +41,20 @@ message EarningSnapshotRedeemData {
 
 message ListAssetsRequest {}
 
+message Asset {
+  string asset_id = 1;
+  string chain_id = 2;
+  string symbol = 3;
+  string name = 4;
+  string logo = 5;
+  string price_usd = 6;
+  string price_btc = 7;
+  int64 order = 8;
+  int32 updated_at = 9;
+}
+
 message ListAssetsResponse {
-  repeated common.v1.Asset assets = 1;
+  repeated Asset assets = 1;
 }
 
 message EarningProduct {
