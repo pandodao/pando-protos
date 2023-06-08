@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package wallethub.v1;
+option go_package = "github.com/fox-one/pando-protos/wallethub/v1;wallethub";
+
+import "google/protobuf/timestamp.proto";
+
+message Asset {
+  string asset_id = 1;
+  string chain_id = 2;
+  string symbol = 3;
+  string name = 4;
+  string logo = 5;
+  string price = 6;
+}
+
+message Snapshot {
+  int64 id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  string snapshot_id = 3;
+  string trace_id = 4;
+  string asset_id = 5;
+  string amount = 6;
+  string user_id = 7;
+  string source = 8;
+  string opponent_id = 9;
+  string memo = 10;
+  Asset asset = 11;
+}
+
+message User {
+  string client_id = 1;
+  string broker_id = 2;
+  string name = 3;
+  string logo = 4;
+  string session_id = 5;
+  string private_key = 6;
+}
+
+message CreateTransferRequest {
+  string trace_id = 1;
+  string asset_id = 2;
+  string amount = 3;
+  string user_id = 4;
+  string broker_id = 5;
+  string opponent_id = 6;
+  repeated string receivers = 7;
+  int32 threshold = 8;
+  string memo = 9;
+}
+
+message CreateTransferResponse {}
+
+message ListSnapshotsRequest {
+  string user_id = 1;
+  string broker_id = 2;
+  int64 from_id = 3;
+  int32 limit = 4;
+}
+
+message ListSnapshotsResponse {
+  repeated Snapshot snapshots = 1;
+}
+
+message CreateUserRequest {
+  string name = 1;
+  bool is_broker = 2;
+}
+
+message CreateUserResponse {
+  User user = 1;
+}
+
+service BrokerService {
+  rpc ListSnapshots(ListSnapshotsRequest) returns (ListSnapshotsResponse);
+  rpc CreateTransfer(CreateTransferRequest) returns (CreateTransferResponse);
+  // CreateUser create a new user, admin or broker token required
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+}
