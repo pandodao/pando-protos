@@ -20,6 +20,18 @@ import { Timestamp, TimestampJSON } from "../../google/protobuf/timestamp.pb";
 //     SwaplpService Protobuf Client      //
 //========================================//
 
+export async function GetSystem(
+  getSystemRequest: GetSystemRequest,
+  config?: ClientConfiguration
+): Promise<GetSystemResponse> {
+  const response = await PBrequest(
+    "/swaplp.v1.SwaplpService/GetSystem",
+    GetSystemRequest.encode(getSystemRequest),
+    config
+  );
+  return GetSystemResponse.decode(response);
+}
+
 export async function ListPairs(
   listPairsRequest: ListPairsRequest,
   config?: ClientConfiguration
@@ -71,6 +83,18 @@ export async function FindOrder(
 //========================================//
 //       SwaplpService JSON Client        //
 //========================================//
+
+export async function GetSystemJSON(
+  getSystemRequest: GetSystemRequest,
+  config?: ClientConfiguration
+): Promise<GetSystemResponse> {
+  const response = await JSONrequest(
+    "/swaplp.v1.SwaplpService/GetSystem",
+    GetSystemRequestJSON.encode(getSystemRequest),
+    config
+  );
+  return GetSystemResponseJSON.decode(response);
+}
 
 export async function ListPairsJSON(
   listPairsRequest: ListPairsRequest,
@@ -125,6 +149,10 @@ export async function FindOrderJSON(
 //========================================//
 
 export interface SwaplpService<Context = unknown> {
+  GetSystem: (
+    getSystemRequest: GetSystemRequest,
+    context: Context
+  ) => Promise<GetSystemResponse> | GetSystemResponse;
   ListPairs: (
     listPairsRequest: ListPairsRequest,
     context: Context
@@ -147,6 +175,12 @@ export function createSwaplpService<Context>(service: SwaplpService<Context>) {
   return {
     name: "swaplp.v1.SwaplpService",
     methods: {
+      GetSystem: {
+        name: "GetSystem",
+        handler: service.GetSystem,
+        input: { protobuf: GetSystemRequest, json: GetSystemRequestJSON },
+        output: { protobuf: GetSystemResponse, json: GetSystemResponseJSON },
+      },
       ListPairs: {
         name: "ListPairs",
         handler: service.ListPairs,
@@ -181,6 +215,12 @@ export function createSwaplpService<Context>(service: SwaplpService<Context>) {
 //========================================//
 //                 Types                  //
 //========================================//
+
+export interface System {
+  payAssetId: string;
+  payAmount: string;
+  payAsset: Asset;
+}
 
 export interface Asset {
   assetId: string;
@@ -230,6 +270,12 @@ export declare namespace Order {
     | "PROPOSING";
 }
 
+export interface GetSystemRequest {}
+
+export interface GetSystemResponse {
+  system: System;
+}
+
 export interface ListPairsRequest {}
 
 export interface ListPairsResponse {
@@ -263,6 +309,80 @@ export interface FindOrderResponse {
 //========================================//
 //        Protobuf Encode / Decode        //
 //========================================//
+
+export const System = {
+  /**
+   * Serializes System to protobuf.
+   */
+  encode: function (msg: Partial<System>): Uint8Array {
+    return System._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes System from protobuf.
+   */
+  decode: function (bytes: ByteSource): System {
+    return System._readMessage(System.initialize(), new BinaryReader(bytes));
+  },
+
+  /**
+   * Initializes System with all fields set to their default value.
+   */
+  initialize: function (): System {
+    return {
+      payAssetId: "",
+      payAmount: "",
+      payAsset: Asset.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<System>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.payAssetId) {
+      writer.writeString(1, msg.payAssetId);
+    }
+    if (msg.payAmount) {
+      writer.writeString(2, msg.payAmount);
+    }
+    if (msg.payAsset) {
+      writer.writeMessage(3, msg.payAsset, Asset._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: System, reader: BinaryReader): System {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.payAssetId = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.payAmount = reader.readString();
+          break;
+        }
+        case 3: {
+          reader.readMessage(msg.payAsset, Asset._readMessage);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
 
 export const Asset = {
   /**
@@ -756,6 +876,116 @@ export const Order = {
       }
     },
   } as const,
+};
+
+export const GetSystemRequest = {
+  /**
+   * Serializes GetSystemRequest to protobuf.
+   */
+  encode: function (_msg?: Partial<GetSystemRequest>): Uint8Array {
+    return new Uint8Array();
+  },
+
+  /**
+   * Deserializes GetSystemRequest from protobuf.
+   */
+  decode: function (_bytes?: ByteSource): GetSystemRequest {
+    return {};
+  },
+
+  /**
+   * Initializes GetSystemRequest with all fields set to their default value.
+   */
+  initialize: function (): GetSystemRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<GetSystemRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    _msg: GetSystemRequest,
+    _reader: BinaryReader
+  ): GetSystemRequest {
+    return _msg;
+  },
+};
+
+export const GetSystemResponse = {
+  /**
+   * Serializes GetSystemResponse to protobuf.
+   */
+  encode: function (msg: Partial<GetSystemResponse>): Uint8Array {
+    return GetSystemResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetSystemResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetSystemResponse {
+    return GetSystemResponse._readMessage(
+      GetSystemResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetSystemResponse with all fields set to their default value.
+   */
+  initialize: function (): GetSystemResponse {
+    return {
+      system: System.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetSystemResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.system) {
+      writer.writeMessage(1, msg.system, System._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetSystemResponse,
+    reader: BinaryReader
+  ): GetSystemResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          reader.readMessage(msg.system, System._readMessage);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
 };
 
 export const ListPairsRequest = {
@@ -1270,6 +1500,74 @@ export const FindOrderResponse = {
 //          JSON Encode / Decode          //
 //========================================//
 
+export const SystemJSON = {
+  /**
+   * Serializes System to JSON.
+   */
+  encode: function (msg: Partial<System>): string {
+    return JSON.stringify(SystemJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes System from JSON.
+   */
+  decode: function (json: string): System {
+    return SystemJSON._readMessage(SystemJSON.initialize(), JSON.parse(json));
+  },
+
+  /**
+   * Initializes System with all fields set to their default value.
+   */
+  initialize: function (): System {
+    return {
+      payAssetId: "",
+      payAmount: "",
+      payAsset: Asset.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<System>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.payAssetId) {
+      json.payAssetId = msg.payAssetId;
+    }
+    if (msg.payAmount) {
+      json.payAmount = msg.payAmount;
+    }
+    if (msg.payAsset) {
+      const payAsset = AssetJSON._writeMessage(msg.payAsset);
+      if (Object.keys(payAsset).length > 0) {
+        json.payAsset = payAsset;
+      }
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: System, json: any): System {
+    const _payAssetId = json.payAssetId ?? json.pay_asset_id;
+    if (_payAssetId) {
+      msg.payAssetId = _payAssetId;
+    }
+    const _payAmount = json.payAmount ?? json.pay_amount;
+    if (_payAmount) {
+      msg.payAmount = _payAmount;
+    }
+    const _payAsset = json.payAsset ?? json.pay_asset;
+    if (_payAsset) {
+      const m = Asset.initialize();
+      AssetJSON._readMessage(m, _payAsset);
+      msg.payAsset = m;
+    }
+    return msg;
+  },
+};
+
 export const AssetJSON = {
   /**
    * Serializes Asset to JSON.
@@ -1723,6 +2021,105 @@ export const OrderJSON = {
       }
     },
   } as const,
+};
+
+export const GetSystemRequestJSON = {
+  /**
+   * Serializes GetSystemRequest to JSON.
+   */
+  encode: function (_msg?: Partial<GetSystemRequest>): string {
+    return "{}";
+  },
+
+  /**
+   * Deserializes GetSystemRequest from JSON.
+   */
+  decode: function (_json?: string): GetSystemRequest {
+    return {};
+  },
+
+  /**
+   * Initializes GetSystemRequest with all fields set to their default value.
+   */
+  initialize: function (): GetSystemRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<GetSystemRequest>
+  ): Record<string, unknown> {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: GetSystemRequest, _json: any): GetSystemRequest {
+    return msg;
+  },
+};
+
+export const GetSystemResponseJSON = {
+  /**
+   * Serializes GetSystemResponse to JSON.
+   */
+  encode: function (msg: Partial<GetSystemResponse>): string {
+    return JSON.stringify(GetSystemResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes GetSystemResponse from JSON.
+   */
+  decode: function (json: string): GetSystemResponse {
+    return GetSystemResponseJSON._readMessage(
+      GetSystemResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetSystemResponse with all fields set to their default value.
+   */
+  initialize: function (): GetSystemResponse {
+    return {
+      system: System.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetSystemResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.system) {
+      const system = SystemJSON._writeMessage(msg.system);
+      if (Object.keys(system).length > 0) {
+        json.system = system;
+      }
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetSystemResponse,
+    json: any
+  ): GetSystemResponse {
+    const _system = json.system;
+    if (_system) {
+      const m = System.initialize();
+      SystemJSON._readMessage(m, _system);
+      msg.system = m;
+    }
+    return msg;
+  },
 };
 
 export const ListPairsRequestJSON = {
