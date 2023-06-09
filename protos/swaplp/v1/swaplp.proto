@@ -5,6 +5,12 @@ option go_package = "github.com/fox-one/pando-protos/swaplp/v1;swaplp";
 
 import "google/protobuf/timestamp.proto";
 
+message System {
+  string pay_asset_id = 1;
+  string pay_amount = 2;
+  Asset pay_asset = 3;
+}
+
 message Asset {
   string asset_id = 1;
   string chain_id = 2;
@@ -53,6 +59,12 @@ message Order {
   State state = 8;
 }
 
+message GetSystemRequest{}
+
+message GetSystemResponse {
+  System system = 1;
+}
+
 message ListPairsRequest{}
 
 message ListPairsResponse {
@@ -84,6 +96,7 @@ message FindOrderResponse {
 }
 
 service SwaplpService {
+  rpc GetSystem(GetSystemRequest) returns (GetSystemResponse);
   rpc ListPairs(ListPairsRequest) returns (ListPairsResponse);
   rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
   rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
