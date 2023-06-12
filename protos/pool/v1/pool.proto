@@ -5,8 +5,9 @@ option go_package = "github.com/fox-one/pando-protos/pool/v1;pool";
 
 service PoolService {
   rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
-  rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
-  rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+
+  rpc GetEvent(GetEventRequest) returns (GetEventResponse);
+  rpc ListEvents(ListEventsRequest) returns (ListEventsResponse);
 
   rpc ListEarningProducts(ListEarningProductsRequest) returns (ListEarningProductsResponse);
   rpc GetEarningProduct(GetEarningProductRequest) returns (GetEarningProductResponse);
@@ -21,6 +22,7 @@ message EarningAction {
     BUY = 1;
     REDEEM = 2;
     DEPOSIT = 3;
+    INTEREST_PAYMENT = 4;
   }
 }
 
@@ -36,6 +38,23 @@ message EarningProductType {
   enum Enum {
     NOT_SET = 0;
     DEFI_NODE = 1;
+  }
+}
+
+message EventStatus {
+  enum Enum {
+    NOT_SET = 0;
+    INIT = 1;
+    SUCCESSFUL = 2;
+    FAILED = 3;
+  }
+}
+
+message UserEarningProductStatus {
+  enum Enum {
+    NOT_SET = 0;
+    ACTIVE = 1;
+    INACTIVE = 2;
   }
 }
 
@@ -73,17 +92,18 @@ message EarningProduct {
   string description = 4;
   string asset_id = 5;
   string interest_rate =6;
-  int64 period = 7;
+  // int64 period = 7;
   string min_amount_per_order = 8;
   string max_amount_per_order = 9;
   string sold = 10;
   string redeemed = 11;
   string capacity = 12;
-  string normalized_amount = 13;
-  string borrow_rate = 14;
-  int64 borrow_rate_circle = 15;
-  int64 redemption_period = 16;
-  int32 borrow_rate_updated_at = 18;
+  string amount = 13;
+  // string borrow_rate = 14;
+  // int64 borrow_rate_circle = 15;
+  // int64 redemption_period = 16;
+  int64 version = 17;
+  // int32 borrow_rate_updated_at = 18;
   int32 created_at = 19;
   EarningProductType.Enum type = 20;
   EarningStatus.Enum status = 21;
@@ -107,20 +127,17 @@ message GetEarningProductResponse {
 }
 
 message UserEarningProduct {
-  enum Status {
-    NOT_SET = 0;
-    ACTIVE = 1;
-    INACTIVE = 2;
-  }
   int64 id = 1;
   string user_id = 2;
   int64 earning_product_id = 3;
-  Status status = 4;
-  string normalized_amount = 5;
-  string total_buy_amount = 6;
-  string total_redeem_amount = 7;
+  UserEarningProductStatus.Enum status = 4;
+  string amount = 5;
+  // string total_buy_amount = 6;
+  // string total_redeem_amount = 7;
+  int64 version = 8;
   int32 created_at = 9;
   int32 updated_at = 10;
+  string queued_amount = 11;
 }
 
 message ListMyEarningProductsRequest {}
@@ -137,16 +154,11 @@ message GetMyEarningProductResponse {
   UserEarningProduct product = 1;
 }
 
-message GetOrderRequest {
+message GetEventRequest {
   string follow_id = 1;
 }
 
 message Event {
-  enum Status {
-    NOT_SET = 0;
-    INIT = 1;
-    USED = 2;
-  }
   int64 id = 1;
   string user_id = 2;
   EarningAction.Enum action = 3;
@@ -154,33 +166,20 @@ message Event {
   string asset_id = 5;
   string amount = 6;
   string extra = 7;
-  Status status = 8;
+  EventStatus.Enum status = 8;
   string follow_id = 9;
   int32 created_at = 10;
 }
 
-message Order {
-  enum Status {
-    NOT_SET = 0;
-    PROCESSING = 1;
-    DONE = 2;
-    CANCELED = 3;
-    CLOSED = 4;
-  }
-  string follow_id = 1;
-  Status status = 2;
-  Event event = 3;
-  UserEarningProduct uep = 4;
+message GetEventResponse {
+  Event event = 1;
 }
 
-message GetOrderResponse {
-  Order order = 1;
-}
-
-message ListOrdersRequest {
+message ListEventsRequest {
   int64 earning_product_id = 1;
+  EarningAction.Enum action = 2;
 }
 
-message ListOrdersResponse {
-  repeated Order orders = 1;
+message ListEventsResponse {
+  repeated Event events = 1;
 }
