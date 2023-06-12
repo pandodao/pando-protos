@@ -15,8 +15,7 @@ service PoolService {
   rpc GetMyEarningProduct(GetMyEarningProductRequest) returns (GetMyEarningProductResponse);
 }
 
-
-message EarningAction {
+message EventAction {
   enum Enum {
     NOT_SET = 0;
     BUY = 1;
@@ -26,7 +25,16 @@ message EarningAction {
   }
 }
 
-message EarningStatus {
+message EventStatus {
+  enum Enum {
+    NOT_SET = 0;
+    INIT = 1;
+    SUCCESSFUL = 2;
+    FAILED = 3;
+  }
+}
+
+message EarningProductStatus {
   enum Enum {
     NOT_SET = 0;
     AVAILABLE = 1;
@@ -38,15 +46,6 @@ message EarningProductType {
   enum Enum {
     NOT_SET = 0;
     DEFI_NODE = 1;
-  }
-}
-
-message EventStatus {
-  enum Enum {
-    NOT_SET = 0;
-    INIT = 1;
-    SUCCESSFUL = 2;
-    FAILED = 3;
   }
 }
 
@@ -64,7 +63,7 @@ message EarningSnapshotBuyData {
 
 message EarningSnapshotRedeemData {
   int64 earning_id = 1;
-  int64 amount = 2; // fixedDecimalPrecision = 8
+  string amount = 2;
 }
 
 message ListAssetsRequest {}
@@ -106,7 +105,7 @@ message EarningProduct {
   // int32 borrow_rate_updated_at = 18;
   int32 created_at = 19;
   EarningProductType.Enum type = 20;
-  EarningStatus.Enum status = 21;
+  EarningProductStatus.Enum status = 21;
   string queued_amount = 22;
 }
 
@@ -161,7 +160,7 @@ message GetEventRequest {
 message Event {
   int64 id = 1;
   string user_id = 2;
-  EarningAction.Enum action = 3;
+  EventAction.Enum action = 3;
   int64 product_id = 4;
   string asset_id = 5;
   string amount = 6;
@@ -177,7 +176,8 @@ message GetEventResponse {
 
 message ListEventsRequest {
   int64 earning_product_id = 1;
-  EarningAction.Enum action = 2;
+  EventAction.Enum action = 2;
+  EventStatus.Enum status = 3;
 }
 
 message ListEventsResponse {
