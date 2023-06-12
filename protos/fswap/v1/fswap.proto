@@ -21,6 +21,7 @@ message Asset {
     string display_symbol = 8;
     string extra = 9;
     string tag = 10;
+    string price_change = 11;
 }
 
 message Pair {
