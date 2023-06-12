@@ -6,6 +6,7 @@ option go_package = "github.com/fox-one/pando-protos/pool/v1;pool";
 service PoolService {
   rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
   rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
+  rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
 
   rpc ListEarningProducts(ListEarningProductsRequest) returns (ListEarningProductsResponse);
   rpc GetEarningProduct(GetEarningProductRequest) returns (GetEarningProductResponse);
@@ -20,6 +21,14 @@ message EarningAction {
     BUY = 1;
     REDEEM = 2;
     DEPOSIT = 3;
+  }
+}
+
+message EarningStatus {
+  enum Enum {
+    NOT_SET = 0;
+    AVAILABLE = 1;
+    QUEUED = 2;
   }
 }
 
@@ -74,10 +83,11 @@ message EarningProduct {
   string borrow_rate = 14;
   int64 borrow_rate_circle = 15;
   int64 redemption_period = 16;
-  int64 version = 17;
   int32 borrow_rate_updated_at = 18;
   int32 created_at = 19;
   EarningProductType.Enum type = 20;
+  EarningStatus.Enum status = 21;
+  string queued_amount = 22;
 }
 
 message ListEarningProductsRequest {
@@ -109,7 +119,6 @@ message UserEarningProduct {
   string normalized_amount = 5;
   string total_buy_amount = 6;
   string total_redeem_amount = 7;
-  int64 version = 8;
   int32 created_at = 9;
   int32 updated_at = 10;
 }
@@ -166,4 +175,12 @@ message Order {
 
 message GetOrderResponse {
   Order order = 1;
+}
+
+message ListOrdersRequest {
+  int64 earning_product_id = 1;
+}
+
+message ListOrdersResponse {
+  repeated Order orders = 1;
 }
