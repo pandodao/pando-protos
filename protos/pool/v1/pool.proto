@@ -15,6 +15,20 @@ service PoolService {
   rpc GetMyEarningProduct(GetMyEarningProductRequest) returns (GetMyEarningProductResponse);
 }
 
+message EventError {
+  enum Enum {
+    NOT_SET = 0;
+    // buy or queue
+    EARNING_PRODUCT_STATUS_MISMATCH = 1;
+    // buy or queue
+    EARNING_PRODUCT_MIN_PER_ORDER_UNSATISFIED = 2;
+    // buy
+    EARNING_PRODUCT_MAX_PER_ORDER_UNSATISFIED = 3;
+    // buy
+    EARNING_PRODUCT_INSUFFICIENT = 4;
+  }
+}
+
 message EventAction {
   enum Enum {
     NOT_SET = 0;
@@ -166,11 +180,14 @@ message Event {
   int64 product_id = 4;
   string asset_id = 5;
   string amount = 6;
+  // set only if the action is queue
   string filled_amount = 7;
   string extra = 8;
   EventStatus.Enum status = 9;
   string follow_id = 10;
   int32 created_at = 11;
+  // set only if the status is failed
+  EventError.Enum error = 12;
 }
 
 message GetEventResponse {
