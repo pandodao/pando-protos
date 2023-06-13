@@ -59,6 +59,7 @@ message UserEarningProductStatus {
 
 message EarningSnapshotBuyData {
   int64 product_id = 1;
+  bool queue = 2;
 }
 
 message EarningSnapshotRedeemData {
