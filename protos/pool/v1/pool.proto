@@ -213,6 +213,10 @@ message ListEventsRequest {
   repeated EventAction.Enum actions = 2;
   repeated EventStatus.Enum statuses = 3;
   repeated EventBusinessStatus.Enum b_statuses = 4;
+  int64 offset = 5;
+  int64 limit = 6; // default 100, max 500
+  int32 start_at = 7;
+  int32 end_at = 8;
 }
 
 message ListEventsResponse {
