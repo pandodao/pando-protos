@@ -18,14 +18,18 @@ service PoolService {
 message EventError {
   enum Enum {
     NOT_SET = 0;
-    // buy or queue
+    // buy or redeem
     EARNING_PRODUCT_STATUS_MISMATCH = 1;
-    // buy or queue
+    // buy
     EARNING_PRODUCT_MIN_PER_ORDER_UNSATISFIED = 2;
     // buy
     EARNING_PRODUCT_MAX_PER_ORDER_UNSATISFIED = 3;
     // buy
     EARNING_PRODUCT_INSUFFICIENT = 4;
+    // redeem
+    USER_EARNING_PRODUCT_SHARE_INSUFFICIENT = 5;
+    // cancel_queue
+    EARNING_EVENT_MISMATCH = 6;
   }
 }
 
@@ -36,8 +40,7 @@ message EventAction {
     REDEEM = 2;
     DEPOSIT = 3;
     INTEREST_PAYMENT = 4;
-    QUEUE = 5;
-    CANCEL_QUEUE = 6;
+    CANCEL_QUEUE = 5;
   }
 }
 
@@ -45,17 +48,27 @@ message EventStatus {
   enum Enum {
     NOT_SET = 0;
     INIT = 1;
-    PROCESSING = 2;
-    SUCCESSFUL = 3;
-    FAILED = 4;
+    DONE = 2;
+    FAILED = 3;
+  }
+}
+
+message EventBusinessStatus {
+  enum Enum {
+    NOT_SET = 0;
+    PENDING = 1;
+    QUEUING = 2;
+    CANCELLED = 3;
+    COMPLETED = 4;
   }
 }
 
 message EarningProductStatus {
   enum Enum {
     NOT_SET = 0;
-    AVAILABLE = 1;
-    QUEUED = 2;
+    RECRUITING = 1;
+    RUNNING = 2;
+    EXPANDING = 3;
   }
 }
 
@@ -76,15 +89,13 @@ message UserEarningProductStatus {
 
 message EarningSnapshotBuyData {
   int64 product_id = 1;
+  EarningProductStatus.Enum product_status = 2;
 }
 
 message EarningSnapshotRedeemData {
-  int64 earning_id = 1;
-  string amount = 2;
-}
-
-message EarningSnapshotQueueData {
   int64 product_id = 1;
+  string amount = 2;
+  EarningProductStatus.Enum product_status = 3;
 }
 
 message EarningSnapshotCancelQueueData {
@@ -178,15 +189,19 @@ message Event {
   string user_id = 2;
   EventAction.Enum action = 3;
   int64 product_id = 4;
-  string asset_id = 5;
-  string amount = 6;
-  // set only if the action is queue
-  string filled_amount = 7;
-  EventStatus.Enum status = 8;
-  string follow_id = 9;
-  int32 created_at = 10;
+  string product_asset_id = 5;
+  EventStatus.Enum status = 6;
   // set only if the status is failed
-  EventError.Enum error = 11;
+  EventError.Enum error = 7;
+  string follow_id = 8;
+  int32 created_at = 9;
+
+  // --- business fields
+
+  // set only if the action is queue
+  string b_filled_amount = 10;
+  string b_amount = 11;
+  EventBusinessStatus.Enum b_status = 12;
 }
 
 message GetEventResponse {
@@ -195,8 +210,9 @@ message GetEventResponse {
 
 message ListEventsRequest {
   int64 earning_product_id = 1;
-  EventAction.Enum action = 2;
-  EventStatus.Enum status = 3;
+  repeated EventAction.Enum actions = 2;
+  repeated EventStatus.Enum statuses = 3;
+  repeated EventBusinessStatus.Enum b_statuses = 4;
 }
 
 message ListEventsResponse {
