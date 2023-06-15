@@ -182,12 +182,11 @@ message Event {
   string amount = 6;
   // set only if the action is queue
   string filled_amount = 7;
-  string extra = 8;
-  EventStatus.Enum status = 9;
-  string follow_id = 10;
-  int32 created_at = 11;
+  EventStatus.Enum status = 8;
+  string follow_id = 9;
+  int32 created_at = 10;
   // set only if the status is failed
-  EventError.Enum error = 12;
+  EventError.Enum error = 11;
 }
 
 message GetEventResponse {
