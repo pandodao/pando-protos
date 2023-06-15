@@ -50,18 +50,10 @@ message EventStatus {
   enum Enum {
     NOT_SET = 0;
     INIT = 1;
-    DONE = 2;
-    FAILED = 3;
-  }
-}
-
-message EventBusinessStatus {
-  enum Enum {
-    NOT_SET = 0;
-    PENDING = 1;
-    QUEUING = 2;
+    PENDING = 2;
     CANCELLED = 3;
     COMPLETED = 4;
+    FAILED = 5;
   }
 }
 
@@ -131,12 +123,13 @@ message EarningProduct {
   string min_amount_per_order = 6;
   string max_amount_per_order = 7;
   string capacity = 8;
-  string amount = 9;
-  int64 version = 10;
-  int32 created_at = 11;
-  EarningProductType.Enum type = 12;
-  EarningProductStatus.Enum status = 13;
-  string queued_amount = 14;
+  string sold = 9;
+  string queuing_buy_amount = 10;
+  string queuing_redeem_amount = 11;
+  int64 version = 12;
+  int32 created_at = 13;
+  EarningProductType.Enum type = 14;
+  EarningProductStatus.Enum status = 15;
 }
 
 message ListEarningProductsRequest {
@@ -161,11 +154,12 @@ message UserEarningProduct {
   int64 earning_product_id = 3;
   UserEarningProductStatus.Enum status = 4;
   string amount = 5;
-  int64 version = 6;
-  int32 created_at = 7;
-  int32 updated_at = 8;
-  string queued_amount = 9;
-  string total_revenue = 10;
+  string queuing_buy_amount = 6;
+  string queuing_redeem_amount = 7;
+  int64 version = 8;
+  int32 created_at = 9;
+  int32 updated_at = 10;
+  string total_revenue = 11;
 }
 
 message ListMyEarningProductsRequest {}
@@ -191,19 +185,14 @@ message Event {
   string user_id = 2;
   EventAction.Enum action = 3;
   int64 product_id = 4;
-  string product_asset_id = 5;
-  EventStatus.Enum status = 6;
+  string asset_id = 5;
+  string amount = 6;
+  string filled_amount = 7;
+  EventStatus.Enum status = 8;
   // set only if the status is failed
-  EventError.Enum error = 7;
-  string follow_id = 8;
-  int32 created_at = 9;
-
-  // --- business fields
-
-  // set only if the action is queue
-  string b_filled_amount = 10;
-  string b_amount = 11;
-  EventBusinessStatus.Enum b_status = 12;
+  EventError.Enum error = 9;
+  string follow_id = 10;
+  int32 created_at = 11;
 }
 
 message GetEventResponse {
@@ -214,11 +203,10 @@ message ListEventsRequest {
   int64 earning_product_id = 1;
   repeated EventAction.Enum actions = 2;
   repeated EventStatus.Enum statuses = 3;
-  repeated EventBusinessStatus.Enum b_statuses = 4;
-  int64 offset = 5;
-  int64 limit = 6; // default 100, max 500
-  int32 start_at = 7;
-  int32 end_at = 8;
+  int64 offset = 4;
+  int64 limit = 5; // default 100, max 500
+  int32 start_at = 6;
+  int32 end_at = 7;
 }
 
 message ListEventsResponse {
