@@ -51,9 +51,10 @@ message EventStatus {
     NOT_SET = 0;
     INIT = 1;
     PENDING = 2;
-    CANCELLED = 3;
-    COMPLETED = 4;
-    FAILED = 5;
+    QUEUING = 3;
+    CANCELLED = 4;
+    COMPLETED = 5;
+    FAILED = 6;
   }
 }
 
