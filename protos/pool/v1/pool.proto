@@ -74,14 +74,6 @@ message EarningProductType {
   }
 }
 
-message UserEarningProductStatus {
-  enum Enum {
-    NOT_SET = 0;
-    ACTIVE = 1;
-    INACTIVE = 2;
-  }
-}
-
 message EarningSnapshotBuyData {
   int64 product_id = 1;
   EarningProductStatus.Enum product_status = 2;
@@ -153,14 +145,13 @@ message UserEarningProduct {
   int64 id = 1;
   string user_id = 2;
   int64 earning_product_id = 3;
-  UserEarningProductStatus.Enum status = 4;
-  string amount = 5;
-  string queuing_buy_amount = 6;
-  string queuing_redeem_amount = 7;
-  int64 version = 8;
-  int32 created_at = 9;
-  int32 updated_at = 10;
-  string total_revenue = 11;
+  string amount = 4;
+  string queuing_buy_amount = 5;
+  string queuing_redeem_amount = 6;
+  int64 version = 7;
+  int32 created_at = 8;
+  int32 updated_at = 9;
+  string total_revenue = 10;
 }
 
 message ListMyEarningProductsRequest {}
