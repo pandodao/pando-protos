@@ -32,6 +32,8 @@ message EventError {
     USER_EARNING_PRODUCT_SHARE_INSUFFICIENT = 6;
     // cancel_queue
     EARNING_EVENT_MISMATCH = 7;
+    // buy or redeem
+    USER_EARNING_PRODUCT_HAS_REVERSED_QUEUING_EVENT = 8;
   }
 }
 
