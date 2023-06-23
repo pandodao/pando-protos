@@ -91,6 +91,11 @@ message EarningSnapshotCancelQueueData {
   int64 event_id = 1;
 }
 
+message EarningSnapshotInterestPaymentData {
+  int64 product_id = 1;
+  EarningProductType.Enum product_type = 2;
+}
+
 message ListAssetsRequest {}
 
 message Asset {
