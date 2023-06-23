@@ -18,9 +18,9 @@ service PoolService {
 message EventError {
   enum Enum {
     NOT_SET = 0;
-    // buy or redeem
+    // buy / redeem
     EARNING_PRODUCT_STATUS_MISMATCH = 1;
-    // buy
+    // buy / interest_payment
     EARNING_PRODUCT_ASSET_MISMATCH = 2;
     // buy
     EARNING_PRODUCT_MIN_PER_ORDER_UNSATISFIED = 3;
@@ -34,6 +34,10 @@ message EventError {
     EARNING_EVENT_MISMATCH = 7;
     // buy or redeem
     USER_EARNING_PRODUCT_HAS_REVERSED_QUEUING_EVENT = 8;
+    // interest_payment
+    EARNING_PRODUCT_NOT_FOUND = 9;
+    // interest_payment
+    USER_EARNING_PRODUCT_EOD_NOT_FOUND = 10;
   }
 }
 
