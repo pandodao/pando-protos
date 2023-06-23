@@ -94,6 +94,7 @@ message EarningSnapshotCancelQueueData {
 message EarningSnapshotInterestPaymentData {
   int64 product_id = 1;
   EarningProductType.Enum product_type = 2;
+  string date = 3; // format: 2006-01-02
 }
 
 message ListAssetsRequest {}
