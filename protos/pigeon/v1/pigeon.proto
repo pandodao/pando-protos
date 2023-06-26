@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package pigeon.v1;
+option go_package = "github.com/fox-one/pando-protos/pigeon/v1;pigeon";
+
+import "google/protobuf/timestamp.proto";
+
+message Message {
+  string message_id = 1;
+  string recipient_id = 2;
+  string category = 3;
+  string data = 4;
+  string representative_id = 5;
+  string quote_message_id = 6;
+  google.protobuf.Timestamp active_at = 7;
+}
+
+message SendMessageRequest {
+    Message message = 1;
+    bool block_bot = 2;
+    string source = 3;
+}
+
+message SendMessageResponse {}
+
+message SendMessagesRequest {
+    repeated Message messages = 1;
+    bool block_bot = 2;
+    string source = 3;
+}
+
+message SendMessagesResponse {}
+
+service PigeonService {
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+  rpc SendMessages(SendMessagesRequest) returns (SendMessagesResponse);
+}
