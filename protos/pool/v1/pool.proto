@@ -81,22 +81,22 @@ message EarningProductType {
 }
 
 message EarningSnapshotBuyData {
-  int64 product_id = 1;
+  int32 product_id = 1;
   EarningProductStatus.Enum product_status = 2;
 }
 
 message EarningSnapshotRedeemData {
-  int64 product_id = 1;
+  int32 product_id = 1;
   string amount = 2;
   EarningProductStatus.Enum product_status = 3;
 }
 
 message EarningSnapshotCancelQueueData {
-  int64 event_id = 1;
+  string event_id = 1;
 }
 
 message EarningSnapshotInterestPaymentData {
-  int64 product_id = 1;
+  int32 product_id = 1;
   EarningProductType.Enum product_type = 2;
   string date = 3; // format: 2006-01-02
 }
@@ -111,7 +111,7 @@ message Asset {
   string logo = 5;
   string price_usd = 6;
   string price_btc = 7;
-  int64 order = 8;
+  int32 order = 8;
   int32 updated_at = 9;
   string chain_logo = 10;
 }
@@ -121,7 +121,7 @@ message ListAssetsResponse {
 }
 
 message EarningProduct {
-  int64 id = 1;
+  int32 id = 1;
   string name = 2;
   string description = 3;
   string asset_id = 4;
@@ -132,7 +132,7 @@ message EarningProduct {
   string sold = 9;
   string queuing_buy_amount = 10;
   string queuing_redeem_amount = 11;
-  int64 version = 12;
+  string version = 12;
   int32 created_at = 13;
   EarningProductType.Enum type = 14;
   EarningProductStatus.Enum status = 15;
@@ -147,7 +147,7 @@ message ListEarningProductsResponse {
 }
 
 message GetEarningProductRequest {
-  int64 id = 1;
+  int32 id = 1;
 }
 
 message GetEarningProductResponse {
@@ -155,13 +155,13 @@ message GetEarningProductResponse {
 }
 
 message UserEarningProduct {
-  int64 id = 1;
+  int32 id = 1;
   string user_id = 2;
-  int64 earning_product_id = 3;
+  int32 earning_product_id = 3;
   string amount = 4;
   string queuing_buy_amount = 5;
   string queuing_redeem_amount = 6;
-  int64 version = 7;
+  string version = 7;
   int32 created_at = 8;
   int32 updated_at = 9;
   string total_revenue = 10;
@@ -174,7 +174,7 @@ message ListMyEarningProductsResponse {
 }
 
 message GetMyEarningProductRequest {
-  int64 id = 1;
+  int32 id = 1;
 }
 
 message GetMyEarningProductResponse {
@@ -186,10 +186,10 @@ message GetEventRequest {
 }
 
 message Event {
-  int64 id = 1;
+  string id = 1;
   string user_id = 2;
   EventAction.Enum action = 3;
-  int64 product_id = 4;
+  int32 product_id = 4;
   string asset_id = 5;
   string amount = 6;
   string filled_amount = 7;
@@ -205,11 +205,11 @@ message GetEventResponse {
 }
 
 message ListEventsRequest {
-  int64 earning_product_id = 1;
+  int32 earning_product_id = 1;
   repeated EventAction.Enum actions = 2;
   repeated EventStatus.Enum statuses = 3;
-  int64 offset = 4;
-  int64 limit = 5; // default 100, max 500
+  int32 offset = 4;
+  int32 limit = 5; // default 100, max 500
   int32 start_at = 6;
   int32 end_at = 7;
 }
