@@ -34,6 +34,34 @@ const _ = twirp.TwirpPackageMinVersion_8_1_0
 
 type PandostatService interface {
 	ListAssets(context.Context, *ListAssetsRequest) (*ListAssetsResponse, error)
+
+	Statistics(context.Context, *StatisticsRequest) (*StatisticsResponse, error)
+
+	FswapStatsInfo(context.Context, *FswapStatsInfoRequest) (*FswapStatsInfoResponse, error)
+
+	FswapAssets(context.Context, *FswapAssetsRequest) (*FswapAssetsResponse, error)
+
+	FswapAssetVolume(context.Context, *FswapAssetVolumeRequest) (*FswapAssetVolumeResponse, error)
+
+	FswapAssetDetail(context.Context, *FswapAssetDetailRequest) (*FswapAssetDetailResponse, error)
+
+	FswapAssetStatistics(context.Context, *FswapAssetStatisticsRequest) (*FswapAssetStatisticsResponse, error)
+
+	LeafCollaterals(context.Context, *LeafCollateralsRequest) (*LeafCollateralsResponse, error)
+
+	LeafCollateralDetail(context.Context, *LeafCollateralDetailRequest) (*LeafCollateralDetailResponse, error)
+
+	LeafCollateralStatistics(context.Context, *LeafCollateralStatisticsRequest) (*LeafCollateralStatisticsResponse, error)
+
+	LeafMintTokenDetail(context.Context, *LeafMintTokenDetailRequest) (*LeafMintTokenDetailResponse, error)
+
+	LeafMintTokenStatistics(context.Context, *LeafMintTokenStatisticsRequest) (*LeafMintTokenStatisticsResponse, error)
+
+	RingsAssets(context.Context, *RingsAssetsRequest) (*RingsAssetsResponse, error)
+
+	RingsMarketStatistics(context.Context, *RingsMarketStatisticsRequest) (*RingsMarketStatisticsResponse, error)
+
+	RingsMarketDetail(context.Context, *RingsMarketDetailRequest) (*RingsMarketDetailResponse, error)
 }
 
 // ================================
@@ -42,7 +70,7 @@ type PandostatService interface {
 
 type pandostatServiceProtobufClient struct {
 	client      HTTPClient
-	urls        [1]string
+	urls        [15]string
 	interceptor twirp.Interceptor
 	opts        twirp.ClientOptions
 }
@@ -70,8 +98,22 @@ func NewPandostatServiceProtobufClient(baseURL string, client HTTPClient, opts .
 	// Build method URLs: <baseURL>[<prefix>]/<package>.<Service>/<Method>
 	serviceURL := sanitizeBaseURL(baseURL)
 	serviceURL += baseServicePath(pathPrefix, "pandostat.v1", "PandostatService")
-	urls := [1]string{
+	urls := [15]string{
 		serviceURL + "ListAssets",
+		serviceURL + "Statistics",
+		serviceURL + "FswapStatsInfo",
+		serviceURL + "FswapAssets",
+		serviceURL + "FswapAssetVolume",
+		serviceURL + "FswapAssetDetail",
+		serviceURL + "FswapAssetStatistics",
+		serviceURL + "LeafCollaterals",
+		serviceURL + "LeafCollateralDetail",
+		serviceURL + "LeafCollateralStatistics",
+		serviceURL + "LeafMintTokenDetail",
+		serviceURL + "LeafMintTokenStatistics",
+		serviceURL + "RingsAssets",
+		serviceURL + "RingsMarketStatistics",
+		serviceURL + "RingsMarketDetail",
 	}
 
 	return &pandostatServiceProtobufClient{
@@ -128,13 +170,657 @@ func (c *pandostatServiceProtobufClient) callListAssets(ctx context.Context, in 
 	return out, nil
 }
 
+func (c *pandostatServiceProtobufClient) Statistics(ctx context.Context, in *StatisticsRequest) (*StatisticsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "Statistics")
+	caller := c.callStatistics
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *StatisticsRequest) (*StatisticsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*StatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*StatisticsRequest) when calling interceptor")
+					}
+					return c.callStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*StatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*StatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callStatistics(ctx context.Context, in *StatisticsRequest) (*StatisticsResponse, error) {
+	out := new(StatisticsResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) FswapStatsInfo(ctx context.Context, in *FswapStatsInfoRequest) (*FswapStatsInfoResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "FswapStatsInfo")
+	caller := c.callFswapStatsInfo
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *FswapStatsInfoRequest) (*FswapStatsInfoResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapStatsInfoRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapStatsInfoRequest) when calling interceptor")
+					}
+					return c.callFswapStatsInfo(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapStatsInfoResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapStatsInfoResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callFswapStatsInfo(ctx context.Context, in *FswapStatsInfoRequest) (*FswapStatsInfoResponse, error) {
+	out := new(FswapStatsInfoResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) FswapAssets(ctx context.Context, in *FswapAssetsRequest) (*FswapAssetsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssets")
+	caller := c.callFswapAssets
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *FswapAssetsRequest) (*FswapAssetsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetsRequest) when calling interceptor")
+					}
+					return c.callFswapAssets(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callFswapAssets(ctx context.Context, in *FswapAssetsRequest) (*FswapAssetsResponse, error) {
+	out := new(FswapAssetsResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[3], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) FswapAssetVolume(ctx context.Context, in *FswapAssetVolumeRequest) (*FswapAssetVolumeResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetVolume")
+	caller := c.callFswapAssetVolume
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *FswapAssetVolumeRequest) (*FswapAssetVolumeResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetVolumeRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetVolumeRequest) when calling interceptor")
+					}
+					return c.callFswapAssetVolume(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetVolumeResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetVolumeResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callFswapAssetVolume(ctx context.Context, in *FswapAssetVolumeRequest) (*FswapAssetVolumeResponse, error) {
+	out := new(FswapAssetVolumeResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[4], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) FswapAssetDetail(ctx context.Context, in *FswapAssetDetailRequest) (*FswapAssetDetailResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetDetail")
+	caller := c.callFswapAssetDetail
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *FswapAssetDetailRequest) (*FswapAssetDetailResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetDetailRequest) when calling interceptor")
+					}
+					return c.callFswapAssetDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callFswapAssetDetail(ctx context.Context, in *FswapAssetDetailRequest) (*FswapAssetDetailResponse, error) {
+	out := new(FswapAssetDetailResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[5], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) FswapAssetStatistics(ctx context.Context, in *FswapAssetStatisticsRequest) (*FswapAssetStatisticsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetStatistics")
+	caller := c.callFswapAssetStatistics
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *FswapAssetStatisticsRequest) (*FswapAssetStatisticsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetStatisticsRequest) when calling interceptor")
+					}
+					return c.callFswapAssetStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callFswapAssetStatistics(ctx context.Context, in *FswapAssetStatisticsRequest) (*FswapAssetStatisticsResponse, error) {
+	out := new(FswapAssetStatisticsResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[6], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) LeafCollaterals(ctx context.Context, in *LeafCollateralsRequest) (*LeafCollateralsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollaterals")
+	caller := c.callLeafCollaterals
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *LeafCollateralsRequest) (*LeafCollateralsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralsRequest) when calling interceptor")
+					}
+					return c.callLeafCollaterals(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callLeafCollaterals(ctx context.Context, in *LeafCollateralsRequest) (*LeafCollateralsResponse, error) {
+	out := new(LeafCollateralsResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[7], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) LeafCollateralDetail(ctx context.Context, in *LeafCollateralDetailRequest) (*LeafCollateralDetailResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollateralDetail")
+	caller := c.callLeafCollateralDetail
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *LeafCollateralDetailRequest) (*LeafCollateralDetailResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralDetailRequest) when calling interceptor")
+					}
+					return c.callLeafCollateralDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callLeafCollateralDetail(ctx context.Context, in *LeafCollateralDetailRequest) (*LeafCollateralDetailResponse, error) {
+	out := new(LeafCollateralDetailResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[8], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) LeafCollateralStatistics(ctx context.Context, in *LeafCollateralStatisticsRequest) (*LeafCollateralStatisticsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollateralStatistics")
+	caller := c.callLeafCollateralStatistics
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *LeafCollateralStatisticsRequest) (*LeafCollateralStatisticsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralStatisticsRequest) when calling interceptor")
+					}
+					return c.callLeafCollateralStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callLeafCollateralStatistics(ctx context.Context, in *LeafCollateralStatisticsRequest) (*LeafCollateralStatisticsResponse, error) {
+	out := new(LeafCollateralStatisticsResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[9], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) LeafMintTokenDetail(ctx context.Context, in *LeafMintTokenDetailRequest) (*LeafMintTokenDetailResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "LeafMintTokenDetail")
+	caller := c.callLeafMintTokenDetail
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *LeafMintTokenDetailRequest) (*LeafMintTokenDetailResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafMintTokenDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafMintTokenDetailRequest) when calling interceptor")
+					}
+					return c.callLeafMintTokenDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafMintTokenDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafMintTokenDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callLeafMintTokenDetail(ctx context.Context, in *LeafMintTokenDetailRequest) (*LeafMintTokenDetailResponse, error) {
+	out := new(LeafMintTokenDetailResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[10], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) LeafMintTokenStatistics(ctx context.Context, in *LeafMintTokenStatisticsRequest) (*LeafMintTokenStatisticsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "LeafMintTokenStatistics")
+	caller := c.callLeafMintTokenStatistics
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *LeafMintTokenStatisticsRequest) (*LeafMintTokenStatisticsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafMintTokenStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafMintTokenStatisticsRequest) when calling interceptor")
+					}
+					return c.callLeafMintTokenStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafMintTokenStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafMintTokenStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callLeafMintTokenStatistics(ctx context.Context, in *LeafMintTokenStatisticsRequest) (*LeafMintTokenStatisticsResponse, error) {
+	out := new(LeafMintTokenStatisticsResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[11], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) RingsAssets(ctx context.Context, in *RingsAssetsRequest) (*RingsAssetsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "RingsAssets")
+	caller := c.callRingsAssets
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *RingsAssetsRequest) (*RingsAssetsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsAssetsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsAssetsRequest) when calling interceptor")
+					}
+					return c.callRingsAssets(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsAssetsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsAssetsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callRingsAssets(ctx context.Context, in *RingsAssetsRequest) (*RingsAssetsResponse, error) {
+	out := new(RingsAssetsResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[12], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) RingsMarketStatistics(ctx context.Context, in *RingsMarketStatisticsRequest) (*RingsMarketStatisticsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "RingsMarketStatistics")
+	caller := c.callRingsMarketStatistics
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *RingsMarketStatisticsRequest) (*RingsMarketStatisticsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsMarketStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsMarketStatisticsRequest) when calling interceptor")
+					}
+					return c.callRingsMarketStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsMarketStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsMarketStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callRingsMarketStatistics(ctx context.Context, in *RingsMarketStatisticsRequest) (*RingsMarketStatisticsResponse, error) {
+	out := new(RingsMarketStatisticsResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[13], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceProtobufClient) RingsMarketDetail(ctx context.Context, in *RingsMarketDetailRequest) (*RingsMarketDetailResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "RingsMarketDetail")
+	caller := c.callRingsMarketDetail
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *RingsMarketDetailRequest) (*RingsMarketDetailResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsMarketDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsMarketDetailRequest) when calling interceptor")
+					}
+					return c.callRingsMarketDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsMarketDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsMarketDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceProtobufClient) callRingsMarketDetail(ctx context.Context, in *RingsMarketDetailRequest) (*RingsMarketDetailResponse, error) {
+	out := new(RingsMarketDetailResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[14], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
 // ============================
 // PandostatService JSON Client
 // ============================
 
 type pandostatServiceJSONClient struct {
 	client      HTTPClient
-	urls        [1]string
+	urls        [15]string
 	interceptor twirp.Interceptor
 	opts        twirp.ClientOptions
 }
@@ -162,8 +848,22 @@ func NewPandostatServiceJSONClient(baseURL string, client HTTPClient, opts ...tw
 	// Build method URLs: <baseURL>[<prefix>]/<package>.<Service>/<Method>
 	serviceURL := sanitizeBaseURL(baseURL)
 	serviceURL += baseServicePath(pathPrefix, "pandostat.v1", "PandostatService")
-	urls := [1]string{
+	urls := [15]string{
 		serviceURL + "ListAssets",
+		serviceURL + "Statistics",
+		serviceURL + "FswapStatsInfo",
+		serviceURL + "FswapAssets",
+		serviceURL + "FswapAssetVolume",
+		serviceURL + "FswapAssetDetail",
+		serviceURL + "FswapAssetStatistics",
+		serviceURL + "LeafCollaterals",
+		serviceURL + "LeafCollateralDetail",
+		serviceURL + "LeafCollateralStatistics",
+		serviceURL + "LeafMintTokenDetail",
+		serviceURL + "LeafMintTokenStatistics",
+		serviceURL + "RingsAssets",
+		serviceURL + "RingsMarketStatistics",
+		serviceURL + "RingsMarketDetail",
 	}
 
 	return &pandostatServiceJSONClient{
@@ -206,6 +906,650 @@ func (c *pandostatServiceJSONClient) ListAssets(ctx context.Context, in *ListAss
 func (c *pandostatServiceJSONClient) callListAssets(ctx context.Context, in *ListAssetsRequest) (*ListAssetsResponse, error) {
 	out := new(ListAssetsResponse)
 	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) Statistics(ctx context.Context, in *StatisticsRequest) (*StatisticsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "Statistics")
+	caller := c.callStatistics
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *StatisticsRequest) (*StatisticsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*StatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*StatisticsRequest) when calling interceptor")
+					}
+					return c.callStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*StatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*StatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callStatistics(ctx context.Context, in *StatisticsRequest) (*StatisticsResponse, error) {
+	out := new(StatisticsResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) FswapStatsInfo(ctx context.Context, in *FswapStatsInfoRequest) (*FswapStatsInfoResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "FswapStatsInfo")
+	caller := c.callFswapStatsInfo
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *FswapStatsInfoRequest) (*FswapStatsInfoResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapStatsInfoRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapStatsInfoRequest) when calling interceptor")
+					}
+					return c.callFswapStatsInfo(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapStatsInfoResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapStatsInfoResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callFswapStatsInfo(ctx context.Context, in *FswapStatsInfoRequest) (*FswapStatsInfoResponse, error) {
+	out := new(FswapStatsInfoResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) FswapAssets(ctx context.Context, in *FswapAssetsRequest) (*FswapAssetsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssets")
+	caller := c.callFswapAssets
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *FswapAssetsRequest) (*FswapAssetsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetsRequest) when calling interceptor")
+					}
+					return c.callFswapAssets(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callFswapAssets(ctx context.Context, in *FswapAssetsRequest) (*FswapAssetsResponse, error) {
+	out := new(FswapAssetsResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[3], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) FswapAssetVolume(ctx context.Context, in *FswapAssetVolumeRequest) (*FswapAssetVolumeResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetVolume")
+	caller := c.callFswapAssetVolume
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *FswapAssetVolumeRequest) (*FswapAssetVolumeResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetVolumeRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetVolumeRequest) when calling interceptor")
+					}
+					return c.callFswapAssetVolume(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetVolumeResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetVolumeResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callFswapAssetVolume(ctx context.Context, in *FswapAssetVolumeRequest) (*FswapAssetVolumeResponse, error) {
+	out := new(FswapAssetVolumeResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[4], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) FswapAssetDetail(ctx context.Context, in *FswapAssetDetailRequest) (*FswapAssetDetailResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetDetail")
+	caller := c.callFswapAssetDetail
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *FswapAssetDetailRequest) (*FswapAssetDetailResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetDetailRequest) when calling interceptor")
+					}
+					return c.callFswapAssetDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callFswapAssetDetail(ctx context.Context, in *FswapAssetDetailRequest) (*FswapAssetDetailResponse, error) {
+	out := new(FswapAssetDetailResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[5], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) FswapAssetStatistics(ctx context.Context, in *FswapAssetStatisticsRequest) (*FswapAssetStatisticsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetStatistics")
+	caller := c.callFswapAssetStatistics
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *FswapAssetStatisticsRequest) (*FswapAssetStatisticsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetStatisticsRequest) when calling interceptor")
+					}
+					return c.callFswapAssetStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callFswapAssetStatistics(ctx context.Context, in *FswapAssetStatisticsRequest) (*FswapAssetStatisticsResponse, error) {
+	out := new(FswapAssetStatisticsResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[6], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) LeafCollaterals(ctx context.Context, in *LeafCollateralsRequest) (*LeafCollateralsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollaterals")
+	caller := c.callLeafCollaterals
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *LeafCollateralsRequest) (*LeafCollateralsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralsRequest) when calling interceptor")
+					}
+					return c.callLeafCollaterals(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callLeafCollaterals(ctx context.Context, in *LeafCollateralsRequest) (*LeafCollateralsResponse, error) {
+	out := new(LeafCollateralsResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[7], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) LeafCollateralDetail(ctx context.Context, in *LeafCollateralDetailRequest) (*LeafCollateralDetailResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollateralDetail")
+	caller := c.callLeafCollateralDetail
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *LeafCollateralDetailRequest) (*LeafCollateralDetailResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralDetailRequest) when calling interceptor")
+					}
+					return c.callLeafCollateralDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callLeafCollateralDetail(ctx context.Context, in *LeafCollateralDetailRequest) (*LeafCollateralDetailResponse, error) {
+	out := new(LeafCollateralDetailResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[8], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) LeafCollateralStatistics(ctx context.Context, in *LeafCollateralStatisticsRequest) (*LeafCollateralStatisticsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollateralStatistics")
+	caller := c.callLeafCollateralStatistics
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *LeafCollateralStatisticsRequest) (*LeafCollateralStatisticsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralStatisticsRequest) when calling interceptor")
+					}
+					return c.callLeafCollateralStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callLeafCollateralStatistics(ctx context.Context, in *LeafCollateralStatisticsRequest) (*LeafCollateralStatisticsResponse, error) {
+	out := new(LeafCollateralStatisticsResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[9], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) LeafMintTokenDetail(ctx context.Context, in *LeafMintTokenDetailRequest) (*LeafMintTokenDetailResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "LeafMintTokenDetail")
+	caller := c.callLeafMintTokenDetail
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *LeafMintTokenDetailRequest) (*LeafMintTokenDetailResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafMintTokenDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafMintTokenDetailRequest) when calling interceptor")
+					}
+					return c.callLeafMintTokenDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafMintTokenDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafMintTokenDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callLeafMintTokenDetail(ctx context.Context, in *LeafMintTokenDetailRequest) (*LeafMintTokenDetailResponse, error) {
+	out := new(LeafMintTokenDetailResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[10], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) LeafMintTokenStatistics(ctx context.Context, in *LeafMintTokenStatisticsRequest) (*LeafMintTokenStatisticsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "LeafMintTokenStatistics")
+	caller := c.callLeafMintTokenStatistics
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *LeafMintTokenStatisticsRequest) (*LeafMintTokenStatisticsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafMintTokenStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafMintTokenStatisticsRequest) when calling interceptor")
+					}
+					return c.callLeafMintTokenStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafMintTokenStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafMintTokenStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callLeafMintTokenStatistics(ctx context.Context, in *LeafMintTokenStatisticsRequest) (*LeafMintTokenStatisticsResponse, error) {
+	out := new(LeafMintTokenStatisticsResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[11], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) RingsAssets(ctx context.Context, in *RingsAssetsRequest) (*RingsAssetsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "RingsAssets")
+	caller := c.callRingsAssets
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *RingsAssetsRequest) (*RingsAssetsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsAssetsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsAssetsRequest) when calling interceptor")
+					}
+					return c.callRingsAssets(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsAssetsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsAssetsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callRingsAssets(ctx context.Context, in *RingsAssetsRequest) (*RingsAssetsResponse, error) {
+	out := new(RingsAssetsResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[12], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) RingsMarketStatistics(ctx context.Context, in *RingsMarketStatisticsRequest) (*RingsMarketStatisticsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "RingsMarketStatistics")
+	caller := c.callRingsMarketStatistics
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *RingsMarketStatisticsRequest) (*RingsMarketStatisticsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsMarketStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsMarketStatisticsRequest) when calling interceptor")
+					}
+					return c.callRingsMarketStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsMarketStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsMarketStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callRingsMarketStatistics(ctx context.Context, in *RingsMarketStatisticsRequest) (*RingsMarketStatisticsResponse, error) {
+	out := new(RingsMarketStatisticsResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[13], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *pandostatServiceJSONClient) RingsMarketDetail(ctx context.Context, in *RingsMarketDetailRequest) (*RingsMarketDetailResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "pandostat.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "PandostatService")
+	ctx = ctxsetters.WithMethodName(ctx, "RingsMarketDetail")
+	caller := c.callRingsMarketDetail
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *RingsMarketDetailRequest) (*RingsMarketDetailResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsMarketDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsMarketDetailRequest) when calling interceptor")
+					}
+					return c.callRingsMarketDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsMarketDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsMarketDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *pandostatServiceJSONClient) callRingsMarketDetail(ctx context.Context, in *RingsMarketDetailRequest) (*RingsMarketDetailResponse, error) {
+	out := new(RingsMarketDetailResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[14], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -319,6 +1663,48 @@ func (s *pandostatServiceServer) ServeHTTP(resp http.ResponseWriter, req *http.R
 	switch method {
 	case "ListAssets":
 		s.serveListAssets(ctx, resp, req)
+		return
+	case "Statistics":
+		s.serveStatistics(ctx, resp, req)
+		return
+	case "FswapStatsInfo":
+		s.serveFswapStatsInfo(ctx, resp, req)
+		return
+	case "FswapAssets":
+		s.serveFswapAssets(ctx, resp, req)
+		return
+	case "FswapAssetVolume":
+		s.serveFswapAssetVolume(ctx, resp, req)
+		return
+	case "FswapAssetDetail":
+		s.serveFswapAssetDetail(ctx, resp, req)
+		return
+	case "FswapAssetStatistics":
+		s.serveFswapAssetStatistics(ctx, resp, req)
+		return
+	case "LeafCollaterals":
+		s.serveLeafCollaterals(ctx, resp, req)
+		return
+	case "LeafCollateralDetail":
+		s.serveLeafCollateralDetail(ctx, resp, req)
+		return
+	case "LeafCollateralStatistics":
+		s.serveLeafCollateralStatistics(ctx, resp, req)
+		return
+	case "LeafMintTokenDetail":
+		s.serveLeafMintTokenDetail(ctx, resp, req)
+		return
+	case "LeafMintTokenStatistics":
+		s.serveLeafMintTokenStatistics(ctx, resp, req)
+		return
+	case "RingsAssets":
+		s.serveRingsAssets(ctx, resp, req)
+		return
+	case "RingsMarketStatistics":
+		s.serveRingsMarketStatistics(ctx, resp, req)
+		return
+	case "RingsMarketDetail":
+		s.serveRingsMarketDetail(ctx, resp, req)
 		return
 	default:
 		msg := fmt.Sprintf("no handler for path %q", req.URL.Path)
@@ -484,6 +1870,2526 @@ func (s *pandostatServiceServer) serveListAssetsProtobuf(ctx context.Context, re
 	}
 	if respContent == nil {
 		s.writeError(ctx, resp, twirp.InternalError("received a nil *ListAssetsResponse and nil error while calling ListAssets. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveStatistics(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveStatisticsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveStatisticsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveStatisticsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "Statistics")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(StatisticsRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.Statistics
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *StatisticsRequest) (*StatisticsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*StatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*StatisticsRequest) when calling interceptor")
+					}
+					return s.PandostatService.Statistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*StatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*StatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *StatisticsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *StatisticsResponse and nil error while calling Statistics. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveStatisticsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "Statistics")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(StatisticsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.Statistics
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *StatisticsRequest) (*StatisticsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*StatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*StatisticsRequest) when calling interceptor")
+					}
+					return s.PandostatService.Statistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*StatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*StatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *StatisticsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *StatisticsResponse and nil error while calling Statistics. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveFswapStatsInfo(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveFswapStatsInfoJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveFswapStatsInfoProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveFswapStatsInfoJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "FswapStatsInfo")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(FswapStatsInfoRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.FswapStatsInfo
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *FswapStatsInfoRequest) (*FswapStatsInfoResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapStatsInfoRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapStatsInfoRequest) when calling interceptor")
+					}
+					return s.PandostatService.FswapStatsInfo(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapStatsInfoResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapStatsInfoResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *FswapStatsInfoResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *FswapStatsInfoResponse and nil error while calling FswapStatsInfo. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveFswapStatsInfoProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "FswapStatsInfo")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(FswapStatsInfoRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.FswapStatsInfo
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *FswapStatsInfoRequest) (*FswapStatsInfoResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapStatsInfoRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapStatsInfoRequest) when calling interceptor")
+					}
+					return s.PandostatService.FswapStatsInfo(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapStatsInfoResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapStatsInfoResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *FswapStatsInfoResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *FswapStatsInfoResponse and nil error while calling FswapStatsInfo. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveFswapAssets(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveFswapAssetsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveFswapAssetsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveFswapAssetsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssets")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(FswapAssetsRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.FswapAssets
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *FswapAssetsRequest) (*FswapAssetsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetsRequest) when calling interceptor")
+					}
+					return s.PandostatService.FswapAssets(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *FswapAssetsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *FswapAssetsResponse and nil error while calling FswapAssets. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveFswapAssetsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssets")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(FswapAssetsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.FswapAssets
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *FswapAssetsRequest) (*FswapAssetsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetsRequest) when calling interceptor")
+					}
+					return s.PandostatService.FswapAssets(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *FswapAssetsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *FswapAssetsResponse and nil error while calling FswapAssets. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveFswapAssetVolume(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveFswapAssetVolumeJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveFswapAssetVolumeProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveFswapAssetVolumeJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetVolume")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(FswapAssetVolumeRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.FswapAssetVolume
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *FswapAssetVolumeRequest) (*FswapAssetVolumeResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetVolumeRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetVolumeRequest) when calling interceptor")
+					}
+					return s.PandostatService.FswapAssetVolume(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetVolumeResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetVolumeResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *FswapAssetVolumeResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *FswapAssetVolumeResponse and nil error while calling FswapAssetVolume. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveFswapAssetVolumeProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetVolume")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(FswapAssetVolumeRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.FswapAssetVolume
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *FswapAssetVolumeRequest) (*FswapAssetVolumeResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetVolumeRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetVolumeRequest) when calling interceptor")
+					}
+					return s.PandostatService.FswapAssetVolume(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetVolumeResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetVolumeResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *FswapAssetVolumeResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *FswapAssetVolumeResponse and nil error while calling FswapAssetVolume. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveFswapAssetDetail(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveFswapAssetDetailJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveFswapAssetDetailProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveFswapAssetDetailJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetDetail")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(FswapAssetDetailRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.FswapAssetDetail
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *FswapAssetDetailRequest) (*FswapAssetDetailResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetDetailRequest) when calling interceptor")
+					}
+					return s.PandostatService.FswapAssetDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *FswapAssetDetailResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *FswapAssetDetailResponse and nil error while calling FswapAssetDetail. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveFswapAssetDetailProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetDetail")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(FswapAssetDetailRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.FswapAssetDetail
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *FswapAssetDetailRequest) (*FswapAssetDetailResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetDetailRequest) when calling interceptor")
+					}
+					return s.PandostatService.FswapAssetDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *FswapAssetDetailResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *FswapAssetDetailResponse and nil error while calling FswapAssetDetail. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveFswapAssetStatistics(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveFswapAssetStatisticsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveFswapAssetStatisticsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveFswapAssetStatisticsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetStatistics")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(FswapAssetStatisticsRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.FswapAssetStatistics
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *FswapAssetStatisticsRequest) (*FswapAssetStatisticsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetStatisticsRequest) when calling interceptor")
+					}
+					return s.PandostatService.FswapAssetStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *FswapAssetStatisticsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *FswapAssetStatisticsResponse and nil error while calling FswapAssetStatistics. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveFswapAssetStatisticsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "FswapAssetStatistics")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(FswapAssetStatisticsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.FswapAssetStatistics
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *FswapAssetStatisticsRequest) (*FswapAssetStatisticsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*FswapAssetStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*FswapAssetStatisticsRequest) when calling interceptor")
+					}
+					return s.PandostatService.FswapAssetStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*FswapAssetStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*FswapAssetStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *FswapAssetStatisticsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *FswapAssetStatisticsResponse and nil error while calling FswapAssetStatistics. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveLeafCollaterals(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveLeafCollateralsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveLeafCollateralsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveLeafCollateralsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollaterals")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(LeafCollateralsRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.LeafCollaterals
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *LeafCollateralsRequest) (*LeafCollateralsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralsRequest) when calling interceptor")
+					}
+					return s.PandostatService.LeafCollaterals(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *LeafCollateralsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *LeafCollateralsResponse and nil error while calling LeafCollaterals. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveLeafCollateralsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollaterals")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(LeafCollateralsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.LeafCollaterals
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *LeafCollateralsRequest) (*LeafCollateralsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralsRequest) when calling interceptor")
+					}
+					return s.PandostatService.LeafCollaterals(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *LeafCollateralsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *LeafCollateralsResponse and nil error while calling LeafCollaterals. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveLeafCollateralDetail(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveLeafCollateralDetailJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveLeafCollateralDetailProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveLeafCollateralDetailJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollateralDetail")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(LeafCollateralDetailRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.LeafCollateralDetail
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *LeafCollateralDetailRequest) (*LeafCollateralDetailResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralDetailRequest) when calling interceptor")
+					}
+					return s.PandostatService.LeafCollateralDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *LeafCollateralDetailResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *LeafCollateralDetailResponse and nil error while calling LeafCollateralDetail. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveLeafCollateralDetailProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollateralDetail")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(LeafCollateralDetailRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.LeafCollateralDetail
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *LeafCollateralDetailRequest) (*LeafCollateralDetailResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralDetailRequest) when calling interceptor")
+					}
+					return s.PandostatService.LeafCollateralDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *LeafCollateralDetailResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *LeafCollateralDetailResponse and nil error while calling LeafCollateralDetail. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveLeafCollateralStatistics(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveLeafCollateralStatisticsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveLeafCollateralStatisticsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveLeafCollateralStatisticsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollateralStatistics")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(LeafCollateralStatisticsRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.LeafCollateralStatistics
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *LeafCollateralStatisticsRequest) (*LeafCollateralStatisticsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralStatisticsRequest) when calling interceptor")
+					}
+					return s.PandostatService.LeafCollateralStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *LeafCollateralStatisticsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *LeafCollateralStatisticsResponse and nil error while calling LeafCollateralStatistics. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveLeafCollateralStatisticsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "LeafCollateralStatistics")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(LeafCollateralStatisticsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.LeafCollateralStatistics
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *LeafCollateralStatisticsRequest) (*LeafCollateralStatisticsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafCollateralStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafCollateralStatisticsRequest) when calling interceptor")
+					}
+					return s.PandostatService.LeafCollateralStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafCollateralStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafCollateralStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *LeafCollateralStatisticsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *LeafCollateralStatisticsResponse and nil error while calling LeafCollateralStatistics. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveLeafMintTokenDetail(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveLeafMintTokenDetailJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveLeafMintTokenDetailProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveLeafMintTokenDetailJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "LeafMintTokenDetail")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(LeafMintTokenDetailRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.LeafMintTokenDetail
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *LeafMintTokenDetailRequest) (*LeafMintTokenDetailResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafMintTokenDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafMintTokenDetailRequest) when calling interceptor")
+					}
+					return s.PandostatService.LeafMintTokenDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafMintTokenDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafMintTokenDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *LeafMintTokenDetailResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *LeafMintTokenDetailResponse and nil error while calling LeafMintTokenDetail. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveLeafMintTokenDetailProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "LeafMintTokenDetail")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(LeafMintTokenDetailRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.LeafMintTokenDetail
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *LeafMintTokenDetailRequest) (*LeafMintTokenDetailResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafMintTokenDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafMintTokenDetailRequest) when calling interceptor")
+					}
+					return s.PandostatService.LeafMintTokenDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafMintTokenDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafMintTokenDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *LeafMintTokenDetailResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *LeafMintTokenDetailResponse and nil error while calling LeafMintTokenDetail. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveLeafMintTokenStatistics(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveLeafMintTokenStatisticsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveLeafMintTokenStatisticsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveLeafMintTokenStatisticsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "LeafMintTokenStatistics")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(LeafMintTokenStatisticsRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.LeafMintTokenStatistics
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *LeafMintTokenStatisticsRequest) (*LeafMintTokenStatisticsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafMintTokenStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafMintTokenStatisticsRequest) when calling interceptor")
+					}
+					return s.PandostatService.LeafMintTokenStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafMintTokenStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafMintTokenStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *LeafMintTokenStatisticsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *LeafMintTokenStatisticsResponse and nil error while calling LeafMintTokenStatistics. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveLeafMintTokenStatisticsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "LeafMintTokenStatistics")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(LeafMintTokenStatisticsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.LeafMintTokenStatistics
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *LeafMintTokenStatisticsRequest) (*LeafMintTokenStatisticsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*LeafMintTokenStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*LeafMintTokenStatisticsRequest) when calling interceptor")
+					}
+					return s.PandostatService.LeafMintTokenStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*LeafMintTokenStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*LeafMintTokenStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *LeafMintTokenStatisticsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *LeafMintTokenStatisticsResponse and nil error while calling LeafMintTokenStatistics. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveRingsAssets(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveRingsAssetsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveRingsAssetsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveRingsAssetsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "RingsAssets")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(RingsAssetsRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.RingsAssets
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *RingsAssetsRequest) (*RingsAssetsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsAssetsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsAssetsRequest) when calling interceptor")
+					}
+					return s.PandostatService.RingsAssets(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsAssetsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsAssetsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *RingsAssetsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *RingsAssetsResponse and nil error while calling RingsAssets. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveRingsAssetsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "RingsAssets")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(RingsAssetsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.RingsAssets
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *RingsAssetsRequest) (*RingsAssetsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsAssetsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsAssetsRequest) when calling interceptor")
+					}
+					return s.PandostatService.RingsAssets(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsAssetsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsAssetsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *RingsAssetsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *RingsAssetsResponse and nil error while calling RingsAssets. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveRingsMarketStatistics(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveRingsMarketStatisticsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveRingsMarketStatisticsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveRingsMarketStatisticsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "RingsMarketStatistics")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(RingsMarketStatisticsRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.RingsMarketStatistics
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *RingsMarketStatisticsRequest) (*RingsMarketStatisticsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsMarketStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsMarketStatisticsRequest) when calling interceptor")
+					}
+					return s.PandostatService.RingsMarketStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsMarketStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsMarketStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *RingsMarketStatisticsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *RingsMarketStatisticsResponse and nil error while calling RingsMarketStatistics. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveRingsMarketStatisticsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "RingsMarketStatistics")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(RingsMarketStatisticsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.RingsMarketStatistics
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *RingsMarketStatisticsRequest) (*RingsMarketStatisticsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsMarketStatisticsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsMarketStatisticsRequest) when calling interceptor")
+					}
+					return s.PandostatService.RingsMarketStatistics(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsMarketStatisticsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsMarketStatisticsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *RingsMarketStatisticsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *RingsMarketStatisticsResponse and nil error while calling RingsMarketStatistics. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveRingsMarketDetail(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveRingsMarketDetailJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveRingsMarketDetailProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *pandostatServiceServer) serveRingsMarketDetailJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "RingsMarketDetail")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(RingsMarketDetailRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.PandostatService.RingsMarketDetail
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *RingsMarketDetailRequest) (*RingsMarketDetailResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsMarketDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsMarketDetailRequest) when calling interceptor")
+					}
+					return s.PandostatService.RingsMarketDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsMarketDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsMarketDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *RingsMarketDetailResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *RingsMarketDetailResponse and nil error while calling RingsMarketDetail. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *pandostatServiceServer) serveRingsMarketDetailProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "RingsMarketDetail")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(RingsMarketDetailRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.PandostatService.RingsMarketDetail
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *RingsMarketDetailRequest) (*RingsMarketDetailResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*RingsMarketDetailRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*RingsMarketDetailRequest) when calling interceptor")
+					}
+					return s.PandostatService.RingsMarketDetail(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*RingsMarketDetailResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*RingsMarketDetailResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *RingsMarketDetailResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *RingsMarketDetailResponse and nil error while calling RingsMarketDetail. nil responses are not supported"))
 		return
 	}
 
@@ -1085,18 +4991,138 @@ func callClientError(ctx context.Context, h *twirp.ClientHooks, err twirp.Error)
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 201 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x29, 0x48, 0xcc, 0x4b,
-	0xc9, 0x2f, 0x2e, 0x49, 0x2c, 0xd1, 0x2f, 0x33, 0xd4, 0x87, 0x73, 0xf4, 0x0a, 0x8a, 0xf2, 0x4b,
-	0xf2, 0x85, 0x78, 0x10, 0x02, 0x65, 0x86, 0x52, 0x62, 0xc9, 0xf9, 0xb9, 0xb9, 0xf9, 0x79, 0x20,
-	0x85, 0x10, 0x16, 0x44, 0x95, 0x92, 0x2d, 0x97, 0xa0, 0x4f, 0x66, 0x71, 0x89, 0x63, 0x71, 0x71,
-	0x6a, 0x49, 0x71, 0x50, 0x6a, 0x61, 0x69, 0x6a, 0x71, 0x89, 0x90, 0x06, 0x17, 0x5b, 0x22, 0x58,
-	0x40, 0x82, 0x51, 0x81, 0x59, 0x83, 0xdb, 0x48, 0x40, 0x0f, 0xaa, 0xa7, 0xcc, 0x50, 0x0f, 0xac,
-	0x32, 0x08, 0x2a, 0xaf, 0x64, 0xc7, 0x25, 0x84, 0xac, 0xbd, 0xb8, 0x20, 0x3f, 0xaf, 0x38, 0x95,
-	0x78, 0xfd, 0x46, 0xc9, 0x5c, 0x02, 0x01, 0x30, 0x67, 0x06, 0xa7, 0x16, 0x95, 0x65, 0x26, 0xa7,
-	0x0a, 0xf9, 0x73, 0x71, 0x21, 0xcc, 0x14, 0x92, 0xd7, 0x43, 0xf6, 0x87, 0x1e, 0x86, 0x63, 0xa5,
-	0x14, 0x70, 0x2b, 0x80, 0x38, 0xc7, 0xc9, 0x22, 0xca, 0x2c, 0x3d, 0xb3, 0x24, 0xa3, 0x34, 0x09,
-	0xe4, 0x0c, 0xfd, 0xb4, 0xfc, 0x0a, 0xdd, 0xfc, 0xbc, 0x54, 0x48, 0x78, 0xe9, 0x82, 0x43, 0xa1,
-	0x58, 0x1f, 0x39, 0x24, 0xad, 0xe1, 0x9c, 0x24, 0x36, 0xb0, 0xb4, 0x31, 0x20, 0x00, 0x00, 0xff,
-	0xff, 0x13, 0xb4, 0x84, 0x7d, 0x6a, 0x01, 0x00, 0x00,
+	// 2116 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x59, 0xdd, 0x52, 0x1b, 0xc9,
+	0x15, 0x8e, 0xfe, 0x00, 0x1d, 0x09, 0x24, 0x1a, 0x0c, 0xb3, 0x32, 0xde, 0x65, 0xc7, 0xeb, 0x5d,
+	0x1b, 0xc7, 0xf2, 0x9a, 0x75, 0x42, 0x2a, 0x29, 0x3b, 0x35, 0x80, 0xb0, 0x55, 0x16, 0x48, 0x3b,
+	0x08, 0x3b, 0xde, 0x54, 0x65, 0xaa, 0xd1, 0x34, 0x66, 0x16, 0x49, 0xa3, 0x9d, 0x69, 0x09, 0xb8,
+	0xcc, 0x65, 0x2a, 0x97, 0xb9, 0xcc, 0x7d, 0x5e, 0x20, 0x77, 0x49, 0x1e, 0x23, 0x37, 0x79, 0x8a,
+	0x54, 0xa5, 0xf2, 0x00, 0x5b, 0xfd, 0xa3, 0xf9, 0x97, 0x90, 0xed, 0xda, 0x3b, 0xcd, 0x77, 0x7e,
+	0xfb, 0xf4, 0x39, 0xa7, 0x4f, 0xb7, 0x60, 0x63, 0x80, 0xfb, 0xa6, 0xed, 0x52, 0x4c, 0x1f, 0x8f,
+	0x9e, 0x3c, 0xf6, 0x3e, 0xaa, 0x03, 0xc7, 0xa6, 0x36, 0x2a, 0xfa, 0xc0, 0xe8, 0x49, 0x65, 0xad,
+	0x63, 0xf7, 0x7a, 0x76, 0x9f, 0x31, 0x8a, 0x5f, 0x82, 0x4b, 0x7d, 0x06, 0xcb, 0x0d, 0xcb, 0xa5,
+	0x9a, 0xeb, 0x12, 0xea, 0xea, 0xe4, 0x87, 0x21, 0x71, 0x29, 0xba, 0x0f, 0x73, 0x98, 0x03, 0x4a,
+	0x6a, 0x33, 0x73, 0xbf, 0xb0, 0x5d, 0xae, 0x4a, 0x99, 0xd1, 0x93, 0x2a, 0xe7, 0xd4, 0x25, 0x5d,
+	0x7d, 0x0e, 0x28, 0x28, 0xee, 0x0e, 0xec, 0xbe, 0x4b, 0xde, 0x43, 0xfe, 0x01, 0xe4, 0xf7, 0xce,
+	0xb1, 0x43, 0xf7, 0x31, 0xc5, 0xa8, 0x08, 0xa9, 0x91, 0x92, 0xda, 0x4c, 0xdd, 0xcf, 0xeb, 0xa9,
+	0x11, 0x5a, 0x82, 0x34, 0x75, 0x95, 0xf4, 0x66, 0xea, 0xfe, 0xa2, 0x9e, 0xa6, 0xae, 0x7a, 0x09,
+	0xcb, 0xc7, 0x14, 0x53, 0xcb, 0xa5, 0x56, 0xc7, 0xf3, 0xf4, 0x1b, 0xc8, 0xd2, 0xeb, 0x01, 0xe1,
+	0x52, 0x4b, 0xdb, 0x9f, 0x55, 0x83, 0x6b, 0xae, 0x36, 0x47, 0xc4, 0x19, 0x59, 0xe4, 0x92, 0x5b,
+	0x68, 0x5f, 0x0f, 0x88, 0xce, 0x99, 0xd1, 0x23, 0xc8, 0x39, 0xb8, 0xff, 0x8e, 0x70, 0xe5, 0x4b,
+	0xdb, 0xeb, 0x61, 0xa9, 0xb6, 0xd5, 0x23, 0x3a, 0x23, 0xeb, 0x82, 0x4b, 0xd5, 0x00, 0x05, 0x0d,
+	0xcb, 0x35, 0x3e, 0x84, 0xac, 0x89, 0x29, 0x96, 0x2b, 0x8c, 0xe8, 0xf0, 0xd6, 0xa4, 0x73, 0x26,
+	0x75, 0x1d, 0x6e, 0x1d, 0xb8, 0x97, 0x78, 0xc0, 0xf4, 0xb8, 0xf5, 0xfe, 0x99, 0x2d, 0xfd, 0x57,
+	0xff, 0x92, 0x82, 0xb5, 0x28, 0x45, 0x1a, 0xb8, 0x03, 0x30, 0xb2, 0xbb, 0xc3, 0x1e, 0x31, 0xb6,
+	0x9f, 0x9e, 0xcb, 0xb0, 0xe4, 0x05, 0xb2, 0xfd, 0xf4, 0x1c, 0xad, 0xc3, 0xfc, 0x19, 0x11, 0xb4,
+	0x34, 0xa7, 0xcd, 0x9d, 0x11, 0x4e, 0xb8, 0x03, 0x40, 0x1d, 0x6c, 0x12, 0x97, 0xd3, 0x32, 0x42,
+	0x4e, 0x20, 0x8c, 0xac, 0xc2, 0x22, 0x1d, 0x3a, 0x7d, 0xc3, 0x1e, 0x11, 0x87, 0x73, 0x64, 0x39,
+	0x47, 0x81, 0x81, 0x2c, 0x60, 0xdb, 0x4f, 0xcf, 0xd5, 0x55, 0x40, 0xdc, 0xa9, 0x50, 0x56, 0xa8,
+	0x7f, 0x4b, 0x01, 0xf8, 0x30, 0xdb, 0x1f, 0xcb, 0x94, 0x7e, 0xa5, 0x2d, 0x13, 0x6d, 0x40, 0xbe,
+	0x6b, 0xfd, 0x30, 0xb4, 0x4c, 0x8b, 0x5e, 0x4b, 0x97, 0x7c, 0x00, 0xad, 0xc1, 0x9c, 0xf0, 0x5d,
+	0x7a, 0x24, 0xbf, 0x22, 0xab, 0xcc, 0x46, 0x57, 0x79, 0x1b, 0xe4, 0x87, 0xb1, 0x63, 0x2a, 0x39,
+	0x4e, 0x5d, 0x10, 0xc0, 0x8e, 0xc9, 0x74, 0x8a, 0x75, 0x29, 0x73, 0x42, 0xa7, 0xf8, 0x52, 0x5f,
+	0xc0, 0x4a, 0xc8, 0x7d, 0x19, 0xd0, 0xaf, 0x23, 0x59, 0xa9, 0x84, 0xf7, 0xcc, 0x17, 0xf1, 0xb2,
+	0xf3, 0x29, 0xac, 0xfb, 0xe8, 0x6b, 0x6e, 0x76, 0x9c, 0x78, 0x9f, 0xc0, 0x02, 0x67, 0x32, 0xbc,
+	0x18, 0xcc, 0xf3, 0xef, 0xba, 0xa9, 0x1e, 0x82, 0x12, 0x97, 0x92, 0x3e, 0x3c, 0x81, 0x79, 0xe1,
+	0xbe, 0x7b, 0x53, 0xe2, 0x8c, 0xf9, 0xc2, 0x4e, 0xec, 0x13, 0x8a, 0xad, 0xee, 0x0c, 0x4e, 0xfc,
+	0x39, 0x1d, 0xf4, 0x62, 0x2c, 0x26, 0xbd, 0x58, 0x85, 0xdc, 0xc0, 0xb1, 0x3a, 0x44, 0x0a, 0x89,
+	0x0f, 0xf4, 0x39, 0x14, 0xa9, 0x4d, 0x71, 0xd7, 0x70, 0x87, 0x83, 0x41, 0x77, 0xbc, 0x87, 0x05,
+	0x8e, 0x1d, 0x73, 0x88, 0xed, 0x56, 0x0f, 0x3b, 0x17, 0x84, 0x1a, 0x1d, 0x3c, 0x18, 0xe7, 0x96,
+	0x40, 0xf6, 0xf0, 0xe0, 0xa6, 0xcd, 0x0c, 0x67, 0x66, 0x2e, 0x9a, 0x99, 0x9b, 0x50, 0x30, 0x89,
+	0xdb, 0x71, 0xac, 0x01, 0xb5, 0xec, 0xbe, 0xdc, 0xd3, 0x20, 0x84, 0x14, 0x98, 0xbf, 0x24, 0xa7,
+	0xae, 0x45, 0x89, 0x32, 0x2f, 0x96, 0x2b, 0x3f, 0x99, 0x6a, 0xcb, 0x75, 0x87, 0xc4, 0xa0, 0x56,
+	0x8f, 0x28, 0x0b, 0xbc, 0x69, 0xe4, 0x39, 0xc2, 0xca, 0x59, 0xfd, 0x6b, 0x1a, 0x6e, 0xfb, 0xd1,
+	0x88, 0xb7, 0x91, 0x6f, 0x43, 0x6d, 0xe4, 0xd9, 0xa4, 0xc4, 0x88, 0x09, 0x06, 0x68, 0x1f, 0xd7,
+	0x64, 0x42, 0x5b, 0x99, 0x09, 0x6f, 0xa5, 0x11, 0x4c, 0x67, 0xcf, 0x0c, 0x2a, 0x43, 0xb1, 0xfd,
+	0xb6, 0x55, 0x33, 0x8e, 0x9a, 0x6d, 0xe3, 0xb8, 0xd6, 0x2e, 0xff, 0x0c, 0xad, 0x40, 0xe9, 0xe0,
+	0xf8, 0x8d, 0xd6, 0x32, 0x1a, 0xf5, 0x6f, 0x4f, 0xea, 0xfb, 0xf5, 0xf6, 0xdb, 0x72, 0x8a, 0xb1,
+	0x09, 0xf0, 0x75, 0xb3, 0x71, 0x72, 0x58, 0x2b, 0xa7, 0x51, 0x09, 0x0a, 0x02, 0x69, 0xe9, 0xf5,
+	0xbd, 0x5a, 0x39, 0xa3, 0xbe, 0x82, 0x8d, 0xe4, 0x35, 0x7e, 0x48, 0xab, 0x53, 0x60, 0xad, 0x41,
+	0xf0, 0xd9, 0x9e, 0xdd, 0xed, 0x62, 0x4a, 0x1c, 0xdc, 0xf5, 0xfa, 0xc7, 0xdf, 0x33, 0xb0, 0x14,
+	0x26, 0xc5, 0x7a, 0x08, 0x82, 0x6c, 0x1f, 0xf7, 0x88, 0x4c, 0x3d, 0xfe, 0x1b, 0x55, 0x61, 0xa5,
+	0xe3, 0x49, 0x18, 0x91, 0x20, 0x2d, 0xfb, 0x24, 0x4d, 0x84, 0x8b, 0x35, 0x38, 0x93, 0x9c, 0x52,
+	0x9f, 0x33, 0x3b, 0x4e, 0xa4, 0x53, 0x3a, 0xe6, 0x89, 0xa6, 0x7a, 0x2e, 0x31, 0xd5, 0x05, 0x91,
+	0x27, 0xab, 0x48, 0xc6, 0xbc, 0x40, 0x64, 0x63, 0x92, 0xe4, 0x1d, 0x53, 0x26, 0xe3, 0x82, 0x00,
+	0x76, 0x02, 0xea, 0x7b, 0x56, 0x9f, 0x12, 0x93, 0xe7, 0xe3, 0x58, 0xfd, 0x21, 0x87, 0x78, 0x25,
+	0xf1, 0x5f, 0x5c, 0x7d, 0x5e, 0x56, 0x12, 0x47, 0xa4, 0x7a, 0x49, 0xde, 0x31, 0x15, 0x10, 0xea,
+	0x05, 0xb0, 0x63, 0xfa, 0xe5, 0x5b, 0x08, 0x96, 0xef, 0xd7, 0xb0, 0xda, 0xb3, 0xfa, 0x46, 0x20,
+	0x56, 0x0e, 0xa6, 0x96, 0xad, 0x14, 0x39, 0x13, 0xea, 0x59, 0x7d, 0x3f, 0xf0, 0x3a, 0xa3, 0xa0,
+	0xbb, 0xb0, 0xe8, 0x52, 0x7c, 0x6a, 0x75, 0x2d, 0x7a, 0x6d, 0x9c, 0x11, 0xa2, 0x2c, 0x72, 0xd6,
+	0xa2, 0x07, 0x1e, 0x10, 0xa2, 0xbe, 0x85, 0xf5, 0xd8, 0x7e, 0xca, 0xbc, 0x78, 0x0e, 0x05, 0xdf,
+	0xda, 0xb8, 0xa1, 0x6d, 0x84, 0xd3, 0x23, 0x2c, 0xab, 0x07, 0x05, 0xd4, 0x5d, 0xb8, 0x1d, 0x26,
+	0x87, 0xbb, 0xdb, 0x5d, 0x58, 0x0c, 0x2c, 0xc6, 0xcb, 0x93, 0xa2, 0x0f, 0xd6, 0x4d, 0xf5, 0x3f,
+	0x69, 0xd8, 0x48, 0x56, 0xf2, 0xb1, 0xbd, 0xee, 0x2e, 0x2c, 0xf6, 0xf0, 0x95, 0x81, 0x47, 0xd8,
+	0xea, 0xe2, 0xd3, 0xee, 0xf8, 0xe0, 0x2a, 0xf6, 0xf0, 0x95, 0x36, 0xc6, 0x62, 0x3b, 0x9d, 0x8d,
+	0xef, 0x74, 0x2c, 0xca, 0xb9, 0x78, 0x94, 0xd1, 0x03, 0x28, 0xc7, 0x36, 0x4e, 0xe4, 0x5c, 0xa9,
+	0x13, 0xd9, 0xb5, 0x49, 0xfb, 0x3c, 0x3f, 0x71, 0x9f, 0xef, 0x00, 0xf4, 0xc9, 0x15, 0x35, 0x44,
+	0x1c, 0x44, 0x32, 0xe6, 0x19, 0xd2, 0xe2, 0xb1, 0x58, 0x87, 0xf9, 0x01, 0x21, 0x17, 0x06, 0xa6,
+	0x3c, 0x0f, 0x17, 0xf5, 0x39, 0xf6, 0xa9, 0x51, 0xf5, 0x1f, 0x69, 0xf8, 0x2c, 0x1c, 0xdb, 0x78,
+	0xe7, 0x3c, 0x09, 0x75, 0x4e, 0x6d, 0xda, 0xe6, 0xc7, 0xbb, 0xa7, 0x4f, 0xfb, 0xc8, 0xee, 0x19,
+	0x4b, 0x95, 0x4c, 0x42, 0xaa, 0x74, 0x61, 0x25, 0xc1, 0x60, 0x42, 0x1f, 0x2d, 0x41, 0xa1, 0x51,
+	0xd3, 0x0e, 0x8c, 0xe3, 0x93, 0x56, 0xab, 0xc1, 0x7a, 0xe8, 0x1a, 0x20, 0x0e, 0x1c, 0x6a, 0xbf,
+	0x33, 0xb4, 0xd7, 0x5a, 0xbd, 0xa1, 0xed, 0x36, 0x58, 0x27, 0xad, 0xc0, 0x1a, 0xc7, 0x45, 0xbf,
+	0xd5, 0xda, 0xf5, 0xe6, 0x91, 0xd7, 0x54, 0x9b, 0xb0, 0x39, 0x79, 0xf9, 0x1f, 0xd2, 0x58, 0x77,
+	0xa0, 0xc2, 0x14, 0xb2, 0xac, 0x6a, 0xdb, 0x17, 0xa4, 0x3f, 0xf3, 0x28, 0xf0, 0xdf, 0xb4, 0xa8,
+	0xb3, 0x98, 0xe4, 0xd4, 0x0a, 0x09, 0x37, 0xa8, 0x74, 0xb4, 0x41, 0xdd, 0x01, 0x38, 0x1d, 0x3a,
+	0x7d, 0x49, 0x96, 0x93, 0x80, 0x40, 0x24, 0x79, 0xda, 0x24, 0xb0, 0x05, 0xcb, 0x52, 0x79, 0x6c,
+	0x20, 0x28, 0x09, 0x42, 0xdb, 0x1b, 0x0b, 0xb6, 0x60, 0x59, 0x5a, 0x0a, 0xf0, 0xca, 0xda, 0x10,
+	0x84, 0x10, 0xaf, 0x34, 0x1b, 0xe0, 0x15, 0x85, 0x51, 0x12, 0x84, 0xf6, 0xa4, 0x71, 0x63, 0x61,
+	0xea, 0xb8, 0x91, 0x9f, 0x36, 0x6e, 0x40, 0x74, 0xdc, 0xf8, 0x53, 0x1a, 0x3e, 0x0d, 0x45, 0x3c,
+	0x5e, 0x37, 0xc7, 0xa1, 0xba, 0xf9, 0x6d, 0xbc, 0x6e, 0x26, 0xcb, 0x56, 0x3d, 0xd2, 0x4f, 0x37,
+	0x73, 0xbc, 0x04, 0x14, 0xb7, 0x32, 0xa5, 0x54, 0x0e, 0xeb, 0x47, 0xed, 0xda, 0x7e, 0x39, 0xe5,
+	0x01, 0xbb, 0x27, 0xfa, 0x51, 0x6d, 0xbf, 0x9c, 0x56, 0x8f, 0x44, 0x0f, 0x49, 0x5c, 0xce, 0x87,
+	0x94, 0xc1, 0x2a, 0x20, 0xdd, 0xea, 0xbf, 0x73, 0xc3, 0x77, 0x93, 0x7f, 0xa7, 0x01, 0x7c, 0x38,
+	0x36, 0x57, 0xf8, 0x87, 0x39, 0x1e, 0x78, 0x97, 0x13, 0x81, 0x68, 0x83, 0xeb, 0xd8, 0x69, 0x90,
+	0xb9, 0x69, 0x1c, 0xc8, 0x4e, 0x1d, 0x07, 0x72, 0x91, 0x71, 0x60, 0x43, 0x12, 0x2d, 0xe2, 0xb8,
+	0xa1, 0x49, 0x82, 0x01, 0xbc, 0x92, 0x6c, 0xc7, 0xb1, 0x2f, 0xb9, 0x6f, 0xf3, 0xb2, 0x92, 0x38,
+	0x12, 0xf2, 0x4d, 0x40, 0xa1, 0x59, 0x62, 0x97, 0x43, 0x01, 0x0d, 0x81, 0x59, 0x42, 0x20, 0xd2,
+	0x37, 0x49, 0xf6, 0x67, 0x09, 0x01, 0x08, 0xdf, 0xc4, 0x6f, 0xe6, 0x5b, 0x21, 0x28, 0x4a, 0x1c,
+	0x57, 0xad, 0xc1, 0x4a, 0x28, 0xd8, 0x72, 0xc3, 0xaa, 0x90, 0x63, 0xdb, 0x33, 0xe1, 0x22, 0xe5,
+	0x4b, 0xe8, 0x82, 0x4d, 0xfd, 0x57, 0x1a, 0x36, 0x38, 0x7a, 0xc8, 0xaf, 0x0a, 0xf1, 0x6a, 0x38,
+	0x0a, 0x55, 0xc3, 0xaf, 0x13, 0xf4, 0x4d, 0x90, 0xac, 0x0a, 0xfc, 0xa7, 0x2b, 0x84, 0x3f, 0xa6,
+	0xa0, 0x14, 0xb1, 0x91, 0x50, 0x06, 0xab, 0x50, 0xd6, 0xeb, 0x47, 0x2f, 0x8e, 0xe5, 0x91, 0x61,
+	0x68, 0x2d, 0x76, 0x6c, 0xac, 0xc3, 0x4a, 0x08, 0xf5, 0x26, 0x70, 0x8f, 0x7d, 0xb7, 0xa9, 0xeb,
+	0xcd, 0x37, 0x9c, 0x3d, 0xe3, 0xb3, 0x4b, 0x54, 0xb2, 0x67, 0xd5, 0x06, 0xdc, 0x99, 0x10, 0x83,
+	0x0f, 0x29, 0xa0, 0x5f, 0x80, 0x12, 0xd0, 0x36, 0xf3, 0x29, 0xf2, 0xbf, 0x2c, 0x7c, 0x92, 0x20,
+	0x37, 0xf5, 0x0c, 0x99, 0xfe, 0x24, 0x10, 0x2a, 0x8b, 0x4c, 0xb4, 0x2c, 0x42, 0x89, 0x99, 0x8d,
+	0x24, 0x26, 0x7a, 0x02, 0xb7, 0xd8, 0x31, 0xe1, 0x10, 0x97, 0x1a, 0x03, 0x6c, 0x99, 0xc6, 0x80,
+	0x38, 0x86, 0x89, 0xc7, 0x93, 0x3c, 0x1a, 0x13, 0x5b, 0xd8, 0x32, 0x5b, 0xc4, 0xd9, 0xc7, 0xd7,
+	0xe8, 0x21, 0x04, 0x2e, 0x0b, 0xc6, 0x19, 0xee, 0x50, 0xdb, 0x91, 0xd5, 0x18, 0x98, 0xbd, 0x0e,
+	0x38, 0xce, 0x06, 0x0a, 0x87, 0xb2, 0x76, 0x35, 0x1e, 0xec, 0x44, 0x5d, 0x16, 0x05, 0xe8, 0x4f,
+	0x76, 0xe4, 0xaa, 0x73, 0xce, 0x52, 0x88, 0xcd, 0x60, 0xe3, 0xd1, 0xaa, 0x38, 0x06, 0x75, 0x4c,
+	0x49, 0xf4, 0x98, 0xc9, 0x4f, 0x3d, 0x66, 0x20, 0x7c, 0xcc, 0xb0, 0xca, 0xc5, 0xae, 0x54, 0x5e,
+	0x90, 0x95, 0x8b, 0x5d, 0xa1, 0xf8, 0x53, 0x80, 0xde, 0xb0, 0x4b, 0x2d, 0x1e, 0x2f, 0x39, 0xe5,
+	0x07, 0x10, 0xf4, 0x15, 0x94, 0xbe, 0x1f, 0xf6, 0x06, 0x46, 0x80, 0x49, 0xcc, 0xf7, 0x4b, 0x0c,
+	0x3e, 0xf4, 0x19, 0x11, 0x64, 0x2f, 0xac, 0xfe, 0x85, 0xb2, 0x24, 0x2e, 0x5d, 0xec, 0x37, 0xba,
+	0x07, 0x4b, 0x0e, 0x71, 0x89, 0x33, 0x22, 0xe3, 0x48, 0x95, 0x38, 0x75, 0x51, 0xa2, 0x32, 0x4c,
+	0xec, 0x46, 0xcf, 0x9b, 0x53, 0x07, 0xbb, 0xe7, 0x4a, 0x59, 0xde, 0xe8, 0x19, 0xb2, 0x87, 0xdd,
+	0x73, 0x16, 0xa0, 0x60, 0xef, 0x72, 0x95, 0x65, 0x11, 0xa0, 0x40, 0xf3, 0x72, 0x51, 0x05, 0x16,
+	0xa4, 0x52, 0x57, 0x41, 0x62, 0x8d, 0xe3, 0xef, 0xad, 0xef, 0x20, 0xef, 0x15, 0x2b, 0x9b, 0xc2,
+	0xda, 0xf5, 0xc3, 0x9a, 0xa1, 0x6b, 0x47, 0x2f, 0x82, 0xc5, 0x37, 0x0f, 0x99, 0x7d, 0x8d, 0xd5,
+	0xdb, 0x02, 0x64, 0xdf, 0xd4, 0x6a, 0xaf, 0xca, 0x69, 0x94, 0x87, 0xdc, 0x61, 0xf3, 0xa8, 0xfd,
+	0xb2, 0x9c, 0x41, 0x8b, 0x90, 0x7f, 0xa9, 0xe9, 0x07, 0xc6, 0xdb, 0x9a, 0xa6, 0x97, 0xb3, 0x8c,
+	0x87, 0xff, 0xca, 0x6d, 0xfd, 0x33, 0x05, 0xcb, 0xb1, 0x17, 0xc2, 0x59, 0xa6, 0xc1, 0x15, 0x28,
+	0x71, 0x60, 0xaf, 0xd9, 0x68, 0x68, 0xed, 0x9a, 0xae, 0x35, 0xca, 0x69, 0x26, 0x17, 0xac, 0xf5,
+	0xf2, 0x2d, 0x1f, 0x11, 0xe5, 0x5c, 0x5e, 0x4b, 0xba, 0x9f, 0x3f, 0x88, 0xdd, 0xcf, 0xb7, 0x10,
+	0x82, 0xa5, 0x86, 0xf6, 0xaa, 0x16, 0xe0, 0x7a, 0xc6, 0x9d, 0x60, 0x98, 0x64, 0x7a, 0xbe, 0xfd,
+	0xff, 0x02, 0x94, 0x5b, 0xe3, 0x32, 0x3f, 0x66, 0xab, 0xe8, 0x10, 0xd4, 0x04, 0xf0, 0x5f, 0x63,
+	0x51, 0xe4, 0x35, 0x34, 0xf6, 0xcc, 0x5b, 0xd9, 0x9c, 0xcc, 0x20, 0xcb, 0xba, 0x09, 0xe0, 0xb7,
+	0x9b, 0xa8, 0xc2, 0x58, 0x33, 0x8e, 0x2a, 0x4c, 0xe8, 0x54, 0xbf, 0x87, 0xa5, 0xf0, 0x73, 0x27,
+	0xba, 0x9b, 0xf0, 0xd8, 0x12, 0x7d, 0x26, 0xad, 0x7c, 0x31, 0x9d, 0x49, 0x2a, 0xd7, 0xa1, 0x10,
+	0x78, 0xf7, 0x43, 0x9b, 0x93, 0x9e, 0x71, 0x3c, 0x7f, 0x3f, 0x9f, 0xc2, 0x21, 0x75, 0x62, 0x28,
+	0x47, 0x1f, 0xf3, 0xd0, 0xbd, 0x49, 0x62, 0xa1, 0x27, 0xc2, 0xca, 0x97, 0x37, 0xb1, 0x25, 0x99,
+	0x10, 0x7d, 0x75, 0xb2, 0x89, 0x50, 0xbf, 0x9e, 0x6c, 0x22, 0xd2, 0x9e, 0x7b, 0xb0, 0x9a, 0xf4,
+	0xc2, 0x83, 0x1e, 0xcc, 0xfc, 0xd2, 0x55, 0xd9, 0x9a, 0x85, 0x55, 0x9a, 0xfb, 0x03, 0x94, 0x22,
+	0x6f, 0x06, 0xe8, 0x8b, 0x69, 0x37, 0x43, 0xcf, 0xc8, 0xbd, 0x1b, 0xb8, 0xfc, 0xe5, 0x24, 0xdd,
+	0xf9, 0xa3, 0xcb, 0x99, 0xf2, 0xb8, 0x10, 0x5d, 0xce, 0xd4, 0x27, 0x84, 0x6b, 0x50, 0x26, 0x5d,
+	0xe5, 0xd0, 0xa3, 0xf7, 0xba, 0xf1, 0x56, 0xaa, 0xb3, 0xb2, 0x4b, 0xd3, 0xdf, 0xc3, 0x4a, 0xc2,
+	0xd5, 0x0d, 0xdd, 0x9f, 0x72, 0x5f, 0x08, 0xaf, 0xf3, 0xc1, 0x0c, 0x9c, 0xd2, 0xd6, 0x48, 0xbc,
+	0xf4, 0x24, 0x4c, 0xea, 0xe8, 0xe7, 0xef, 0x73, 0x3f, 0xa9, 0x3c, 0x9a, 0x91, 0xdb, 0x2f, 0xdb,
+	0xc0, 0x90, 0x19, 0x2d, 0xdb, 0xf8, 0xb0, 0x1f, 0x2d, 0xdb, 0xa4, 0x09, 0x75, 0x00, 0xb7, 0x12,
+	0x47, 0x26, 0xb4, 0x35, 0xfb, 0x6c, 0x59, 0x79, 0x38, 0x13, 0xaf, 0xb4, 0x68, 0xc2, 0x72, 0x6c,
+	0x3c, 0x42, 0x5f, 0x4e, 0xd4, 0x10, 0xde, 0xa5, 0xaf, 0x6e, 0xe4, 0x13, 0x56, 0x76, 0x7f, 0xf5,
+	0xdd, 0x2f, 0xdf, 0x59, 0xf4, 0x7c, 0x78, 0x5a, 0xed, 0xd8, 0xbd, 0xc7, 0x67, 0xf6, 0xd5, 0x23,
+	0xbb, 0x4f, 0xc4, 0x5f, 0x7f, 0x8f, 0xf8, 0x1f, 0x7a, 0xee, 0xe3, 0xe0, 0x9f, 0x82, 0xbf, 0xf1,
+	0x3e, 0x4e, 0xe7, 0x38, 0xf9, 0x9b, 0x1f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x59, 0x21, 0x2f, 0x79,
+	0x35, 0x1c, 0x00, 0x00,
 }
