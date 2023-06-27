@@ -3,12 +3,40 @@ syntax = "proto3";
 package pandostat.v1; 
 option go_package = "github.com/fox-one/pando-protos/pandostat/v1;pandostat";
 
-// import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
 
 service PandostatService {
     rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
+    rpc Statistics(StatisticsRequest) returns (StatisticsResponse);
+
+    rpc FswapStatsInfo(FswapStatsInfoRequest) returns (FswapStatsInfoResponse); 
+    rpc FswapAssets(FswapAssetsRequest) returns (FswapAssetsResponse);
+    rpc FswapAssetVolume(FswapAssetVolumeRequest) returns (FswapAssetVolumeResponse); // 7d volume chart data
+    rpc FswapAssetDetail(FswapAssetDetailRequest) returns (FswapAssetDetailResponse);
+    rpc FswapAssetStatistics(FswapAssetStatisticsRequest) returns (FswapAssetStatisticsResponse);
+
+    rpc LeafCollaterals(LeafCollateralsRequest) returns (LeafCollateralsResponse); 
+    rpc LeafCollateralDetail(LeafCollateralDetailRequest) returns (LeafCollateralDetailResponse);
+    rpc LeafCollateralStatistics(LeafCollateralStatisticsRequest) returns (LeafCollateralStatisticsResponse);
+    rpc LeafMintTokenDetail(LeafMintTokenDetailRequest) returns (LeafMintTokenDetailResponse);
+    rpc LeafMintTokenStatistics(LeafMintTokenStatisticsRequest) returns (LeafMintTokenStatisticsResponse);
+
+    rpc RingsAssets(RingsAssetsRequest) returns (RingsAssetsResponse);
+    rpc RingsMarketStatistics(RingsMarketStatisticsRequest) returns (RingsMarketStatisticsResponse);
+    rpc RingsMarketDetail(RingsMarketDetailRequest) returns (RingsMarketDetailResponse);
 }
+
+/* ----------  GENERAL   -----------*/
+
+enum TimeRange {
+    TIME_RANGE_NOT_SET = 0;
+    DAY = 1;
+    WEEK = 2;
+    MONTH = 3;
+    HARF_YEAR = 4;
+    YEAR = 5;
+}
+
 
 message ListAssetsRequest {
     repeated common.v1.Asset assets = 1;
@@ -17,3 +45,278 @@ message ListAssetsRequest {
 message ListAssetsResponse {
     repeated common.v1.Asset assets = 1;
 }
+
+message ChartData {
+    string v = 1;
+    uint32 ts = 2;
+}
+
+enum OverviewChartType {
+    TYPE_NOT_SET = 0;
+    // leaf
+    LEAF_SUPPLY = 1; 
+    LEAF_COLLATERAL = 2;
+    // rings
+    RINGS_SUPPLY = 21;
+    RINGS_BORROW = 22; 
+    // fswap
+    FSWAP_LIQUIDITY = 41; 
+    FSWAP_VOLUME = 42;
+    // lake
+    LAKE_LIQUIDITY = 61;
+    LAKE_VOLUME = 62;
+}
+
+message StatisticsRequest {
+    OverviewChartType type = 1;
+    TimeRange range = 2;
+}
+
+message StatisticsResponse {
+    repeated ChartData data = 1;
+}
+/* ----------  GENERAL   -----------*/
+
+
+
+/* ----------  4SWAP     -----------*/
+message FswapStatsInfoRequest {
+}
+
+message FswapStatsInfoResponse {
+    string volume_24h = 1;
+    string fee_24h = 2;
+    string trades_24h =3;
+    string turn_over_24h = 4;
+}
+
+message FswapAssetsRequest {
+}
+
+message FswapAsset {
+    string id = 1; // asset id
+    string liquidity = 2;
+    string volume = 3;
+    string volume_24h = 4;
+    string volume_7d = 5;
+    string trades = 6;
+}
+
+message FswapAssetsResponse{
+    repeated FswapAsset assets = 1;
+}
+
+message FswapAssetVolumeRequest {
+    string asset_id = 1;
+}
+
+message FswapAssetVolumeResponse {
+    repeated ChartData volumes = 1;
+}
+
+message FswapAssetDetailRequest {
+    string asset_id = 1;    
+}
+
+message FswapAssetDetailResponse {
+    string price = 1;
+    string total_supply = 2;
+    string market_cap = 3;
+    string volume_24h = 4;
+    string trades_24h = 5;
+    string description = 6;
+    string website = 7;
+    uint32 issue_time = 8;
+}
+
+message FswapAssetStatisticsRequest {
+    enum FswapAssetChartType {
+        TYPE_NOT_SET = 0;
+        FSWAP_LIQUIDITY = 1;
+        FSWAP_VOLUME = 2;
+        FSWAP_PRICE = 3;
+    }
+    
+    FswapAssetChartType type = 1;
+    TimeRange range = 2;
+    string asset_id = 3;
+}
+
+message FswapAssetStatisticsResponse {
+    repeated ChartData data = 1;
+}
+/* ----------  4SWAP    -----------*/
+
+
+/* ----------  LEAF     -----------*/
+message LeafCollateralsRequest {
+
+}
+
+message LeafCollateral {
+    string id = 1; // this collateral id
+    string name=2;
+    string collateral_asset_id = 3; // the collateral asset id
+    string debt_asset_id = 4;
+    // supply
+    string total_supply = 5;
+    string supply_24h = 6;
+    string supply_7d = 7;
+    // minted
+    string total_minted = 8;
+    string minted_24h = 9;
+    string minted_7d = 10;
+    // other info
+    string price = 11;
+    string min_collateral_ratio = 12;
+    string stability_fee = 13;
+}
+
+message LeafCollateralsResponse {
+    repeated LeafCollateral collaterals = 1;
+}
+
+message LeafCollateralDetailRequest {
+    string collateral_id = 1;
+}
+
+message LeafCollateralDetailResponse {
+    string price = 1;
+    // supply is deposit asset 
+    string total_supply = 2;
+    string max_available = 3;
+    // minted is debt asset, eg: pUSD Debt 
+    string total_minted = 4;
+    // other info
+    string stability_fee = 5;
+    string collateral_ratio = 6;
+    string min_collateral_ratio = 7;
+    // price oracle
+    string next_price = 8;
+    uint32 peek_at = 9;
+}
+
+message LeafCollateralStatisticsRequest{
+    enum CollateralChartType {
+        TYPE_NOT_SET = 0;
+        LEAF_SUPPLY = 1;
+        LEAF_MAX_AVAILABLE = 2;
+        LEAF_LIQUIDATION_PRICE = 3;
+    }
+    
+    CollateralChartType type = 1;
+    TimeRange range = 2;
+    string collateral_id = 3;
+}
+
+message LeafCollateralStatisticsResponse {
+    repeated ChartData data = 1;
+}
+
+message LeafMintTokenDetailRequest {
+    string asset_id = 1;
+}
+
+message LeafMintTokenDetailResponse {
+    string price = 1;
+    string minted_24h = 2;
+    string burned_24h = 3;
+    string volume_24h = 4;
+
+    string minted_trades_24h = 5;
+    string burned_trades_24h = 6;
+    string volume_trades_24h = 7;
+
+    string description = 8;
+    string website = 9;
+
+    uint32 issue_time = 10;
+}
+
+message LeafMintTokenStatisticsRequest{
+    enum MintTokenChartType {
+        TYPE_NOT_SET = 0;
+        LEAF_MINTED = 1;
+        LEAF_BURNED = 2;
+    }
+    
+    MintTokenChartType type = 1;
+    TimeRange range = 2;
+    string asset_id = 3;
+}
+
+message LeafMintTokenStatisticsResponse {
+    repeated ChartData data = 1;
+}
+/* ----------  LEAF     -----------*/
+
+
+
+/* ----------  RINGS    -----------*/
+message RingsAssetsRequest {
+}
+
+message RingsAsset {
+    string id = 1;
+    string supply_apy = 2;
+    string total_supply = 3;
+    string supply_24h = 4;
+    string supply_7d = 5;
+    string suppliers = 6;
+
+    string borrow_apy = 7;
+    string total_borrow = 8;
+    string borrow_24h = 9;
+    string borrow_7d = 10;
+    string borrowers = 11;
+}
+
+message RingsAssetsResponse {
+    repeated RingsAsset stats = 1;
+}
+
+message RingsMarketStatisticsRequest{
+    enum MarketChartType {
+        TYPE_NOT_SET = 0;
+        RINGS_SUPPLY_APY = 1;
+        RINGS_SUPPLY_VOLUME = 2;
+        RINGS_BORROW_APY = 3;
+        RINGS_BORROW_VOLUME = 4;
+    }
+    
+    MarketChartType type = 1;
+    TimeRange range = 2;
+    string asset_id = 3;
+}
+
+message RingsMarketStatisticsResponse {
+    repeated ChartData data = 1;
+}
+
+message RingsMarketDetailRequest {
+    string asset_id = 1;    
+}
+
+message RingsMarketDetailResponse {
+    string price = 1;
+    string liquidity = 2;
+    string suppliers = 3;
+    string borrowers = 4;
+    string interest_paid_per_day = 5; // Interest Paid/Day
+    string collateral_factor = 6;// 抵押率（即每抵押 1 USD 可以获得 1 * collateral_factor的借贷额度，为0说明不可抵押）
+    string rtoken_minted = 7;
+    string exchange_rate = 8;//兑换率: 1 cToken = 1 * exchange_rate 原asset
+    string description = 9;
+    string website = 10;
+    // interest rate model 
+    string base_rate = 11;
+    string multiplier = 12;
+    string jump_multiplier = 13;
+    string kink = 14;
+    string reserve_factor = 15;
+    // Utilization Rate
+    string total_cash = 16;
+    string total_borrows = 17; // 已借出的量
+    string reserves = 18;
+}
+/* ----------  RINGS    -----------*/
