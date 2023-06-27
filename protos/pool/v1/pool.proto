@@ -113,6 +113,7 @@ message Asset {
   string price_btc = 7;
   int64 order = 8;
   int32 updated_at = 9;
+  string chain_logo = 10;
 }
 
 message ListAssetsResponse {
