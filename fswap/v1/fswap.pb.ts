@@ -650,6 +650,8 @@ export interface Asset {
   price: string;
   displaySymbol: string;
   extra: string;
+  tag: string;
+  priceChange: string;
 }
 
 export interface Pair {
@@ -672,6 +674,9 @@ export interface Pair {
   version: number;
   baseVolume24h: string;
   quoteVolume24h: string;
+  netRor24h: string;
+  netRor7d: string;
+  netRor30d: string;
 }
 
 export interface Deposit {
@@ -987,6 +992,8 @@ export const Asset = {
       price: "",
       displaySymbol: "",
       extra: "",
+      tag: "",
+      priceChange: "",
     };
   },
 
@@ -1023,6 +1030,12 @@ export const Asset = {
     }
     if (msg.extra) {
       writer.writeString(9, msg.extra);
+    }
+    if (msg.tag) {
+      writer.writeString(10, msg.tag);
+    }
+    if (msg.priceChange) {
+      writer.writeString(11, msg.priceChange);
     }
     return writer;
   },
@@ -1068,6 +1081,14 @@ export const Asset = {
         }
         case 9: {
           msg.extra = reader.readString();
+          break;
+        }
+        case 10: {
+          msg.tag = reader.readString();
+          break;
+        }
+        case 11: {
+          msg.priceChange = reader.readString();
           break;
         }
         default: {
@@ -1119,6 +1140,9 @@ export const Pair = {
       version: 0,
       baseVolume24h: "",
       quoteVolume24h: "",
+      netRor24h: "",
+      netRor7d: "",
+      netRor30d: "",
     };
   },
 
@@ -1185,6 +1209,15 @@ export const Pair = {
     }
     if (msg.quoteVolume24h) {
       writer.writeString(19, msg.quoteVolume24h);
+    }
+    if (msg.netRor24h) {
+      writer.writeString(20, msg.netRor24h);
+    }
+    if (msg.netRor7d) {
+      writer.writeString(21, msg.netRor7d);
+    }
+    if (msg.netRor30d) {
+      writer.writeString(22, msg.netRor30d);
     }
     return writer;
   },
@@ -1270,6 +1303,18 @@ export const Pair = {
         }
         case 19: {
           msg.quoteVolume24h = reader.readString();
+          break;
+        }
+        case 20: {
+          msg.netRor24h = reader.readString();
+          break;
+        }
+        case 21: {
+          msg.netRor7d = reader.readString();
+          break;
+        }
+        case 22: {
+          msg.netRor30d = reader.readString();
           break;
         }
         default: {
@@ -3909,6 +3954,8 @@ export const AssetJSON = {
       price: "",
       displaySymbol: "",
       extra: "",
+      tag: "",
+      priceChange: "",
     };
   },
 
@@ -3946,6 +3993,12 @@ export const AssetJSON = {
     }
     if (msg.extra) {
       json.extra = msg.extra;
+    }
+    if (msg.tag) {
+      json.tag = msg.tag;
+    }
+    if (msg.priceChange) {
+      json.priceChange = msg.priceChange;
     }
     return json;
   },
@@ -3992,6 +4045,14 @@ export const AssetJSON = {
     if (_extra) {
       msg.extra = _extra;
     }
+    const _tag = json.tag;
+    if (_tag) {
+      msg.tag = _tag;
+    }
+    const _priceChange = json.priceChange ?? json.price_change;
+    if (_priceChange) {
+      msg.priceChange = _priceChange;
+    }
     return msg;
   },
 };
@@ -4035,6 +4096,9 @@ export const PairJSON = {
       version: 0,
       baseVolume24h: "",
       quoteVolume24h: "",
+      netRor24h: "",
+      netRor7d: "",
+      netRor30d: "",
     };
   },
 
@@ -4099,6 +4163,15 @@ export const PairJSON = {
     }
     if (msg.quoteVolume24h) {
       json.quoteVolume24h = msg.quoteVolume24h;
+    }
+    if (msg.netRor24h) {
+      json.netRor24h = msg.netRor24h;
+    }
+    if (msg.netRor7d) {
+      json.netRor7d = msg.netRor7d;
+    }
+    if (msg.netRor30d) {
+      json.netRor30d = msg.netRor30d;
     }
     return json;
   },
@@ -4183,6 +4256,18 @@ export const PairJSON = {
     const _quoteVolume24h = json.quoteVolume24h ?? json.quote_volume_24h;
     if (_quoteVolume24h) {
       msg.quoteVolume24h = _quoteVolume24h;
+    }
+    const _netRor24h = json.netRor24h ?? json.net_ror_24h;
+    if (_netRor24h) {
+      msg.netRor24h = _netRor24h;
+    }
+    const _netRor7d = json.netRor7d ?? json.net_ror_7d;
+    if (_netRor7d) {
+      msg.netRor7d = _netRor7d;
+    }
+    const _netRor30d = json.netRor30d ?? json.net_ror_30d;
+    if (_netRor30d) {
+      msg.netRor30d = _netRor30d;
     }
     return msg;
   },

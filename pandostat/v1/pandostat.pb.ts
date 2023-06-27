@@ -32,6 +32,174 @@ export async function ListAssets(
   return ListAssetsResponse.decode(response);
 }
 
+export async function Statistics(
+  statisticsRequest: StatisticsRequest,
+  config?: ClientConfiguration
+): Promise<StatisticsResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/Statistics",
+    StatisticsRequest.encode(statisticsRequest),
+    config
+  );
+  return StatisticsResponse.decode(response);
+}
+
+export async function FswapStatsInfo(
+  fswapStatsInfoRequest: FswapStatsInfoRequest,
+  config?: ClientConfiguration
+): Promise<FswapStatsInfoResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/FswapStatsInfo",
+    FswapStatsInfoRequest.encode(fswapStatsInfoRequest),
+    config
+  );
+  return FswapStatsInfoResponse.decode(response);
+}
+
+export async function FswapAssets(
+  fswapAssetsRequest: FswapAssetsRequest,
+  config?: ClientConfiguration
+): Promise<FswapAssetsResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/FswapAssets",
+    FswapAssetsRequest.encode(fswapAssetsRequest),
+    config
+  );
+  return FswapAssetsResponse.decode(response);
+}
+
+export async function FswapAssetVolume(
+  fswapAssetVolumeRequest: FswapAssetVolumeRequest,
+  config?: ClientConfiguration
+): Promise<FswapAssetVolumeResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/FswapAssetVolume",
+    FswapAssetVolumeRequest.encode(fswapAssetVolumeRequest),
+    config
+  );
+  return FswapAssetVolumeResponse.decode(response);
+}
+
+export async function FswapAssetDetail(
+  fswapAssetDetailRequest: FswapAssetDetailRequest,
+  config?: ClientConfiguration
+): Promise<FswapAssetDetailResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/FswapAssetDetail",
+    FswapAssetDetailRequest.encode(fswapAssetDetailRequest),
+    config
+  );
+  return FswapAssetDetailResponse.decode(response);
+}
+
+export async function FswapAssetStatistics(
+  fswapAssetStatisticsRequest: FswapAssetStatisticsRequest,
+  config?: ClientConfiguration
+): Promise<FswapAssetStatisticsResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/FswapAssetStatistics",
+    FswapAssetStatisticsRequest.encode(fswapAssetStatisticsRequest),
+    config
+  );
+  return FswapAssetStatisticsResponse.decode(response);
+}
+
+export async function LeafCollaterals(
+  leafCollateralsRequest: LeafCollateralsRequest,
+  config?: ClientConfiguration
+): Promise<LeafCollateralsResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/LeafCollaterals",
+    LeafCollateralsRequest.encode(leafCollateralsRequest),
+    config
+  );
+  return LeafCollateralsResponse.decode(response);
+}
+
+export async function LeafCollateralDetail(
+  leafCollateralDetailRequest: LeafCollateralDetailRequest,
+  config?: ClientConfiguration
+): Promise<LeafCollateralDetailResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/LeafCollateralDetail",
+    LeafCollateralDetailRequest.encode(leafCollateralDetailRequest),
+    config
+  );
+  return LeafCollateralDetailResponse.decode(response);
+}
+
+export async function LeafCollateralStatistics(
+  leafCollateralStatisticsRequest: LeafCollateralStatisticsRequest,
+  config?: ClientConfiguration
+): Promise<LeafCollateralStatisticsResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/LeafCollateralStatistics",
+    LeafCollateralStatisticsRequest.encode(leafCollateralStatisticsRequest),
+    config
+  );
+  return LeafCollateralStatisticsResponse.decode(response);
+}
+
+export async function LeafMintTokenDetail(
+  leafMintTokenDetailRequest: LeafMintTokenDetailRequest,
+  config?: ClientConfiguration
+): Promise<LeafMintTokenDetailResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/LeafMintTokenDetail",
+    LeafMintTokenDetailRequest.encode(leafMintTokenDetailRequest),
+    config
+  );
+  return LeafMintTokenDetailResponse.decode(response);
+}
+
+export async function LeafMintTokenStatistics(
+  leafMintTokenStatisticsRequest: LeafMintTokenStatisticsRequest,
+  config?: ClientConfiguration
+): Promise<LeafMintTokenStatisticsResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/LeafMintTokenStatistics",
+    LeafMintTokenStatisticsRequest.encode(leafMintTokenStatisticsRequest),
+    config
+  );
+  return LeafMintTokenStatisticsResponse.decode(response);
+}
+
+export async function RingsAssets(
+  ringsAssetsRequest: RingsAssetsRequest,
+  config?: ClientConfiguration
+): Promise<RingsAssetsResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/RingsAssets",
+    RingsAssetsRequest.encode(ringsAssetsRequest),
+    config
+  );
+  return RingsAssetsResponse.decode(response);
+}
+
+export async function RingsMarketStatistics(
+  ringsMarketStatisticsRequest: RingsMarketStatisticsRequest,
+  config?: ClientConfiguration
+): Promise<RingsMarketStatisticsResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/RingsMarketStatistics",
+    RingsMarketStatisticsRequest.encode(ringsMarketStatisticsRequest),
+    config
+  );
+  return RingsMarketStatisticsResponse.decode(response);
+}
+
+export async function RingsMarketDetail(
+  ringsMarketDetailRequest: RingsMarketDetailRequest,
+  config?: ClientConfiguration
+): Promise<RingsMarketDetailResponse> {
+  const response = await PBrequest(
+    "/pandostat.v1.PandostatService/RingsMarketDetail",
+    RingsMarketDetailRequest.encode(ringsMarketDetailRequest),
+    config
+  );
+  return RingsMarketDetailResponse.decode(response);
+}
+
 //========================================//
 //      PandostatService JSON Client      //
 //========================================//
@@ -48,6 +216,174 @@ export async function ListAssetsJSON(
   return ListAssetsResponseJSON.decode(response);
 }
 
+export async function StatisticsJSON(
+  statisticsRequest: StatisticsRequest,
+  config?: ClientConfiguration
+): Promise<StatisticsResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/Statistics",
+    StatisticsRequestJSON.encode(statisticsRequest),
+    config
+  );
+  return StatisticsResponseJSON.decode(response);
+}
+
+export async function FswapStatsInfoJSON(
+  fswapStatsInfoRequest: FswapStatsInfoRequest,
+  config?: ClientConfiguration
+): Promise<FswapStatsInfoResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/FswapStatsInfo",
+    FswapStatsInfoRequestJSON.encode(fswapStatsInfoRequest),
+    config
+  );
+  return FswapStatsInfoResponseJSON.decode(response);
+}
+
+export async function FswapAssetsJSON(
+  fswapAssetsRequest: FswapAssetsRequest,
+  config?: ClientConfiguration
+): Promise<FswapAssetsResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/FswapAssets",
+    FswapAssetsRequestJSON.encode(fswapAssetsRequest),
+    config
+  );
+  return FswapAssetsResponseJSON.decode(response);
+}
+
+export async function FswapAssetVolumeJSON(
+  fswapAssetVolumeRequest: FswapAssetVolumeRequest,
+  config?: ClientConfiguration
+): Promise<FswapAssetVolumeResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/FswapAssetVolume",
+    FswapAssetVolumeRequestJSON.encode(fswapAssetVolumeRequest),
+    config
+  );
+  return FswapAssetVolumeResponseJSON.decode(response);
+}
+
+export async function FswapAssetDetailJSON(
+  fswapAssetDetailRequest: FswapAssetDetailRequest,
+  config?: ClientConfiguration
+): Promise<FswapAssetDetailResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/FswapAssetDetail",
+    FswapAssetDetailRequestJSON.encode(fswapAssetDetailRequest),
+    config
+  );
+  return FswapAssetDetailResponseJSON.decode(response);
+}
+
+export async function FswapAssetStatisticsJSON(
+  fswapAssetStatisticsRequest: FswapAssetStatisticsRequest,
+  config?: ClientConfiguration
+): Promise<FswapAssetStatisticsResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/FswapAssetStatistics",
+    FswapAssetStatisticsRequestJSON.encode(fswapAssetStatisticsRequest),
+    config
+  );
+  return FswapAssetStatisticsResponseJSON.decode(response);
+}
+
+export async function LeafCollateralsJSON(
+  leafCollateralsRequest: LeafCollateralsRequest,
+  config?: ClientConfiguration
+): Promise<LeafCollateralsResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/LeafCollaterals",
+    LeafCollateralsRequestJSON.encode(leafCollateralsRequest),
+    config
+  );
+  return LeafCollateralsResponseJSON.decode(response);
+}
+
+export async function LeafCollateralDetailJSON(
+  leafCollateralDetailRequest: LeafCollateralDetailRequest,
+  config?: ClientConfiguration
+): Promise<LeafCollateralDetailResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/LeafCollateralDetail",
+    LeafCollateralDetailRequestJSON.encode(leafCollateralDetailRequest),
+    config
+  );
+  return LeafCollateralDetailResponseJSON.decode(response);
+}
+
+export async function LeafCollateralStatisticsJSON(
+  leafCollateralStatisticsRequest: LeafCollateralStatisticsRequest,
+  config?: ClientConfiguration
+): Promise<LeafCollateralStatisticsResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/LeafCollateralStatistics",
+    LeafCollateralStatisticsRequestJSON.encode(leafCollateralStatisticsRequest),
+    config
+  );
+  return LeafCollateralStatisticsResponseJSON.decode(response);
+}
+
+export async function LeafMintTokenDetailJSON(
+  leafMintTokenDetailRequest: LeafMintTokenDetailRequest,
+  config?: ClientConfiguration
+): Promise<LeafMintTokenDetailResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/LeafMintTokenDetail",
+    LeafMintTokenDetailRequestJSON.encode(leafMintTokenDetailRequest),
+    config
+  );
+  return LeafMintTokenDetailResponseJSON.decode(response);
+}
+
+export async function LeafMintTokenStatisticsJSON(
+  leafMintTokenStatisticsRequest: LeafMintTokenStatisticsRequest,
+  config?: ClientConfiguration
+): Promise<LeafMintTokenStatisticsResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/LeafMintTokenStatistics",
+    LeafMintTokenStatisticsRequestJSON.encode(leafMintTokenStatisticsRequest),
+    config
+  );
+  return LeafMintTokenStatisticsResponseJSON.decode(response);
+}
+
+export async function RingsAssetsJSON(
+  ringsAssetsRequest: RingsAssetsRequest,
+  config?: ClientConfiguration
+): Promise<RingsAssetsResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/RingsAssets",
+    RingsAssetsRequestJSON.encode(ringsAssetsRequest),
+    config
+  );
+  return RingsAssetsResponseJSON.decode(response);
+}
+
+export async function RingsMarketStatisticsJSON(
+  ringsMarketStatisticsRequest: RingsMarketStatisticsRequest,
+  config?: ClientConfiguration
+): Promise<RingsMarketStatisticsResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/RingsMarketStatistics",
+    RingsMarketStatisticsRequestJSON.encode(ringsMarketStatisticsRequest),
+    config
+  );
+  return RingsMarketStatisticsResponseJSON.decode(response);
+}
+
+export async function RingsMarketDetailJSON(
+  ringsMarketDetailRequest: RingsMarketDetailRequest,
+  config?: ClientConfiguration
+): Promise<RingsMarketDetailResponse> {
+  const response = await JSONrequest(
+    "/pandostat.v1.PandostatService/RingsMarketDetail",
+    RingsMarketDetailRequestJSON.encode(ringsMarketDetailRequest),
+    config
+  );
+  return RingsMarketDetailResponseJSON.decode(response);
+}
+
 //========================================//
 //            PandostatService            //
 //========================================//
@@ -57,6 +393,66 @@ export interface PandostatService<Context = unknown> {
     listAssetsRequest: ListAssetsRequest,
     context: Context
   ) => Promise<ListAssetsResponse> | ListAssetsResponse;
+  Statistics: (
+    statisticsRequest: StatisticsRequest,
+    context: Context
+  ) => Promise<StatisticsResponse> | StatisticsResponse;
+  FswapStatsInfo: (
+    fswapStatsInfoRequest: FswapStatsInfoRequest,
+    context: Context
+  ) => Promise<FswapStatsInfoResponse> | FswapStatsInfoResponse;
+  FswapAssets: (
+    fswapAssetsRequest: FswapAssetsRequest,
+    context: Context
+  ) => Promise<FswapAssetsResponse> | FswapAssetsResponse;
+  FswapAssetVolume: (
+    fswapAssetVolumeRequest: FswapAssetVolumeRequest,
+    context: Context
+  ) => Promise<FswapAssetVolumeResponse> | FswapAssetVolumeResponse;
+  FswapAssetDetail: (
+    fswapAssetDetailRequest: FswapAssetDetailRequest,
+    context: Context
+  ) => Promise<FswapAssetDetailResponse> | FswapAssetDetailResponse;
+  FswapAssetStatistics: (
+    fswapAssetStatisticsRequest: FswapAssetStatisticsRequest,
+    context: Context
+  ) => Promise<FswapAssetStatisticsResponse> | FswapAssetStatisticsResponse;
+  LeafCollaterals: (
+    leafCollateralsRequest: LeafCollateralsRequest,
+    context: Context
+  ) => Promise<LeafCollateralsResponse> | LeafCollateralsResponse;
+  LeafCollateralDetail: (
+    leafCollateralDetailRequest: LeafCollateralDetailRequest,
+    context: Context
+  ) => Promise<LeafCollateralDetailResponse> | LeafCollateralDetailResponse;
+  LeafCollateralStatistics: (
+    leafCollateralStatisticsRequest: LeafCollateralStatisticsRequest,
+    context: Context
+  ) =>
+    | Promise<LeafCollateralStatisticsResponse>
+    | LeafCollateralStatisticsResponse;
+  LeafMintTokenDetail: (
+    leafMintTokenDetailRequest: LeafMintTokenDetailRequest,
+    context: Context
+  ) => Promise<LeafMintTokenDetailResponse> | LeafMintTokenDetailResponse;
+  LeafMintTokenStatistics: (
+    leafMintTokenStatisticsRequest: LeafMintTokenStatisticsRequest,
+    context: Context
+  ) =>
+    | Promise<LeafMintTokenStatisticsResponse>
+    | LeafMintTokenStatisticsResponse;
+  RingsAssets: (
+    ringsAssetsRequest: RingsAssetsRequest,
+    context: Context
+  ) => Promise<RingsAssetsResponse> | RingsAssetsResponse;
+  RingsMarketStatistics: (
+    ringsMarketStatisticsRequest: RingsMarketStatisticsRequest,
+    context: Context
+  ) => Promise<RingsMarketStatisticsResponse> | RingsMarketStatisticsResponse;
+  RingsMarketDetail: (
+    ringsMarketDetailRequest: RingsMarketDetailRequest,
+    context: Context
+  ) => Promise<RingsMarketDetailResponse> | RingsMarketDetailResponse;
 }
 
 export function createPandostatService<Context>(
@@ -71,6 +467,162 @@ export function createPandostatService<Context>(
         input: { protobuf: ListAssetsRequest, json: ListAssetsRequestJSON },
         output: { protobuf: ListAssetsResponse, json: ListAssetsResponseJSON },
       },
+      Statistics: {
+        name: "Statistics",
+        handler: service.Statistics,
+        input: { protobuf: StatisticsRequest, json: StatisticsRequestJSON },
+        output: { protobuf: StatisticsResponse, json: StatisticsResponseJSON },
+      },
+      FswapStatsInfo: {
+        name: "FswapStatsInfo",
+        handler: service.FswapStatsInfo,
+        input: {
+          protobuf: FswapStatsInfoRequest,
+          json: FswapStatsInfoRequestJSON,
+        },
+        output: {
+          protobuf: FswapStatsInfoResponse,
+          json: FswapStatsInfoResponseJSON,
+        },
+      },
+      FswapAssets: {
+        name: "FswapAssets",
+        handler: service.FswapAssets,
+        input: { protobuf: FswapAssetsRequest, json: FswapAssetsRequestJSON },
+        output: {
+          protobuf: FswapAssetsResponse,
+          json: FswapAssetsResponseJSON,
+        },
+      },
+      FswapAssetVolume: {
+        name: "FswapAssetVolume",
+        handler: service.FswapAssetVolume,
+        input: {
+          protobuf: FswapAssetVolumeRequest,
+          json: FswapAssetVolumeRequestJSON,
+        },
+        output: {
+          protobuf: FswapAssetVolumeResponse,
+          json: FswapAssetVolumeResponseJSON,
+        },
+      },
+      FswapAssetDetail: {
+        name: "FswapAssetDetail",
+        handler: service.FswapAssetDetail,
+        input: {
+          protobuf: FswapAssetDetailRequest,
+          json: FswapAssetDetailRequestJSON,
+        },
+        output: {
+          protobuf: FswapAssetDetailResponse,
+          json: FswapAssetDetailResponseJSON,
+        },
+      },
+      FswapAssetStatistics: {
+        name: "FswapAssetStatistics",
+        handler: service.FswapAssetStatistics,
+        input: {
+          protobuf: FswapAssetStatisticsRequest,
+          json: FswapAssetStatisticsRequestJSON,
+        },
+        output: {
+          protobuf: FswapAssetStatisticsResponse,
+          json: FswapAssetStatisticsResponseJSON,
+        },
+      },
+      LeafCollaterals: {
+        name: "LeafCollaterals",
+        handler: service.LeafCollaterals,
+        input: {
+          protobuf: LeafCollateralsRequest,
+          json: LeafCollateralsRequestJSON,
+        },
+        output: {
+          protobuf: LeafCollateralsResponse,
+          json: LeafCollateralsResponseJSON,
+        },
+      },
+      LeafCollateralDetail: {
+        name: "LeafCollateralDetail",
+        handler: service.LeafCollateralDetail,
+        input: {
+          protobuf: LeafCollateralDetailRequest,
+          json: LeafCollateralDetailRequestJSON,
+        },
+        output: {
+          protobuf: LeafCollateralDetailResponse,
+          json: LeafCollateralDetailResponseJSON,
+        },
+      },
+      LeafCollateralStatistics: {
+        name: "LeafCollateralStatistics",
+        handler: service.LeafCollateralStatistics,
+        input: {
+          protobuf: LeafCollateralStatisticsRequest,
+          json: LeafCollateralStatisticsRequestJSON,
+        },
+        output: {
+          protobuf: LeafCollateralStatisticsResponse,
+          json: LeafCollateralStatisticsResponseJSON,
+        },
+      },
+      LeafMintTokenDetail: {
+        name: "LeafMintTokenDetail",
+        handler: service.LeafMintTokenDetail,
+        input: {
+          protobuf: LeafMintTokenDetailRequest,
+          json: LeafMintTokenDetailRequestJSON,
+        },
+        output: {
+          protobuf: LeafMintTokenDetailResponse,
+          json: LeafMintTokenDetailResponseJSON,
+        },
+      },
+      LeafMintTokenStatistics: {
+        name: "LeafMintTokenStatistics",
+        handler: service.LeafMintTokenStatistics,
+        input: {
+          protobuf: LeafMintTokenStatisticsRequest,
+          json: LeafMintTokenStatisticsRequestJSON,
+        },
+        output: {
+          protobuf: LeafMintTokenStatisticsResponse,
+          json: LeafMintTokenStatisticsResponseJSON,
+        },
+      },
+      RingsAssets: {
+        name: "RingsAssets",
+        handler: service.RingsAssets,
+        input: { protobuf: RingsAssetsRequest, json: RingsAssetsRequestJSON },
+        output: {
+          protobuf: RingsAssetsResponse,
+          json: RingsAssetsResponseJSON,
+        },
+      },
+      RingsMarketStatistics: {
+        name: "RingsMarketStatistics",
+        handler: service.RingsMarketStatistics,
+        input: {
+          protobuf: RingsMarketStatisticsRequest,
+          json: RingsMarketStatisticsRequestJSON,
+        },
+        output: {
+          protobuf: RingsMarketStatisticsResponse,
+          json: RingsMarketStatisticsResponseJSON,
+        },
+      },
+      RingsMarketDetail: {
+        name: "RingsMarketDetail",
+        handler: service.RingsMarketDetail,
+        input: {
+          protobuf: RingsMarketDetailRequest,
+          json: RingsMarketDetailRequestJSON,
+        },
+        output: {
+          protobuf: RingsMarketDetailResponse,
+          json: RingsMarketDetailResponseJSON,
+        },
+      },
     },
   } as const;
 }
@@ -78,6 +630,25 @@ export function createPandostatService<Context>(
 //========================================//
 //                 Types                  //
 //========================================//
+
+export type TimeRange =
+  | "TIME_RANGE_NOT_SET"
+  | "DAY"
+  | "WEEK"
+  | "MONTH"
+  | "HARF_YEAR"
+  | "YEAR";
+
+export type OverviewChartType =
+  | "TYPE_NOT_SET"
+  | "LEAF_SUPPLY"
+  | "LEAF_COLLATERAL"
+  | "RINGS_SUPPLY"
+  | "RINGS_BORROW"
+  | "FSWAP_LIQUIDITY"
+  | "FSWAP_VOLUME"
+  | "LAKE_LIQUIDITY"
+  | "LAKE_VOLUME";
 
 export interface ListAssetsRequest {
   assets: Asset[];
@@ -87,9 +658,445 @@ export interface ListAssetsResponse {
   assets: Asset[];
 }
 
+export interface ChartData {
+  v: string;
+  ts: number;
+}
+
+export interface StatisticsRequest {
+  type: OverviewChartType;
+  range: TimeRange;
+}
+
+export interface StatisticsResponse {
+  data: ChartData[];
+}
+
+/**
+ * ----------  4SWAP     -----------
+ */
+export interface FswapStatsInfoRequest {}
+
+export interface FswapStatsInfoResponse {
+  volume24h: string;
+  fee24h: string;
+  trades24h: string;
+  turnOver24h: string;
+}
+
+export interface FswapAssetsRequest {}
+
+export interface FswapAsset {
+  id: string;
+  liquidity: string;
+  volume: string;
+  volume24h: string;
+  volume7d: string;
+  trades: string;
+}
+
+export interface FswapAssetsResponse {
+  assets: FswapAsset[];
+}
+
+export interface FswapAssetVolumeRequest {
+  assetId: string;
+}
+
+export interface FswapAssetVolumeResponse {
+  volumes: ChartData[];
+}
+
+export interface FswapAssetDetailRequest {
+  assetId: string;
+}
+
+export interface FswapAssetDetailResponse {
+  price: string;
+  totalSupply: string;
+  marketCap: string;
+  volume24h: string;
+  trades24h: string;
+  description: string;
+  website: string;
+  issueTime: number;
+}
+
+export interface FswapAssetStatisticsRequest {
+  type: FswapAssetStatisticsRequest.FswapAssetChartType;
+  range: TimeRange;
+  assetId: string;
+}
+
+export declare namespace FswapAssetStatisticsRequest {
+  export type FswapAssetChartType =
+    | "TYPE_NOT_SET"
+    | "FSWAP_LIQUIDITY"
+    | "FSWAP_VOLUME"
+    | "FSWAP_PRICE";
+}
+
+export interface FswapAssetStatisticsResponse {
+  data: ChartData[];
+}
+
+/**
+ * ----------  LEAF     -----------
+ */
+export interface LeafCollateralsRequest {}
+
+export interface LeafCollateral {
+  id: string;
+  name: string;
+  collateralAssetId: string;
+  debtAssetId: string;
+  /**
+   * supply
+   */
+  totalSupply: string;
+  supply24h: string;
+  supply7d: string;
+  /**
+   * minted
+   */
+  totalMinted: string;
+  minted24h: string;
+  minted7d: string;
+  /**
+   * other info
+   */
+  price: string;
+  minCollateralRatio: string;
+  stabilityFee: string;
+}
+
+export interface LeafCollateralsResponse {
+  collaterals: LeafCollateral[];
+}
+
+export interface LeafCollateralDetailRequest {
+  collateralId: string;
+}
+
+export interface LeafCollateralDetailResponse {
+  price: string;
+  /**
+   * supply is deposit asset
+   */
+  totalSupply: string;
+  maxAvailable: string;
+  /**
+   * minted is debt asset, eg: pUSD Debt
+   */
+  totalMinted: string;
+  /**
+   * other info
+   */
+  stabilityFee: string;
+  collateralRatio: string;
+  minCollateralRatio: string;
+  /**
+   * price oracle
+   */
+  nextPrice: string;
+  peekAt: number;
+}
+
+export interface LeafCollateralStatisticsRequest {
+  type: LeafCollateralStatisticsRequest.CollateralChartType;
+  range: TimeRange;
+  collateralId: string;
+}
+
+export declare namespace LeafCollateralStatisticsRequest {
+  export type CollateralChartType =
+    | "TYPE_NOT_SET"
+    | "LEAF_SUPPLY"
+    | "LEAF_MAX_AVAILABLE"
+    | "LEAF_LIQUIDATION_PRICE";
+}
+
+export interface LeafCollateralStatisticsResponse {
+  data: ChartData[];
+}
+
+export interface LeafMintTokenDetailRequest {
+  assetId: string;
+}
+
+export interface LeafMintTokenDetailResponse {
+  price: string;
+  minted24h: string;
+  burned24h: string;
+  volume24h: string;
+  mintedTrades24h: string;
+  burnedTrades24h: string;
+  volumeTrades24h: string;
+  description: string;
+  website: string;
+  issueTime: number;
+}
+
+export interface LeafMintTokenStatisticsRequest {
+  type: LeafMintTokenStatisticsRequest.MintTokenChartType;
+  range: TimeRange;
+  assetId: string;
+}
+
+export declare namespace LeafMintTokenStatisticsRequest {
+  export type MintTokenChartType =
+    | "TYPE_NOT_SET"
+    | "LEAF_MINTED"
+    | "LEAF_BURNED";
+}
+
+export interface LeafMintTokenStatisticsResponse {
+  data: ChartData[];
+}
+
+/**
+ * ----------  RINGS    -----------
+ */
+export interface RingsAssetsRequest {}
+
+export interface RingsAsset {
+  id: string;
+  supplyApy: string;
+  totalSupply: string;
+  supply24h: string;
+  supply7d: string;
+  suppliers: string;
+  borrowApy: string;
+  totalBorrow: string;
+  borrow24h: string;
+  borrow7d: string;
+  borrowers: string;
+}
+
+export interface RingsAssetsResponse {
+  stats: RingsAsset[];
+}
+
+export interface RingsMarketStatisticsRequest {
+  type: RingsMarketStatisticsRequest.MarketChartType;
+  range: TimeRange;
+  assetId: string;
+}
+
+export declare namespace RingsMarketStatisticsRequest {
+  export type MarketChartType =
+    | "TYPE_NOT_SET"
+    | "RINGS_SUPPLY_APY"
+    | "RINGS_SUPPLY_VOLUME"
+    | "RINGS_BORROW_APY"
+    | "RINGS_BORROW_VOLUME";
+}
+
+export interface RingsMarketStatisticsResponse {
+  data: ChartData[];
+}
+
+export interface RingsMarketDetailRequest {
+  assetId: string;
+}
+
+export interface RingsMarketDetailResponse {
+  price: string;
+  liquidity: string;
+  suppliers: string;
+  borrowers: string;
+  interestPaidPerDay: string;
+  collateralFactor: string;
+  rtokenMinted: string;
+  exchangeRate: string;
+  description: string;
+  website: string;
+  /**
+   * interest rate model
+   */
+  baseRate: string;
+  multiplier: string;
+  jumpMultiplier: string;
+  kink: string;
+  reserveFactor: string;
+  /**
+   * Utilization Rate
+   */
+  totalCash: string;
+  totalBorrows: string;
+  reserves: string;
+}
+
 //========================================//
 //        Protobuf Encode / Decode        //
 //========================================//
+
+export const TimeRange = {
+  TIME_RANGE_NOT_SET: "TIME_RANGE_NOT_SET",
+  DAY: "DAY",
+  WEEK: "WEEK",
+  MONTH: "MONTH",
+  HARF_YEAR: "HARF_YEAR",
+  YEAR: "YEAR",
+  /**
+   * @private
+   */
+  _fromInt: function (i: number): TimeRange {
+    switch (i) {
+      case 0: {
+        return "TIME_RANGE_NOT_SET";
+      }
+      case 1: {
+        return "DAY";
+      }
+      case 2: {
+        return "WEEK";
+      }
+      case 3: {
+        return "MONTH";
+      }
+      case 4: {
+        return "HARF_YEAR";
+      }
+      case 5: {
+        return "YEAR";
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as TimeRange;
+      }
+    }
+  },
+  /**
+   * @private
+   */
+  _toInt: function (i: TimeRange): number {
+    switch (i) {
+      case "TIME_RANGE_NOT_SET": {
+        return 0;
+      }
+      case "DAY": {
+        return 1;
+      }
+      case "WEEK": {
+        return 2;
+      }
+      case "MONTH": {
+        return 3;
+      }
+      case "HARF_YEAR": {
+        return 4;
+      }
+      case "YEAR": {
+        return 5;
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as number;
+      }
+    }
+  },
+} as const;
+
+export const OverviewChartType = {
+  TYPE_NOT_SET: "TYPE_NOT_SET",
+  /**
+   * leaf
+   */
+  LEAF_SUPPLY: "LEAF_SUPPLY",
+  LEAF_COLLATERAL: "LEAF_COLLATERAL",
+  /**
+   * rings
+   */
+  RINGS_SUPPLY: "RINGS_SUPPLY",
+  RINGS_BORROW: "RINGS_BORROW",
+  /**
+   * fswap
+   */
+  FSWAP_LIQUIDITY: "FSWAP_LIQUIDITY",
+  FSWAP_VOLUME: "FSWAP_VOLUME",
+  /**
+   * lake
+   */
+  LAKE_LIQUIDITY: "LAKE_LIQUIDITY",
+  LAKE_VOLUME: "LAKE_VOLUME",
+  /**
+   * @private
+   */
+  _fromInt: function (i: number): OverviewChartType {
+    switch (i) {
+      case 0: {
+        return "TYPE_NOT_SET";
+      }
+      case 1: {
+        return "LEAF_SUPPLY";
+      }
+      case 2: {
+        return "LEAF_COLLATERAL";
+      }
+      case 21: {
+        return "RINGS_SUPPLY";
+      }
+      case 22: {
+        return "RINGS_BORROW";
+      }
+      case 41: {
+        return "FSWAP_LIQUIDITY";
+      }
+      case 42: {
+        return "FSWAP_VOLUME";
+      }
+      case 61: {
+        return "LAKE_LIQUIDITY";
+      }
+      case 62: {
+        return "LAKE_VOLUME";
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as OverviewChartType;
+      }
+    }
+  },
+  /**
+   * @private
+   */
+  _toInt: function (i: OverviewChartType): number {
+    switch (i) {
+      case "TYPE_NOT_SET": {
+        return 0;
+      }
+      case "LEAF_SUPPLY": {
+        return 1;
+      }
+      case "LEAF_COLLATERAL": {
+        return 2;
+      }
+      case "RINGS_SUPPLY": {
+        return 21;
+      }
+      case "RINGS_BORROW": {
+        return 22;
+      }
+      case "FSWAP_LIQUIDITY": {
+        return 41;
+      }
+      case "FSWAP_VOLUME": {
+        return 42;
+      }
+      case "LAKE_LIQUIDITY": {
+        return 61;
+      }
+      case "LAKE_VOLUME": {
+        return 62;
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as number;
+      }
+    }
+  },
+} as const;
 
 export const ListAssetsRequest = {
   /**
@@ -229,9 +1236,3149 @@ export const ListAssetsResponse = {
   },
 };
 
+export const ChartData = {
+  /**
+   * Serializes ChartData to protobuf.
+   */
+  encode: function (msg: Partial<ChartData>): Uint8Array {
+    return ChartData._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ChartData from protobuf.
+   */
+  decode: function (bytes: ByteSource): ChartData {
+    return ChartData._readMessage(
+      ChartData.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes ChartData with all fields set to their default value.
+   */
+  initialize: function (): ChartData {
+    return {
+      v: "",
+      ts: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ChartData>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.v) {
+      writer.writeString(1, msg.v);
+    }
+    if (msg.ts) {
+      writer.writeUint32(2, msg.ts);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: ChartData, reader: BinaryReader): ChartData {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.v = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.ts = reader.readUint32();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const StatisticsRequest = {
+  /**
+   * Serializes StatisticsRequest to protobuf.
+   */
+  encode: function (msg: Partial<StatisticsRequest>): Uint8Array {
+    return StatisticsRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes StatisticsRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): StatisticsRequest {
+    return StatisticsRequest._readMessage(
+      StatisticsRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes StatisticsRequest with all fields set to their default value.
+   */
+  initialize: function (): StatisticsRequest {
+    return {
+      type: OverviewChartType._fromInt(0),
+      range: TimeRange._fromInt(0),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<StatisticsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.type && OverviewChartType._toInt(msg.type)) {
+      writer.writeEnum(1, OverviewChartType._toInt(msg.type));
+    }
+    if (msg.range && TimeRange._toInt(msg.range)) {
+      writer.writeEnum(2, TimeRange._toInt(msg.range));
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: StatisticsRequest,
+    reader: BinaryReader
+  ): StatisticsRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.type = OverviewChartType._fromInt(reader.readEnum());
+          break;
+        }
+        case 2: {
+          msg.range = TimeRange._fromInt(reader.readEnum());
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const StatisticsResponse = {
+  /**
+   * Serializes StatisticsResponse to protobuf.
+   */
+  encode: function (msg: Partial<StatisticsResponse>): Uint8Array {
+    return StatisticsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes StatisticsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): StatisticsResponse {
+    return StatisticsResponse._readMessage(
+      StatisticsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes StatisticsResponse with all fields set to their default value.
+   */
+  initialize: function (): StatisticsResponse {
+    return {
+      data: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<StatisticsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.data?.length) {
+      writer.writeRepeatedMessage(1, msg.data as any, ChartData._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: StatisticsResponse,
+    reader: BinaryReader
+  ): StatisticsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = ChartData.initialize();
+          reader.readMessage(m, ChartData._readMessage);
+          msg.data.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapStatsInfoRequest = {
+  /**
+   * Serializes FswapStatsInfoRequest to protobuf.
+   */
+  encode: function (_msg?: Partial<FswapStatsInfoRequest>): Uint8Array {
+    return new Uint8Array();
+  },
+
+  /**
+   * Deserializes FswapStatsInfoRequest from protobuf.
+   */
+  decode: function (_bytes?: ByteSource): FswapStatsInfoRequest {
+    return {};
+  },
+
+  /**
+   * Initializes FswapStatsInfoRequest with all fields set to their default value.
+   */
+  initialize: function (): FswapStatsInfoRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<FswapStatsInfoRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    _msg: FswapStatsInfoRequest,
+    _reader: BinaryReader
+  ): FswapStatsInfoRequest {
+    return _msg;
+  },
+};
+
+export const FswapStatsInfoResponse = {
+  /**
+   * Serializes FswapStatsInfoResponse to protobuf.
+   */
+  encode: function (msg: Partial<FswapStatsInfoResponse>): Uint8Array {
+    return FswapStatsInfoResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FswapStatsInfoResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): FswapStatsInfoResponse {
+    return FswapStatsInfoResponse._readMessage(
+      FswapStatsInfoResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FswapStatsInfoResponse with all fields set to their default value.
+   */
+  initialize: function (): FswapStatsInfoResponse {
+    return {
+      volume24h: "",
+      fee24h: "",
+      trades24h: "",
+      turnOver24h: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapStatsInfoResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.volume24h) {
+      writer.writeString(1, msg.volume24h);
+    }
+    if (msg.fee24h) {
+      writer.writeString(2, msg.fee24h);
+    }
+    if (msg.trades24h) {
+      writer.writeString(3, msg.trades24h);
+    }
+    if (msg.turnOver24h) {
+      writer.writeString(4, msg.turnOver24h);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapStatsInfoResponse,
+    reader: BinaryReader
+  ): FswapStatsInfoResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.volume24h = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.fee24h = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.trades24h = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.turnOver24h = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetsRequest = {
+  /**
+   * Serializes FswapAssetsRequest to protobuf.
+   */
+  encode: function (_msg?: Partial<FswapAssetsRequest>): Uint8Array {
+    return new Uint8Array();
+  },
+
+  /**
+   * Deserializes FswapAssetsRequest from protobuf.
+   */
+  decode: function (_bytes?: ByteSource): FswapAssetsRequest {
+    return {};
+  },
+
+  /**
+   * Initializes FswapAssetsRequest with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetsRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<FswapAssetsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    _msg: FswapAssetsRequest,
+    _reader: BinaryReader
+  ): FswapAssetsRequest {
+    return _msg;
+  },
+};
+
+export const FswapAsset = {
+  /**
+   * Serializes FswapAsset to protobuf.
+   */
+  encode: function (msg: Partial<FswapAsset>): Uint8Array {
+    return FswapAsset._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FswapAsset from protobuf.
+   */
+  decode: function (bytes: ByteSource): FswapAsset {
+    return FswapAsset._readMessage(
+      FswapAsset.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FswapAsset with all fields set to their default value.
+   */
+  initialize: function (): FswapAsset {
+    return {
+      id: "",
+      liquidity: "",
+      volume: "",
+      volume24h: "",
+      volume7d: "",
+      trades: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAsset>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.id) {
+      writer.writeString(1, msg.id);
+    }
+    if (msg.liquidity) {
+      writer.writeString(2, msg.liquidity);
+    }
+    if (msg.volume) {
+      writer.writeString(3, msg.volume);
+    }
+    if (msg.volume24h) {
+      writer.writeString(4, msg.volume24h);
+    }
+    if (msg.volume7d) {
+      writer.writeString(5, msg.volume7d);
+    }
+    if (msg.trades) {
+      writer.writeString(6, msg.trades);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: FswapAsset, reader: BinaryReader): FswapAsset {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.liquidity = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.volume = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.volume24h = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.volume7d = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.trades = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetsResponse = {
+  /**
+   * Serializes FswapAssetsResponse to protobuf.
+   */
+  encode: function (msg: Partial<FswapAssetsResponse>): Uint8Array {
+    return FswapAssetsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FswapAssetsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): FswapAssetsResponse {
+    return FswapAssetsResponse._readMessage(
+      FswapAssetsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetsResponse with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetsResponse {
+    return {
+      assets: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.assets?.length) {
+      writer.writeRepeatedMessage(
+        1,
+        msg.assets as any,
+        FswapAsset._writeMessage
+      );
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetsResponse,
+    reader: BinaryReader
+  ): FswapAssetsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = FswapAsset.initialize();
+          reader.readMessage(m, FswapAsset._readMessage);
+          msg.assets.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetVolumeRequest = {
+  /**
+   * Serializes FswapAssetVolumeRequest to protobuf.
+   */
+  encode: function (msg: Partial<FswapAssetVolumeRequest>): Uint8Array {
+    return FswapAssetVolumeRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FswapAssetVolumeRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): FswapAssetVolumeRequest {
+    return FswapAssetVolumeRequest._readMessage(
+      FswapAssetVolumeRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetVolumeRequest with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetVolumeRequest {
+    return {
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetVolumeRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.assetId) {
+      writer.writeString(1, msg.assetId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetVolumeRequest,
+    reader: BinaryReader
+  ): FswapAssetVolumeRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetVolumeResponse = {
+  /**
+   * Serializes FswapAssetVolumeResponse to protobuf.
+   */
+  encode: function (msg: Partial<FswapAssetVolumeResponse>): Uint8Array {
+    return FswapAssetVolumeResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FswapAssetVolumeResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): FswapAssetVolumeResponse {
+    return FswapAssetVolumeResponse._readMessage(
+      FswapAssetVolumeResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetVolumeResponse with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetVolumeResponse {
+    return {
+      volumes: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetVolumeResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.volumes?.length) {
+      writer.writeRepeatedMessage(
+        1,
+        msg.volumes as any,
+        ChartData._writeMessage
+      );
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetVolumeResponse,
+    reader: BinaryReader
+  ): FswapAssetVolumeResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = ChartData.initialize();
+          reader.readMessage(m, ChartData._readMessage);
+          msg.volumes.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetDetailRequest = {
+  /**
+   * Serializes FswapAssetDetailRequest to protobuf.
+   */
+  encode: function (msg: Partial<FswapAssetDetailRequest>): Uint8Array {
+    return FswapAssetDetailRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FswapAssetDetailRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): FswapAssetDetailRequest {
+    return FswapAssetDetailRequest._readMessage(
+      FswapAssetDetailRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetDetailRequest with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetDetailRequest {
+    return {
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetDetailRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.assetId) {
+      writer.writeString(1, msg.assetId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetDetailRequest,
+    reader: BinaryReader
+  ): FswapAssetDetailRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetDetailResponse = {
+  /**
+   * Serializes FswapAssetDetailResponse to protobuf.
+   */
+  encode: function (msg: Partial<FswapAssetDetailResponse>): Uint8Array {
+    return FswapAssetDetailResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FswapAssetDetailResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): FswapAssetDetailResponse {
+    return FswapAssetDetailResponse._readMessage(
+      FswapAssetDetailResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetDetailResponse with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetDetailResponse {
+    return {
+      price: "",
+      totalSupply: "",
+      marketCap: "",
+      volume24h: "",
+      trades24h: "",
+      description: "",
+      website: "",
+      issueTime: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetDetailResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.price) {
+      writer.writeString(1, msg.price);
+    }
+    if (msg.totalSupply) {
+      writer.writeString(2, msg.totalSupply);
+    }
+    if (msg.marketCap) {
+      writer.writeString(3, msg.marketCap);
+    }
+    if (msg.volume24h) {
+      writer.writeString(4, msg.volume24h);
+    }
+    if (msg.trades24h) {
+      writer.writeString(5, msg.trades24h);
+    }
+    if (msg.description) {
+      writer.writeString(6, msg.description);
+    }
+    if (msg.website) {
+      writer.writeString(7, msg.website);
+    }
+    if (msg.issueTime) {
+      writer.writeUint32(8, msg.issueTime);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetDetailResponse,
+    reader: BinaryReader
+  ): FswapAssetDetailResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.price = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.totalSupply = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.marketCap = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.volume24h = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.trades24h = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.description = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.website = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.issueTime = reader.readUint32();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetStatisticsRequest = {
+  /**
+   * Serializes FswapAssetStatisticsRequest to protobuf.
+   */
+  encode: function (msg: Partial<FswapAssetStatisticsRequest>): Uint8Array {
+    return FswapAssetStatisticsRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FswapAssetStatisticsRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): FswapAssetStatisticsRequest {
+    return FswapAssetStatisticsRequest._readMessage(
+      FswapAssetStatisticsRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetStatisticsRequest with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetStatisticsRequest {
+    return {
+      type: FswapAssetStatisticsRequest.FswapAssetChartType._fromInt(0),
+      range: TimeRange._fromInt(0),
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetStatisticsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (
+      msg.type &&
+      FswapAssetStatisticsRequest.FswapAssetChartType._toInt(msg.type)
+    ) {
+      writer.writeEnum(
+        1,
+        FswapAssetStatisticsRequest.FswapAssetChartType._toInt(msg.type)
+      );
+    }
+    if (msg.range && TimeRange._toInt(msg.range)) {
+      writer.writeEnum(2, TimeRange._toInt(msg.range));
+    }
+    if (msg.assetId) {
+      writer.writeString(3, msg.assetId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetStatisticsRequest,
+    reader: BinaryReader
+  ): FswapAssetStatisticsRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.type = FswapAssetStatisticsRequest.FswapAssetChartType._fromInt(
+            reader.readEnum()
+          );
+          break;
+        }
+        case 2: {
+          msg.range = TimeRange._fromInt(reader.readEnum());
+          break;
+        }
+        case 3: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+
+  FswapAssetChartType: {
+    TYPE_NOT_SET: "TYPE_NOT_SET",
+    FSWAP_LIQUIDITY: "FSWAP_LIQUIDITY",
+    FSWAP_VOLUME: "FSWAP_VOLUME",
+    FSWAP_PRICE: "FSWAP_PRICE",
+    /**
+     * @private
+     */
+    _fromInt: function (
+      i: number
+    ): FswapAssetStatisticsRequest.FswapAssetChartType {
+      switch (i) {
+        case 0: {
+          return "TYPE_NOT_SET";
+        }
+        case 1: {
+          return "FSWAP_LIQUIDITY";
+        }
+        case 2: {
+          return "FSWAP_VOLUME";
+        }
+        case 3: {
+          return "FSWAP_PRICE";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as FswapAssetStatisticsRequest.FswapAssetChartType;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (
+      i: FswapAssetStatisticsRequest.FswapAssetChartType
+    ): number {
+      switch (i) {
+        case "TYPE_NOT_SET": {
+          return 0;
+        }
+        case "FSWAP_LIQUIDITY": {
+          return 1;
+        }
+        case "FSWAP_VOLUME": {
+          return 2;
+        }
+        case "FSWAP_PRICE": {
+          return 3;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
+export const FswapAssetStatisticsResponse = {
+  /**
+   * Serializes FswapAssetStatisticsResponse to protobuf.
+   */
+  encode: function (msg: Partial<FswapAssetStatisticsResponse>): Uint8Array {
+    return FswapAssetStatisticsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes FswapAssetStatisticsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): FswapAssetStatisticsResponse {
+    return FswapAssetStatisticsResponse._readMessage(
+      FswapAssetStatisticsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetStatisticsResponse with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetStatisticsResponse {
+    return {
+      data: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetStatisticsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.data?.length) {
+      writer.writeRepeatedMessage(1, msg.data as any, ChartData._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetStatisticsResponse,
+    reader: BinaryReader
+  ): FswapAssetStatisticsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = ChartData.initialize();
+          reader.readMessage(m, ChartData._readMessage);
+          msg.data.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafCollateralsRequest = {
+  /**
+   * Serializes LeafCollateralsRequest to protobuf.
+   */
+  encode: function (_msg?: Partial<LeafCollateralsRequest>): Uint8Array {
+    return new Uint8Array();
+  },
+
+  /**
+   * Deserializes LeafCollateralsRequest from protobuf.
+   */
+  decode: function (_bytes?: ByteSource): LeafCollateralsRequest {
+    return {};
+  },
+
+  /**
+   * Initializes LeafCollateralsRequest with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralsRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<LeafCollateralsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    _msg: LeafCollateralsRequest,
+    _reader: BinaryReader
+  ): LeafCollateralsRequest {
+    return _msg;
+  },
+};
+
+export const LeafCollateral = {
+  /**
+   * Serializes LeafCollateral to protobuf.
+   */
+  encode: function (msg: Partial<LeafCollateral>): Uint8Array {
+    return LeafCollateral._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LeafCollateral from protobuf.
+   */
+  decode: function (bytes: ByteSource): LeafCollateral {
+    return LeafCollateral._readMessage(
+      LeafCollateral.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateral with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateral {
+    return {
+      id: "",
+      name: "",
+      collateralAssetId: "",
+      debtAssetId: "",
+      totalSupply: "",
+      supply24h: "",
+      supply7d: "",
+      totalMinted: "",
+      minted24h: "",
+      minted7d: "",
+      price: "",
+      minCollateralRatio: "",
+      stabilityFee: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateral>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.id) {
+      writer.writeString(1, msg.id);
+    }
+    if (msg.name) {
+      writer.writeString(2, msg.name);
+    }
+    if (msg.collateralAssetId) {
+      writer.writeString(3, msg.collateralAssetId);
+    }
+    if (msg.debtAssetId) {
+      writer.writeString(4, msg.debtAssetId);
+    }
+    if (msg.totalSupply) {
+      writer.writeString(5, msg.totalSupply);
+    }
+    if (msg.supply24h) {
+      writer.writeString(6, msg.supply24h);
+    }
+    if (msg.supply7d) {
+      writer.writeString(7, msg.supply7d);
+    }
+    if (msg.totalMinted) {
+      writer.writeString(8, msg.totalMinted);
+    }
+    if (msg.minted24h) {
+      writer.writeString(9, msg.minted24h);
+    }
+    if (msg.minted7d) {
+      writer.writeString(10, msg.minted7d);
+    }
+    if (msg.price) {
+      writer.writeString(11, msg.price);
+    }
+    if (msg.minCollateralRatio) {
+      writer.writeString(12, msg.minCollateralRatio);
+    }
+    if (msg.stabilityFee) {
+      writer.writeString(13, msg.stabilityFee);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateral,
+    reader: BinaryReader
+  ): LeafCollateral {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.name = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.collateralAssetId = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.debtAssetId = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.totalSupply = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.supply24h = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.supply7d = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.totalMinted = reader.readString();
+          break;
+        }
+        case 9: {
+          msg.minted24h = reader.readString();
+          break;
+        }
+        case 10: {
+          msg.minted7d = reader.readString();
+          break;
+        }
+        case 11: {
+          msg.price = reader.readString();
+          break;
+        }
+        case 12: {
+          msg.minCollateralRatio = reader.readString();
+          break;
+        }
+        case 13: {
+          msg.stabilityFee = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafCollateralsResponse = {
+  /**
+   * Serializes LeafCollateralsResponse to protobuf.
+   */
+  encode: function (msg: Partial<LeafCollateralsResponse>): Uint8Array {
+    return LeafCollateralsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LeafCollateralsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): LeafCollateralsResponse {
+    return LeafCollateralsResponse._readMessage(
+      LeafCollateralsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateralsResponse with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralsResponse {
+    return {
+      collaterals: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateralsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.collaterals?.length) {
+      writer.writeRepeatedMessage(
+        1,
+        msg.collaterals as any,
+        LeafCollateral._writeMessage
+      );
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralsResponse,
+    reader: BinaryReader
+  ): LeafCollateralsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = LeafCollateral.initialize();
+          reader.readMessage(m, LeafCollateral._readMessage);
+          msg.collaterals.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafCollateralDetailRequest = {
+  /**
+   * Serializes LeafCollateralDetailRequest to protobuf.
+   */
+  encode: function (msg: Partial<LeafCollateralDetailRequest>): Uint8Array {
+    return LeafCollateralDetailRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LeafCollateralDetailRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): LeafCollateralDetailRequest {
+    return LeafCollateralDetailRequest._readMessage(
+      LeafCollateralDetailRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateralDetailRequest with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralDetailRequest {
+    return {
+      collateralId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateralDetailRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.collateralId) {
+      writer.writeString(1, msg.collateralId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralDetailRequest,
+    reader: BinaryReader
+  ): LeafCollateralDetailRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.collateralId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafCollateralDetailResponse = {
+  /**
+   * Serializes LeafCollateralDetailResponse to protobuf.
+   */
+  encode: function (msg: Partial<LeafCollateralDetailResponse>): Uint8Array {
+    return LeafCollateralDetailResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LeafCollateralDetailResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): LeafCollateralDetailResponse {
+    return LeafCollateralDetailResponse._readMessage(
+      LeafCollateralDetailResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateralDetailResponse with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralDetailResponse {
+    return {
+      price: "",
+      totalSupply: "",
+      maxAvailable: "",
+      totalMinted: "",
+      stabilityFee: "",
+      collateralRatio: "",
+      minCollateralRatio: "",
+      nextPrice: "",
+      peekAt: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateralDetailResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.price) {
+      writer.writeString(1, msg.price);
+    }
+    if (msg.totalSupply) {
+      writer.writeString(2, msg.totalSupply);
+    }
+    if (msg.maxAvailable) {
+      writer.writeString(3, msg.maxAvailable);
+    }
+    if (msg.totalMinted) {
+      writer.writeString(4, msg.totalMinted);
+    }
+    if (msg.stabilityFee) {
+      writer.writeString(5, msg.stabilityFee);
+    }
+    if (msg.collateralRatio) {
+      writer.writeString(6, msg.collateralRatio);
+    }
+    if (msg.minCollateralRatio) {
+      writer.writeString(7, msg.minCollateralRatio);
+    }
+    if (msg.nextPrice) {
+      writer.writeString(8, msg.nextPrice);
+    }
+    if (msg.peekAt) {
+      writer.writeUint32(9, msg.peekAt);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralDetailResponse,
+    reader: BinaryReader
+  ): LeafCollateralDetailResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.price = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.totalSupply = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.maxAvailable = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.totalMinted = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.stabilityFee = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.collateralRatio = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.minCollateralRatio = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.nextPrice = reader.readString();
+          break;
+        }
+        case 9: {
+          msg.peekAt = reader.readUint32();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafCollateralStatisticsRequest = {
+  /**
+   * Serializes LeafCollateralStatisticsRequest to protobuf.
+   */
+  encode: function (msg: Partial<LeafCollateralStatisticsRequest>): Uint8Array {
+    return LeafCollateralStatisticsRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LeafCollateralStatisticsRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): LeafCollateralStatisticsRequest {
+    return LeafCollateralStatisticsRequest._readMessage(
+      LeafCollateralStatisticsRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateralStatisticsRequest with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralStatisticsRequest {
+    return {
+      type: LeafCollateralStatisticsRequest.CollateralChartType._fromInt(0),
+      range: TimeRange._fromInt(0),
+      collateralId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateralStatisticsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (
+      msg.type &&
+      LeafCollateralStatisticsRequest.CollateralChartType._toInt(msg.type)
+    ) {
+      writer.writeEnum(
+        1,
+        LeafCollateralStatisticsRequest.CollateralChartType._toInt(msg.type)
+      );
+    }
+    if (msg.range && TimeRange._toInt(msg.range)) {
+      writer.writeEnum(2, TimeRange._toInt(msg.range));
+    }
+    if (msg.collateralId) {
+      writer.writeString(3, msg.collateralId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralStatisticsRequest,
+    reader: BinaryReader
+  ): LeafCollateralStatisticsRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.type =
+            LeafCollateralStatisticsRequest.CollateralChartType._fromInt(
+              reader.readEnum()
+            );
+          break;
+        }
+        case 2: {
+          msg.range = TimeRange._fromInt(reader.readEnum());
+          break;
+        }
+        case 3: {
+          msg.collateralId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+
+  CollateralChartType: {
+    TYPE_NOT_SET: "TYPE_NOT_SET",
+    LEAF_SUPPLY: "LEAF_SUPPLY",
+    LEAF_MAX_AVAILABLE: "LEAF_MAX_AVAILABLE",
+    LEAF_LIQUIDATION_PRICE: "LEAF_LIQUIDATION_PRICE",
+    /**
+     * @private
+     */
+    _fromInt: function (
+      i: number
+    ): LeafCollateralStatisticsRequest.CollateralChartType {
+      switch (i) {
+        case 0: {
+          return "TYPE_NOT_SET";
+        }
+        case 1: {
+          return "LEAF_SUPPLY";
+        }
+        case 2: {
+          return "LEAF_MAX_AVAILABLE";
+        }
+        case 3: {
+          return "LEAF_LIQUIDATION_PRICE";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as LeafCollateralStatisticsRequest.CollateralChartType;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (
+      i: LeafCollateralStatisticsRequest.CollateralChartType
+    ): number {
+      switch (i) {
+        case "TYPE_NOT_SET": {
+          return 0;
+        }
+        case "LEAF_SUPPLY": {
+          return 1;
+        }
+        case "LEAF_MAX_AVAILABLE": {
+          return 2;
+        }
+        case "LEAF_LIQUIDATION_PRICE": {
+          return 3;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
+export const LeafCollateralStatisticsResponse = {
+  /**
+   * Serializes LeafCollateralStatisticsResponse to protobuf.
+   */
+  encode: function (
+    msg: Partial<LeafCollateralStatisticsResponse>
+  ): Uint8Array {
+    return LeafCollateralStatisticsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LeafCollateralStatisticsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): LeafCollateralStatisticsResponse {
+    return LeafCollateralStatisticsResponse._readMessage(
+      LeafCollateralStatisticsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateralStatisticsResponse with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralStatisticsResponse {
+    return {
+      data: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateralStatisticsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.data?.length) {
+      writer.writeRepeatedMessage(1, msg.data as any, ChartData._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralStatisticsResponse,
+    reader: BinaryReader
+  ): LeafCollateralStatisticsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = ChartData.initialize();
+          reader.readMessage(m, ChartData._readMessage);
+          msg.data.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafMintTokenDetailRequest = {
+  /**
+   * Serializes LeafMintTokenDetailRequest to protobuf.
+   */
+  encode: function (msg: Partial<LeafMintTokenDetailRequest>): Uint8Array {
+    return LeafMintTokenDetailRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LeafMintTokenDetailRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): LeafMintTokenDetailRequest {
+    return LeafMintTokenDetailRequest._readMessage(
+      LeafMintTokenDetailRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LeafMintTokenDetailRequest with all fields set to their default value.
+   */
+  initialize: function (): LeafMintTokenDetailRequest {
+    return {
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafMintTokenDetailRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.assetId) {
+      writer.writeString(1, msg.assetId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafMintTokenDetailRequest,
+    reader: BinaryReader
+  ): LeafMintTokenDetailRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafMintTokenDetailResponse = {
+  /**
+   * Serializes LeafMintTokenDetailResponse to protobuf.
+   */
+  encode: function (msg: Partial<LeafMintTokenDetailResponse>): Uint8Array {
+    return LeafMintTokenDetailResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LeafMintTokenDetailResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): LeafMintTokenDetailResponse {
+    return LeafMintTokenDetailResponse._readMessage(
+      LeafMintTokenDetailResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LeafMintTokenDetailResponse with all fields set to their default value.
+   */
+  initialize: function (): LeafMintTokenDetailResponse {
+    return {
+      price: "",
+      minted24h: "",
+      burned24h: "",
+      volume24h: "",
+      mintedTrades24h: "",
+      burnedTrades24h: "",
+      volumeTrades24h: "",
+      description: "",
+      website: "",
+      issueTime: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafMintTokenDetailResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.price) {
+      writer.writeString(1, msg.price);
+    }
+    if (msg.minted24h) {
+      writer.writeString(2, msg.minted24h);
+    }
+    if (msg.burned24h) {
+      writer.writeString(3, msg.burned24h);
+    }
+    if (msg.volume24h) {
+      writer.writeString(4, msg.volume24h);
+    }
+    if (msg.mintedTrades24h) {
+      writer.writeString(5, msg.mintedTrades24h);
+    }
+    if (msg.burnedTrades24h) {
+      writer.writeString(6, msg.burnedTrades24h);
+    }
+    if (msg.volumeTrades24h) {
+      writer.writeString(7, msg.volumeTrades24h);
+    }
+    if (msg.description) {
+      writer.writeString(8, msg.description);
+    }
+    if (msg.website) {
+      writer.writeString(9, msg.website);
+    }
+    if (msg.issueTime) {
+      writer.writeUint32(10, msg.issueTime);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafMintTokenDetailResponse,
+    reader: BinaryReader
+  ): LeafMintTokenDetailResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.price = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.minted24h = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.burned24h = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.volume24h = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.mintedTrades24h = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.burnedTrades24h = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.volumeTrades24h = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.description = reader.readString();
+          break;
+        }
+        case 9: {
+          msg.website = reader.readString();
+          break;
+        }
+        case 10: {
+          msg.issueTime = reader.readUint32();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafMintTokenStatisticsRequest = {
+  /**
+   * Serializes LeafMintTokenStatisticsRequest to protobuf.
+   */
+  encode: function (msg: Partial<LeafMintTokenStatisticsRequest>): Uint8Array {
+    return LeafMintTokenStatisticsRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LeafMintTokenStatisticsRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): LeafMintTokenStatisticsRequest {
+    return LeafMintTokenStatisticsRequest._readMessage(
+      LeafMintTokenStatisticsRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LeafMintTokenStatisticsRequest with all fields set to their default value.
+   */
+  initialize: function (): LeafMintTokenStatisticsRequest {
+    return {
+      type: LeafMintTokenStatisticsRequest.MintTokenChartType._fromInt(0),
+      range: TimeRange._fromInt(0),
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafMintTokenStatisticsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (
+      msg.type &&
+      LeafMintTokenStatisticsRequest.MintTokenChartType._toInt(msg.type)
+    ) {
+      writer.writeEnum(
+        1,
+        LeafMintTokenStatisticsRequest.MintTokenChartType._toInt(msg.type)
+      );
+    }
+    if (msg.range && TimeRange._toInt(msg.range)) {
+      writer.writeEnum(2, TimeRange._toInt(msg.range));
+    }
+    if (msg.assetId) {
+      writer.writeString(3, msg.assetId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafMintTokenStatisticsRequest,
+    reader: BinaryReader
+  ): LeafMintTokenStatisticsRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.type = LeafMintTokenStatisticsRequest.MintTokenChartType._fromInt(
+            reader.readEnum()
+          );
+          break;
+        }
+        case 2: {
+          msg.range = TimeRange._fromInt(reader.readEnum());
+          break;
+        }
+        case 3: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+
+  MintTokenChartType: {
+    TYPE_NOT_SET: "TYPE_NOT_SET",
+    LEAF_MINTED: "LEAF_MINTED",
+    LEAF_BURNED: "LEAF_BURNED",
+    /**
+     * @private
+     */
+    _fromInt: function (
+      i: number
+    ): LeafMintTokenStatisticsRequest.MintTokenChartType {
+      switch (i) {
+        case 0: {
+          return "TYPE_NOT_SET";
+        }
+        case 1: {
+          return "LEAF_MINTED";
+        }
+        case 2: {
+          return "LEAF_BURNED";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as LeafMintTokenStatisticsRequest.MintTokenChartType;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (
+      i: LeafMintTokenStatisticsRequest.MintTokenChartType
+    ): number {
+      switch (i) {
+        case "TYPE_NOT_SET": {
+          return 0;
+        }
+        case "LEAF_MINTED": {
+          return 1;
+        }
+        case "LEAF_BURNED": {
+          return 2;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
+export const LeafMintTokenStatisticsResponse = {
+  /**
+   * Serializes LeafMintTokenStatisticsResponse to protobuf.
+   */
+  encode: function (msg: Partial<LeafMintTokenStatisticsResponse>): Uint8Array {
+    return LeafMintTokenStatisticsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes LeafMintTokenStatisticsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): LeafMintTokenStatisticsResponse {
+    return LeafMintTokenStatisticsResponse._readMessage(
+      LeafMintTokenStatisticsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes LeafMintTokenStatisticsResponse with all fields set to their default value.
+   */
+  initialize: function (): LeafMintTokenStatisticsResponse {
+    return {
+      data: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafMintTokenStatisticsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.data?.length) {
+      writer.writeRepeatedMessage(1, msg.data as any, ChartData._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafMintTokenStatisticsResponse,
+    reader: BinaryReader
+  ): LeafMintTokenStatisticsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = ChartData.initialize();
+          reader.readMessage(m, ChartData._readMessage);
+          msg.data.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const RingsAssetsRequest = {
+  /**
+   * Serializes RingsAssetsRequest to protobuf.
+   */
+  encode: function (_msg?: Partial<RingsAssetsRequest>): Uint8Array {
+    return new Uint8Array();
+  },
+
+  /**
+   * Deserializes RingsAssetsRequest from protobuf.
+   */
+  decode: function (_bytes?: ByteSource): RingsAssetsRequest {
+    return {};
+  },
+
+  /**
+   * Initializes RingsAssetsRequest with all fields set to their default value.
+   */
+  initialize: function (): RingsAssetsRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<RingsAssetsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    _msg: RingsAssetsRequest,
+    _reader: BinaryReader
+  ): RingsAssetsRequest {
+    return _msg;
+  },
+};
+
+export const RingsAsset = {
+  /**
+   * Serializes RingsAsset to protobuf.
+   */
+  encode: function (msg: Partial<RingsAsset>): Uint8Array {
+    return RingsAsset._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes RingsAsset from protobuf.
+   */
+  decode: function (bytes: ByteSource): RingsAsset {
+    return RingsAsset._readMessage(
+      RingsAsset.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes RingsAsset with all fields set to their default value.
+   */
+  initialize: function (): RingsAsset {
+    return {
+      id: "",
+      supplyApy: "",
+      totalSupply: "",
+      supply24h: "",
+      supply7d: "",
+      suppliers: "",
+      borrowApy: "",
+      totalBorrow: "",
+      borrow24h: "",
+      borrow7d: "",
+      borrowers: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsAsset>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.id) {
+      writer.writeString(1, msg.id);
+    }
+    if (msg.supplyApy) {
+      writer.writeString(2, msg.supplyApy);
+    }
+    if (msg.totalSupply) {
+      writer.writeString(3, msg.totalSupply);
+    }
+    if (msg.supply24h) {
+      writer.writeString(4, msg.supply24h);
+    }
+    if (msg.supply7d) {
+      writer.writeString(5, msg.supply7d);
+    }
+    if (msg.suppliers) {
+      writer.writeString(6, msg.suppliers);
+    }
+    if (msg.borrowApy) {
+      writer.writeString(7, msg.borrowApy);
+    }
+    if (msg.totalBorrow) {
+      writer.writeString(8, msg.totalBorrow);
+    }
+    if (msg.borrow24h) {
+      writer.writeString(9, msg.borrow24h);
+    }
+    if (msg.borrow7d) {
+      writer.writeString(10, msg.borrow7d);
+    }
+    if (msg.borrowers) {
+      writer.writeString(11, msg.borrowers);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: RingsAsset, reader: BinaryReader): RingsAsset {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.supplyApy = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.totalSupply = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.supply24h = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.supply7d = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.suppliers = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.borrowApy = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.totalBorrow = reader.readString();
+          break;
+        }
+        case 9: {
+          msg.borrow24h = reader.readString();
+          break;
+        }
+        case 10: {
+          msg.borrow7d = reader.readString();
+          break;
+        }
+        case 11: {
+          msg.borrowers = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const RingsAssetsResponse = {
+  /**
+   * Serializes RingsAssetsResponse to protobuf.
+   */
+  encode: function (msg: Partial<RingsAssetsResponse>): Uint8Array {
+    return RingsAssetsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes RingsAssetsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): RingsAssetsResponse {
+    return RingsAssetsResponse._readMessage(
+      RingsAssetsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes RingsAssetsResponse with all fields set to their default value.
+   */
+  initialize: function (): RingsAssetsResponse {
+    return {
+      stats: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsAssetsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.stats?.length) {
+      writer.writeRepeatedMessage(
+        1,
+        msg.stats as any,
+        RingsAsset._writeMessage
+      );
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsAssetsResponse,
+    reader: BinaryReader
+  ): RingsAssetsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = RingsAsset.initialize();
+          reader.readMessage(m, RingsAsset._readMessage);
+          msg.stats.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const RingsMarketStatisticsRequest = {
+  /**
+   * Serializes RingsMarketStatisticsRequest to protobuf.
+   */
+  encode: function (msg: Partial<RingsMarketStatisticsRequest>): Uint8Array {
+    return RingsMarketStatisticsRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes RingsMarketStatisticsRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): RingsMarketStatisticsRequest {
+    return RingsMarketStatisticsRequest._readMessage(
+      RingsMarketStatisticsRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes RingsMarketStatisticsRequest with all fields set to their default value.
+   */
+  initialize: function (): RingsMarketStatisticsRequest {
+    return {
+      type: RingsMarketStatisticsRequest.MarketChartType._fromInt(0),
+      range: TimeRange._fromInt(0),
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsMarketStatisticsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (
+      msg.type &&
+      RingsMarketStatisticsRequest.MarketChartType._toInt(msg.type)
+    ) {
+      writer.writeEnum(
+        1,
+        RingsMarketStatisticsRequest.MarketChartType._toInt(msg.type)
+      );
+    }
+    if (msg.range && TimeRange._toInt(msg.range)) {
+      writer.writeEnum(2, TimeRange._toInt(msg.range));
+    }
+    if (msg.assetId) {
+      writer.writeString(3, msg.assetId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsMarketStatisticsRequest,
+    reader: BinaryReader
+  ): RingsMarketStatisticsRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.type = RingsMarketStatisticsRequest.MarketChartType._fromInt(
+            reader.readEnum()
+          );
+          break;
+        }
+        case 2: {
+          msg.range = TimeRange._fromInt(reader.readEnum());
+          break;
+        }
+        case 3: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+
+  MarketChartType: {
+    TYPE_NOT_SET: "TYPE_NOT_SET",
+    RINGS_SUPPLY_APY: "RINGS_SUPPLY_APY",
+    RINGS_SUPPLY_VOLUME: "RINGS_SUPPLY_VOLUME",
+    RINGS_BORROW_APY: "RINGS_BORROW_APY",
+    RINGS_BORROW_VOLUME: "RINGS_BORROW_VOLUME",
+    /**
+     * @private
+     */
+    _fromInt: function (
+      i: number
+    ): RingsMarketStatisticsRequest.MarketChartType {
+      switch (i) {
+        case 0: {
+          return "TYPE_NOT_SET";
+        }
+        case 1: {
+          return "RINGS_SUPPLY_APY";
+        }
+        case 2: {
+          return "RINGS_SUPPLY_VOLUME";
+        }
+        case 3: {
+          return "RINGS_BORROW_APY";
+        }
+        case 4: {
+          return "RINGS_BORROW_VOLUME";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as RingsMarketStatisticsRequest.MarketChartType;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: RingsMarketStatisticsRequest.MarketChartType): number {
+      switch (i) {
+        case "TYPE_NOT_SET": {
+          return 0;
+        }
+        case "RINGS_SUPPLY_APY": {
+          return 1;
+        }
+        case "RINGS_SUPPLY_VOLUME": {
+          return 2;
+        }
+        case "RINGS_BORROW_APY": {
+          return 3;
+        }
+        case "RINGS_BORROW_VOLUME": {
+          return 4;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
+export const RingsMarketStatisticsResponse = {
+  /**
+   * Serializes RingsMarketStatisticsResponse to protobuf.
+   */
+  encode: function (msg: Partial<RingsMarketStatisticsResponse>): Uint8Array {
+    return RingsMarketStatisticsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes RingsMarketStatisticsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): RingsMarketStatisticsResponse {
+    return RingsMarketStatisticsResponse._readMessage(
+      RingsMarketStatisticsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes RingsMarketStatisticsResponse with all fields set to their default value.
+   */
+  initialize: function (): RingsMarketStatisticsResponse {
+    return {
+      data: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsMarketStatisticsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.data?.length) {
+      writer.writeRepeatedMessage(1, msg.data as any, ChartData._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsMarketStatisticsResponse,
+    reader: BinaryReader
+  ): RingsMarketStatisticsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = ChartData.initialize();
+          reader.readMessage(m, ChartData._readMessage);
+          msg.data.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const RingsMarketDetailRequest = {
+  /**
+   * Serializes RingsMarketDetailRequest to protobuf.
+   */
+  encode: function (msg: Partial<RingsMarketDetailRequest>): Uint8Array {
+    return RingsMarketDetailRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes RingsMarketDetailRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): RingsMarketDetailRequest {
+    return RingsMarketDetailRequest._readMessage(
+      RingsMarketDetailRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes RingsMarketDetailRequest with all fields set to their default value.
+   */
+  initialize: function (): RingsMarketDetailRequest {
+    return {
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsMarketDetailRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.assetId) {
+      writer.writeString(1, msg.assetId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsMarketDetailRequest,
+    reader: BinaryReader
+  ): RingsMarketDetailRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const RingsMarketDetailResponse = {
+  /**
+   * Serializes RingsMarketDetailResponse to protobuf.
+   */
+  encode: function (msg: Partial<RingsMarketDetailResponse>): Uint8Array {
+    return RingsMarketDetailResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes RingsMarketDetailResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): RingsMarketDetailResponse {
+    return RingsMarketDetailResponse._readMessage(
+      RingsMarketDetailResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes RingsMarketDetailResponse with all fields set to their default value.
+   */
+  initialize: function (): RingsMarketDetailResponse {
+    return {
+      price: "",
+      liquidity: "",
+      suppliers: "",
+      borrowers: "",
+      interestPaidPerDay: "",
+      collateralFactor: "",
+      rtokenMinted: "",
+      exchangeRate: "",
+      description: "",
+      website: "",
+      baseRate: "",
+      multiplier: "",
+      jumpMultiplier: "",
+      kink: "",
+      reserveFactor: "",
+      totalCash: "",
+      totalBorrows: "",
+      reserves: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsMarketDetailResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.price) {
+      writer.writeString(1, msg.price);
+    }
+    if (msg.liquidity) {
+      writer.writeString(2, msg.liquidity);
+    }
+    if (msg.suppliers) {
+      writer.writeString(3, msg.suppliers);
+    }
+    if (msg.borrowers) {
+      writer.writeString(4, msg.borrowers);
+    }
+    if (msg.interestPaidPerDay) {
+      writer.writeString(5, msg.interestPaidPerDay);
+    }
+    if (msg.collateralFactor) {
+      writer.writeString(6, msg.collateralFactor);
+    }
+    if (msg.rtokenMinted) {
+      writer.writeString(7, msg.rtokenMinted);
+    }
+    if (msg.exchangeRate) {
+      writer.writeString(8, msg.exchangeRate);
+    }
+    if (msg.description) {
+      writer.writeString(9, msg.description);
+    }
+    if (msg.website) {
+      writer.writeString(10, msg.website);
+    }
+    if (msg.baseRate) {
+      writer.writeString(11, msg.baseRate);
+    }
+    if (msg.multiplier) {
+      writer.writeString(12, msg.multiplier);
+    }
+    if (msg.jumpMultiplier) {
+      writer.writeString(13, msg.jumpMultiplier);
+    }
+    if (msg.kink) {
+      writer.writeString(14, msg.kink);
+    }
+    if (msg.reserveFactor) {
+      writer.writeString(15, msg.reserveFactor);
+    }
+    if (msg.totalCash) {
+      writer.writeString(16, msg.totalCash);
+    }
+    if (msg.totalBorrows) {
+      writer.writeString(17, msg.totalBorrows);
+    }
+    if (msg.reserves) {
+      writer.writeString(18, msg.reserves);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsMarketDetailResponse,
+    reader: BinaryReader
+  ): RingsMarketDetailResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.price = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.liquidity = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.suppliers = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.borrowers = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.interestPaidPerDay = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.collateralFactor = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.rtokenMinted = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.exchangeRate = reader.readString();
+          break;
+        }
+        case 9: {
+          msg.description = reader.readString();
+          break;
+        }
+        case 10: {
+          msg.website = reader.readString();
+          break;
+        }
+        case 11: {
+          msg.baseRate = reader.readString();
+          break;
+        }
+        case 12: {
+          msg.multiplier = reader.readString();
+          break;
+        }
+        case 13: {
+          msg.jumpMultiplier = reader.readString();
+          break;
+        }
+        case 14: {
+          msg.kink = reader.readString();
+          break;
+        }
+        case 15: {
+          msg.reserveFactor = reader.readString();
+          break;
+        }
+        case 16: {
+          msg.totalCash = reader.readString();
+          break;
+        }
+        case 17: {
+          msg.totalBorrows = reader.readString();
+          break;
+        }
+        case 18: {
+          msg.reserves = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
+
+export const TimeRangeJSON = {
+  TIME_RANGE_NOT_SET: "TIME_RANGE_NOT_SET",
+  DAY: "DAY",
+  WEEK: "WEEK",
+  MONTH: "MONTH",
+  HARF_YEAR: "HARF_YEAR",
+  YEAR: "YEAR",
+  /**
+   * @private
+   */
+  _fromInt: function (i: number): TimeRange {
+    switch (i) {
+      case 0: {
+        return "TIME_RANGE_NOT_SET";
+      }
+      case 1: {
+        return "DAY";
+      }
+      case 2: {
+        return "WEEK";
+      }
+      case 3: {
+        return "MONTH";
+      }
+      case 4: {
+        return "HARF_YEAR";
+      }
+      case 5: {
+        return "YEAR";
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as TimeRange;
+      }
+    }
+  },
+  /**
+   * @private
+   */
+  _toInt: function (i: TimeRange): number {
+    switch (i) {
+      case "TIME_RANGE_NOT_SET": {
+        return 0;
+      }
+      case "DAY": {
+        return 1;
+      }
+      case "WEEK": {
+        return 2;
+      }
+      case "MONTH": {
+        return 3;
+      }
+      case "HARF_YEAR": {
+        return 4;
+      }
+      case "YEAR": {
+        return 5;
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as number;
+      }
+    }
+  },
+} as const;
+
+export const OverviewChartTypeJSON = {
+  TYPE_NOT_SET: "TYPE_NOT_SET",
+  /**
+   * leaf
+   */
+  LEAF_SUPPLY: "LEAF_SUPPLY",
+  LEAF_COLLATERAL: "LEAF_COLLATERAL",
+  /**
+   * rings
+   */
+  RINGS_SUPPLY: "RINGS_SUPPLY",
+  RINGS_BORROW: "RINGS_BORROW",
+  /**
+   * fswap
+   */
+  FSWAP_LIQUIDITY: "FSWAP_LIQUIDITY",
+  FSWAP_VOLUME: "FSWAP_VOLUME",
+  /**
+   * lake
+   */
+  LAKE_LIQUIDITY: "LAKE_LIQUIDITY",
+  LAKE_VOLUME: "LAKE_VOLUME",
+  /**
+   * @private
+   */
+  _fromInt: function (i: number): OverviewChartType {
+    switch (i) {
+      case 0: {
+        return "TYPE_NOT_SET";
+      }
+      case 1: {
+        return "LEAF_SUPPLY";
+      }
+      case 2: {
+        return "LEAF_COLLATERAL";
+      }
+      case 21: {
+        return "RINGS_SUPPLY";
+      }
+      case 22: {
+        return "RINGS_BORROW";
+      }
+      case 41: {
+        return "FSWAP_LIQUIDITY";
+      }
+      case 42: {
+        return "FSWAP_VOLUME";
+      }
+      case 61: {
+        return "LAKE_LIQUIDITY";
+      }
+      case 62: {
+        return "LAKE_VOLUME";
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as OverviewChartType;
+      }
+    }
+  },
+  /**
+   * @private
+   */
+  _toInt: function (i: OverviewChartType): number {
+    switch (i) {
+      case "TYPE_NOT_SET": {
+        return 0;
+      }
+      case "LEAF_SUPPLY": {
+        return 1;
+      }
+      case "LEAF_COLLATERAL": {
+        return 2;
+      }
+      case "RINGS_SUPPLY": {
+        return 21;
+      }
+      case "RINGS_BORROW": {
+        return 22;
+      }
+      case "FSWAP_LIQUIDITY": {
+        return 41;
+      }
+      case "FSWAP_VOLUME": {
+        return 42;
+      }
+      case "LAKE_LIQUIDITY": {
+        return 61;
+      }
+      case "LAKE_VOLUME": {
+        return 62;
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as number;
+      }
+    }
+  },
+} as const;
 
 export const ListAssetsRequestJSON = {
   /**
@@ -346,6 +4493,2630 @@ export const ListAssetsResponseJSON = {
         AssetJSON._readMessage(m, item);
         msg.assets.push(m);
       }
+    }
+    return msg;
+  },
+};
+
+export const ChartDataJSON = {
+  /**
+   * Serializes ChartData to JSON.
+   */
+  encode: function (msg: Partial<ChartData>): string {
+    return JSON.stringify(ChartDataJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ChartData from JSON.
+   */
+  decode: function (json: string): ChartData {
+    return ChartDataJSON._readMessage(
+      ChartDataJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes ChartData with all fields set to their default value.
+   */
+  initialize: function (): ChartData {
+    return {
+      v: "",
+      ts: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<ChartData>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.v) {
+      json.v = msg.v;
+    }
+    if (msg.ts) {
+      json.ts = msg.ts;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: ChartData, json: any): ChartData {
+    const _v = json.v;
+    if (_v) {
+      msg.v = _v;
+    }
+    const _ts = json.ts;
+    if (_ts) {
+      msg.ts = _ts;
+    }
+    return msg;
+  },
+};
+
+export const StatisticsRequestJSON = {
+  /**
+   * Serializes StatisticsRequest to JSON.
+   */
+  encode: function (msg: Partial<StatisticsRequest>): string {
+    return JSON.stringify(StatisticsRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes StatisticsRequest from JSON.
+   */
+  decode: function (json: string): StatisticsRequest {
+    return StatisticsRequestJSON._readMessage(
+      StatisticsRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes StatisticsRequest with all fields set to their default value.
+   */
+  initialize: function (): StatisticsRequest {
+    return {
+      type: OverviewChartType._fromInt(0),
+      range: TimeRange._fromInt(0),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<StatisticsRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.type && OverviewChartTypeJSON._toInt(msg.type)) {
+      json.type = msg.type;
+    }
+    if (msg.range && TimeRangeJSON._toInt(msg.range)) {
+      json.range = msg.range;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: StatisticsRequest,
+    json: any
+  ): StatisticsRequest {
+    const _type = json.type;
+    if (_type) {
+      msg.type = _type;
+    }
+    const _range = json.range;
+    if (_range) {
+      msg.range = _range;
+    }
+    return msg;
+  },
+};
+
+export const StatisticsResponseJSON = {
+  /**
+   * Serializes StatisticsResponse to JSON.
+   */
+  encode: function (msg: Partial<StatisticsResponse>): string {
+    return JSON.stringify(StatisticsResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes StatisticsResponse from JSON.
+   */
+  decode: function (json: string): StatisticsResponse {
+    return StatisticsResponseJSON._readMessage(
+      StatisticsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes StatisticsResponse with all fields set to their default value.
+   */
+  initialize: function (): StatisticsResponse {
+    return {
+      data: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<StatisticsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.data?.length) {
+      json.data = msg.data.map(ChartDataJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: StatisticsResponse,
+    json: any
+  ): StatisticsResponse {
+    const _data = json.data;
+    if (_data) {
+      for (const item of _data) {
+        const m = ChartData.initialize();
+        ChartDataJSON._readMessage(m, item);
+        msg.data.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapStatsInfoRequestJSON = {
+  /**
+   * Serializes FswapStatsInfoRequest to JSON.
+   */
+  encode: function (_msg?: Partial<FswapStatsInfoRequest>): string {
+    return "{}";
+  },
+
+  /**
+   * Deserializes FswapStatsInfoRequest from JSON.
+   */
+  decode: function (_json?: string): FswapStatsInfoRequest {
+    return {};
+  },
+
+  /**
+   * Initializes FswapStatsInfoRequest with all fields set to their default value.
+   */
+  initialize: function (): FswapStatsInfoRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<FswapStatsInfoRequest>
+  ): Record<string, unknown> {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapStatsInfoRequest,
+    _json: any
+  ): FswapStatsInfoRequest {
+    return msg;
+  },
+};
+
+export const FswapStatsInfoResponseJSON = {
+  /**
+   * Serializes FswapStatsInfoResponse to JSON.
+   */
+  encode: function (msg: Partial<FswapStatsInfoResponse>): string {
+    return JSON.stringify(FswapStatsInfoResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FswapStatsInfoResponse from JSON.
+   */
+  decode: function (json: string): FswapStatsInfoResponse {
+    return FswapStatsInfoResponseJSON._readMessage(
+      FswapStatsInfoResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FswapStatsInfoResponse with all fields set to their default value.
+   */
+  initialize: function (): FswapStatsInfoResponse {
+    return {
+      volume24h: "",
+      fee24h: "",
+      trades24h: "",
+      turnOver24h: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapStatsInfoResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.volume24h) {
+      json.volume24h = msg.volume24h;
+    }
+    if (msg.fee24h) {
+      json.fee24h = msg.fee24h;
+    }
+    if (msg.trades24h) {
+      json.trades24h = msg.trades24h;
+    }
+    if (msg.turnOver24h) {
+      json.turnOver24h = msg.turnOver24h;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapStatsInfoResponse,
+    json: any
+  ): FswapStatsInfoResponse {
+    const _volume24h = json.volume24h ?? json.volume_24h;
+    if (_volume24h) {
+      msg.volume24h = _volume24h;
+    }
+    const _fee24h = json.fee24h ?? json.fee_24h;
+    if (_fee24h) {
+      msg.fee24h = _fee24h;
+    }
+    const _trades24h = json.trades24h ?? json.trades_24h;
+    if (_trades24h) {
+      msg.trades24h = _trades24h;
+    }
+    const _turnOver24h = json.turnOver24h ?? json.turn_over_24h;
+    if (_turnOver24h) {
+      msg.turnOver24h = _turnOver24h;
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetsRequestJSON = {
+  /**
+   * Serializes FswapAssetsRequest to JSON.
+   */
+  encode: function (_msg?: Partial<FswapAssetsRequest>): string {
+    return "{}";
+  },
+
+  /**
+   * Deserializes FswapAssetsRequest from JSON.
+   */
+  decode: function (_json?: string): FswapAssetsRequest {
+    return {};
+  },
+
+  /**
+   * Initializes FswapAssetsRequest with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetsRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<FswapAssetsRequest>
+  ): Record<string, unknown> {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetsRequest,
+    _json: any
+  ): FswapAssetsRequest {
+    return msg;
+  },
+};
+
+export const FswapAssetJSON = {
+  /**
+   * Serializes FswapAsset to JSON.
+   */
+  encode: function (msg: Partial<FswapAsset>): string {
+    return JSON.stringify(FswapAssetJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FswapAsset from JSON.
+   */
+  decode: function (json: string): FswapAsset {
+    return FswapAssetJSON._readMessage(
+      FswapAssetJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FswapAsset with all fields set to their default value.
+   */
+  initialize: function (): FswapAsset {
+    return {
+      id: "",
+      liquidity: "",
+      volume: "",
+      volume24h: "",
+      volume7d: "",
+      trades: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<FswapAsset>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json.id = msg.id;
+    }
+    if (msg.liquidity) {
+      json.liquidity = msg.liquidity;
+    }
+    if (msg.volume) {
+      json.volume = msg.volume;
+    }
+    if (msg.volume24h) {
+      json.volume24h = msg.volume24h;
+    }
+    if (msg.volume7d) {
+      json.volume7d = msg.volume7d;
+    }
+    if (msg.trades) {
+      json.trades = msg.trades;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: FswapAsset, json: any): FswapAsset {
+    const _id = json.id;
+    if (_id) {
+      msg.id = _id;
+    }
+    const _liquidity = json.liquidity;
+    if (_liquidity) {
+      msg.liquidity = _liquidity;
+    }
+    const _volume = json.volume;
+    if (_volume) {
+      msg.volume = _volume;
+    }
+    const _volume24h = json.volume24h ?? json.volume_24h;
+    if (_volume24h) {
+      msg.volume24h = _volume24h;
+    }
+    const _volume7d = json.volume7d ?? json.volume_7d;
+    if (_volume7d) {
+      msg.volume7d = _volume7d;
+    }
+    const _trades = json.trades;
+    if (_trades) {
+      msg.trades = _trades;
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetsResponseJSON = {
+  /**
+   * Serializes FswapAssetsResponse to JSON.
+   */
+  encode: function (msg: Partial<FswapAssetsResponse>): string {
+    return JSON.stringify(FswapAssetsResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FswapAssetsResponse from JSON.
+   */
+  decode: function (json: string): FswapAssetsResponse {
+    return FswapAssetsResponseJSON._readMessage(
+      FswapAssetsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetsResponse with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetsResponse {
+    return {
+      assets: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.assets?.length) {
+      json.assets = msg.assets.map(FswapAssetJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetsResponse,
+    json: any
+  ): FswapAssetsResponse {
+    const _assets = json.assets;
+    if (_assets) {
+      for (const item of _assets) {
+        const m = FswapAsset.initialize();
+        FswapAssetJSON._readMessage(m, item);
+        msg.assets.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetVolumeRequestJSON = {
+  /**
+   * Serializes FswapAssetVolumeRequest to JSON.
+   */
+  encode: function (msg: Partial<FswapAssetVolumeRequest>): string {
+    return JSON.stringify(FswapAssetVolumeRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FswapAssetVolumeRequest from JSON.
+   */
+  decode: function (json: string): FswapAssetVolumeRequest {
+    return FswapAssetVolumeRequestJSON._readMessage(
+      FswapAssetVolumeRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetVolumeRequest with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetVolumeRequest {
+    return {
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetVolumeRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetVolumeRequest,
+    json: any
+  ): FswapAssetVolumeRequest {
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetVolumeResponseJSON = {
+  /**
+   * Serializes FswapAssetVolumeResponse to JSON.
+   */
+  encode: function (msg: Partial<FswapAssetVolumeResponse>): string {
+    return JSON.stringify(FswapAssetVolumeResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FswapAssetVolumeResponse from JSON.
+   */
+  decode: function (json: string): FswapAssetVolumeResponse {
+    return FswapAssetVolumeResponseJSON._readMessage(
+      FswapAssetVolumeResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetVolumeResponse with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetVolumeResponse {
+    return {
+      volumes: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetVolumeResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.volumes?.length) {
+      json.volumes = msg.volumes.map(ChartDataJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetVolumeResponse,
+    json: any
+  ): FswapAssetVolumeResponse {
+    const _volumes = json.volumes;
+    if (_volumes) {
+      for (const item of _volumes) {
+        const m = ChartData.initialize();
+        ChartDataJSON._readMessage(m, item);
+        msg.volumes.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetDetailRequestJSON = {
+  /**
+   * Serializes FswapAssetDetailRequest to JSON.
+   */
+  encode: function (msg: Partial<FswapAssetDetailRequest>): string {
+    return JSON.stringify(FswapAssetDetailRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FswapAssetDetailRequest from JSON.
+   */
+  decode: function (json: string): FswapAssetDetailRequest {
+    return FswapAssetDetailRequestJSON._readMessage(
+      FswapAssetDetailRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetDetailRequest with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetDetailRequest {
+    return {
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetDetailRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetDetailRequest,
+    json: any
+  ): FswapAssetDetailRequest {
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetDetailResponseJSON = {
+  /**
+   * Serializes FswapAssetDetailResponse to JSON.
+   */
+  encode: function (msg: Partial<FswapAssetDetailResponse>): string {
+    return JSON.stringify(FswapAssetDetailResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FswapAssetDetailResponse from JSON.
+   */
+  decode: function (json: string): FswapAssetDetailResponse {
+    return FswapAssetDetailResponseJSON._readMessage(
+      FswapAssetDetailResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetDetailResponse with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetDetailResponse {
+    return {
+      price: "",
+      totalSupply: "",
+      marketCap: "",
+      volume24h: "",
+      trades24h: "",
+      description: "",
+      website: "",
+      issueTime: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetDetailResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.price) {
+      json.price = msg.price;
+    }
+    if (msg.totalSupply) {
+      json.totalSupply = msg.totalSupply;
+    }
+    if (msg.marketCap) {
+      json.marketCap = msg.marketCap;
+    }
+    if (msg.volume24h) {
+      json.volume24h = msg.volume24h;
+    }
+    if (msg.trades24h) {
+      json.trades24h = msg.trades24h;
+    }
+    if (msg.description) {
+      json.description = msg.description;
+    }
+    if (msg.website) {
+      json.website = msg.website;
+    }
+    if (msg.issueTime) {
+      json.issueTime = msg.issueTime;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetDetailResponse,
+    json: any
+  ): FswapAssetDetailResponse {
+    const _price = json.price;
+    if (_price) {
+      msg.price = _price;
+    }
+    const _totalSupply = json.totalSupply ?? json.total_supply;
+    if (_totalSupply) {
+      msg.totalSupply = _totalSupply;
+    }
+    const _marketCap = json.marketCap ?? json.market_cap;
+    if (_marketCap) {
+      msg.marketCap = _marketCap;
+    }
+    const _volume24h = json.volume24h ?? json.volume_24h;
+    if (_volume24h) {
+      msg.volume24h = _volume24h;
+    }
+    const _trades24h = json.trades24h ?? json.trades_24h;
+    if (_trades24h) {
+      msg.trades24h = _trades24h;
+    }
+    const _description = json.description;
+    if (_description) {
+      msg.description = _description;
+    }
+    const _website = json.website;
+    if (_website) {
+      msg.website = _website;
+    }
+    const _issueTime = json.issueTime ?? json.issue_time;
+    if (_issueTime) {
+      msg.issueTime = _issueTime;
+    }
+    return msg;
+  },
+};
+
+export const FswapAssetStatisticsRequestJSON = {
+  /**
+   * Serializes FswapAssetStatisticsRequest to JSON.
+   */
+  encode: function (msg: Partial<FswapAssetStatisticsRequest>): string {
+    return JSON.stringify(FswapAssetStatisticsRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FswapAssetStatisticsRequest from JSON.
+   */
+  decode: function (json: string): FswapAssetStatisticsRequest {
+    return FswapAssetStatisticsRequestJSON._readMessage(
+      FswapAssetStatisticsRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetStatisticsRequest with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetStatisticsRequest {
+    return {
+      type: FswapAssetStatisticsRequest.FswapAssetChartType._fromInt(0),
+      range: TimeRange._fromInt(0),
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetStatisticsRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (
+      msg.type &&
+      FswapAssetStatisticsRequestJSON.FswapAssetChartType._toInt(msg.type)
+    ) {
+      json.type = msg.type;
+    }
+    if (msg.range && TimeRangeJSON._toInt(msg.range)) {
+      json.range = msg.range;
+    }
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetStatisticsRequest,
+    json: any
+  ): FswapAssetStatisticsRequest {
+    const _type = json.type;
+    if (_type) {
+      msg.type = _type;
+    }
+    const _range = json.range;
+    if (_range) {
+      msg.range = _range;
+    }
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    return msg;
+  },
+
+  FswapAssetChartType: {
+    TYPE_NOT_SET: "TYPE_NOT_SET",
+    FSWAP_LIQUIDITY: "FSWAP_LIQUIDITY",
+    FSWAP_VOLUME: "FSWAP_VOLUME",
+    FSWAP_PRICE: "FSWAP_PRICE",
+    /**
+     * @private
+     */
+    _fromInt: function (
+      i: number
+    ): FswapAssetStatisticsRequest.FswapAssetChartType {
+      switch (i) {
+        case 0: {
+          return "TYPE_NOT_SET";
+        }
+        case 1: {
+          return "FSWAP_LIQUIDITY";
+        }
+        case 2: {
+          return "FSWAP_VOLUME";
+        }
+        case 3: {
+          return "FSWAP_PRICE";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as FswapAssetStatisticsRequest.FswapAssetChartType;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (
+      i: FswapAssetStatisticsRequest.FswapAssetChartType
+    ): number {
+      switch (i) {
+        case "TYPE_NOT_SET": {
+          return 0;
+        }
+        case "FSWAP_LIQUIDITY": {
+          return 1;
+        }
+        case "FSWAP_VOLUME": {
+          return 2;
+        }
+        case "FSWAP_PRICE": {
+          return 3;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
+export const FswapAssetStatisticsResponseJSON = {
+  /**
+   * Serializes FswapAssetStatisticsResponse to JSON.
+   */
+  encode: function (msg: Partial<FswapAssetStatisticsResponse>): string {
+    return JSON.stringify(FswapAssetStatisticsResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes FswapAssetStatisticsResponse from JSON.
+   */
+  decode: function (json: string): FswapAssetStatisticsResponse {
+    return FswapAssetStatisticsResponseJSON._readMessage(
+      FswapAssetStatisticsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes FswapAssetStatisticsResponse with all fields set to their default value.
+   */
+  initialize: function (): FswapAssetStatisticsResponse {
+    return {
+      data: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<FswapAssetStatisticsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.data?.length) {
+      json.data = msg.data.map(ChartDataJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: FswapAssetStatisticsResponse,
+    json: any
+  ): FswapAssetStatisticsResponse {
+    const _data = json.data;
+    if (_data) {
+      for (const item of _data) {
+        const m = ChartData.initialize();
+        ChartDataJSON._readMessage(m, item);
+        msg.data.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafCollateralsRequestJSON = {
+  /**
+   * Serializes LeafCollateralsRequest to JSON.
+   */
+  encode: function (_msg?: Partial<LeafCollateralsRequest>): string {
+    return "{}";
+  },
+
+  /**
+   * Deserializes LeafCollateralsRequest from JSON.
+   */
+  decode: function (_json?: string): LeafCollateralsRequest {
+    return {};
+  },
+
+  /**
+   * Initializes LeafCollateralsRequest with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralsRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<LeafCollateralsRequest>
+  ): Record<string, unknown> {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralsRequest,
+    _json: any
+  ): LeafCollateralsRequest {
+    return msg;
+  },
+};
+
+export const LeafCollateralJSON = {
+  /**
+   * Serializes LeafCollateral to JSON.
+   */
+  encode: function (msg: Partial<LeafCollateral>): string {
+    return JSON.stringify(LeafCollateralJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes LeafCollateral from JSON.
+   */
+  decode: function (json: string): LeafCollateral {
+    return LeafCollateralJSON._readMessage(
+      LeafCollateralJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateral with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateral {
+    return {
+      id: "",
+      name: "",
+      collateralAssetId: "",
+      debtAssetId: "",
+      totalSupply: "",
+      supply24h: "",
+      supply7d: "",
+      totalMinted: "",
+      minted24h: "",
+      minted7d: "",
+      price: "",
+      minCollateralRatio: "",
+      stabilityFee: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateral>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json.id = msg.id;
+    }
+    if (msg.name) {
+      json.name = msg.name;
+    }
+    if (msg.collateralAssetId) {
+      json.collateralAssetId = msg.collateralAssetId;
+    }
+    if (msg.debtAssetId) {
+      json.debtAssetId = msg.debtAssetId;
+    }
+    if (msg.totalSupply) {
+      json.totalSupply = msg.totalSupply;
+    }
+    if (msg.supply24h) {
+      json.supply24h = msg.supply24h;
+    }
+    if (msg.supply7d) {
+      json.supply7d = msg.supply7d;
+    }
+    if (msg.totalMinted) {
+      json.totalMinted = msg.totalMinted;
+    }
+    if (msg.minted24h) {
+      json.minted24h = msg.minted24h;
+    }
+    if (msg.minted7d) {
+      json.minted7d = msg.minted7d;
+    }
+    if (msg.price) {
+      json.price = msg.price;
+    }
+    if (msg.minCollateralRatio) {
+      json.minCollateralRatio = msg.minCollateralRatio;
+    }
+    if (msg.stabilityFee) {
+      json.stabilityFee = msg.stabilityFee;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: LeafCollateral, json: any): LeafCollateral {
+    const _id = json.id;
+    if (_id) {
+      msg.id = _id;
+    }
+    const _name = json.name;
+    if (_name) {
+      msg.name = _name;
+    }
+    const _collateralAssetId =
+      json.collateralAssetId ?? json.collateral_asset_id;
+    if (_collateralAssetId) {
+      msg.collateralAssetId = _collateralAssetId;
+    }
+    const _debtAssetId = json.debtAssetId ?? json.debt_asset_id;
+    if (_debtAssetId) {
+      msg.debtAssetId = _debtAssetId;
+    }
+    const _totalSupply = json.totalSupply ?? json.total_supply;
+    if (_totalSupply) {
+      msg.totalSupply = _totalSupply;
+    }
+    const _supply24h = json.supply24h ?? json.supply_24h;
+    if (_supply24h) {
+      msg.supply24h = _supply24h;
+    }
+    const _supply7d = json.supply7d ?? json.supply_7d;
+    if (_supply7d) {
+      msg.supply7d = _supply7d;
+    }
+    const _totalMinted = json.totalMinted ?? json.total_minted;
+    if (_totalMinted) {
+      msg.totalMinted = _totalMinted;
+    }
+    const _minted24h = json.minted24h ?? json.minted_24h;
+    if (_minted24h) {
+      msg.minted24h = _minted24h;
+    }
+    const _minted7d = json.minted7d ?? json.minted_7d;
+    if (_minted7d) {
+      msg.minted7d = _minted7d;
+    }
+    const _price = json.price;
+    if (_price) {
+      msg.price = _price;
+    }
+    const _minCollateralRatio =
+      json.minCollateralRatio ?? json.min_collateral_ratio;
+    if (_minCollateralRatio) {
+      msg.minCollateralRatio = _minCollateralRatio;
+    }
+    const _stabilityFee = json.stabilityFee ?? json.stability_fee;
+    if (_stabilityFee) {
+      msg.stabilityFee = _stabilityFee;
+    }
+    return msg;
+  },
+};
+
+export const LeafCollateralsResponseJSON = {
+  /**
+   * Serializes LeafCollateralsResponse to JSON.
+   */
+  encode: function (msg: Partial<LeafCollateralsResponse>): string {
+    return JSON.stringify(LeafCollateralsResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes LeafCollateralsResponse from JSON.
+   */
+  decode: function (json: string): LeafCollateralsResponse {
+    return LeafCollateralsResponseJSON._readMessage(
+      LeafCollateralsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateralsResponse with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralsResponse {
+    return {
+      collaterals: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateralsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.collaterals?.length) {
+      json.collaterals = msg.collaterals.map(LeafCollateralJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralsResponse,
+    json: any
+  ): LeafCollateralsResponse {
+    const _collaterals = json.collaterals;
+    if (_collaterals) {
+      for (const item of _collaterals) {
+        const m = LeafCollateral.initialize();
+        LeafCollateralJSON._readMessage(m, item);
+        msg.collaterals.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafCollateralDetailRequestJSON = {
+  /**
+   * Serializes LeafCollateralDetailRequest to JSON.
+   */
+  encode: function (msg: Partial<LeafCollateralDetailRequest>): string {
+    return JSON.stringify(LeafCollateralDetailRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes LeafCollateralDetailRequest from JSON.
+   */
+  decode: function (json: string): LeafCollateralDetailRequest {
+    return LeafCollateralDetailRequestJSON._readMessage(
+      LeafCollateralDetailRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateralDetailRequest with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralDetailRequest {
+    return {
+      collateralId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateralDetailRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.collateralId) {
+      json.collateralId = msg.collateralId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralDetailRequest,
+    json: any
+  ): LeafCollateralDetailRequest {
+    const _collateralId = json.collateralId ?? json.collateral_id;
+    if (_collateralId) {
+      msg.collateralId = _collateralId;
+    }
+    return msg;
+  },
+};
+
+export const LeafCollateralDetailResponseJSON = {
+  /**
+   * Serializes LeafCollateralDetailResponse to JSON.
+   */
+  encode: function (msg: Partial<LeafCollateralDetailResponse>): string {
+    return JSON.stringify(LeafCollateralDetailResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes LeafCollateralDetailResponse from JSON.
+   */
+  decode: function (json: string): LeafCollateralDetailResponse {
+    return LeafCollateralDetailResponseJSON._readMessage(
+      LeafCollateralDetailResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateralDetailResponse with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralDetailResponse {
+    return {
+      price: "",
+      totalSupply: "",
+      maxAvailable: "",
+      totalMinted: "",
+      stabilityFee: "",
+      collateralRatio: "",
+      minCollateralRatio: "",
+      nextPrice: "",
+      peekAt: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateralDetailResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.price) {
+      json.price = msg.price;
+    }
+    if (msg.totalSupply) {
+      json.totalSupply = msg.totalSupply;
+    }
+    if (msg.maxAvailable) {
+      json.maxAvailable = msg.maxAvailable;
+    }
+    if (msg.totalMinted) {
+      json.totalMinted = msg.totalMinted;
+    }
+    if (msg.stabilityFee) {
+      json.stabilityFee = msg.stabilityFee;
+    }
+    if (msg.collateralRatio) {
+      json.collateralRatio = msg.collateralRatio;
+    }
+    if (msg.minCollateralRatio) {
+      json.minCollateralRatio = msg.minCollateralRatio;
+    }
+    if (msg.nextPrice) {
+      json.nextPrice = msg.nextPrice;
+    }
+    if (msg.peekAt) {
+      json.peekAt = msg.peekAt;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralDetailResponse,
+    json: any
+  ): LeafCollateralDetailResponse {
+    const _price = json.price;
+    if (_price) {
+      msg.price = _price;
+    }
+    const _totalSupply = json.totalSupply ?? json.total_supply;
+    if (_totalSupply) {
+      msg.totalSupply = _totalSupply;
+    }
+    const _maxAvailable = json.maxAvailable ?? json.max_available;
+    if (_maxAvailable) {
+      msg.maxAvailable = _maxAvailable;
+    }
+    const _totalMinted = json.totalMinted ?? json.total_minted;
+    if (_totalMinted) {
+      msg.totalMinted = _totalMinted;
+    }
+    const _stabilityFee = json.stabilityFee ?? json.stability_fee;
+    if (_stabilityFee) {
+      msg.stabilityFee = _stabilityFee;
+    }
+    const _collateralRatio = json.collateralRatio ?? json.collateral_ratio;
+    if (_collateralRatio) {
+      msg.collateralRatio = _collateralRatio;
+    }
+    const _minCollateralRatio =
+      json.minCollateralRatio ?? json.min_collateral_ratio;
+    if (_minCollateralRatio) {
+      msg.minCollateralRatio = _minCollateralRatio;
+    }
+    const _nextPrice = json.nextPrice ?? json.next_price;
+    if (_nextPrice) {
+      msg.nextPrice = _nextPrice;
+    }
+    const _peekAt = json.peekAt ?? json.peek_at;
+    if (_peekAt) {
+      msg.peekAt = _peekAt;
+    }
+    return msg;
+  },
+};
+
+export const LeafCollateralStatisticsRequestJSON = {
+  /**
+   * Serializes LeafCollateralStatisticsRequest to JSON.
+   */
+  encode: function (msg: Partial<LeafCollateralStatisticsRequest>): string {
+    return JSON.stringify(
+      LeafCollateralStatisticsRequestJSON._writeMessage(msg)
+    );
+  },
+
+  /**
+   * Deserializes LeafCollateralStatisticsRequest from JSON.
+   */
+  decode: function (json: string): LeafCollateralStatisticsRequest {
+    return LeafCollateralStatisticsRequestJSON._readMessage(
+      LeafCollateralStatisticsRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateralStatisticsRequest with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralStatisticsRequest {
+    return {
+      type: LeafCollateralStatisticsRequest.CollateralChartType._fromInt(0),
+      range: TimeRange._fromInt(0),
+      collateralId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateralStatisticsRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (
+      msg.type &&
+      LeafCollateralStatisticsRequestJSON.CollateralChartType._toInt(msg.type)
+    ) {
+      json.type = msg.type;
+    }
+    if (msg.range && TimeRangeJSON._toInt(msg.range)) {
+      json.range = msg.range;
+    }
+    if (msg.collateralId) {
+      json.collateralId = msg.collateralId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralStatisticsRequest,
+    json: any
+  ): LeafCollateralStatisticsRequest {
+    const _type = json.type;
+    if (_type) {
+      msg.type = _type;
+    }
+    const _range = json.range;
+    if (_range) {
+      msg.range = _range;
+    }
+    const _collateralId = json.collateralId ?? json.collateral_id;
+    if (_collateralId) {
+      msg.collateralId = _collateralId;
+    }
+    return msg;
+  },
+
+  CollateralChartType: {
+    TYPE_NOT_SET: "TYPE_NOT_SET",
+    LEAF_SUPPLY: "LEAF_SUPPLY",
+    LEAF_MAX_AVAILABLE: "LEAF_MAX_AVAILABLE",
+    LEAF_LIQUIDATION_PRICE: "LEAF_LIQUIDATION_PRICE",
+    /**
+     * @private
+     */
+    _fromInt: function (
+      i: number
+    ): LeafCollateralStatisticsRequest.CollateralChartType {
+      switch (i) {
+        case 0: {
+          return "TYPE_NOT_SET";
+        }
+        case 1: {
+          return "LEAF_SUPPLY";
+        }
+        case 2: {
+          return "LEAF_MAX_AVAILABLE";
+        }
+        case 3: {
+          return "LEAF_LIQUIDATION_PRICE";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as LeafCollateralStatisticsRequest.CollateralChartType;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (
+      i: LeafCollateralStatisticsRequest.CollateralChartType
+    ): number {
+      switch (i) {
+        case "TYPE_NOT_SET": {
+          return 0;
+        }
+        case "LEAF_SUPPLY": {
+          return 1;
+        }
+        case "LEAF_MAX_AVAILABLE": {
+          return 2;
+        }
+        case "LEAF_LIQUIDATION_PRICE": {
+          return 3;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
+export const LeafCollateralStatisticsResponseJSON = {
+  /**
+   * Serializes LeafCollateralStatisticsResponse to JSON.
+   */
+  encode: function (msg: Partial<LeafCollateralStatisticsResponse>): string {
+    return JSON.stringify(
+      LeafCollateralStatisticsResponseJSON._writeMessage(msg)
+    );
+  },
+
+  /**
+   * Deserializes LeafCollateralStatisticsResponse from JSON.
+   */
+  decode: function (json: string): LeafCollateralStatisticsResponse {
+    return LeafCollateralStatisticsResponseJSON._readMessage(
+      LeafCollateralStatisticsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LeafCollateralStatisticsResponse with all fields set to their default value.
+   */
+  initialize: function (): LeafCollateralStatisticsResponse {
+    return {
+      data: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafCollateralStatisticsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.data?.length) {
+      json.data = msg.data.map(ChartDataJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafCollateralStatisticsResponse,
+    json: any
+  ): LeafCollateralStatisticsResponse {
+    const _data = json.data;
+    if (_data) {
+      for (const item of _data) {
+        const m = ChartData.initialize();
+        ChartDataJSON._readMessage(m, item);
+        msg.data.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const LeafMintTokenDetailRequestJSON = {
+  /**
+   * Serializes LeafMintTokenDetailRequest to JSON.
+   */
+  encode: function (msg: Partial<LeafMintTokenDetailRequest>): string {
+    return JSON.stringify(LeafMintTokenDetailRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes LeafMintTokenDetailRequest from JSON.
+   */
+  decode: function (json: string): LeafMintTokenDetailRequest {
+    return LeafMintTokenDetailRequestJSON._readMessage(
+      LeafMintTokenDetailRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LeafMintTokenDetailRequest with all fields set to their default value.
+   */
+  initialize: function (): LeafMintTokenDetailRequest {
+    return {
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafMintTokenDetailRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafMintTokenDetailRequest,
+    json: any
+  ): LeafMintTokenDetailRequest {
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    return msg;
+  },
+};
+
+export const LeafMintTokenDetailResponseJSON = {
+  /**
+   * Serializes LeafMintTokenDetailResponse to JSON.
+   */
+  encode: function (msg: Partial<LeafMintTokenDetailResponse>): string {
+    return JSON.stringify(LeafMintTokenDetailResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes LeafMintTokenDetailResponse from JSON.
+   */
+  decode: function (json: string): LeafMintTokenDetailResponse {
+    return LeafMintTokenDetailResponseJSON._readMessage(
+      LeafMintTokenDetailResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LeafMintTokenDetailResponse with all fields set to their default value.
+   */
+  initialize: function (): LeafMintTokenDetailResponse {
+    return {
+      price: "",
+      minted24h: "",
+      burned24h: "",
+      volume24h: "",
+      mintedTrades24h: "",
+      burnedTrades24h: "",
+      volumeTrades24h: "",
+      description: "",
+      website: "",
+      issueTime: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafMintTokenDetailResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.price) {
+      json.price = msg.price;
+    }
+    if (msg.minted24h) {
+      json.minted24h = msg.minted24h;
+    }
+    if (msg.burned24h) {
+      json.burned24h = msg.burned24h;
+    }
+    if (msg.volume24h) {
+      json.volume24h = msg.volume24h;
+    }
+    if (msg.mintedTrades24h) {
+      json.mintedTrades24h = msg.mintedTrades24h;
+    }
+    if (msg.burnedTrades24h) {
+      json.burnedTrades24h = msg.burnedTrades24h;
+    }
+    if (msg.volumeTrades24h) {
+      json.volumeTrades24h = msg.volumeTrades24h;
+    }
+    if (msg.description) {
+      json.description = msg.description;
+    }
+    if (msg.website) {
+      json.website = msg.website;
+    }
+    if (msg.issueTime) {
+      json.issueTime = msg.issueTime;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafMintTokenDetailResponse,
+    json: any
+  ): LeafMintTokenDetailResponse {
+    const _price = json.price;
+    if (_price) {
+      msg.price = _price;
+    }
+    const _minted24h = json.minted24h ?? json.minted_24h;
+    if (_minted24h) {
+      msg.minted24h = _minted24h;
+    }
+    const _burned24h = json.burned24h ?? json.burned_24h;
+    if (_burned24h) {
+      msg.burned24h = _burned24h;
+    }
+    const _volume24h = json.volume24h ?? json.volume_24h;
+    if (_volume24h) {
+      msg.volume24h = _volume24h;
+    }
+    const _mintedTrades24h = json.mintedTrades24h ?? json.minted_trades_24h;
+    if (_mintedTrades24h) {
+      msg.mintedTrades24h = _mintedTrades24h;
+    }
+    const _burnedTrades24h = json.burnedTrades24h ?? json.burned_trades_24h;
+    if (_burnedTrades24h) {
+      msg.burnedTrades24h = _burnedTrades24h;
+    }
+    const _volumeTrades24h = json.volumeTrades24h ?? json.volume_trades_24h;
+    if (_volumeTrades24h) {
+      msg.volumeTrades24h = _volumeTrades24h;
+    }
+    const _description = json.description;
+    if (_description) {
+      msg.description = _description;
+    }
+    const _website = json.website;
+    if (_website) {
+      msg.website = _website;
+    }
+    const _issueTime = json.issueTime ?? json.issue_time;
+    if (_issueTime) {
+      msg.issueTime = _issueTime;
+    }
+    return msg;
+  },
+};
+
+export const LeafMintTokenStatisticsRequestJSON = {
+  /**
+   * Serializes LeafMintTokenStatisticsRequest to JSON.
+   */
+  encode: function (msg: Partial<LeafMintTokenStatisticsRequest>): string {
+    return JSON.stringify(
+      LeafMintTokenStatisticsRequestJSON._writeMessage(msg)
+    );
+  },
+
+  /**
+   * Deserializes LeafMintTokenStatisticsRequest from JSON.
+   */
+  decode: function (json: string): LeafMintTokenStatisticsRequest {
+    return LeafMintTokenStatisticsRequestJSON._readMessage(
+      LeafMintTokenStatisticsRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LeafMintTokenStatisticsRequest with all fields set to their default value.
+   */
+  initialize: function (): LeafMintTokenStatisticsRequest {
+    return {
+      type: LeafMintTokenStatisticsRequest.MintTokenChartType._fromInt(0),
+      range: TimeRange._fromInt(0),
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafMintTokenStatisticsRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (
+      msg.type &&
+      LeafMintTokenStatisticsRequestJSON.MintTokenChartType._toInt(msg.type)
+    ) {
+      json.type = msg.type;
+    }
+    if (msg.range && TimeRangeJSON._toInt(msg.range)) {
+      json.range = msg.range;
+    }
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafMintTokenStatisticsRequest,
+    json: any
+  ): LeafMintTokenStatisticsRequest {
+    const _type = json.type;
+    if (_type) {
+      msg.type = _type;
+    }
+    const _range = json.range;
+    if (_range) {
+      msg.range = _range;
+    }
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    return msg;
+  },
+
+  MintTokenChartType: {
+    TYPE_NOT_SET: "TYPE_NOT_SET",
+    LEAF_MINTED: "LEAF_MINTED",
+    LEAF_BURNED: "LEAF_BURNED",
+    /**
+     * @private
+     */
+    _fromInt: function (
+      i: number
+    ): LeafMintTokenStatisticsRequest.MintTokenChartType {
+      switch (i) {
+        case 0: {
+          return "TYPE_NOT_SET";
+        }
+        case 1: {
+          return "LEAF_MINTED";
+        }
+        case 2: {
+          return "LEAF_BURNED";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as LeafMintTokenStatisticsRequest.MintTokenChartType;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (
+      i: LeafMintTokenStatisticsRequest.MintTokenChartType
+    ): number {
+      switch (i) {
+        case "TYPE_NOT_SET": {
+          return 0;
+        }
+        case "LEAF_MINTED": {
+          return 1;
+        }
+        case "LEAF_BURNED": {
+          return 2;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
+export const LeafMintTokenStatisticsResponseJSON = {
+  /**
+   * Serializes LeafMintTokenStatisticsResponse to JSON.
+   */
+  encode: function (msg: Partial<LeafMintTokenStatisticsResponse>): string {
+    return JSON.stringify(
+      LeafMintTokenStatisticsResponseJSON._writeMessage(msg)
+    );
+  },
+
+  /**
+   * Deserializes LeafMintTokenStatisticsResponse from JSON.
+   */
+  decode: function (json: string): LeafMintTokenStatisticsResponse {
+    return LeafMintTokenStatisticsResponseJSON._readMessage(
+      LeafMintTokenStatisticsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes LeafMintTokenStatisticsResponse with all fields set to their default value.
+   */
+  initialize: function (): LeafMintTokenStatisticsResponse {
+    return {
+      data: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<LeafMintTokenStatisticsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.data?.length) {
+      json.data = msg.data.map(ChartDataJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: LeafMintTokenStatisticsResponse,
+    json: any
+  ): LeafMintTokenStatisticsResponse {
+    const _data = json.data;
+    if (_data) {
+      for (const item of _data) {
+        const m = ChartData.initialize();
+        ChartDataJSON._readMessage(m, item);
+        msg.data.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const RingsAssetsRequestJSON = {
+  /**
+   * Serializes RingsAssetsRequest to JSON.
+   */
+  encode: function (_msg?: Partial<RingsAssetsRequest>): string {
+    return "{}";
+  },
+
+  /**
+   * Deserializes RingsAssetsRequest from JSON.
+   */
+  decode: function (_json?: string): RingsAssetsRequest {
+    return {};
+  },
+
+  /**
+   * Initializes RingsAssetsRequest with all fields set to their default value.
+   */
+  initialize: function (): RingsAssetsRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<RingsAssetsRequest>
+  ): Record<string, unknown> {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsAssetsRequest,
+    _json: any
+  ): RingsAssetsRequest {
+    return msg;
+  },
+};
+
+export const RingsAssetJSON = {
+  /**
+   * Serializes RingsAsset to JSON.
+   */
+  encode: function (msg: Partial<RingsAsset>): string {
+    return JSON.stringify(RingsAssetJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes RingsAsset from JSON.
+   */
+  decode: function (json: string): RingsAsset {
+    return RingsAssetJSON._readMessage(
+      RingsAssetJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes RingsAsset with all fields set to their default value.
+   */
+  initialize: function (): RingsAsset {
+    return {
+      id: "",
+      supplyApy: "",
+      totalSupply: "",
+      supply24h: "",
+      supply7d: "",
+      suppliers: "",
+      borrowApy: "",
+      totalBorrow: "",
+      borrow24h: "",
+      borrow7d: "",
+      borrowers: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<RingsAsset>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json.id = msg.id;
+    }
+    if (msg.supplyApy) {
+      json.supplyApy = msg.supplyApy;
+    }
+    if (msg.totalSupply) {
+      json.totalSupply = msg.totalSupply;
+    }
+    if (msg.supply24h) {
+      json.supply24h = msg.supply24h;
+    }
+    if (msg.supply7d) {
+      json.supply7d = msg.supply7d;
+    }
+    if (msg.suppliers) {
+      json.suppliers = msg.suppliers;
+    }
+    if (msg.borrowApy) {
+      json.borrowApy = msg.borrowApy;
+    }
+    if (msg.totalBorrow) {
+      json.totalBorrow = msg.totalBorrow;
+    }
+    if (msg.borrow24h) {
+      json.borrow24h = msg.borrow24h;
+    }
+    if (msg.borrow7d) {
+      json.borrow7d = msg.borrow7d;
+    }
+    if (msg.borrowers) {
+      json.borrowers = msg.borrowers;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: RingsAsset, json: any): RingsAsset {
+    const _id = json.id;
+    if (_id) {
+      msg.id = _id;
+    }
+    const _supplyApy = json.supplyApy ?? json.supply_apy;
+    if (_supplyApy) {
+      msg.supplyApy = _supplyApy;
+    }
+    const _totalSupply = json.totalSupply ?? json.total_supply;
+    if (_totalSupply) {
+      msg.totalSupply = _totalSupply;
+    }
+    const _supply24h = json.supply24h ?? json.supply_24h;
+    if (_supply24h) {
+      msg.supply24h = _supply24h;
+    }
+    const _supply7d = json.supply7d ?? json.supply_7d;
+    if (_supply7d) {
+      msg.supply7d = _supply7d;
+    }
+    const _suppliers = json.suppliers;
+    if (_suppliers) {
+      msg.suppliers = _suppliers;
+    }
+    const _borrowApy = json.borrowApy ?? json.borrow_apy;
+    if (_borrowApy) {
+      msg.borrowApy = _borrowApy;
+    }
+    const _totalBorrow = json.totalBorrow ?? json.total_borrow;
+    if (_totalBorrow) {
+      msg.totalBorrow = _totalBorrow;
+    }
+    const _borrow24h = json.borrow24h ?? json.borrow_24h;
+    if (_borrow24h) {
+      msg.borrow24h = _borrow24h;
+    }
+    const _borrow7d = json.borrow7d ?? json.borrow_7d;
+    if (_borrow7d) {
+      msg.borrow7d = _borrow7d;
+    }
+    const _borrowers = json.borrowers;
+    if (_borrowers) {
+      msg.borrowers = _borrowers;
+    }
+    return msg;
+  },
+};
+
+export const RingsAssetsResponseJSON = {
+  /**
+   * Serializes RingsAssetsResponse to JSON.
+   */
+  encode: function (msg: Partial<RingsAssetsResponse>): string {
+    return JSON.stringify(RingsAssetsResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes RingsAssetsResponse from JSON.
+   */
+  decode: function (json: string): RingsAssetsResponse {
+    return RingsAssetsResponseJSON._readMessage(
+      RingsAssetsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes RingsAssetsResponse with all fields set to their default value.
+   */
+  initialize: function (): RingsAssetsResponse {
+    return {
+      stats: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsAssetsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.stats?.length) {
+      json.stats = msg.stats.map(RingsAssetJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsAssetsResponse,
+    json: any
+  ): RingsAssetsResponse {
+    const _stats = json.stats;
+    if (_stats) {
+      for (const item of _stats) {
+        const m = RingsAsset.initialize();
+        RingsAssetJSON._readMessage(m, item);
+        msg.stats.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const RingsMarketStatisticsRequestJSON = {
+  /**
+   * Serializes RingsMarketStatisticsRequest to JSON.
+   */
+  encode: function (msg: Partial<RingsMarketStatisticsRequest>): string {
+    return JSON.stringify(RingsMarketStatisticsRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes RingsMarketStatisticsRequest from JSON.
+   */
+  decode: function (json: string): RingsMarketStatisticsRequest {
+    return RingsMarketStatisticsRequestJSON._readMessage(
+      RingsMarketStatisticsRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes RingsMarketStatisticsRequest with all fields set to their default value.
+   */
+  initialize: function (): RingsMarketStatisticsRequest {
+    return {
+      type: RingsMarketStatisticsRequest.MarketChartType._fromInt(0),
+      range: TimeRange._fromInt(0),
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsMarketStatisticsRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (
+      msg.type &&
+      RingsMarketStatisticsRequestJSON.MarketChartType._toInt(msg.type)
+    ) {
+      json.type = msg.type;
+    }
+    if (msg.range && TimeRangeJSON._toInt(msg.range)) {
+      json.range = msg.range;
+    }
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsMarketStatisticsRequest,
+    json: any
+  ): RingsMarketStatisticsRequest {
+    const _type = json.type;
+    if (_type) {
+      msg.type = _type;
+    }
+    const _range = json.range;
+    if (_range) {
+      msg.range = _range;
+    }
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    return msg;
+  },
+
+  MarketChartType: {
+    TYPE_NOT_SET: "TYPE_NOT_SET",
+    RINGS_SUPPLY_APY: "RINGS_SUPPLY_APY",
+    RINGS_SUPPLY_VOLUME: "RINGS_SUPPLY_VOLUME",
+    RINGS_BORROW_APY: "RINGS_BORROW_APY",
+    RINGS_BORROW_VOLUME: "RINGS_BORROW_VOLUME",
+    /**
+     * @private
+     */
+    _fromInt: function (
+      i: number
+    ): RingsMarketStatisticsRequest.MarketChartType {
+      switch (i) {
+        case 0: {
+          return "TYPE_NOT_SET";
+        }
+        case 1: {
+          return "RINGS_SUPPLY_APY";
+        }
+        case 2: {
+          return "RINGS_SUPPLY_VOLUME";
+        }
+        case 3: {
+          return "RINGS_BORROW_APY";
+        }
+        case 4: {
+          return "RINGS_BORROW_VOLUME";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as RingsMarketStatisticsRequest.MarketChartType;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: RingsMarketStatisticsRequest.MarketChartType): number {
+      switch (i) {
+        case "TYPE_NOT_SET": {
+          return 0;
+        }
+        case "RINGS_SUPPLY_APY": {
+          return 1;
+        }
+        case "RINGS_SUPPLY_VOLUME": {
+          return 2;
+        }
+        case "RINGS_BORROW_APY": {
+          return 3;
+        }
+        case "RINGS_BORROW_VOLUME": {
+          return 4;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
+export const RingsMarketStatisticsResponseJSON = {
+  /**
+   * Serializes RingsMarketStatisticsResponse to JSON.
+   */
+  encode: function (msg: Partial<RingsMarketStatisticsResponse>): string {
+    return JSON.stringify(RingsMarketStatisticsResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes RingsMarketStatisticsResponse from JSON.
+   */
+  decode: function (json: string): RingsMarketStatisticsResponse {
+    return RingsMarketStatisticsResponseJSON._readMessage(
+      RingsMarketStatisticsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes RingsMarketStatisticsResponse with all fields set to their default value.
+   */
+  initialize: function (): RingsMarketStatisticsResponse {
+    return {
+      data: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsMarketStatisticsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.data?.length) {
+      json.data = msg.data.map(ChartDataJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsMarketStatisticsResponse,
+    json: any
+  ): RingsMarketStatisticsResponse {
+    const _data = json.data;
+    if (_data) {
+      for (const item of _data) {
+        const m = ChartData.initialize();
+        ChartDataJSON._readMessage(m, item);
+        msg.data.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const RingsMarketDetailRequestJSON = {
+  /**
+   * Serializes RingsMarketDetailRequest to JSON.
+   */
+  encode: function (msg: Partial<RingsMarketDetailRequest>): string {
+    return JSON.stringify(RingsMarketDetailRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes RingsMarketDetailRequest from JSON.
+   */
+  decode: function (json: string): RingsMarketDetailRequest {
+    return RingsMarketDetailRequestJSON._readMessage(
+      RingsMarketDetailRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes RingsMarketDetailRequest with all fields set to their default value.
+   */
+  initialize: function (): RingsMarketDetailRequest {
+    return {
+      assetId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsMarketDetailRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsMarketDetailRequest,
+    json: any
+  ): RingsMarketDetailRequest {
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    return msg;
+  },
+};
+
+export const RingsMarketDetailResponseJSON = {
+  /**
+   * Serializes RingsMarketDetailResponse to JSON.
+   */
+  encode: function (msg: Partial<RingsMarketDetailResponse>): string {
+    return JSON.stringify(RingsMarketDetailResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes RingsMarketDetailResponse from JSON.
+   */
+  decode: function (json: string): RingsMarketDetailResponse {
+    return RingsMarketDetailResponseJSON._readMessage(
+      RingsMarketDetailResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes RingsMarketDetailResponse with all fields set to their default value.
+   */
+  initialize: function (): RingsMarketDetailResponse {
+    return {
+      price: "",
+      liquidity: "",
+      suppliers: "",
+      borrowers: "",
+      interestPaidPerDay: "",
+      collateralFactor: "",
+      rtokenMinted: "",
+      exchangeRate: "",
+      description: "",
+      website: "",
+      baseRate: "",
+      multiplier: "",
+      jumpMultiplier: "",
+      kink: "",
+      reserveFactor: "",
+      totalCash: "",
+      totalBorrows: "",
+      reserves: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<RingsMarketDetailResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.price) {
+      json.price = msg.price;
+    }
+    if (msg.liquidity) {
+      json.liquidity = msg.liquidity;
+    }
+    if (msg.suppliers) {
+      json.suppliers = msg.suppliers;
+    }
+    if (msg.borrowers) {
+      json.borrowers = msg.borrowers;
+    }
+    if (msg.interestPaidPerDay) {
+      json.interestPaidPerDay = msg.interestPaidPerDay;
+    }
+    if (msg.collateralFactor) {
+      json.collateralFactor = msg.collateralFactor;
+    }
+    if (msg.rtokenMinted) {
+      json.rtokenMinted = msg.rtokenMinted;
+    }
+    if (msg.exchangeRate) {
+      json.exchangeRate = msg.exchangeRate;
+    }
+    if (msg.description) {
+      json.description = msg.description;
+    }
+    if (msg.website) {
+      json.website = msg.website;
+    }
+    if (msg.baseRate) {
+      json.baseRate = msg.baseRate;
+    }
+    if (msg.multiplier) {
+      json.multiplier = msg.multiplier;
+    }
+    if (msg.jumpMultiplier) {
+      json.jumpMultiplier = msg.jumpMultiplier;
+    }
+    if (msg.kink) {
+      json.kink = msg.kink;
+    }
+    if (msg.reserveFactor) {
+      json.reserveFactor = msg.reserveFactor;
+    }
+    if (msg.totalCash) {
+      json.totalCash = msg.totalCash;
+    }
+    if (msg.totalBorrows) {
+      json.totalBorrows = msg.totalBorrows;
+    }
+    if (msg.reserves) {
+      json.reserves = msg.reserves;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: RingsMarketDetailResponse,
+    json: any
+  ): RingsMarketDetailResponse {
+    const _price = json.price;
+    if (_price) {
+      msg.price = _price;
+    }
+    const _liquidity = json.liquidity;
+    if (_liquidity) {
+      msg.liquidity = _liquidity;
+    }
+    const _suppliers = json.suppliers;
+    if (_suppliers) {
+      msg.suppliers = _suppliers;
+    }
+    const _borrowers = json.borrowers;
+    if (_borrowers) {
+      msg.borrowers = _borrowers;
+    }
+    const _interestPaidPerDay =
+      json.interestPaidPerDay ?? json.interest_paid_per_day;
+    if (_interestPaidPerDay) {
+      msg.interestPaidPerDay = _interestPaidPerDay;
+    }
+    const _collateralFactor = json.collateralFactor ?? json.collateral_factor;
+    if (_collateralFactor) {
+      msg.collateralFactor = _collateralFactor;
+    }
+    const _rtokenMinted = json.rtokenMinted ?? json.rtoken_minted;
+    if (_rtokenMinted) {
+      msg.rtokenMinted = _rtokenMinted;
+    }
+    const _exchangeRate = json.exchangeRate ?? json.exchange_rate;
+    if (_exchangeRate) {
+      msg.exchangeRate = _exchangeRate;
+    }
+    const _description = json.description;
+    if (_description) {
+      msg.description = _description;
+    }
+    const _website = json.website;
+    if (_website) {
+      msg.website = _website;
+    }
+    const _baseRate = json.baseRate ?? json.base_rate;
+    if (_baseRate) {
+      msg.baseRate = _baseRate;
+    }
+    const _multiplier = json.multiplier;
+    if (_multiplier) {
+      msg.multiplier = _multiplier;
+    }
+    const _jumpMultiplier = json.jumpMultiplier ?? json.jump_multiplier;
+    if (_jumpMultiplier) {
+      msg.jumpMultiplier = _jumpMultiplier;
+    }
+    const _kink = json.kink;
+    if (_kink) {
+      msg.kink = _kink;
+    }
+    const _reserveFactor = json.reserveFactor ?? json.reserve_factor;
+    if (_reserveFactor) {
+      msg.reserveFactor = _reserveFactor;
+    }
+    const _totalCash = json.totalCash ?? json.total_cash;
+    if (_totalCash) {
+      msg.totalCash = _totalCash;
+    }
+    const _totalBorrows = json.totalBorrows ?? json.total_borrows;
+    if (_totalBorrows) {
+      msg.totalBorrows = _totalBorrows;
+    }
+    const _reserves = json.reserves;
+    if (_reserves) {
+      msg.reserves = _reserves;
     }
     return msg;
   },
