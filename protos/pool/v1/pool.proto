@@ -98,7 +98,8 @@ message EarningSnapshotCancelQueueData {
 message EarningSnapshotInterestPaymentData {
   int32 product_id = 1;
   EarningProductType.Enum product_type = 2;
-  string date = 3; // format: 2006-01-02
+  string start_date = 3; // format: 2006-01-02
+  string end_date = 4; // format: 2006-01-02
 }
 
 message ListAssetsRequest {}
@@ -136,6 +137,11 @@ message EarningProduct {
   int32 created_at = 13;
   EarningProductType.Enum type = 14;
   EarningProductStatus.Enum status = 15;
+  int32 running_nodes = 16;
+  int32 interest_payment_duration = 17;
+  string expanding_amount = 18;
+  string filled_expanding_amount = 19;
+  int32 expected_expanding_end_at = 20;
 }
 
 message ListEarningProductsRequest {
@@ -198,6 +204,7 @@ message Event {
   EventError.Enum error = 9;
   string follow_id = 10;
   int32 created_at = 11;
+  string queuing_ahead_amount = 12;
 }
 
 message GetEventResponse {
