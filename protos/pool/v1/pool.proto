@@ -76,7 +76,8 @@ message EarningProductStatus {
 message EarningProductType {
   enum Enum {
     NOT_SET = 0;
-    DEFI_NODE = 1;
+    STAKING = 1;
+    SAVINGS = 2;
   }
 }
 
