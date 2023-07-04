@@ -38,6 +38,8 @@ message EventError {
     EARNING_PRODUCT_NOT_FOUND = 9;
     // interest_payment
     USER_EARNING_PRODUCT_EOD_NOT_FOUND = 10;
+    // redeem
+    USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED = 11;
   }
 }
 
@@ -49,6 +51,8 @@ message EventAction {
     DEPOSIT = 3;
     INTEREST_PAYMENT = 4;
     CANCEL_QUEUE = 5;
+    PLEDGE = 6;
+    CANCEL_PLEDGE = 7;
   }
 }
 
@@ -101,6 +105,14 @@ message EarningSnapshotInterestPaymentData {
   EarningProductType.Enum product_type = 2;
   string start_date = 3; // format: 2006-01-02
   string end_date = 4; // format: 2006-01-02
+}
+
+message EarningSnapshotPledgeData {
+  string user_id = 1;
+}
+
+message EarningSnapshotCancelPledgeData {
+  string user_id = 1;
 }
 
 message ListAssetsRequest {}
@@ -172,6 +184,7 @@ message UserEarningProduct {
   int32 created_at = 8;
   int32 updated_at = 9;
   string total_revenue = 10;
+  bool pledged = 11;
 }
 
 message ListMyEarningProductsRequest {}
