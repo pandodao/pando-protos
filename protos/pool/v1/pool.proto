@@ -103,7 +103,7 @@ message EarningSnapshotCancelQueueData {
 message EarningSnapshotInterestPaymentData {
   int32 product_id = 1;
   EarningProductType.Enum product_type = 2;
-  string start_date = 3; // format: 2006-01-02
+  string start_date = 3; // format: 2008-01-02
   string end_date = 4; // format: 2006-01-02
 }
 
@@ -219,6 +219,7 @@ message Event {
   string follow_id = 10;
   int32 created_at = 11;
   string queuing_ahead_amount = 12;
+  string interest_payment_date = 13;
 }
 
 message GetEventResponse {
