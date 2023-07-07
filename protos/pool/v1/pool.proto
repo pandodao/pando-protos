@@ -155,6 +155,7 @@ message EarningProduct {
   string expanding_amount = 18;
   string filled_expanding_amount = 19;
   int32 expected_expanding_end_at = 20;
+  bool user_is_in_group = 21;
 }
 
 message ListEarningProductsRequest {
