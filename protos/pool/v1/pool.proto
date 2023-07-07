@@ -10,7 +10,6 @@ service PoolService {
   rpc ListEvents(ListEventsRequest) returns (ListEventsResponse);
 
   rpc ListEarningProducts(ListEarningProductsRequest) returns (ListEarningProductsResponse);
-  rpc GetEarningProduct(GetEarningProductRequest) returns (GetEarningProductResponse);
   rpc ListMyEarningProducts(ListMyEarningProductsRequest) returns (ListMyEarningProductsResponse);
   rpc GetMyEarningProduct(GetMyEarningProductRequest) returns (GetMyEarningProductResponse);
 }
@@ -164,14 +163,6 @@ message ListEarningProductsRequest {
 
 message ListEarningProductsResponse {
   repeated EarningProduct products = 1;
-}
-
-message GetEarningProductRequest {
-  int32 id = 1;
-}
-
-message GetEarningProductResponse {
-  EarningProduct product = 1;
 }
 
 message UserEarningProduct {
