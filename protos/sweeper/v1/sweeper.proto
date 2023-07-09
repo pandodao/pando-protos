@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package sweeper.v1;
-option go_package = "github.com/fox-one/pando-protos/sweeper/v1;pigeon";
+option go_package = "github.com/fox-one/pando-protos/sweeper/v1;sweeper";
 
 message Transfer {
     enum Status {
