@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package sweeper.v1;
+option go_package = "github.com/fox-one/pando-protos/sweeper/v1;pigeon";
+
+message Transfer {
+    enum Status {
+        NOT_SET = 0;
+        PENDING = 1;
+        HANDLED = 2;
+        SPENT = 3;
+    }
+
+    string trace_id = 1;
+    string asset_id = 2;
+    string amount = 3;
+    repeated string opponents = 4;
+    uint32 threshold = 5;
+    string memo = 6;
+    Status status = 7;  
+    string tx_hash = 8;
+}
+
+message Balance {
+    string asset_id = 1;
+    string amount = 2;
+    int32 count = 3;
+}
+
+message SendTransferRequest {
+    string trace_id = 1;
+    string asset_id = 2;
+    string amount = 3;
+    repeated string opponents = 4;
+    uint32 threshold = 5;
+    string memo = 6;
+}
+
+message SendTransferResponse {}
+
+message SendTransfersRequest {
+    repeated SendTransferRequest transfers = 1;
+}
+
+message SendTransfersResponse {}
+
+message GetTransferRequest {
+    string trace_id = 1;
+}
+
+message GetTransferResponse {
+    Transfer transfer = 1;
+}
+
+message GetBalancesRequest {}
+
+message GetBalancesResponse {
+    repeated Balance balances = 1;
+}
+
+service PigeonService {
+  rpc SendTransfer(SendTransferRequest) returns (SendTransferResponse);
+  rpc SendTransfers(SendTransfersRequest) returns (SendTransfersResponse);
+  rpc GetTransfer(GetTransferRequest) returns (GetTransferResponse);
+  rpc GetBalances(GetBalancesRequest) returns (GetBalancesResponse);
+}
