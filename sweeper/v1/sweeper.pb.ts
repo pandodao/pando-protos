@@ -15,7 +15,7 @@ import {
 export { MIN_SUPPORTED_VERSION_0_0_56 } from "twirpscript";
 
 //========================================//
-//     PigeonService Protobuf Client      //
+//     SweeperService Protobuf Client     //
 //========================================//
 
 export async function SendTransfer(
@@ -23,7 +23,7 @@ export async function SendTransfer(
   config?: ClientConfiguration
 ): Promise<SendTransferResponse> {
   const response = await PBrequest(
-    "/sweeper.v1.PigeonService/SendTransfer",
+    "/sweeper.v1.SweeperService/SendTransfer",
     SendTransferRequest.encode(sendTransferRequest),
     config
   );
@@ -35,7 +35,7 @@ export async function SendTransfers(
   config?: ClientConfiguration
 ): Promise<SendTransfersResponse> {
   const response = await PBrequest(
-    "/sweeper.v1.PigeonService/SendTransfers",
+    "/sweeper.v1.SweeperService/SendTransfers",
     SendTransfersRequest.encode(sendTransfersRequest),
     config
   );
@@ -47,7 +47,7 @@ export async function GetTransfer(
   config?: ClientConfiguration
 ): Promise<GetTransferResponse> {
   const response = await PBrequest(
-    "/sweeper.v1.PigeonService/GetTransfer",
+    "/sweeper.v1.SweeperService/GetTransfer",
     GetTransferRequest.encode(getTransferRequest),
     config
   );
@@ -59,7 +59,7 @@ export async function GetBalances(
   config?: ClientConfiguration
 ): Promise<GetBalancesResponse> {
   const response = await PBrequest(
-    "/sweeper.v1.PigeonService/GetBalances",
+    "/sweeper.v1.SweeperService/GetBalances",
     GetBalancesRequest.encode(getBalancesRequest),
     config
   );
@@ -67,7 +67,7 @@ export async function GetBalances(
 }
 
 //========================================//
-//       PigeonService JSON Client        //
+//       SweeperService JSON Client       //
 //========================================//
 
 export async function SendTransferJSON(
@@ -75,7 +75,7 @@ export async function SendTransferJSON(
   config?: ClientConfiguration
 ): Promise<SendTransferResponse> {
   const response = await JSONrequest(
-    "/sweeper.v1.PigeonService/SendTransfer",
+    "/sweeper.v1.SweeperService/SendTransfer",
     SendTransferRequestJSON.encode(sendTransferRequest),
     config
   );
@@ -87,7 +87,7 @@ export async function SendTransfersJSON(
   config?: ClientConfiguration
 ): Promise<SendTransfersResponse> {
   const response = await JSONrequest(
-    "/sweeper.v1.PigeonService/SendTransfers",
+    "/sweeper.v1.SweeperService/SendTransfers",
     SendTransfersRequestJSON.encode(sendTransfersRequest),
     config
   );
@@ -99,7 +99,7 @@ export async function GetTransferJSON(
   config?: ClientConfiguration
 ): Promise<GetTransferResponse> {
   const response = await JSONrequest(
-    "/sweeper.v1.PigeonService/GetTransfer",
+    "/sweeper.v1.SweeperService/GetTransfer",
     GetTransferRequestJSON.encode(getTransferRequest),
     config
   );
@@ -111,7 +111,7 @@ export async function GetBalancesJSON(
   config?: ClientConfiguration
 ): Promise<GetBalancesResponse> {
   const response = await JSONrequest(
-    "/sweeper.v1.PigeonService/GetBalances",
+    "/sweeper.v1.SweeperService/GetBalances",
     GetBalancesRequestJSON.encode(getBalancesRequest),
     config
   );
@@ -119,10 +119,10 @@ export async function GetBalancesJSON(
 }
 
 //========================================//
-//             PigeonService              //
+//             SweeperService             //
 //========================================//
 
-export interface PigeonService<Context = unknown> {
+export interface SweeperService<Context = unknown> {
   SendTransfer: (
     sendTransferRequest: SendTransferRequest,
     context: Context
@@ -141,9 +141,11 @@ export interface PigeonService<Context = unknown> {
   ) => Promise<GetBalancesResponse> | GetBalancesResponse;
 }
 
-export function createPigeonService<Context>(service: PigeonService<Context>) {
+export function createSweeperService<Context>(
+  service: SweeperService<Context>
+) {
   return {
-    name: "sweeper.v1.PigeonService",
+    name: "sweeper.v1.SweeperService",
     methods: {
       SendTransfer: {
         name: "SendTransfer",
