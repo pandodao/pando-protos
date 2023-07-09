@@ -58,7 +58,7 @@ message GetBalancesResponse {
     repeated Balance balances = 1;
 }
 
-service PigeonService {
+service SweeperService {
   rpc SendTransfer(SendTransferRequest) returns (SendTransferResponse);
   rpc SendTransfers(SendTransfersRequest) returns (SendTransfersResponse);
   rpc GetTransfer(GetTransferRequest) returns (GetTransferResponse);
