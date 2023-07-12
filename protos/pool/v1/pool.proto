@@ -50,13 +50,14 @@ message EventAction {
     DEPOSIT = 3;
     INTEREST_PAYMENT = 4;
     CANCEL_QUEUE = 5;
-    PLEDGE = 6;
-    CANCEL_PLEDGE = 7;
 
     // for admins
+
     ADMIN_INTEREST_PAYMENT = 100;
     ADMIN_PRODUCT_EXPAND = 101;
     ADMIN_PRODUCT_MERGE_EXPANSION = 102;
+    ADMIN_PLEDGE = 103;
+    ADMIN_CANCEL_PLEDGE = 104;
   }
 }
 
@@ -121,11 +122,11 @@ message EarningSnapshotAdminProductMergeExpansionData {
   bool skip_full_fill_check = 2;
 }
 
-message EarningSnapshotPledgeData {
+message EarningSnapshotAdminPledgeData {
   string user_id = 1;
 }
 
-message EarningSnapshotCancelPledgeData {
+message EarningSnapshotAdminCancelPledgeData {
   string user_id = 1;
 }
 
@@ -192,6 +193,7 @@ message UserEarningProduct {
   int32 updated_at = 9;
   string total_revenue = 10;
   bool pledged = 11;
+  string expand_buy_amount = 12;
 }
 
 message ListMyEarningProductsRequest {}
