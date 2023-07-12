@@ -52,6 +52,11 @@ message EventAction {
     CANCEL_QUEUE = 5;
     PLEDGE = 6;
     CANCEL_PLEDGE = 7;
+
+    // for admins
+    ADMIN_INTEREST_PAYMENT = 100;
+    ADMIN_PRODUCT_EXPAND = 101;
+    ADMIN_PRODUCT_MERGE_EXPANSION = 102;
   }
 }
 
@@ -99,11 +104,21 @@ message EarningSnapshotCancelQueueData {
   string event_id = 1;
 }
 
-message EarningSnapshotInterestPaymentData {
+message EarningSnapshotAdminInterestPaymentData {
   int32 product_id = 1;
   EarningProductType.Enum product_type = 2;
   string start_date = 3; // format: 2008-01-02
   string end_date = 4; // format: 2006-01-02
+}
+
+message EarningSnapshotAdminProductExpandData {
+  int32 product_id = 1;
+  string amount = 2;
+}
+
+message EarningSnapshotAdminProductMergeExpansionData {
+  int32 product_id = 1;
+  bool skip_full_fill_check = 2;
 }
 
 message EarningSnapshotPledgeData {
