@@ -677,6 +677,7 @@ export interface Pair {
   netRor24h: string;
   netRor7d: string;
   netRor30d: string;
+  profitRate: string;
 }
 
 export interface Deposit {
@@ -1143,6 +1144,7 @@ export const Pair = {
       netRor24h: "",
       netRor7d: "",
       netRor30d: "",
+      profitRate: "",
     };
   },
 
@@ -1218,6 +1220,9 @@ export const Pair = {
     }
     if (msg.netRor30d) {
       writer.writeString(22, msg.netRor30d);
+    }
+    if (msg.profitRate) {
+      writer.writeString(23, msg.profitRate);
     }
     return writer;
   },
@@ -1315,6 +1320,10 @@ export const Pair = {
         }
         case 22: {
           msg.netRor30d = reader.readString();
+          break;
+        }
+        case 23: {
+          msg.profitRate = reader.readString();
           break;
         }
         default: {
@@ -4099,6 +4108,7 @@ export const PairJSON = {
       netRor24h: "",
       netRor7d: "",
       netRor30d: "",
+      profitRate: "",
     };
   },
 
@@ -4172,6 +4182,9 @@ export const PairJSON = {
     }
     if (msg.netRor30d) {
       json.netRor30d = msg.netRor30d;
+    }
+    if (msg.profitRate) {
+      json.profitRate = msg.profitRate;
     }
     return json;
   },
@@ -4268,6 +4281,10 @@ export const PairJSON = {
     const _netRor30d = json.netRor30d ?? json.net_ror_30d;
     if (_netRor30d) {
       msg.netRor30d = _netRor30d;
+    }
+    const _profitRate = json.profitRate ?? json.profit_rate;
+    if (_profitRate) {
+      msg.profitRate = _profitRate;
     }
     return msg;
   },
