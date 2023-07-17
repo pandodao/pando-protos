@@ -47,6 +47,7 @@ message Pair {
     string net_ror_24h = 20;
     string net_ror_7d = 21;
     string net_ror_30d = 22;
+    string profit_rate = 23;
 }
 
 message Deposit {
