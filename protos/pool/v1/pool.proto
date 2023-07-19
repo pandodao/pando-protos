@@ -79,6 +79,7 @@ message EarningProductStatus {
     RECRUITING = 1;
     RUNNING = 2;
     EXPANDING = 3;
+    DEACTIVATED = 4;
   }
 }
 
