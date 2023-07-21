@@ -244,6 +244,7 @@ message ListEventsRequest {
   int32 limit = 5; // default 100, max 500
   int32 start_at = 6;
   int32 end_at = 7;
+  EarningProductType.Enum product_type = 8;
 }
 
 message ListEventsResponse {
