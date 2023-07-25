@@ -58,6 +58,7 @@ message EventAction {
     ADMIN_PRODUCT_MERGE_EXPANSION = 102;
     ADMIN_PLEDGE = 103;
     ADMIN_CANCEL_PLEDGE = 104;
+    ADMIN_LEGACY_ASSET_MIGRATION = 105;
   }
 }
 
@@ -127,6 +128,12 @@ message EarningSnapshotAdminPledgeData {
 
 message EarningSnapshotAdminCancelPledgeData {
   string user_id = 1;
+}
+
+message EarningSnapshotAdminLegacyAssetMigrationData {
+  string user_id = 1;
+  int32 product_id = 2;
+  string amount = 3;
 }
 
 message ListAssetsRequest {}
