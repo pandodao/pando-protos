@@ -179,6 +179,7 @@ message EarningProduct {
   bool user_is_in_whitelist = 21;
   string description_rules = 22;
   string description_risk_disclosure = 23;
+  bool enabled_whitelist_limit = 24;
 }
 
 message ListEarningProductsRequest {
