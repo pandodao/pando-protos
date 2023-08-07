@@ -65,6 +65,15 @@ message FindTransferResponse {
   Transfer transfer = 1;
 }
 
+message ListTransfersRequest {
+  string cursor = 1;
+  int32 limit = 2;
+}
+
+message ListTransfersResponse {
+  repeated Transfer transfers = 1;
+}
+
 message FindAuditRequest {
   string id = 1;
 }
@@ -98,6 +107,7 @@ service SwapNodeService {
     rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse);
     rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
     rpc FindTransfer(FindTransferRequest) returns (FindTransferResponse);
+    rpc ListTransfers(ListTransfersRequest) returns (ListTransfersResponse);
     rpc FindAudit(FindAuditRequest) returns (FindAuditResponse);
     rpc ListAudits(ListAuditsRequest) returns (ListAuditsResponse);
     rpc ListExpiredDeposits(ListExpiredDepositsRequest) returns (ListExpiredDepositsResponse);
