@@ -15,6 +15,14 @@ enum Action {
     SWAPV2 = 6;
 }
 
+message Header {
+    int32 version = 1;
+    int32 protocol_id = 2;
+    string user_id = 3;
+    string follow_id = 4;
+    Action action = 5;
+}
+
 message Pair {
     string base_asset_id = 1;
     string quote_asset_id = 2;
@@ -38,9 +46,7 @@ message Output {
     string memo = 6;
     string transaction_hash = 7;
     int32 output_index = 8;
-    string user_id = 9;
-    string follow_id = 10;
-    Action action = 11;
+    Header header = 9;
 }
 
 message Order {

@@ -15,6 +15,7 @@ message ListPairsResponse {
 message ListOutputsRequest {
   string cursor = 1;
   int32 limit = 2;
+  bool decode_header = 3;
 }
 
 message ListOutputsResponse {
