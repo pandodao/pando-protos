@@ -73,6 +73,7 @@ message ListTransfersRequest {
 
 message ListTransfersResponse {
   repeated Transfer transfers = 1;
+  string next_cursor = 2;
 }
 
 message FindAuditRequest {
