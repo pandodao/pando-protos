@@ -12,6 +12,14 @@ enum Action {
     SWAP = 3;
     EXPIRE_DEPOSIT = 4;
     AUDIT = 5;
+    SWAPV2 = 6;
+}
+
+message Header {
+    int32 version = 1;
+    string user_id = 2;
+    string follow_id = 3;
+    Action action = 4;
 }
 
 message Pair {
@@ -35,6 +43,9 @@ message Output {
     string amount = 4;
     string sender = 5;
     string memo = 6;
+    string transaction_hash = 7;
+    int32 output_index = 8;
+    Header header = 9;
 }
 
 message Order {
@@ -87,6 +98,13 @@ message Transaction {
 }
 
 message Transfer {
+    enum Status {
+        PENDING_NOT_SET = 0;
+        ASSIGNED = 1;
+        HANDLED = 2;
+        PASSED = 3;
+    }
+
     string id = 1;
     google.protobuf.Timestamp created_at = 2;
     string asset_id = 3;
@@ -95,6 +113,7 @@ message Transfer {
     int32 threshold = 6;
     string memo = 7;
     string signed_tx = 8;
+    Status status = 9;
 }
 
 message Audit {
