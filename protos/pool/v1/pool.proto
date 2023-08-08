@@ -92,20 +92,35 @@ message EarningProductType {
   }
 }
 
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"33c11af4-dbae-2cea-158f-2eaf97872dc8","action":1,"params":["int32:1","uint8:1"]}' -b64 url
+// AgQBM8Ea9NuuLOoVjy6vl4ctyAABAAAAAQGaHI_0
+
 message EarningSnapshotBuyData {
   int32 product_id = 1;
   EarningProductStatus.Enum product_status = 2;
 }
 
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"b3b4c09c-2421-41ec-b8d4-bdedfbbd58b1","action":2,"params":["int32:1","int64:100000000","uint8:1"]}' -b64 url
+// AgQBs7TAnCQhQey41L3t-71YsQACAAAAAQAAAAAF9eEAAV-_pLo=
+
 message EarningSnapshotRedeemData {
   int32 product_id = 1;
-  string amount = 2;
+  int64 amount = 2;
   EarningProductStatus.Enum product_status = 3;
 }
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"79c21af4-dbae-4aea-858f-1eaf97823cb3","action":3,"params":["string:08ae8c28-1529-4387-b30d-ed65414587e4"]}' -b64 url
+// AgQBecIa9NuuSuqFjx6vl4I8swADJDA4YWU4YzI4LTE1MjktNDM4Ny1iMzBkLWVkNjU0MTQ1ODdlNKyXib4=
+
 
 message EarningSnapshotCancelQueueData {
   string event_id = 1;
 }
+
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":100,"params":["int32:1","uint8:0","string:2023-07-03"]}' -b64 url
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBkAAAAAQAKMjAyMy0wNy0wM98DTfQ=
 
 message EarningSnapshotAdminInterestPaymentData {
   int32 product_id = 1;
@@ -113,27 +128,43 @@ message EarningSnapshotAdminInterestPaymentData {
   string date = 3; // format: 2008-01-02
 }
 
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":101,"params":["int32:1","int64:100000000"]}' -b64 url
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBlAAAAAQAAAAAF9eEAhmnkag==
+
+
 message EarningSnapshotAdminProductExpandData {
   int32 product_id = 1;
-  string amount = 2;
+  int64 amount = 2;
 }
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":102,"params":["int32:1"]}' -b64 url                
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBmAAAAAV9Uv9M=
 
 message EarningSnapshotAdminProductMergeExpansionData {
   int32 product_id = 1;
 }
 
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":103,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a"]}' -b64 url
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBnJGE4ZDRlMzhlLTkzMTctNDUyOS04Y2E5LTQyODlkNDY2ODA3YZA5O2U=
+
 message EarningSnapshotAdminPledgeData {
   string user_id = 1;
 }
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":104,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a"]}' -b64 url
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBoJGE4ZDRlMzhlLTkzMTctNDUyOS04Y2E5LTQyODlkNDY2ODA3YUQO7hs=
 
 message EarningSnapshotAdminCancelPledgeData {
   string user_id = 1;
 }
 
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"33c11af4-dbae-3cea-158f-2eaf97372dc1","action":105,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a","int32:3","int64:100000000"]}' -b64 url
+// AgQBM8Ea9NuuPOoVjy6vlzctwQBpJGE4ZDRlMzhlLTkzMTctNDUyOS04Y2E5LTQyODlkNDY2ODA3YQAAAAMAAAAABfXhAP2MZbE=
+
 message EarningSnapshotAdminLegacyAssetMigrationData {
   string user_id = 1;
   int32 product_id = 2;
-  string amount = 3;
+  int64 amount = 3;
 }
 
 message ListAssetsRequest {}
