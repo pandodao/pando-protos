@@ -39,10 +39,6 @@ message EventError {
     USER_EARNING_PRODUCT_EOD_NOT_FOUND = 10;
     // redeem
     USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED = 11;
-    // pledge
-    USER_HAS_BEEN_PLEDGED = 12;
-    // cancel_pledge
-    USER_HAS_NOT_BEEN_PLEDGED = 13;
   }
 }
 
