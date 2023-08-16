@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package explorer.v1;
+option go_package = "github.com/fox-one/pando-protos/explorer/v1;explorer";
+
+message Output {
+  string id = 1;
+  int32 created_at = 2;
+  string asset_id = 3;
+  string amount = 4;
+  string sender = 5;
+  string memo = 6;
+  string transaction_hash = 7;
+  int32 output_index = 8;
+  int32 header_action = 9;
+}
+
+message Transfer {
+  string id = 1;
+  int32 created_at = 2;
+  string asset_id = 3;
+  string amount = 4;
+  int32 threshold = 5;
+  string signed_tx = 6;
+}
+
+service ExplorerService {
+  rpc ListOutputs(ListOutputsRequest) returns (ListOutputsResponse);
+  rpc GetTransaction(GetTransactionRequest) returns (GetTransactionResponse);
+}
+
+message ListOutputsRequest {
+  string cursor = 1;
+  int32 limit = 2;
+}
+
+message ListOutputsResponse {
+  repeated Output outputs = 1;
+}
+
+message GetTransactionRequest {
+  string transaction_hash = 1;
+  int32 output_index = 2;
+}
+
+message GetTransactionResponse {
+  repeated Output outputs = 1;
+  repeated Transfer transfers = 2;
+}
