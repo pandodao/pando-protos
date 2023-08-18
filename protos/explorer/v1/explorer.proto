@@ -8,11 +8,10 @@ message Output {
   int32 created_at = 2;
   string asset_id = 3;
   string amount = 4;
-  string sender = 5;
-  string memo = 6;
-  string transaction_hash = 7;
-  int32 output_index = 8;
-  int32 header_action = 9;
+  string memo = 5;
+  string transaction_hash = 6;
+  int32 output_index = 7;
+  int32 header_action = 8;
 }
 
 message Transfer {
