@@ -1,0 +1,291 @@
+syntax = "proto3";
+
+package pool.v1; 
+option go_package = "github.com/fox-one/pando-protos/pool/v1;pool";
+
+service PoolService {
+  rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
+
+  rpc GetEvent(GetEventRequest) returns (GetEventResponse);
+  rpc ListEvents(ListEventsRequest) returns (ListEventsResponse);
+
+  rpc ListEarningProducts(ListEarningProductsRequest) returns (ListEarningProductsResponse);
+  rpc ListMyEarningProducts(ListMyEarningProductsRequest) returns (ListMyEarningProductsResponse);
+  rpc GetMyEarningProduct(GetMyEarningProductRequest) returns (GetMyEarningProductResponse);
+}
+
+message EventError {
+  enum Enum {
+    NOT_SET = 0;
+    // buy / redeem / admin_expand / admin_merge_expansion
+    EARNING_PRODUCT_STATUS_MISMATCH = 1;
+    // buy / admin_interest_payment
+    EARNING_PRODUCT_ASSET_MISMATCH = 2;
+    // buy
+    EARNING_PRODUCT_MIN_PER_ORDER_UNSATISFIED = 3;
+    // buy
+    EARNING_PRODUCT_MAX_PER_ORDER_UNSATISFIED = 4;
+    // buy
+    EARNING_PRODUCT_INSUFFICIENT = 5;
+    // redeem
+    USER_EARNING_PRODUCT_SHARE_INSUFFICIENT = 6;
+    // cancel_queue
+    EARNING_EVENT_MISMATCH = 7;
+    // buy or redeem
+    USER_EARNING_PRODUCT_HAS_REVERSED_QUEUING_EVENT = 8;
+    // admin_interest_payment
+    EARNING_PRODUCT_NOT_FOUND = 9;
+    // admin_interest_payment
+    USER_EARNING_PRODUCT_EOD_NOT_FOUND = 10;
+    // redeem
+    USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED = 11;
+  }
+}
+
+message EventAction {
+  enum Enum {
+    NOT_SET = 0;
+    BUY = 1;
+    REDEEM = 2;
+    DEPOSIT = 3;
+    INTEREST_PAYMENT = 4;
+    CANCEL_QUEUE = 5;
+
+    // for admins
+
+    ADMIN_INTEREST_PAYMENT = 100;
+    ADMIN_PRODUCT_EXPAND = 101;
+    ADMIN_PRODUCT_MERGE_EXPANSION = 102;
+    ADMIN_PLEDGE = 103;
+    ADMIN_CANCEL_PLEDGE = 104;
+    ADMIN_LEGACY_ASSET_MIGRATION = 105;
+  }
+}
+
+message EventStatus {
+  enum Enum {
+    NOT_SET = 0;
+    INIT = 1;
+    PENDING = 2;
+    QUEUING = 3;
+    CANCELLED = 4;
+    COMPLETED = 5;
+    FAILED = 6;
+  }
+}
+
+message EarningProductStatus {
+  enum Enum {
+    NOT_SET = 0;
+    RECRUITING = 1;
+    RUNNING = 2;
+    EXPANDING = 3;
+    DEACTIVATED = 4;
+  }
+}
+
+message EarningProductType {
+  enum Enum {
+    NOT_SET = 0;
+    STAKING = 1;
+    SAVINGS = 2;
+  }
+}
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"33c11af4-dbae-2cea-158f-2eaf97872dc8","action":1,"params":["int32:1","uint8:1"]}' -b64 url
+// AgQBM8Ea9NuuLOoVjy6vl4ctyAABAAAAAQGaHI_0
+
+message EarningSnapshotBuyData {
+  int32 product_id = 1;
+  EarningProductStatus.Enum product_status = 2;
+}
+
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"b3b4c09c-2421-41ec-b8d4-bdedfbbd58b1","action":2,"params":["int32:1","int64:100000000","uint8:1"]}' -b64 url
+// AgQBs7TAnCQhQey41L3t-71YsQACAAAAAQAAAAAF9eEAAV-_pLo=
+
+message EarningSnapshotRedeemData {
+  int32 product_id = 1;
+  int64 amount = 2;
+  EarningProductStatus.Enum product_status = 3;
+}
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"79c21af4-dbae-4aea-858f-1eaf97823cb3","action":3,"params":["string:08ae8c28-1529-4387-b30d-ed65414587e4"]}' -b64 url
+// AgQBecIa9NuuSuqFjx6vl4I8swADJDA4YWU4YzI4LTE1MjktNDM4Ny1iMzBkLWVkNjU0MTQ1ODdlNKyXib4=
+
+
+message EarningSnapshotCancelQueueData {
+  string event_id = 1;
+}
+
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":100,"params":["int32:1","uint8:0","string:2023-07-03"]}' -b64 url
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBkAAAAAQAKMjAyMy0wNy0wM98DTfQ=
+
+message EarningSnapshotAdminInterestPaymentData {
+  int32 product_id = 1;
+  EarningProductType.Enum product_type = 2;
+  string date = 3; // format: 2008-01-02
+}
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":101,"params":["int32:1","int64:100000000"]}' -b64 url
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBlAAAAAQAAAAAF9eEAhmnkag==
+
+
+message EarningSnapshotAdminProductExpandData {
+  int32 product_id = 1;
+  int64 amount = 2;
+}
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":102,"params":["int32:1"]}' -b64 url                
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBmAAAAAV9Uv9M=
+
+message EarningSnapshotAdminProductMergeExpansionData {
+  int32 product_id = 1;
+}
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":103,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a"]}' -b64 url
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBnJGE4ZDRlMzhlLTkzMTctNDUyOS04Y2E5LTQyODlkNDY2ODA3YZA5O2U=
+
+message EarningSnapshotAdminPledgeData {
+  string user_id = 1;
+}
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":104,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a"]}' -b64 url
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBoJGE4ZDRlMzhlLTkzMTctNDUyOS04Y2E5LTQyODlkNDY2ODA3YUQO7hs=
+
+message EarningSnapshotAdminCancelPledgeData {
+  string user_id = 1;
+}
+
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"33c11af4-dbae-3cea-158f-2eaf97372dc1","action":105,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a","int32:3","int64:100000000"]}' -b64 url
+// AgQBM8Ea9NuuPOoVjy6vlzctwQBpJGE4ZDRlMzhlLTkzMTctNDUyOS04Y2E5LTQyODlkNDY2ODA3YQAAAAMAAAAABfXhAP2MZbE=
+
+message EarningSnapshotAdminLegacyAssetMigrationData {
+  string user_id = 1;
+  int32 product_id = 2;
+  int64 amount = 3;
+}
+
+message ListAssetsRequest {}
+
+message Asset {
+  string asset_id = 1;
+  string chain_id = 2;
+  string symbol = 3;
+  string name = 4;
+  string logo = 5;
+  string price_usd = 6;
+  string price_btc = 7;
+  int32 order = 8;
+  int32 updated_at = 9;
+  string chain_logo = 10;
+}
+
+message ListAssetsResponse {
+  repeated Asset assets = 1;
+}
+
+message EarningProduct {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+  string asset_id = 4;
+  string interest_rate =5;
+  string min_amount_per_order = 6;
+  string max_amount_per_order = 7;
+  string capacity = 8;
+  string sold = 9;
+  string queuing_buy_amount = 10;
+  string queuing_redeem_amount = 11;
+  string version = 12;
+  int32 created_at = 13;
+  EarningProductType.Enum type = 14;
+  EarningProductStatus.Enum status = 15;
+  int32 running_nodes = 16;
+  int32 interest_payment_duration = 17;
+  string expanding_amount = 18;
+  string filled_expanding_amount = 19;
+  int32 expected_expanding_end_at = 20;
+  bool user_is_in_whitelist = 21;
+  string description_rules = 22;
+  string description_risk_disclosure = 23;
+  bool enabled_whitelist_limit = 24;
+}
+
+message ListEarningProductsRequest {
+  EarningProductType.Enum type = 1;
+}
+
+message ListEarningProductsResponse {
+  repeated EarningProduct products = 1;
+}
+
+message UserEarningProduct {
+  int32 id = 1;
+  string user_id = 2;
+  int32 earning_product_id = 3;
+  string amount = 4;
+  string queuing_buy_amount = 5;
+  string queuing_redeem_amount = 6;
+  string version = 7;
+  int32 created_at = 8;
+  int32 updated_at = 9;
+  string total_revenue = 10;
+  bool pledged = 11;
+  string expand_buy_amount = 12;
+}
+
+message ListMyEarningProductsRequest {}
+
+message ListMyEarningProductsResponse {
+  repeated UserEarningProduct products = 1;
+}
+
+message GetMyEarningProductRequest {
+  int32 id = 1;
+}
+
+message GetMyEarningProductResponse {
+  UserEarningProduct product = 1;
+}
+
+message GetEventRequest {
+  string follow_id = 1;
+}
+
+message Event {
+  string id = 1;
+  string user_id = 2;
+  EventAction.Enum action = 3;
+  int32 product_id = 4;
+  string asset_id = 5;
+  string amount = 6;
+  string filled_amount = 7;
+  EventStatus.Enum status = 8;
+  // set only if the status is failed
+  EventError.Enum error = 9;
+  string follow_id = 10;
+  int32 created_at = 11;
+  string queuing_ahead_amount = 12;
+  string interest_payment_date = 13;
+}
+
+message GetEventResponse {
+  Event event = 1;
+}
+
+message ListEventsRequest {
+  int32 earning_product_id = 1;
+  repeated EventAction.Enum actions = 2;
+  repeated EventStatus.Enum statuses = 3;
+  int32 offset = 4;
+  int32 limit = 5; // default 100, max 500
+  int32 start_at = 6;
+  int32 end_at = 7;
+  EarningProductType.Enum product_type = 8;
+}
+
+message ListEventsResponse {
+  repeated Event events = 1;
+}
