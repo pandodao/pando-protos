@@ -31,12 +31,13 @@ service ExplorerService {
 }
 
 message ListOutputsRequest {
-  int64 cursor = 1;
+  string cursor = 1;
   int32 limit = 2;
 }
 
 message ListOutputsResponse {
   repeated Output outputs = 1;
+  string next_cursor = 2;
 }
 
 message GetTransactionRequest {
