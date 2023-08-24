@@ -68,6 +68,8 @@ message EventAction {
     ADMIN_PLEDGE = 103;
     ADMIN_CANCEL_PLEDGE = 104;
     ADMIN_LEGACY_ASSET_MIGRATION = 105;
+    ADMIN_AUDIT_APPROVE = 106;
+    ADMIN_AUDIT_REJECT = 107;
   }
 }
 
@@ -175,6 +177,14 @@ message EarningSnapshotAdminLegacyAssetMigrationData {
   int32 product_id = 2;
   int64 amount = 3;
 }
+
+message EarningSnapshotAdminAuditApproveData {
+  string trace_id = 1;
+} 
+
+message EarningSnapshotAdminAuditRejectData {
+  string trace_id = 1;
+} 
 
 message ListAssetsRequest {}
 
@@ -301,9 +311,9 @@ message ListEventsResponse {
 
 message Audit {
   enum Status {
-      Pending = 0;
-      Rejected = 1;
-      Approved = 2;
+      NOT_SET = 0;
+      REJECTED = 1;
+      APPROVED = 2;
   }
 
   string id = 1;
