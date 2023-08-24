@@ -24,7 +24,9 @@ message Transfer {
 }
 
 service ExplorerService {
+  // curl -X POST -d '{"limit":5,"cursor":0}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/ListOutputs
   rpc ListOutputs(ListOutputsRequest) returns (ListOutputsResponse);
+  // curl -X POST -d '{"transaction_hash":"f31b695293651f065149166b83a9100456c2f03a941ca2156f19c830022c81f6","output_index":0}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/GetTransaction
   rpc GetTransaction(GetTransactionRequest) returns (GetTransactionResponse);
 }
 
