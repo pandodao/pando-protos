@@ -48,6 +48,10 @@ message EventError {
     USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED = 11;
     // admin_interest_payment
     EOD_ALREADY_APPLIED = 12;
+    // admin_audit_approve / admin_audit_reject
+    AUDIT_NOT_FOUND = 13;
+    // admin_audit_approve / admin_audit_reject
+    AUDIT_STATUS_MISMATCH = 14;
   }
 }
 
