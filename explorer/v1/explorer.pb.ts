@@ -18,6 +18,9 @@ export { MIN_SUPPORTED_VERSION_0_0_56 } from "twirpscript";
 //    ExplorerService Protobuf Client     //
 //========================================//
 
+/**
+ * curl -X POST -d '{"limit":5,"cursor":"0"}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/ListOutputs
+ */
 export async function ListOutputs(
   listOutputsRequest: ListOutputsRequest,
   config?: ClientConfiguration
@@ -30,6 +33,9 @@ export async function ListOutputs(
   return ListOutputsResponse.decode(response);
 }
 
+/**
+ * curl -X POST -d '{"transaction_hash":"f31b695293651f065149166b83a9100456c2f03a941ca2156f19c830022c81f6","output_index":0}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/GetTransaction
+ */
 export async function GetTransaction(
   getTransactionRequest: GetTransactionRequest,
   config?: ClientConfiguration
@@ -46,6 +52,9 @@ export async function GetTransaction(
 //      ExplorerService JSON Client       //
 //========================================//
 
+/**
+ * curl -X POST -d '{"limit":5,"cursor":"0"}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/ListOutputs
+ */
 export async function ListOutputsJSON(
   listOutputsRequest: ListOutputsRequest,
   config?: ClientConfiguration
@@ -58,6 +67,9 @@ export async function ListOutputsJSON(
   return ListOutputsResponseJSON.decode(response);
 }
 
+/**
+ * curl -X POST -d '{"transaction_hash":"f31b695293651f065149166b83a9100456c2f03a941ca2156f19c830022c81f6","output_index":0}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/GetTransaction
+ */
 export async function GetTransactionJSON(
   getTransactionRequest: GetTransactionRequest,
   config?: ClientConfiguration
@@ -75,10 +87,16 @@ export async function GetTransactionJSON(
 //========================================//
 
 export interface ExplorerService<Context = unknown> {
+  /**
+   * curl -X POST -d '{"limit":5,"cursor":"0"}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/ListOutputs
+   */
   ListOutputs: (
     listOutputsRequest: ListOutputsRequest,
     context: Context
   ) => Promise<ListOutputsResponse> | ListOutputsResponse;
+  /**
+   * curl -X POST -d '{"transaction_hash":"f31b695293651f065149166b83a9100456c2f03a941ca2156f19c830022c81f6","output_index":0}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/GetTransaction
+   */
   GetTransaction: (
     getTransactionRequest: GetTransactionRequest,
     context: Context
@@ -125,7 +143,6 @@ export interface Output {
   createdAt: number;
   assetId: string;
   amount: string;
-  sender: string;
   memo: string;
   transactionHash: string;
   outputIndex: number;
@@ -138,7 +155,7 @@ export interface Transfer {
   assetId: string;
   amount: string;
   threshold: number;
-  signedTx: string;
+  signedBy: string;
 }
 
 export interface ListOutputsRequest {
@@ -148,6 +165,7 @@ export interface ListOutputsRequest {
 
 export interface ListOutputsResponse {
   outputs: Output[];
+  nextCursor: string;
 }
 
 export interface GetTransactionRequest {
@@ -188,7 +206,6 @@ export const Output = {
       createdAt: 0,
       assetId: "",
       amount: "",
-      sender: "",
       memo: "",
       transactionHash: "",
       outputIndex: 0,
@@ -215,20 +232,17 @@ export const Output = {
     if (msg.amount) {
       writer.writeString(4, msg.amount);
     }
-    if (msg.sender) {
-      writer.writeString(5, msg.sender);
-    }
     if (msg.memo) {
-      writer.writeString(6, msg.memo);
+      writer.writeString(5, msg.memo);
     }
     if (msg.transactionHash) {
-      writer.writeString(7, msg.transactionHash);
+      writer.writeString(6, msg.transactionHash);
     }
     if (msg.outputIndex) {
-      writer.writeInt32(8, msg.outputIndex);
+      writer.writeInt32(7, msg.outputIndex);
     }
     if (msg.headerAction) {
-      writer.writeInt32(9, msg.headerAction);
+      writer.writeInt32(8, msg.headerAction);
     }
     return writer;
   },
@@ -257,22 +271,18 @@ export const Output = {
           break;
         }
         case 5: {
-          msg.sender = reader.readString();
-          break;
-        }
-        case 6: {
           msg.memo = reader.readString();
           break;
         }
-        case 7: {
+        case 6: {
           msg.transactionHash = reader.readString();
           break;
         }
-        case 8: {
+        case 7: {
           msg.outputIndex = reader.readInt32();
           break;
         }
-        case 9: {
+        case 8: {
           msg.headerAction = reader.readInt32();
           break;
         }
@@ -314,7 +324,7 @@ export const Transfer = {
       assetId: "",
       amount: "",
       threshold: 0,
-      signedTx: "",
+      signedBy: "",
     };
   },
 
@@ -340,8 +350,8 @@ export const Transfer = {
     if (msg.threshold) {
       writer.writeInt32(5, msg.threshold);
     }
-    if (msg.signedTx) {
-      writer.writeString(6, msg.signedTx);
+    if (msg.signedBy) {
+      writer.writeString(6, msg.signedBy);
     }
     return writer;
   },
@@ -374,7 +384,7 @@ export const Transfer = {
           break;
         }
         case 6: {
-          msg.signedTx = reader.readString();
+          msg.signedBy = reader.readString();
           break;
         }
         default: {
@@ -489,6 +499,7 @@ export const ListOutputsResponse = {
   initialize: function (): ListOutputsResponse {
     return {
       outputs: [],
+      nextCursor: "",
     };
   },
 
@@ -501,6 +512,9 @@ export const ListOutputsResponse = {
   ): BinaryWriter {
     if (msg.outputs?.length) {
       writer.writeRepeatedMessage(1, msg.outputs as any, Output._writeMessage);
+    }
+    if (msg.nextCursor) {
+      writer.writeString(2, msg.nextCursor);
     }
     return writer;
   },
@@ -519,6 +533,10 @@ export const ListOutputsResponse = {
           const m = Output.initialize();
           reader.readMessage(m, Output._readMessage);
           msg.outputs.push(m);
+          break;
+        }
+        case 2: {
+          msg.nextCursor = reader.readString();
           break;
         }
         default: {
@@ -717,7 +735,6 @@ export const OutputJSON = {
       createdAt: 0,
       assetId: "",
       amount: "",
-      sender: "",
       memo: "",
       transactionHash: "",
       outputIndex: 0,
@@ -741,9 +758,6 @@ export const OutputJSON = {
     }
     if (msg.amount) {
       json.amount = msg.amount;
-    }
-    if (msg.sender) {
-      json.sender = msg.sender;
     }
     if (msg.memo) {
       json.memo = msg.memo;
@@ -779,10 +793,6 @@ export const OutputJSON = {
     const _amount = json.amount;
     if (_amount) {
       msg.amount = _amount;
-    }
-    const _sender = json.sender;
-    if (_sender) {
-      msg.sender = _sender;
     }
     const _memo = json.memo;
     if (_memo) {
@@ -832,7 +842,7 @@ export const TransferJSON = {
       assetId: "",
       amount: "",
       threshold: 0,
-      signedTx: "",
+      signedBy: "",
     };
   },
 
@@ -856,8 +866,8 @@ export const TransferJSON = {
     if (msg.threshold) {
       json.threshold = msg.threshold;
     }
-    if (msg.signedTx) {
-      json.signedTx = msg.signedTx;
+    if (msg.signedBy) {
+      json.signedBy = msg.signedBy;
     }
     return json;
   },
@@ -886,9 +896,9 @@ export const TransferJSON = {
     if (_threshold) {
       msg.threshold = _threshold;
     }
-    const _signedTx = json.signedTx ?? json.signed_tx;
-    if (_signedTx) {
-      msg.signedTx = _signedTx;
+    const _signedBy = json.signedBy ?? json.signed_by;
+    if (_signedBy) {
+      msg.signedBy = _signedBy;
     }
     return msg;
   },
@@ -981,6 +991,7 @@ export const ListOutputsResponseJSON = {
   initialize: function (): ListOutputsResponse {
     return {
       outputs: [],
+      nextCursor: "",
     };
   },
 
@@ -993,6 +1004,9 @@ export const ListOutputsResponseJSON = {
     const json: Record<string, unknown> = {};
     if (msg.outputs?.length) {
       json.outputs = msg.outputs.map(OutputJSON._writeMessage);
+    }
+    if (msg.nextCursor) {
+      json.nextCursor = msg.nextCursor;
     }
     return json;
   },
@@ -1011,6 +1025,10 @@ export const ListOutputsResponseJSON = {
         OutputJSON._readMessage(m, item);
         msg.outputs.push(m);
       }
+    }
+    const _nextCursor = json.nextCursor ?? json.next_cursor;
+    if (_nextCursor) {
+      msg.nextCursor = _nextCursor;
     }
     return msg;
   },
