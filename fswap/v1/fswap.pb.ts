@@ -716,6 +716,7 @@ export interface Transaction {
   feeValue: string;
   followId: string;
   liquidity: string;
+  groupId: string;
 }
 
 export declare namespace Transaction {
@@ -1560,6 +1561,7 @@ export const Transaction = {
       feeValue: "",
       followId: "",
       liquidity: "",
+      groupId: "",
     };
   },
 
@@ -1623,6 +1625,9 @@ export const Transaction = {
     }
     if (msg.liquidity) {
       writer.writeString(18, msg.liquidity);
+    }
+    if (msg.groupId) {
+      writer.writeString(19, msg.groupId);
     }
     return writer;
   },
@@ -1704,6 +1709,10 @@ export const Transaction = {
         }
         case 18: {
           msg.liquidity = reader.readString();
+          break;
+        }
+        case 19: {
+          msg.groupId = reader.readString();
           break;
         }
         default: {
@@ -4508,6 +4517,7 @@ export const TransactionJSON = {
       feeValue: "",
       followId: "",
       liquidity: "",
+      groupId: "",
     };
   },
 
@@ -4572,6 +4582,9 @@ export const TransactionJSON = {
     }
     if (msg.liquidity) {
       json.liquidity = msg.liquidity;
+    }
+    if (msg.groupId) {
+      json.groupId = msg.groupId;
     }
     return json;
   },
@@ -4653,6 +4666,10 @@ export const TransactionJSON = {
     const _liquidity = json.liquidity;
     if (_liquidity) {
       msg.liquidity = _liquidity;
+    }
+    const _groupId = json.groupId ?? json.group_id;
+    if (_groupId) {
+      msg.groupId = _groupId;
     }
     return msg;
   },
