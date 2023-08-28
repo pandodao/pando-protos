@@ -12,6 +12,7 @@ message Output {
   string transaction_hash = 6;
   int32 output_index = 7;
   int32 header_action = 8;
+  int32 protocol_id = 9;
 }
 
 message Transfer {
