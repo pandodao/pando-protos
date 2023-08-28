@@ -96,6 +96,7 @@ message Transaction {
     string fee_value = 16;
     string follow_id = 17;
     string liquidity = 18;
+    string group_id = 19;
 }
 
 message Order {
