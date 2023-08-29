@@ -88,15 +88,6 @@ message Trade {
     }
 }
 
-message Payment {
-    string trace_id = 1;
-    string asset_id = 2;
-    string amount = 3;
-    string opponent_id = 4;
-    string memo = 5;
-    string url = 6;
-}
-
 message PreOrderRequest {
     Order.Type type = 1;
     string pay_asset_id = 2;
@@ -107,7 +98,6 @@ message PreOrderRequest {
 message PreOrderResponse {
     Order order = 1;
     repeated Trade trades = 2;
-    Payment payment = 3;
 }
 
 message CancelOrderRequest {
