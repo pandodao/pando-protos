@@ -127,6 +127,7 @@ message ListOrdersRequest {
 message ListOrdersResponse {
     repeated Order orders = 1;
     string next_cursor = 2;
+    bool has_next = 3;
 }
 
 service TradingLabService {
