@@ -291,8 +291,8 @@ export interface GetOrderResponse {
 }
 
 export interface ListOrdersRequest {
-  type: string;
-  state: string;
+  type: Order.Type;
+  state: Order.State;
   cursor: string;
   limit: number;
 }
@@ -1617,8 +1617,8 @@ export const ListOrdersRequest = {
    */
   initialize: function (): ListOrdersRequest {
     return {
-      type: "",
-      state: "",
+      type: Order.Type._fromInt(0),
+      state: Order.State._fromInt(0),
       cursor: "",
       limit: 0,
     };
@@ -1631,11 +1631,11 @@ export const ListOrdersRequest = {
     msg: Partial<ListOrdersRequest>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.type) {
-      writer.writeString(1, msg.type);
+    if (msg.type && Order.Type._toInt(msg.type)) {
+      writer.writeEnum(1, Order.Type._toInt(msg.type));
     }
-    if (msg.state) {
-      writer.writeString(2, msg.state);
+    if (msg.state && Order.State._toInt(msg.state)) {
+      writer.writeEnum(2, Order.State._toInt(msg.state));
     }
     if (msg.cursor) {
       writer.writeString(3, msg.cursor);
@@ -1657,11 +1657,11 @@ export const ListOrdersRequest = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.type = reader.readString();
+          msg.type = Order.Type._fromInt(reader.readEnum());
           break;
         }
         case 2: {
-          msg.state = reader.readString();
+          msg.state = Order.State._fromInt(reader.readEnum());
           break;
         }
         case 3: {
@@ -2973,8 +2973,8 @@ export const ListOrdersRequestJSON = {
    */
   initialize: function (): ListOrdersRequest {
     return {
-      type: "",
-      state: "",
+      type: Order.Type._fromInt(0),
+      state: Order.State._fromInt(0),
       cursor: "",
       limit: 0,
     };
@@ -2987,10 +2987,10 @@ export const ListOrdersRequestJSON = {
     msg: Partial<ListOrdersRequest>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.type) {
+    if (msg.type && OrderJSON.Type._toInt(msg.type)) {
       json.type = msg.type;
     }
-    if (msg.state) {
+    if (msg.state && OrderJSON.State._toInt(msg.state)) {
       json.state = msg.state;
     }
     if (msg.cursor) {
