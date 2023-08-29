@@ -300,6 +300,7 @@ export interface ListOrdersRequest {
 export interface ListOrdersResponse {
   orders: Order[];
   nextCursor: string;
+  hasNext: boolean;
 }
 
 //========================================//
@@ -1710,6 +1711,7 @@ export const ListOrdersResponse = {
     return {
       orders: [],
       nextCursor: "",
+      hasNext: false,
     };
   },
 
@@ -1725,6 +1727,9 @@ export const ListOrdersResponse = {
     }
     if (msg.nextCursor) {
       writer.writeString(2, msg.nextCursor);
+    }
+    if (msg.hasNext) {
+      writer.writeBool(3, msg.hasNext);
     }
     return writer;
   },
@@ -1747,6 +1752,10 @@ export const ListOrdersResponse = {
         }
         case 2: {
           msg.nextCursor = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.hasNext = reader.readBool();
           break;
         }
         default: {
@@ -3054,6 +3063,7 @@ export const ListOrdersResponseJSON = {
     return {
       orders: [],
       nextCursor: "",
+      hasNext: false,
     };
   },
 
@@ -3069,6 +3079,9 @@ export const ListOrdersResponseJSON = {
     }
     if (msg.nextCursor) {
       json.nextCursor = msg.nextCursor;
+    }
+    if (msg.hasNext) {
+      json.hasNext = msg.hasNext;
     }
     return json;
   },
@@ -3091,6 +3104,10 @@ export const ListOrdersResponseJSON = {
     const _nextCursor = json.nextCursor ?? json.next_cursor;
     if (_nextCursor) {
       msg.nextCursor = _nextCursor;
+    }
+    const _hasNext = json.hasNext ?? json.has_next;
+    if (_hasNext) {
+      msg.hasNext = _hasNext;
     }
     return msg;
   },
