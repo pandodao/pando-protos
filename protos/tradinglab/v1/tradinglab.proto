@@ -118,8 +118,8 @@ message GetOrderResponse {
 }
 
 message ListOrdersRequest {
-    string type = 1;
-    string state = 2;
+    Order.Type type = 1;
+    Order.State state = 2;
     string cursor = 3;
     int32 limit = 4;
 }
