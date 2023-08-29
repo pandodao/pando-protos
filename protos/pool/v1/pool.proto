@@ -39,6 +39,8 @@ message EventError {
     USER_EARNING_PRODUCT_EOD_NOT_FOUND = 10;
     // redeem
     USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED = 11;
+    // admin_interest_payment
+    EOD_ALREADY_APPLIED = 12;
   }
 }
 
