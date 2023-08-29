@@ -278,7 +278,8 @@ export declare namespace EventError {
     | "USER_EARNING_PRODUCT_HAS_REVERSED_QUEUING_EVENT"
     | "EARNING_PRODUCT_NOT_FOUND"
     | "USER_EARNING_PRODUCT_EOD_NOT_FOUND"
-    | "USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED";
+    | "USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED"
+    | "EOD_ALREADY_APPLIED";
 }
 
 export interface EventAction {}
@@ -593,6 +594,10 @@ export const EventError = {
     USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED:
       "USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED",
     /**
+     * admin_interest_payment
+     */
+    EOD_ALREADY_APPLIED: "EOD_ALREADY_APPLIED",
+    /**
      * @private
      */
     _fromInt: function (i: number): EventError.Enum {
@@ -632,6 +637,9 @@ export const EventError = {
         }
         case 11: {
           return "USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED";
+        }
+        case 12: {
+          return "EOD_ALREADY_APPLIED";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -679,6 +687,9 @@ export const EventError = {
         }
         case "USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED": {
           return 11;
+        }
+        case "EOD_ALREADY_APPLIED": {
+          return 12;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -3465,6 +3476,10 @@ export const EventErrorJSON = {
     USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED:
       "USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED",
     /**
+     * admin_interest_payment
+     */
+    EOD_ALREADY_APPLIED: "EOD_ALREADY_APPLIED",
+    /**
      * @private
      */
     _fromInt: function (i: number): EventError.Enum {
@@ -3504,6 +3519,9 @@ export const EventErrorJSON = {
         }
         case 11: {
           return "USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED";
+        }
+        case 12: {
+          return "EOD_ALREADY_APPLIED";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -3551,6 +3569,9 @@ export const EventErrorJSON = {
         }
         case "USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED": {
           return 11;
+        }
+        case "EOD_ALREADY_APPLIED": {
+          return 12;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
