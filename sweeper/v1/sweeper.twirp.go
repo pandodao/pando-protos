@@ -35,11 +35,13 @@ const _ = twirp.TwirpPackageMinVersion_8_1_0
 type SweeperService interface {
 	SendTransfer(context.Context, *SendTransferRequest) (*SendTransferResponse, error)
 
-	SendTransfers(context.Context, *SendTransfersRequest) (*SendTransfersResponse, error)
-
 	GetTransfer(context.Context, *GetTransferRequest) (*GetTransferResponse, error)
 
-	GetBalances(context.Context, *GetBalancesRequest) (*GetBalancesResponse, error)
+	ListBalances(context.Context, *ListBalancesRequest) (*ListBalancesResponse, error)
+
+	ListSnapshots(context.Context, *ListSnapshotsRequest) (*ListSnapshotsResponse, error)
+
+	ClaimSnapshot(context.Context, *ClaimSnapshotRequest) (*ClaimSnapshotResponse, error)
 }
 
 // ==============================
@@ -48,7 +50,7 @@ type SweeperService interface {
 
 type sweeperServiceProtobufClient struct {
 	client      HTTPClient
-	urls        [4]string
+	urls        [5]string
 	interceptor twirp.Interceptor
 	opts        twirp.ClientOptions
 }
@@ -76,11 +78,12 @@ func NewSweeperServiceProtobufClient(baseURL string, client HTTPClient, opts ...
 	// Build method URLs: <baseURL>[<prefix>]/<package>.<Service>/<Method>
 	serviceURL := sanitizeBaseURL(baseURL)
 	serviceURL += baseServicePath(pathPrefix, "sweeper.v1", "SweeperService")
-	urls := [4]string{
+	urls := [5]string{
 		serviceURL + "SendTransfer",
-		serviceURL + "SendTransfers",
 		serviceURL + "GetTransfer",
-		serviceURL + "GetBalances",
+		serviceURL + "ListBalances",
+		serviceURL + "ListSnapshots",
+		serviceURL + "ClaimSnapshot",
 	}
 
 	return &sweeperServiceProtobufClient{
@@ -137,52 +140,6 @@ func (c *sweeperServiceProtobufClient) callSendTransfer(ctx context.Context, in 
 	return out, nil
 }
 
-func (c *sweeperServiceProtobufClient) SendTransfers(ctx context.Context, in *SendTransfersRequest) (*SendTransfersResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "sweeper.v1")
-	ctx = ctxsetters.WithServiceName(ctx, "SweeperService")
-	ctx = ctxsetters.WithMethodName(ctx, "SendTransfers")
-	caller := c.callSendTransfers
-	if c.interceptor != nil {
-		caller = func(ctx context.Context, req *SendTransfersRequest) (*SendTransfersResponse, error) {
-			resp, err := c.interceptor(
-				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*SendTransfersRequest)
-					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*SendTransfersRequest) when calling interceptor")
-					}
-					return c.callSendTransfers(ctx, typedReq)
-				},
-			)(ctx, req)
-			if resp != nil {
-				typedResp, ok := resp.(*SendTransfersResponse)
-				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*SendTransfersResponse) when calling interceptor")
-				}
-				return typedResp, err
-			}
-			return nil, err
-		}
-	}
-	return caller(ctx, in)
-}
-
-func (c *sweeperServiceProtobufClient) callSendTransfers(ctx context.Context, in *SendTransfersRequest) (*SendTransfersResponse, error) {
-	out := new(SendTransfersResponse)
-	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
-	if err != nil {
-		twerr, ok := err.(twirp.Error)
-		if !ok {
-			twerr = twirp.InternalErrorWith(err)
-		}
-		callClientError(ctx, c.opts.Hooks, twerr)
-		return nil, err
-	}
-
-	callClientResponseReceived(ctx, c.opts.Hooks)
-
-	return out, nil
-}
-
 func (c *sweeperServiceProtobufClient) GetTransfer(ctx context.Context, in *GetTransferRequest) (*GetTransferResponse, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "sweeper.v1")
 	ctx = ctxsetters.WithServiceName(ctx, "SweeperService")
@@ -214,6 +171,52 @@ func (c *sweeperServiceProtobufClient) GetTransfer(ctx context.Context, in *GetT
 
 func (c *sweeperServiceProtobufClient) callGetTransfer(ctx context.Context, in *GetTransferRequest) (*GetTransferResponse, error) {
 	out := new(GetTransferResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *sweeperServiceProtobufClient) ListBalances(ctx context.Context, in *ListBalancesRequest) (*ListBalancesResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "sweeper.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "SweeperService")
+	ctx = ctxsetters.WithMethodName(ctx, "ListBalances")
+	caller := c.callListBalances
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *ListBalancesRequest) (*ListBalancesResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ListBalancesRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ListBalancesRequest) when calling interceptor")
+					}
+					return c.callListBalances(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ListBalancesResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ListBalancesResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *sweeperServiceProtobufClient) callListBalances(ctx context.Context, in *ListBalancesRequest) (*ListBalancesResponse, error) {
+	out := new(ListBalancesResponse)
 	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -229,26 +232,26 @@ func (c *sweeperServiceProtobufClient) callGetTransfer(ctx context.Context, in *
 	return out, nil
 }
 
-func (c *sweeperServiceProtobufClient) GetBalances(ctx context.Context, in *GetBalancesRequest) (*GetBalancesResponse, error) {
+func (c *sweeperServiceProtobufClient) ListSnapshots(ctx context.Context, in *ListSnapshotsRequest) (*ListSnapshotsResponse, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "sweeper.v1")
 	ctx = ctxsetters.WithServiceName(ctx, "SweeperService")
-	ctx = ctxsetters.WithMethodName(ctx, "GetBalances")
-	caller := c.callGetBalances
+	ctx = ctxsetters.WithMethodName(ctx, "ListSnapshots")
+	caller := c.callListSnapshots
 	if c.interceptor != nil {
-		caller = func(ctx context.Context, req *GetBalancesRequest) (*GetBalancesResponse, error) {
+		caller = func(ctx context.Context, req *ListSnapshotsRequest) (*ListSnapshotsResponse, error) {
 			resp, err := c.interceptor(
 				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*GetBalancesRequest)
+					typedReq, ok := req.(*ListSnapshotsRequest)
 					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*GetBalancesRequest) when calling interceptor")
+						return nil, twirp.InternalError("failed type assertion req.(*ListSnapshotsRequest) when calling interceptor")
 					}
-					return c.callGetBalances(ctx, typedReq)
+					return c.callListSnapshots(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
-				typedResp, ok := resp.(*GetBalancesResponse)
+				typedResp, ok := resp.(*ListSnapshotsResponse)
 				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*GetBalancesResponse) when calling interceptor")
+					return nil, twirp.InternalError("failed type assertion resp.(*ListSnapshotsResponse) when calling interceptor")
 				}
 				return typedResp, err
 			}
@@ -258,9 +261,55 @@ func (c *sweeperServiceProtobufClient) GetBalances(ctx context.Context, in *GetB
 	return caller(ctx, in)
 }
 
-func (c *sweeperServiceProtobufClient) callGetBalances(ctx context.Context, in *GetBalancesRequest) (*GetBalancesResponse, error) {
-	out := new(GetBalancesResponse)
+func (c *sweeperServiceProtobufClient) callListSnapshots(ctx context.Context, in *ListSnapshotsRequest) (*ListSnapshotsResponse, error) {
+	out := new(ListSnapshotsResponse)
 	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[3], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *sweeperServiceProtobufClient) ClaimSnapshot(ctx context.Context, in *ClaimSnapshotRequest) (*ClaimSnapshotResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "sweeper.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "SweeperService")
+	ctx = ctxsetters.WithMethodName(ctx, "ClaimSnapshot")
+	caller := c.callClaimSnapshot
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *ClaimSnapshotRequest) (*ClaimSnapshotResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ClaimSnapshotRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ClaimSnapshotRequest) when calling interceptor")
+					}
+					return c.callClaimSnapshot(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ClaimSnapshotResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ClaimSnapshotResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *sweeperServiceProtobufClient) callClaimSnapshot(ctx context.Context, in *ClaimSnapshotRequest) (*ClaimSnapshotResponse, error) {
+	out := new(ClaimSnapshotResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[4], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -281,7 +330,7 @@ func (c *sweeperServiceProtobufClient) callGetBalances(ctx context.Context, in *
 
 type sweeperServiceJSONClient struct {
 	client      HTTPClient
-	urls        [4]string
+	urls        [5]string
 	interceptor twirp.Interceptor
 	opts        twirp.ClientOptions
 }
@@ -309,11 +358,12 @@ func NewSweeperServiceJSONClient(baseURL string, client HTTPClient, opts ...twir
 	// Build method URLs: <baseURL>[<prefix>]/<package>.<Service>/<Method>
 	serviceURL := sanitizeBaseURL(baseURL)
 	serviceURL += baseServicePath(pathPrefix, "sweeper.v1", "SweeperService")
-	urls := [4]string{
+	urls := [5]string{
 		serviceURL + "SendTransfer",
-		serviceURL + "SendTransfers",
 		serviceURL + "GetTransfer",
-		serviceURL + "GetBalances",
+		serviceURL + "ListBalances",
+		serviceURL + "ListSnapshots",
+		serviceURL + "ClaimSnapshot",
 	}
 
 	return &sweeperServiceJSONClient{
@@ -370,52 +420,6 @@ func (c *sweeperServiceJSONClient) callSendTransfer(ctx context.Context, in *Sen
 	return out, nil
 }
 
-func (c *sweeperServiceJSONClient) SendTransfers(ctx context.Context, in *SendTransfersRequest) (*SendTransfersResponse, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "sweeper.v1")
-	ctx = ctxsetters.WithServiceName(ctx, "SweeperService")
-	ctx = ctxsetters.WithMethodName(ctx, "SendTransfers")
-	caller := c.callSendTransfers
-	if c.interceptor != nil {
-		caller = func(ctx context.Context, req *SendTransfersRequest) (*SendTransfersResponse, error) {
-			resp, err := c.interceptor(
-				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*SendTransfersRequest)
-					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*SendTransfersRequest) when calling interceptor")
-					}
-					return c.callSendTransfers(ctx, typedReq)
-				},
-			)(ctx, req)
-			if resp != nil {
-				typedResp, ok := resp.(*SendTransfersResponse)
-				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*SendTransfersResponse) when calling interceptor")
-				}
-				return typedResp, err
-			}
-			return nil, err
-		}
-	}
-	return caller(ctx, in)
-}
-
-func (c *sweeperServiceJSONClient) callSendTransfers(ctx context.Context, in *SendTransfersRequest) (*SendTransfersResponse, error) {
-	out := new(SendTransfersResponse)
-	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
-	if err != nil {
-		twerr, ok := err.(twirp.Error)
-		if !ok {
-			twerr = twirp.InternalErrorWith(err)
-		}
-		callClientError(ctx, c.opts.Hooks, twerr)
-		return nil, err
-	}
-
-	callClientResponseReceived(ctx, c.opts.Hooks)
-
-	return out, nil
-}
-
 func (c *sweeperServiceJSONClient) GetTransfer(ctx context.Context, in *GetTransferRequest) (*GetTransferResponse, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "sweeper.v1")
 	ctx = ctxsetters.WithServiceName(ctx, "SweeperService")
@@ -447,6 +451,52 @@ func (c *sweeperServiceJSONClient) GetTransfer(ctx context.Context, in *GetTrans
 
 func (c *sweeperServiceJSONClient) callGetTransfer(ctx context.Context, in *GetTransferRequest) (*GetTransferResponse, error) {
 	out := new(GetTransferResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *sweeperServiceJSONClient) ListBalances(ctx context.Context, in *ListBalancesRequest) (*ListBalancesResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "sweeper.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "SweeperService")
+	ctx = ctxsetters.WithMethodName(ctx, "ListBalances")
+	caller := c.callListBalances
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *ListBalancesRequest) (*ListBalancesResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ListBalancesRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ListBalancesRequest) when calling interceptor")
+					}
+					return c.callListBalances(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ListBalancesResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ListBalancesResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *sweeperServiceJSONClient) callListBalances(ctx context.Context, in *ListBalancesRequest) (*ListBalancesResponse, error) {
+	out := new(ListBalancesResponse)
 	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -462,26 +512,26 @@ func (c *sweeperServiceJSONClient) callGetTransfer(ctx context.Context, in *GetT
 	return out, nil
 }
 
-func (c *sweeperServiceJSONClient) GetBalances(ctx context.Context, in *GetBalancesRequest) (*GetBalancesResponse, error) {
+func (c *sweeperServiceJSONClient) ListSnapshots(ctx context.Context, in *ListSnapshotsRequest) (*ListSnapshotsResponse, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "sweeper.v1")
 	ctx = ctxsetters.WithServiceName(ctx, "SweeperService")
-	ctx = ctxsetters.WithMethodName(ctx, "GetBalances")
-	caller := c.callGetBalances
+	ctx = ctxsetters.WithMethodName(ctx, "ListSnapshots")
+	caller := c.callListSnapshots
 	if c.interceptor != nil {
-		caller = func(ctx context.Context, req *GetBalancesRequest) (*GetBalancesResponse, error) {
+		caller = func(ctx context.Context, req *ListSnapshotsRequest) (*ListSnapshotsResponse, error) {
 			resp, err := c.interceptor(
 				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*GetBalancesRequest)
+					typedReq, ok := req.(*ListSnapshotsRequest)
 					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*GetBalancesRequest) when calling interceptor")
+						return nil, twirp.InternalError("failed type assertion req.(*ListSnapshotsRequest) when calling interceptor")
 					}
-					return c.callGetBalances(ctx, typedReq)
+					return c.callListSnapshots(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
-				typedResp, ok := resp.(*GetBalancesResponse)
+				typedResp, ok := resp.(*ListSnapshotsResponse)
 				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*GetBalancesResponse) when calling interceptor")
+					return nil, twirp.InternalError("failed type assertion resp.(*ListSnapshotsResponse) when calling interceptor")
 				}
 				return typedResp, err
 			}
@@ -491,9 +541,55 @@ func (c *sweeperServiceJSONClient) GetBalances(ctx context.Context, in *GetBalan
 	return caller(ctx, in)
 }
 
-func (c *sweeperServiceJSONClient) callGetBalances(ctx context.Context, in *GetBalancesRequest) (*GetBalancesResponse, error) {
-	out := new(GetBalancesResponse)
+func (c *sweeperServiceJSONClient) callListSnapshots(ctx context.Context, in *ListSnapshotsRequest) (*ListSnapshotsResponse, error) {
+	out := new(ListSnapshotsResponse)
 	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[3], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *sweeperServiceJSONClient) ClaimSnapshot(ctx context.Context, in *ClaimSnapshotRequest) (*ClaimSnapshotResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "sweeper.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "SweeperService")
+	ctx = ctxsetters.WithMethodName(ctx, "ClaimSnapshot")
+	caller := c.callClaimSnapshot
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *ClaimSnapshotRequest) (*ClaimSnapshotResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ClaimSnapshotRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ClaimSnapshotRequest) when calling interceptor")
+					}
+					return c.callClaimSnapshot(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ClaimSnapshotResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ClaimSnapshotResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *sweeperServiceJSONClient) callClaimSnapshot(ctx context.Context, in *ClaimSnapshotRequest) (*ClaimSnapshotResponse, error) {
+	out := new(ClaimSnapshotResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[4], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -608,14 +704,17 @@ func (s *sweeperServiceServer) ServeHTTP(resp http.ResponseWriter, req *http.Req
 	case "SendTransfer":
 		s.serveSendTransfer(ctx, resp, req)
 		return
-	case "SendTransfers":
-		s.serveSendTransfers(ctx, resp, req)
-		return
 	case "GetTransfer":
 		s.serveGetTransfer(ctx, resp, req)
 		return
-	case "GetBalances":
-		s.serveGetBalances(ctx, resp, req)
+	case "ListBalances":
+		s.serveListBalances(ctx, resp, req)
+		return
+	case "ListSnapshots":
+		s.serveListSnapshots(ctx, resp, req)
+		return
+	case "ClaimSnapshot":
+		s.serveClaimSnapshot(ctx, resp, req)
 		return
 	default:
 		msg := fmt.Sprintf("no handler for path %q", req.URL.Path)
@@ -781,186 +880,6 @@ func (s *sweeperServiceServer) serveSendTransferProtobuf(ctx context.Context, re
 	}
 	if respContent == nil {
 		s.writeError(ctx, resp, twirp.InternalError("received a nil *SendTransferResponse and nil error while calling SendTransfer. nil responses are not supported"))
-		return
-	}
-
-	ctx = callResponsePrepared(ctx, s.hooks)
-
-	respBytes, err := proto.Marshal(respContent)
-	if err != nil {
-		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
-		return
-	}
-
-	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
-	resp.Header().Set("Content-Type", "application/protobuf")
-	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
-	resp.WriteHeader(http.StatusOK)
-	if n, err := resp.Write(respBytes); err != nil {
-		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
-		twerr := twirp.NewError(twirp.Unknown, msg)
-		ctx = callError(ctx, s.hooks, twerr)
-	}
-	callResponseSent(ctx, s.hooks)
-}
-
-func (s *sweeperServiceServer) serveSendTransfers(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
-	header := req.Header.Get("Content-Type")
-	i := strings.Index(header, ";")
-	if i == -1 {
-		i = len(header)
-	}
-	switch strings.TrimSpace(strings.ToLower(header[:i])) {
-	case "application/json":
-		s.serveSendTransfersJSON(ctx, resp, req)
-	case "application/protobuf":
-		s.serveSendTransfersProtobuf(ctx, resp, req)
-	default:
-		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
-		twerr := badRouteError(msg, req.Method, req.URL.Path)
-		s.writeError(ctx, resp, twerr)
-	}
-}
-
-func (s *sweeperServiceServer) serveSendTransfersJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
-	var err error
-	ctx = ctxsetters.WithMethodName(ctx, "SendTransfers")
-	ctx, err = callRequestRouted(ctx, s.hooks)
-	if err != nil {
-		s.writeError(ctx, resp, err)
-		return
-	}
-
-	d := json.NewDecoder(req.Body)
-	rawReqBody := json.RawMessage{}
-	if err := d.Decode(&rawReqBody); err != nil {
-		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
-		return
-	}
-	reqContent := new(SendTransfersRequest)
-	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
-	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
-		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
-		return
-	}
-
-	handler := s.SweeperService.SendTransfers
-	if s.interceptor != nil {
-		handler = func(ctx context.Context, req *SendTransfersRequest) (*SendTransfersResponse, error) {
-			resp, err := s.interceptor(
-				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*SendTransfersRequest)
-					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*SendTransfersRequest) when calling interceptor")
-					}
-					return s.SweeperService.SendTransfers(ctx, typedReq)
-				},
-			)(ctx, req)
-			if resp != nil {
-				typedResp, ok := resp.(*SendTransfersResponse)
-				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*SendTransfersResponse) when calling interceptor")
-				}
-				return typedResp, err
-			}
-			return nil, err
-		}
-	}
-
-	// Call service method
-	var respContent *SendTransfersResponse
-	func() {
-		defer ensurePanicResponses(ctx, resp, s.hooks)
-		respContent, err = handler(ctx, reqContent)
-	}()
-
-	if err != nil {
-		s.writeError(ctx, resp, err)
-		return
-	}
-	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *SendTransfersResponse and nil error while calling SendTransfers. nil responses are not supported"))
-		return
-	}
-
-	ctx = callResponsePrepared(ctx, s.hooks)
-
-	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
-	respBytes, err := marshaler.Marshal(respContent)
-	if err != nil {
-		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
-		return
-	}
-
-	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
-	resp.Header().Set("Content-Type", "application/json")
-	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
-	resp.WriteHeader(http.StatusOK)
-
-	if n, err := resp.Write(respBytes); err != nil {
-		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
-		twerr := twirp.NewError(twirp.Unknown, msg)
-		ctx = callError(ctx, s.hooks, twerr)
-	}
-	callResponseSent(ctx, s.hooks)
-}
-
-func (s *sweeperServiceServer) serveSendTransfersProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
-	var err error
-	ctx = ctxsetters.WithMethodName(ctx, "SendTransfers")
-	ctx, err = callRequestRouted(ctx, s.hooks)
-	if err != nil {
-		s.writeError(ctx, resp, err)
-		return
-	}
-
-	buf, err := ioutil.ReadAll(req.Body)
-	if err != nil {
-		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
-		return
-	}
-	reqContent := new(SendTransfersRequest)
-	if err = proto.Unmarshal(buf, reqContent); err != nil {
-		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
-		return
-	}
-
-	handler := s.SweeperService.SendTransfers
-	if s.interceptor != nil {
-		handler = func(ctx context.Context, req *SendTransfersRequest) (*SendTransfersResponse, error) {
-			resp, err := s.interceptor(
-				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*SendTransfersRequest)
-					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*SendTransfersRequest) when calling interceptor")
-					}
-					return s.SweeperService.SendTransfers(ctx, typedReq)
-				},
-			)(ctx, req)
-			if resp != nil {
-				typedResp, ok := resp.(*SendTransfersResponse)
-				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*SendTransfersResponse) when calling interceptor")
-				}
-				return typedResp, err
-			}
-			return nil, err
-		}
-	}
-
-	// Call service method
-	var respContent *SendTransfersResponse
-	func() {
-		defer ensurePanicResponses(ctx, resp, s.hooks)
-		respContent, err = handler(ctx, reqContent)
-	}()
-
-	if err != nil {
-		s.writeError(ctx, resp, err)
-		return
-	}
-	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *SendTransfersResponse and nil error while calling SendTransfers. nil responses are not supported"))
 		return
 	}
 
@@ -1164,7 +1083,7 @@ func (s *sweeperServiceServer) serveGetTransferProtobuf(ctx context.Context, res
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *sweeperServiceServer) serveGetBalances(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *sweeperServiceServer) serveListBalances(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	header := req.Header.Get("Content-Type")
 	i := strings.Index(header, ";")
 	if i == -1 {
@@ -1172,9 +1091,9 @@ func (s *sweeperServiceServer) serveGetBalances(ctx context.Context, resp http.R
 	}
 	switch strings.TrimSpace(strings.ToLower(header[:i])) {
 	case "application/json":
-		s.serveGetBalancesJSON(ctx, resp, req)
+		s.serveListBalancesJSON(ctx, resp, req)
 	case "application/protobuf":
-		s.serveGetBalancesProtobuf(ctx, resp, req)
+		s.serveListBalancesProtobuf(ctx, resp, req)
 	default:
 		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
 		twerr := badRouteError(msg, req.Method, req.URL.Path)
@@ -1182,9 +1101,9 @@ func (s *sweeperServiceServer) serveGetBalances(ctx context.Context, resp http.R
 	}
 }
 
-func (s *sweeperServiceServer) serveGetBalancesJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *sweeperServiceServer) serveListBalancesJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
-	ctx = ctxsetters.WithMethodName(ctx, "GetBalances")
+	ctx = ctxsetters.WithMethodName(ctx, "ListBalances")
 	ctx, err = callRequestRouted(ctx, s.hooks)
 	if err != nil {
 		s.writeError(ctx, resp, err)
@@ -1197,29 +1116,29 @@ func (s *sweeperServiceServer) serveGetBalancesJSON(ctx context.Context, resp ht
 		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
 		return
 	}
-	reqContent := new(GetBalancesRequest)
+	reqContent := new(ListBalancesRequest)
 	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
 	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
 		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
 		return
 	}
 
-	handler := s.SweeperService.GetBalances
+	handler := s.SweeperService.ListBalances
 	if s.interceptor != nil {
-		handler = func(ctx context.Context, req *GetBalancesRequest) (*GetBalancesResponse, error) {
+		handler = func(ctx context.Context, req *ListBalancesRequest) (*ListBalancesResponse, error) {
 			resp, err := s.interceptor(
 				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*GetBalancesRequest)
+					typedReq, ok := req.(*ListBalancesRequest)
 					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*GetBalancesRequest) when calling interceptor")
+						return nil, twirp.InternalError("failed type assertion req.(*ListBalancesRequest) when calling interceptor")
 					}
-					return s.SweeperService.GetBalances(ctx, typedReq)
+					return s.SweeperService.ListBalances(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
-				typedResp, ok := resp.(*GetBalancesResponse)
+				typedResp, ok := resp.(*ListBalancesResponse)
 				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*GetBalancesResponse) when calling interceptor")
+					return nil, twirp.InternalError("failed type assertion resp.(*ListBalancesResponse) when calling interceptor")
 				}
 				return typedResp, err
 			}
@@ -1228,7 +1147,7 @@ func (s *sweeperServiceServer) serveGetBalancesJSON(ctx context.Context, resp ht
 	}
 
 	// Call service method
-	var respContent *GetBalancesResponse
+	var respContent *ListBalancesResponse
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = handler(ctx, reqContent)
@@ -1239,7 +1158,7 @@ func (s *sweeperServiceServer) serveGetBalancesJSON(ctx context.Context, resp ht
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *GetBalancesResponse and nil error while calling GetBalances. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *ListBalancesResponse and nil error while calling ListBalances. nil responses are not supported"))
 		return
 	}
 
@@ -1265,9 +1184,9 @@ func (s *sweeperServiceServer) serveGetBalancesJSON(ctx context.Context, resp ht
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *sweeperServiceServer) serveGetBalancesProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *sweeperServiceServer) serveListBalancesProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
-	ctx = ctxsetters.WithMethodName(ctx, "GetBalances")
+	ctx = ctxsetters.WithMethodName(ctx, "ListBalances")
 	ctx, err = callRequestRouted(ctx, s.hooks)
 	if err != nil {
 		s.writeError(ctx, resp, err)
@@ -1279,28 +1198,28 @@ func (s *sweeperServiceServer) serveGetBalancesProtobuf(ctx context.Context, res
 		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
 		return
 	}
-	reqContent := new(GetBalancesRequest)
+	reqContent := new(ListBalancesRequest)
 	if err = proto.Unmarshal(buf, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
 		return
 	}
 
-	handler := s.SweeperService.GetBalances
+	handler := s.SweeperService.ListBalances
 	if s.interceptor != nil {
-		handler = func(ctx context.Context, req *GetBalancesRequest) (*GetBalancesResponse, error) {
+		handler = func(ctx context.Context, req *ListBalancesRequest) (*ListBalancesResponse, error) {
 			resp, err := s.interceptor(
 				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*GetBalancesRequest)
+					typedReq, ok := req.(*ListBalancesRequest)
 					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*GetBalancesRequest) when calling interceptor")
+						return nil, twirp.InternalError("failed type assertion req.(*ListBalancesRequest) when calling interceptor")
 					}
-					return s.SweeperService.GetBalances(ctx, typedReq)
+					return s.SweeperService.ListBalances(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
-				typedResp, ok := resp.(*GetBalancesResponse)
+				typedResp, ok := resp.(*ListBalancesResponse)
 				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*GetBalancesResponse) when calling interceptor")
+					return nil, twirp.InternalError("failed type assertion resp.(*ListBalancesResponse) when calling interceptor")
 				}
 				return typedResp, err
 			}
@@ -1309,7 +1228,7 @@ func (s *sweeperServiceServer) serveGetBalancesProtobuf(ctx context.Context, res
 	}
 
 	// Call service method
-	var respContent *GetBalancesResponse
+	var respContent *ListBalancesResponse
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = handler(ctx, reqContent)
@@ -1320,7 +1239,367 @@ func (s *sweeperServiceServer) serveGetBalancesProtobuf(ctx context.Context, res
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *GetBalancesResponse and nil error while calling GetBalances. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *ListBalancesResponse and nil error while calling ListBalances. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *sweeperServiceServer) serveListSnapshots(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveListSnapshotsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveListSnapshotsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *sweeperServiceServer) serveListSnapshotsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "ListSnapshots")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(ListSnapshotsRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.SweeperService.ListSnapshots
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *ListSnapshotsRequest) (*ListSnapshotsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ListSnapshotsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ListSnapshotsRequest) when calling interceptor")
+					}
+					return s.SweeperService.ListSnapshots(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ListSnapshotsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ListSnapshotsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *ListSnapshotsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *ListSnapshotsResponse and nil error while calling ListSnapshots. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *sweeperServiceServer) serveListSnapshotsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "ListSnapshots")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(ListSnapshotsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.SweeperService.ListSnapshots
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *ListSnapshotsRequest) (*ListSnapshotsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ListSnapshotsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ListSnapshotsRequest) when calling interceptor")
+					}
+					return s.SweeperService.ListSnapshots(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ListSnapshotsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ListSnapshotsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *ListSnapshotsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *ListSnapshotsResponse and nil error while calling ListSnapshots. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *sweeperServiceServer) serveClaimSnapshot(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveClaimSnapshotJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveClaimSnapshotProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *sweeperServiceServer) serveClaimSnapshotJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "ClaimSnapshot")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(ClaimSnapshotRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.SweeperService.ClaimSnapshot
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *ClaimSnapshotRequest) (*ClaimSnapshotResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ClaimSnapshotRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ClaimSnapshotRequest) when calling interceptor")
+					}
+					return s.SweeperService.ClaimSnapshot(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ClaimSnapshotResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ClaimSnapshotResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *ClaimSnapshotResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *ClaimSnapshotResponse and nil error while calling ClaimSnapshot. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *sweeperServiceServer) serveClaimSnapshotProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "ClaimSnapshot")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(ClaimSnapshotRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.SweeperService.ClaimSnapshot
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *ClaimSnapshotRequest) (*ClaimSnapshotResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ClaimSnapshotRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ClaimSnapshotRequest) when calling interceptor")
+					}
+					return s.SweeperService.ClaimSnapshot(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ClaimSnapshotResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ClaimSnapshotResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *ClaimSnapshotResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *ClaimSnapshotResponse and nil error while calling ClaimSnapshot. nil responses are not supported"))
 		return
 	}
 
@@ -1922,39 +2201,51 @@ func callClientError(ctx context.Context, h *twirp.ClientHooks, err twirp.Error)
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 536 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x54, 0x5f, 0x73, 0xd2, 0x4e,
-	0x14, 0xfd, 0x05, 0xca, 0xbf, 0xcb, 0xaf, 0x1d, 0x66, 0xc1, 0x36, 0xa2, 0x63, 0xe3, 0x3e, 0xf1,
-	0x52, 0x62, 0xa9, 0x4f, 0x3a, 0x3e, 0xd8, 0x01, 0x29, 0x33, 0x4e, 0xac, 0x1b, 0x7c, 0xf1, 0x85,
-	0x59, 0xc8, 0xd6, 0x30, 0x53, 0xb2, 0x31, 0xbb, 0x20, 0x9f, 0x4b, 0x3f, 0x8d, 0xdf, 0xc6, 0x61,
-	0xb3, 0x21, 0x09, 0x14, 0xf5, 0xd1, 0xb7, 0xbd, 0xf7, 0x9c, 0x7b, 0xb2, 0xe7, 0xdc, 0xcc, 0x82,
-	0x29, 0xbe, 0x31, 0x16, 0xb2, 0xc8, 0x5e, 0x5d, 0xda, 0xfa, 0xd8, 0x0d, 0x23, 0x2e, 0x39, 0x82,
-	0xa4, 0x5c, 0x5d, 0xe2, 0xef, 0x05, 0xa8, 0x8e, 0x23, 0x1a, 0x88, 0x3b, 0x16, 0xa1, 0xc7, 0x50,
-	0x95, 0x11, 0x9d, 0xb1, 0xc9, 0xdc, 0x33, 0x0d, 0xcb, 0xe8, 0xd4, 0x48, 0x45, 0xd5, 0x23, 0x6f,
-	0x03, 0x51, 0x21, 0x98, 0xdc, 0x40, 0x85, 0x18, 0x52, 0xf5, 0xc8, 0x43, 0xa7, 0x50, 0xa6, 0x0b,
-	0xbe, 0x0c, 0xa4, 0x59, 0x54, 0x80, 0xae, 0xd0, 0x53, 0xa8, 0xf1, 0x30, 0xe4, 0x01, 0x0b, 0xa4,
-	0x30, 0x8f, 0xac, 0x62, 0xa7, 0x46, 0xd2, 0xc6, 0x06, 0x95, 0x7e, 0xc4, 0x84, 0xcf, 0xef, 0x3d,
-	0xb3, 0x64, 0x19, 0x9d, 0x63, 0x92, 0x36, 0x10, 0x82, 0xa3, 0x05, 0x5b, 0x70, 0xb3, 0xac, 0x14,
-	0xd5, 0x19, 0x5d, 0x41, 0x59, 0x48, 0x2a, 0x97, 0xc2, 0xac, 0x58, 0x46, 0xe7, 0xa4, 0xf7, 0xa4,
-	0x9b, 0xfa, 0xe8, 0x26, 0x1e, 0xba, 0xae, 0xa2, 0x10, 0x4d, 0x45, 0x67, 0x50, 0x91, 0xeb, 0x89,
-	0x4f, 0x85, 0x6f, 0x56, 0xe3, 0xdb, 0xc9, 0xf5, 0x0d, 0x15, 0x3e, 0x7e, 0x05, 0xe5, 0x98, 0x8a,
-	0xea, 0x50, 0x71, 0x3e, 0x8c, 0x27, 0xee, 0x60, 0xdc, 0xf8, 0x6f, 0x53, 0xdc, 0x0e, 0x9c, 0xfe,
-	0xc8, 0x19, 0x36, 0x8c, 0x4d, 0x71, 0xf3, 0xd6, 0xe9, 0xbf, 0x1f, 0xf4, 0x1b, 0x05, 0x54, 0x83,
-	0x92, 0x7b, 0x3b, 0x70, 0xc6, 0x8d, 0x22, 0x26, 0x50, 0xb9, 0xa6, 0xf7, 0x34, 0x98, 0xb1, 0x5c,
-	0x2e, 0xc6, 0xa1, 0x5c, 0x0a, 0xb9, 0x5c, 0x5a, 0x50, 0x9a, 0x6d, 0xe3, 0x2a, 0x91, 0xb8, 0xc0,
-	0x3f, 0x0c, 0x68, 0xba, 0x2c, 0xf0, 0x12, 0x23, 0x84, 0x7d, 0x5d, 0x32, 0x21, 0xff, 0xed, 0x9d,
-	0xe0, 0x53, 0x68, 0xe5, 0x2f, 0x2d, 0x42, 0x1e, 0x08, 0x86, 0x3f, 0xe5, 0xfb, 0x22, 0x71, 0xf3,
-	0x06, 0x6a, 0x32, 0xe9, 0x99, 0x86, 0x55, 0xec, 0xd4, 0x7b, 0xe7, 0xd9, 0x35, 0x3e, 0x90, 0x00,
-	0x49, 0x27, 0xf0, 0x19, 0x3c, 0xda, 0x91, 0xd5, 0xdf, 0xb3, 0x01, 0x0d, 0x99, 0xfc, 0xfb, 0xec,
-	0xf0, 0x10, 0x9a, 0xb9, 0x81, 0x58, 0x07, 0xbd, 0x50, 0x13, 0xaa, 0xa7, 0x26, 0xea, 0xbd, 0xd6,
-	0x43, 0x7f, 0x19, 0xd9, 0xb2, 0x70, 0x4b, 0x7d, 0x59, 0xff, 0x0e, 0x89, 0x4f, 0xfc, 0x4e, 0xc9,
-	0xa7, 0x5d, 0x2d, 0x6f, 0x43, 0x75, 0xaa, 0x7b, 0xda, 0x7d, 0x33, 0x2b, 0xaf, 0xf9, 0x64, 0x4b,
-	0xea, 0xfd, 0x2c, 0xc0, 0x89, 0x1b, 0x13, 0x5c, 0x16, 0xad, 0xe6, 0x33, 0x86, 0x3e, 0xc2, 0xff,
-	0xd9, 0x0c, 0xd0, 0x9f, 0xf2, 0x6b, 0x5b, 0x87, 0x09, 0xfa, 0x5a, 0x63, 0x38, 0xce, 0xc5, 0x8a,
-	0x0e, 0x8e, 0x24, 0x06, 0xdb, 0xcf, 0x7f, 0xc3, 0xd0, 0xaa, 0x0e, 0xd4, 0x33, 0x11, 0xa3, 0x67,
-	0xd9, 0x89, 0xfd, 0x65, 0xb5, 0xcf, 0x0f, 0xe2, 0x39, 0xbd, 0x24, 0xd3, 0x3d, 0xbd, 0x9d, 0x15,
-	0xec, 0xe9, 0xed, 0x2e, 0xe3, 0xfa, 0xe5, 0xe7, 0xde, 0x97, 0xb9, 0xf4, 0x97, 0xd3, 0xee, 0x8c,
-	0x2f, 0xec, 0x3b, 0xbe, 0xbe, 0xe0, 0x01, 0xb3, 0x43, 0x1a, 0x78, 0xfc, 0x42, 0x3d, 0x94, 0xc2,
-	0x4e, 0x9f, 0xd0, 0xd7, 0xfa, 0x38, 0x2d, 0x2b, 0xe8, 0xea, 0x57, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0x08, 0x10, 0x54, 0x0f, 0x5f, 0x05, 0x00, 0x00,
+	// 722 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x55, 0x4d, 0x6f, 0xda, 0x40,
+	0x10, 0xad, 0x21, 0x7c, 0x0d, 0x49, 0x84, 0x16, 0xd2, 0xba, 0xb4, 0x2a, 0xd4, 0x27, 0x2e, 0xb1,
+	0x1b, 0xa7, 0xaa, 0xd4, 0x8f, 0x4b, 0xd2, 0x20, 0x82, 0x1a, 0xd1, 0xc4, 0x70, 0xea, 0x85, 0x2e,
+	0x78, 0x09, 0x96, 0xb0, 0xd7, 0xf5, 0x2e, 0x69, 0x7e, 0x57, 0xef, 0xfd, 0x15, 0xed, 0x0f, 0xaa,
+	0xbc, 0x5e, 0x03, 0xcb, 0x47, 0x54, 0xf5, 0xd4, 0x1b, 0x33, 0xf3, 0x66, 0xf6, 0xcd, 0xbc, 0x67,
+	0x01, 0x3a, 0xfb, 0x4e, 0x48, 0x48, 0x22, 0xeb, 0xee, 0xc4, 0x92, 0x3f, 0xcd, 0x30, 0xa2, 0x9c,
+	0x22, 0x48, 0xc3, 0xbb, 0x93, 0x7a, 0xe3, 0x96, 0xd2, 0xdb, 0x19, 0xb1, 0x44, 0x65, 0x34, 0x9f,
+	0x58, 0xdc, 0xf3, 0x09, 0xe3, 0xd8, 0x0f, 0x13, 0xb0, 0xf1, 0x2b, 0x03, 0xc5, 0x41, 0x84, 0x03,
+	0x36, 0x21, 0x11, 0x7a, 0x0a, 0x45, 0x1e, 0xe1, 0x31, 0x19, 0x7a, 0xae, 0xae, 0x35, 0xb5, 0x56,
+	0xc9, 0x29, 0x88, 0xb8, 0xeb, 0xc6, 0x25, 0xcc, 0x18, 0xe1, 0x71, 0x29, 0x93, 0x94, 0x44, 0xdc,
+	0x75, 0xd1, 0x63, 0xc8, 0x63, 0x9f, 0xce, 0x03, 0xae, 0x67, 0x45, 0x41, 0x46, 0xe8, 0x39, 0x94,
+	0x68, 0x18, 0xd2, 0x80, 0x04, 0x9c, 0xe9, 0x7b, 0xcd, 0x6c, 0xab, 0xe4, 0x2c, 0x13, 0x71, 0x95,
+	0x4f, 0x23, 0xc2, 0xa6, 0x74, 0xe6, 0xea, 0xb9, 0xa6, 0xd6, 0x3a, 0x70, 0x96, 0x09, 0x84, 0x60,
+	0xcf, 0x27, 0x3e, 0xd5, 0xf3, 0x62, 0xa2, 0xf8, 0x8d, 0x4e, 0x21, 0xcf, 0x38, 0xe6, 0x73, 0xa6,
+	0x17, 0x9a, 0x5a, 0xeb, 0xd0, 0x7e, 0x66, 0x2e, 0x17, 0x35, 0xd3, 0x1d, 0xcc, 0xbe, 0x80, 0x38,
+	0x12, 0x8a, 0x9e, 0x40, 0x81, 0xdf, 0x0f, 0xa7, 0x98, 0x4d, 0xf5, 0x62, 0xc2, 0x8e, 0xdf, 0x5f,
+	0x62, 0x36, 0x45, 0x0d, 0x28, 0x8b, 0x0b, 0x8c, 0xe9, 0x2c, 0xde, 0xa9, 0x24, 0x18, 0x40, 0x9a,
+	0xea, 0xba, 0xc6, 0x3b, 0xc8, 0x27, 0xb3, 0x50, 0x19, 0x0a, 0xbd, 0xcf, 0x83, 0x61, 0xbf, 0x3d,
+	0xa8, 0x3c, 0x8a, 0x83, 0xeb, 0x76, 0xef, 0xa2, 0xdb, 0xeb, 0x54, 0xb4, 0x38, 0xb8, 0x3c, 0xeb,
+	0x5d, 0x5c, 0xb5, 0x2f, 0x2a, 0x19, 0x54, 0x82, 0x5c, 0xff, 0xba, 0xdd, 0x1b, 0x54, 0xb2, 0xc6,
+	0x07, 0x28, 0x9c, 0xe3, 0x19, 0x0e, 0xc6, 0x44, 0x39, 0x9c, 0xb6, 0xeb, 0x70, 0x99, 0xd5, 0xc3,
+	0x19, 0x3f, 0x35, 0x28, 0xf6, 0x03, 0x1c, 0xb2, 0x29, 0xe5, 0xe8, 0x10, 0x32, 0x8b, 0xce, 0x8c,
+	0xe7, 0xa2, 0xb7, 0x00, 0xe3, 0x88, 0x60, 0x4e, 0xdc, 0x21, 0x4e, 0x1a, 0xcb, 0x76, 0xdd, 0x4c,
+	0x64, 0x36, 0x53, 0x99, 0xcd, 0x41, 0x2a, 0xb3, 0x53, 0x92, 0xe8, 0x33, 0xae, 0x50, 0xc9, 0xee,
+	0xa2, 0xb2, 0xa7, 0x68, 0xd8, 0x80, 0x72, 0x2a, 0x59, 0xdc, 0x95, 0x13, 0x45, 0x48, 0x53, 0xdd,
+	0xad, 0x42, 0x19, 0xbf, 0x35, 0xa8, 0xf6, 0x49, 0xe0, 0xa6, 0x9a, 0x38, 0xe4, 0xdb, 0x9c, 0x30,
+	0xfe, 0x9f, 0xdb, 0x6b, 0xcd, 0x10, 0x85, 0x0d, 0x43, 0x5c, 0x42, 0x4d, 0xdd, 0x8a, 0x85, 0x34,
+	0x60, 0x04, 0xbd, 0x12, 0x6b, 0x89, 0x9c, 0x58, 0xab, 0x6c, 0xd7, 0xb6, 0x39, 0xd3, 0x59, 0xa0,
+	0x0c, 0x0b, 0x50, 0x87, 0xf0, 0xbf, 0x3f, 0x8f, 0xd1, 0x81, 0xaa, 0xd2, 0xf0, 0xcf, 0x2f, 0xbf,
+	0x81, 0xea, 0x95, 0xc7, 0xb8, 0x34, 0x27, 0x4b, 0x9f, 0x5e, 0xdb, 0x5d, 0xdb, 0xd8, 0xbd, 0x03,
+	0x35, 0xb5, 0x4f, 0x32, 0xb0, 0xa0, 0x38, 0x92, 0x39, 0x5d, 0x6b, 0x66, 0x5b, 0x65, 0xbb, 0xba,
+	0xca, 0x40, 0xe2, 0x9d, 0x05, 0xc8, 0xf8, 0x9a, 0x0c, 0x4a, 0xed, 0xbd, 0x60, 0x60, 0x43, 0x9e,
+	0x4e, 0x26, 0x8c, 0x70, 0xb9, 0xc8, 0x43, 0x96, 0x96, 0x48, 0x54, 0x83, 0xdc, 0xcc, 0xf3, 0xbd,
+	0xe4, 0x2b, 0xc8, 0x39, 0x49, 0x60, 0x7c, 0x82, 0xa3, 0xb5, 0x17, 0x24, 0x57, 0x1b, 0x4a, 0x2c,
+	0x4d, 0x4a, 0xb2, 0xca, 0xb9, 0xd2, 0x0e, 0x67, 0x09, 0x8b, 0xf7, 0xfe, 0x38, 0xc3, 0x9e, 0xbf,
+	0xa8, 0x49, 0xba, 0xeb, 0x5f, 0xe5, 0xda, 0x01, 0x33, 0x1b, 0x07, 0xec, 0xc2, 0xd1, 0xda, 0xa0,
+	0xa5, 0x86, 0xe9, 0x73, 0xdb, 0x34, 0x5c, 0xe0, 0x17, 0x28, 0xfb, 0x47, 0x16, 0x0e, 0xfb, 0x09,
+	0xa2, 0x4f, 0xa2, 0x3b, 0x6f, 0x4c, 0xd0, 0x0d, 0xec, 0xaf, 0x5a, 0x13, 0x35, 0x94, 0x11, 0x9b,
+	0x9f, 0x62, 0xbd, 0xb9, 0x1b, 0x20, 0x79, 0xf5, 0xa0, 0xbc, 0x62, 0x39, 0xf4, 0x62, 0xb5, 0x61,
+	0xd3, 0xbc, 0xf5, 0xc6, 0xce, 0xba, 0x9c, 0x77, 0x03, 0xfb, 0xab, 0x0e, 0x52, 0x29, 0x6e, 0xf1,
+	0xa4, 0x4a, 0x71, 0xab, 0xf9, 0x06, 0x70, 0xa0, 0x28, 0x8d, 0x36, 0x5a, 0xd6, 0x6d, 0x56, 0x7f,
+	0xf9, 0x00, 0x62, 0x39, 0x55, 0x51, 0x4a, 0x9d, 0xba, 0xcd, 0x0d, 0xea, 0xd4, 0xad, 0x32, 0x9f,
+	0xbf, 0xfe, 0x62, 0xdf, 0x7a, 0x7c, 0x3a, 0x1f, 0x99, 0x63, 0xea, 0x5b, 0x13, 0x7a, 0x7f, 0x4c,
+	0x03, 0x62, 0x85, 0x38, 0x70, 0xe9, 0xb1, 0xb0, 0x09, 0xb3, 0x96, 0x7f, 0xe8, 0xef, 0xe5, 0xcf,
+	0x51, 0x5e, 0x94, 0x4e, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0xe2, 0x49, 0x97, 0x3b, 0xed, 0x07,
+	0x00, 0x00,
 }
