@@ -12,6 +12,7 @@ message Output {
   string transaction_hash = 6;
   int32 output_index = 7;
   int32 header_action = 8;
+  int32 protocol_id = 9;
 }
 
 message Transfer {
@@ -28,6 +29,8 @@ service ExplorerService {
   rpc ListOutputs(ListOutputsRequest) returns (ListOutputsResponse);
   // curl -X POST -d '{"transaction_hash":"f31b695293651f065149166b83a9100456c2f03a941ca2156f19c830022c81f6","output_index":0}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/GetTransaction
   rpc GetTransaction(GetTransactionRequest) returns (GetTransactionResponse);
+  // curl -X POST -d '{"trace_id":"9a11cfec-0761-3403-be66-4168116dbcac"}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/GetTransactionByTraceID
+  rpc GetTransactionByTraceID(GetTransactionByTraceIDRequest) returns (GetTransactionByTraceIDResponse);
 }
 
 message ListOutputsRequest {
@@ -46,6 +49,15 @@ message GetTransactionRequest {
 }
 
 message GetTransactionResponse {
+  repeated Output outputs = 1;
+  repeated Transfer transfers = 2;
+}
+
+message GetTransactionByTraceIDRequest {
+  string trace_id = 1;
+}
+
+message GetTransactionByTraceIDResponse {
   repeated Output outputs = 1;
   repeated Transfer transfers = 2;
 }
