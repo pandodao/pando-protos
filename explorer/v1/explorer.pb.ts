@@ -48,6 +48,21 @@ export async function GetTransaction(
   return GetTransactionResponse.decode(response);
 }
 
+/**
+ * curl -X POST -d '{"trace_id":"9a11cfec-0761-3403-be66-4168116dbcac"}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/GetTransactionByTraceID
+ */
+export async function GetTransactionByTraceID(
+  getTransactionByTraceIDRequest: GetTransactionByTraceIDRequest,
+  config?: ClientConfiguration
+): Promise<GetTransactionByTraceIDResponse> {
+  const response = await PBrequest(
+    "/explorer.v1.ExplorerService/GetTransactionByTraceID",
+    GetTransactionByTraceIDRequest.encode(getTransactionByTraceIDRequest),
+    config
+  );
+  return GetTransactionByTraceIDResponse.decode(response);
+}
+
 //========================================//
 //      ExplorerService JSON Client       //
 //========================================//
@@ -82,6 +97,21 @@ export async function GetTransactionJSON(
   return GetTransactionResponseJSON.decode(response);
 }
 
+/**
+ * curl -X POST -d '{"trace_id":"9a11cfec-0761-3403-be66-4168116dbcac"}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/GetTransactionByTraceID
+ */
+export async function GetTransactionByTraceIDJSON(
+  getTransactionByTraceIDRequest: GetTransactionByTraceIDRequest,
+  config?: ClientConfiguration
+): Promise<GetTransactionByTraceIDResponse> {
+  const response = await JSONrequest(
+    "/explorer.v1.ExplorerService/GetTransactionByTraceID",
+    GetTransactionByTraceIDRequestJSON.encode(getTransactionByTraceIDRequest),
+    config
+  );
+  return GetTransactionByTraceIDResponseJSON.decode(response);
+}
+
 //========================================//
 //            ExplorerService             //
 //========================================//
@@ -101,6 +131,15 @@ export interface ExplorerService<Context = unknown> {
     getTransactionRequest: GetTransactionRequest,
     context: Context
   ) => Promise<GetTransactionResponse> | GetTransactionResponse;
+  /**
+   * curl -X POST -d '{"trace_id":"9a11cfec-0761-3403-be66-4168116dbcac"}' -H "Content-Type: application/json" $HOST/twirp/explorer.v1.ExplorerService/GetTransactionByTraceID
+   */
+  GetTransactionByTraceID: (
+    getTransactionByTraceIDRequest: GetTransactionByTraceIDRequest,
+    context: Context
+  ) =>
+    | Promise<GetTransactionByTraceIDResponse>
+    | GetTransactionByTraceIDResponse;
 }
 
 export function createExplorerService<Context>(
@@ -130,6 +169,18 @@ export function createExplorerService<Context>(
           json: GetTransactionResponseJSON,
         },
       },
+      GetTransactionByTraceID: {
+        name: "GetTransactionByTraceID",
+        handler: service.GetTransactionByTraceID,
+        input: {
+          protobuf: GetTransactionByTraceIDRequest,
+          json: GetTransactionByTraceIDRequestJSON,
+        },
+        output: {
+          protobuf: GetTransactionByTraceIDResponse,
+          json: GetTransactionByTraceIDResponseJSON,
+        },
+      },
     },
   } as const;
 }
@@ -147,6 +198,7 @@ export interface Output {
   transactionHash: string;
   outputIndex: number;
   headerAction: number;
+  protocolId: number;
 }
 
 export interface Transfer {
@@ -174,6 +226,15 @@ export interface GetTransactionRequest {
 }
 
 export interface GetTransactionResponse {
+  outputs: Output[];
+  transfers: Transfer[];
+}
+
+export interface GetTransactionByTraceIDRequest {
+  traceId: string;
+}
+
+export interface GetTransactionByTraceIDResponse {
   outputs: Output[];
   transfers: Transfer[];
 }
@@ -210,6 +271,7 @@ export const Output = {
       transactionHash: "",
       outputIndex: 0,
       headerAction: 0,
+      protocolId: 0,
     };
   },
 
@@ -243,6 +305,9 @@ export const Output = {
     }
     if (msg.headerAction) {
       writer.writeInt32(8, msg.headerAction);
+    }
+    if (msg.protocolId) {
+      writer.writeInt32(9, msg.protocolId);
     }
     return writer;
   },
@@ -284,6 +349,10 @@ export const Output = {
         }
         case 8: {
           msg.headerAction = reader.readInt32();
+          break;
+        }
+        case 9: {
+          msg.protocolId = reader.readInt32();
           break;
         }
         default: {
@@ -707,6 +776,156 @@ export const GetTransactionResponse = {
   },
 };
 
+export const GetTransactionByTraceIDRequest = {
+  /**
+   * Serializes GetTransactionByTraceIDRequest to protobuf.
+   */
+  encode: function (msg: Partial<GetTransactionByTraceIDRequest>): Uint8Array {
+    return GetTransactionByTraceIDRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetTransactionByTraceIDRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetTransactionByTraceIDRequest {
+    return GetTransactionByTraceIDRequest._readMessage(
+      GetTransactionByTraceIDRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetTransactionByTraceIDRequest with all fields set to their default value.
+   */
+  initialize: function (): GetTransactionByTraceIDRequest {
+    return {
+      traceId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetTransactionByTraceIDRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.traceId) {
+      writer.writeString(1, msg.traceId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetTransactionByTraceIDRequest,
+    reader: BinaryReader
+  ): GetTransactionByTraceIDRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.traceId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const GetTransactionByTraceIDResponse = {
+  /**
+   * Serializes GetTransactionByTraceIDResponse to protobuf.
+   */
+  encode: function (msg: Partial<GetTransactionByTraceIDResponse>): Uint8Array {
+    return GetTransactionByTraceIDResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetTransactionByTraceIDResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetTransactionByTraceIDResponse {
+    return GetTransactionByTraceIDResponse._readMessage(
+      GetTransactionByTraceIDResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetTransactionByTraceIDResponse with all fields set to their default value.
+   */
+  initialize: function (): GetTransactionByTraceIDResponse {
+    return {
+      outputs: [],
+      transfers: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetTransactionByTraceIDResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.outputs?.length) {
+      writer.writeRepeatedMessage(1, msg.outputs as any, Output._writeMessage);
+    }
+    if (msg.transfers?.length) {
+      writer.writeRepeatedMessage(
+        2,
+        msg.transfers as any,
+        Transfer._writeMessage
+      );
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetTransactionByTraceIDResponse,
+    reader: BinaryReader
+  ): GetTransactionByTraceIDResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = Output.initialize();
+          reader.readMessage(m, Output._readMessage);
+          msg.outputs.push(m);
+          break;
+        }
+        case 2: {
+          const m = Transfer.initialize();
+          reader.readMessage(m, Transfer._readMessage);
+          msg.transfers.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
@@ -739,6 +958,7 @@ export const OutputJSON = {
       transactionHash: "",
       outputIndex: 0,
       headerAction: 0,
+      protocolId: 0,
     };
   },
 
@@ -770,6 +990,9 @@ export const OutputJSON = {
     }
     if (msg.headerAction) {
       json.headerAction = msg.headerAction;
+    }
+    if (msg.protocolId) {
+      json.protocolId = msg.protocolId;
     }
     return json;
   },
@@ -809,6 +1032,10 @@ export const OutputJSON = {
     const _headerAction = json.headerAction ?? json.header_action;
     if (_headerAction) {
       msg.headerAction = _headerAction;
+    }
+    const _protocolId = json.protocolId ?? json.protocol_id;
+    if (_protocolId) {
+      msg.protocolId = _protocolId;
     }
     return msg;
   },
@@ -1148,6 +1375,136 @@ export const GetTransactionResponseJSON = {
     msg: GetTransactionResponse,
     json: any
   ): GetTransactionResponse {
+    const _outputs = json.outputs;
+    if (_outputs) {
+      for (const item of _outputs) {
+        const m = Output.initialize();
+        OutputJSON._readMessage(m, item);
+        msg.outputs.push(m);
+      }
+    }
+    const _transfers = json.transfers;
+    if (_transfers) {
+      for (const item of _transfers) {
+        const m = Transfer.initialize();
+        TransferJSON._readMessage(m, item);
+        msg.transfers.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const GetTransactionByTraceIDRequestJSON = {
+  /**
+   * Serializes GetTransactionByTraceIDRequest to JSON.
+   */
+  encode: function (msg: Partial<GetTransactionByTraceIDRequest>): string {
+    return JSON.stringify(
+      GetTransactionByTraceIDRequestJSON._writeMessage(msg)
+    );
+  },
+
+  /**
+   * Deserializes GetTransactionByTraceIDRequest from JSON.
+   */
+  decode: function (json: string): GetTransactionByTraceIDRequest {
+    return GetTransactionByTraceIDRequestJSON._readMessage(
+      GetTransactionByTraceIDRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetTransactionByTraceIDRequest with all fields set to their default value.
+   */
+  initialize: function (): GetTransactionByTraceIDRequest {
+    return {
+      traceId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetTransactionByTraceIDRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetTransactionByTraceIDRequest,
+    json: any
+  ): GetTransactionByTraceIDRequest {
+    const _traceId = json.traceId ?? json.trace_id;
+    if (_traceId) {
+      msg.traceId = _traceId;
+    }
+    return msg;
+  },
+};
+
+export const GetTransactionByTraceIDResponseJSON = {
+  /**
+   * Serializes GetTransactionByTraceIDResponse to JSON.
+   */
+  encode: function (msg: Partial<GetTransactionByTraceIDResponse>): string {
+    return JSON.stringify(
+      GetTransactionByTraceIDResponseJSON._writeMessage(msg)
+    );
+  },
+
+  /**
+   * Deserializes GetTransactionByTraceIDResponse from JSON.
+   */
+  decode: function (json: string): GetTransactionByTraceIDResponse {
+    return GetTransactionByTraceIDResponseJSON._readMessage(
+      GetTransactionByTraceIDResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetTransactionByTraceIDResponse with all fields set to their default value.
+   */
+  initialize: function (): GetTransactionByTraceIDResponse {
+    return {
+      outputs: [],
+      transfers: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetTransactionByTraceIDResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.outputs?.length) {
+      json.outputs = msg.outputs.map(OutputJSON._writeMessage);
+    }
+    if (msg.transfers?.length) {
+      json.transfers = msg.transfers.map(TransferJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetTransactionByTraceIDResponse,
+    json: any
+  ): GetTransactionByTraceIDResponse {
     const _outputs = json.outputs;
     if (_outputs) {
       for (const item of _outputs) {
