@@ -3,6 +3,8 @@ syntax = "proto3";
 package pool.v1; 
 option go_package = "github.com/fox-one/pando-protos/pool/v1;pool";
 
+import "google/protobuf/timestamp.proto";
+
 service PoolService {
   rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
 
@@ -12,7 +14,12 @@ service PoolService {
   rpc ListEarningProducts(ListEarningProductsRequest) returns (ListEarningProductsResponse);
   rpc ListMyEarningProducts(ListMyEarningProductsRequest) returns (ListMyEarningProductsResponse);
   rpc GetMyEarningProduct(GetMyEarningProductRequest) returns (GetMyEarningProductResponse);
+
+  // audit
+  rpc FindAudit(FindAuditRequest) returns (FindAuditResponse);
+  rpc ListAudits(ListAuditsRequest) returns (ListAuditsResponse);
 }
+
 
 message EventError {
   enum Enum {
@@ -41,6 +48,10 @@ message EventError {
     USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED = 11;
     // admin_interest_payment
     EOD_ALREADY_APPLIED = 12;
+    // admin_audit_approve / admin_audit_reject
+    AUDIT_NOT_FOUND = 13;
+    // admin_audit_approve / admin_audit_reject
+    AUDIT_STATUS_MISMATCH = 14;
   }
 }
 
@@ -61,6 +72,8 @@ message EventAction {
     ADMIN_PLEDGE = 103;
     ADMIN_CANCEL_PLEDGE = 104;
     ADMIN_LEGACY_ASSET_MIGRATION = 105;
+    ADMIN_AUDIT_APPROVE = 106;
+    ADMIN_AUDIT_REJECT = 107;
   }
 }
 
@@ -168,6 +181,14 @@ message EarningSnapshotAdminLegacyAssetMigrationData {
   int32 product_id = 2;
   int64 amount = 3;
 }
+
+message EarningSnapshotAdminAuditApproveData {
+  string trace_id = 1;
+} 
+
+message EarningSnapshotAdminAuditRejectData {
+  string trace_id = 1;
+} 
 
 message ListAssetsRequest {}
 
@@ -290,4 +311,38 @@ message ListEventsRequest {
 
 message ListEventsResponse {
   repeated Event events = 1;
+}
+
+message Audit {
+  enum Status {
+      NOT_SET = 0;
+      REJECTED = 1;
+      APPROVED = 2;
+  }
+
+  string id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  string asset_id = 3;
+  string amount = 4;
+  string user_id = 5;
+  Status status = 6;
+  string memo = 7;
+  string reviewed_by = 8;
+}
+
+message FindAuditRequest {
+  string id = 1;
+}
+
+message FindAuditResponse {
+  Audit audit = 1;
+}
+
+message ListAuditsRequest {
+  google.protobuf.Timestamp offset = 1;
+  int64 limit = 2;
+}
+
+message ListAuditsResponse {
+  repeated Audit audits = 1;
 }
