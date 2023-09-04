@@ -88,6 +88,16 @@ message Trade {
     }
 }
 
+message Transfer {
+    string trace_id = 1;
+    string asset_id = 2;
+    string amount = 3;
+    string memo = 4;
+    repeated string opponents = 5;
+    uint32 threshold = 6;
+    string url = 7;
+}
+
 message PreOrderRequest {
     Order.Type type = 1;
     string pay_asset_id = 2;
@@ -98,6 +108,7 @@ message PreOrderRequest {
 message PreOrderResponse {
     Order order = 1;
     repeated Trade trades = 2;
+    Transfer transfer = 3;
 }
 
 message CancelOrderRequest {
