@@ -74,6 +74,7 @@ message EventAction {
     ADMIN_LEGACY_ASSET_MIGRATION = 105;
     ADMIN_AUDIT_APPROVE = 106;
     ADMIN_AUDIT_REJECT = 107;
+    ADMIN_AUTO_REVISE_PRODUCT_CAPACITY = 108;
   }
 }
 
@@ -189,6 +190,10 @@ message EarningSnapshotAdminAuditApproveData {
 message EarningSnapshotAdminAuditRejectData {
   string trace_id = 1;
 } 
+
+message EarningSnapshotAdminAutoReviseProductCapacityData {
+  int32 product_id = 1;
+}
 
 message ListAssetsRequest {}
 
