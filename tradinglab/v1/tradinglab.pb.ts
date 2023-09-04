@@ -261,6 +261,16 @@ export declare namespace Trade {
   }
 }
 
+export interface Transfer {
+  traceId: string;
+  assetId: string;
+  amount: string;
+  memo: string;
+  opponents: string[];
+  threshold: number;
+  url: string;
+}
+
 export interface PreOrderRequest {
   type: Order.Type;
   payAssetId: string;
@@ -271,6 +281,7 @@ export interface PreOrderRequest {
 export interface PreOrderResponse {
   order: Order;
   trades: Trade[];
+  transfer: Transfer;
 }
 
 export interface CancelOrderRequest {
@@ -1146,6 +1157,115 @@ export const Trade = {
   },
 };
 
+export const Transfer = {
+  /**
+   * Serializes Transfer to protobuf.
+   */
+  encode: function (msg: Partial<Transfer>): Uint8Array {
+    return Transfer._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes Transfer from protobuf.
+   */
+  decode: function (bytes: ByteSource): Transfer {
+    return Transfer._readMessage(
+      Transfer.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes Transfer with all fields set to their default value.
+   */
+  initialize: function (): Transfer {
+    return {
+      traceId: "",
+      assetId: "",
+      amount: "",
+      memo: "",
+      opponents: [],
+      threshold: 0,
+      url: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<Transfer>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.traceId) {
+      writer.writeString(1, msg.traceId);
+    }
+    if (msg.assetId) {
+      writer.writeString(2, msg.assetId);
+    }
+    if (msg.amount) {
+      writer.writeString(3, msg.amount);
+    }
+    if (msg.memo) {
+      writer.writeString(4, msg.memo);
+    }
+    if (msg.opponents?.length) {
+      writer.writeRepeatedString(5, msg.opponents);
+    }
+    if (msg.threshold) {
+      writer.writeUint32(6, msg.threshold);
+    }
+    if (msg.url) {
+      writer.writeString(7, msg.url);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Transfer, reader: BinaryReader): Transfer {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.traceId = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.amount = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.memo = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.opponents.push(reader.readString());
+          break;
+        }
+        case 6: {
+          msg.threshold = reader.readUint32();
+          break;
+        }
+        case 7: {
+          msg.url = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 export const PreOrderRequest = {
   /**
    * Serializes PreOrderRequest to protobuf.
@@ -1265,6 +1385,7 @@ export const PreOrderResponse = {
     return {
       order: Order.initialize(),
       trades: [],
+      transfer: Transfer.initialize(),
     };
   },
 
@@ -1280,6 +1401,9 @@ export const PreOrderResponse = {
     }
     if (msg.trades?.length) {
       writer.writeRepeatedMessage(2, msg.trades as any, Trade._writeMessage);
+    }
+    if (msg.transfer) {
+      writer.writeMessage(3, msg.transfer, Transfer._writeMessage);
     }
     return writer;
   },
@@ -1302,6 +1426,10 @@ export const PreOrderResponse = {
           const m = Trade.initialize();
           reader.readMessage(m, Trade._readMessage);
           msg.trades.push(m);
+          break;
+        }
+        case 3: {
+          reader.readMessage(msg.transfer, Transfer._readMessage);
           break;
         }
         default: {
@@ -2578,6 +2706,104 @@ export const TradeJSON = {
   },
 };
 
+export const TransferJSON = {
+  /**
+   * Serializes Transfer to JSON.
+   */
+  encode: function (msg: Partial<Transfer>): string {
+    return JSON.stringify(TransferJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes Transfer from JSON.
+   */
+  decode: function (json: string): Transfer {
+    return TransferJSON._readMessage(
+      TransferJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes Transfer with all fields set to their default value.
+   */
+  initialize: function (): Transfer {
+    return {
+      traceId: "",
+      assetId: "",
+      amount: "",
+      memo: "",
+      opponents: [],
+      threshold: 0,
+      url: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<Transfer>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
+    }
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    if (msg.amount) {
+      json.amount = msg.amount;
+    }
+    if (msg.memo) {
+      json.memo = msg.memo;
+    }
+    if (msg.opponents?.length) {
+      json.opponents = msg.opponents;
+    }
+    if (msg.threshold) {
+      json.threshold = msg.threshold;
+    }
+    if (msg.url) {
+      json.url = msg.url;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Transfer, json: any): Transfer {
+    const _traceId = json.traceId ?? json.trace_id;
+    if (_traceId) {
+      msg.traceId = _traceId;
+    }
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    const _amount = json.amount;
+    if (_amount) {
+      msg.amount = _amount;
+    }
+    const _memo = json.memo;
+    if (_memo) {
+      msg.memo = _memo;
+    }
+    const _opponents = json.opponents;
+    if (_opponents) {
+      msg.opponents = _opponents;
+    }
+    const _threshold = json.threshold;
+    if (_threshold) {
+      msg.threshold = _threshold;
+    }
+    const _url = json.url;
+    if (_url) {
+      msg.url = _url;
+    }
+    return msg;
+  },
+};
+
 export const PreOrderRequestJSON = {
   /**
    * Serializes PreOrderRequest to JSON.
@@ -2679,6 +2905,7 @@ export const PreOrderResponseJSON = {
     return {
       order: Order.initialize(),
       trades: [],
+      transfer: Transfer.initialize(),
     };
   },
 
@@ -2697,6 +2924,12 @@ export const PreOrderResponseJSON = {
     }
     if (msg.trades?.length) {
       json.trades = msg.trades.map(TradeJSON._writeMessage);
+    }
+    if (msg.transfer) {
+      const transfer = TransferJSON._writeMessage(msg.transfer);
+      if (Object.keys(transfer).length > 0) {
+        json.transfer = transfer;
+      }
     }
     return json;
   },
@@ -2718,6 +2951,12 @@ export const PreOrderResponseJSON = {
         TradeJSON._readMessage(m, item);
         msg.trades.push(m);
       }
+    }
+    const _transfer = json.transfer;
+    if (_transfer) {
+      const m = Transfer.initialize();
+      TransferJSON._readMessage(m, _transfer);
+      msg.transfer = m;
     }
     return msg;
   },
