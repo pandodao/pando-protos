@@ -509,6 +509,7 @@ export interface EarningProduct {
   descriptionRules: string;
   descriptionRiskDisclosure: string;
   enabledWhitelistLimit: boolean;
+  inactive: boolean;
 }
 
 export interface ListEarningProductsRequest {
@@ -2441,6 +2442,7 @@ export const EarningProduct = {
       descriptionRules: "",
       descriptionRiskDisclosure: "",
       enabledWhitelistLimit: false,
+      inactive: false,
     };
   },
 
@@ -2522,6 +2524,9 @@ export const EarningProduct = {
     }
     if (msg.enabledWhitelistLimit) {
       writer.writeBool(24, msg.enabledWhitelistLimit);
+    }
+    if (msg.inactive) {
+      writer.writeBool(25, msg.inactive);
     }
     return writer;
   },
@@ -2630,6 +2635,10 @@ export const EarningProduct = {
         }
         case 24: {
           msg.enabledWhitelistLimit = reader.readBool();
+          break;
+        }
+        case 25: {
+          msg.inactive = reader.readBool();
           break;
         }
         default: {
@@ -5779,6 +5788,7 @@ export const EarningProductJSON = {
       descriptionRules: "",
       descriptionRiskDisclosure: "",
       enabledWhitelistLimit: false,
+      inactive: false,
     };
   },
 
@@ -5860,6 +5870,9 @@ export const EarningProductJSON = {
     }
     if (msg.enabledWhitelistLimit) {
       json.enabledWhitelistLimit = msg.enabledWhitelistLimit;
+    }
+    if (msg.inactive) {
+      json.inactive = msg.inactive;
     }
     return json;
   },
@@ -5972,6 +5985,10 @@ export const EarningProductJSON = {
       json.enabledWhitelistLimit ?? json.enabled_whitelist_limit;
     if (_enabledWhitelistLimit) {
       msg.enabledWhitelistLimit = _enabledWhitelistLimit;
+    }
+    const _inactive = json.inactive;
+    if (_inactive) {
+      msg.inactive = _inactive;
     }
     return msg;
   },
