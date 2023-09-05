@@ -276,6 +276,7 @@ export interface PreOrderRequest {
   payAssetId: string;
   fillAssetId: string;
   funds: string;
+  exchange: string;
 }
 
 export interface PreOrderResponse {
@@ -285,7 +286,7 @@ export interface PreOrderResponse {
 }
 
 export interface CancelOrderRequest {
-  orderId: string;
+  id: string;
 }
 
 export interface CancelOrderResponse {
@@ -1296,6 +1297,7 @@ export const PreOrderRequest = {
       payAssetId: "",
       fillAssetId: "",
       funds: "",
+      exchange: "",
     };
   },
 
@@ -1317,6 +1319,9 @@ export const PreOrderRequest = {
     }
     if (msg.funds) {
       writer.writeString(4, msg.funds);
+    }
+    if (msg.exchange) {
+      writer.writeString(5, msg.exchange);
     }
     return writer;
   },
@@ -1345,6 +1350,10 @@ export const PreOrderRequest = {
         }
         case 4: {
           msg.funds = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.exchange = reader.readString();
           break;
         }
         default: {
@@ -1468,7 +1477,7 @@ export const CancelOrderRequest = {
    */
   initialize: function (): CancelOrderRequest {
     return {
-      orderId: "",
+      id: "",
     };
   },
 
@@ -1479,8 +1488,8 @@ export const CancelOrderRequest = {
     msg: Partial<CancelOrderRequest>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.orderId) {
-      writer.writeString(1, msg.orderId);
+    if (msg.id) {
+      writer.writeString(1, msg.id);
     }
     return writer;
   },
@@ -1496,7 +1505,7 @@ export const CancelOrderRequest = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.orderId = reader.readString();
+          msg.id = reader.readString();
           break;
         }
         default: {
@@ -2831,6 +2840,7 @@ export const PreOrderRequestJSON = {
       payAssetId: "",
       fillAssetId: "",
       funds: "",
+      exchange: "",
     };
   },
 
@@ -2852,6 +2862,9 @@ export const PreOrderRequestJSON = {
     }
     if (msg.funds) {
       json.funds = msg.funds;
+    }
+    if (msg.exchange) {
+      json.exchange = msg.exchange;
     }
     return json;
   },
@@ -2875,6 +2888,10 @@ export const PreOrderRequestJSON = {
     const _funds = json.funds;
     if (_funds) {
       msg.funds = _funds;
+    }
+    const _exchange = json.exchange;
+    if (_exchange) {
+      msg.exchange = _exchange;
     }
     return msg;
   },
@@ -2985,7 +3002,7 @@ export const CancelOrderRequestJSON = {
    */
   initialize: function (): CancelOrderRequest {
     return {
-      orderId: "",
+      id: "",
     };
   },
 
@@ -2996,8 +3013,8 @@ export const CancelOrderRequestJSON = {
     msg: Partial<CancelOrderRequest>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.orderId) {
-      json.orderId = msg.orderId;
+    if (msg.id) {
+      json.id = msg.id;
     }
     return json;
   },
@@ -3009,9 +3026,9 @@ export const CancelOrderRequestJSON = {
     msg: CancelOrderRequest,
     json: any
   ): CancelOrderRequest {
-    const _orderId = json.orderId ?? json.order_id;
-    if (_orderId) {
-      msg.orderId = _orderId;
+    const _id = json.id;
+    if (_id) {
+      msg.id = _id;
     }
     return msg;
   },
