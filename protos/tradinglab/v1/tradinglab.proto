@@ -103,7 +103,7 @@ message PreOrderRequest {
     string pay_asset_id = 2;
     string fill_asset_id = 3;
     string funds = 4;
-    string exchange = 5;
+    repeated string exchanges = 5;
 }
 
 message PreOrderResponse {
