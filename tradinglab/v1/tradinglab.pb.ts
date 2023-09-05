@@ -276,7 +276,7 @@ export interface PreOrderRequest {
   payAssetId: string;
   fillAssetId: string;
   funds: string;
-  exchange: string;
+  exchanges: string[];
 }
 
 export interface PreOrderResponse {
@@ -1297,7 +1297,7 @@ export const PreOrderRequest = {
       payAssetId: "",
       fillAssetId: "",
       funds: "",
-      exchange: "",
+      exchanges: [],
     };
   },
 
@@ -1320,8 +1320,8 @@ export const PreOrderRequest = {
     if (msg.funds) {
       writer.writeString(4, msg.funds);
     }
-    if (msg.exchange) {
-      writer.writeString(5, msg.exchange);
+    if (msg.exchanges?.length) {
+      writer.writeRepeatedString(5, msg.exchanges);
     }
     return writer;
   },
@@ -1353,7 +1353,7 @@ export const PreOrderRequest = {
           break;
         }
         case 5: {
-          msg.exchange = reader.readString();
+          msg.exchanges.push(reader.readString());
           break;
         }
         default: {
@@ -2840,7 +2840,7 @@ export const PreOrderRequestJSON = {
       payAssetId: "",
       fillAssetId: "",
       funds: "",
-      exchange: "",
+      exchanges: [],
     };
   },
 
@@ -2863,8 +2863,8 @@ export const PreOrderRequestJSON = {
     if (msg.funds) {
       json.funds = msg.funds;
     }
-    if (msg.exchange) {
-      json.exchange = msg.exchange;
+    if (msg.exchanges?.length) {
+      json.exchanges = msg.exchanges;
     }
     return json;
   },
@@ -2889,9 +2889,9 @@ export const PreOrderRequestJSON = {
     if (_funds) {
       msg.funds = _funds;
     }
-    const _exchange = json.exchange;
-    if (_exchange) {
-      msg.exchange = _exchange;
+    const _exchanges = json.exchanges;
+    if (_exchanges) {
+      msg.exchanges = _exchanges;
     }
     return msg;
   },
