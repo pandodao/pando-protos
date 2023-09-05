@@ -103,6 +103,7 @@ message PreOrderRequest {
     string pay_asset_id = 2;
     string fill_asset_id = 3;
     string funds = 4;
+    string exchange = 5;
 }
 
 message PreOrderResponse {
@@ -112,7 +113,7 @@ message PreOrderResponse {
 }
 
 message CancelOrderRequest {
-    string order_id = 1;
+    string id = 1;
 }
 
 message CancelOrderResponse {
