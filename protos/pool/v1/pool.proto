@@ -235,6 +235,7 @@ message EarningProduct {
   string description_risk_disclosure = 23;
   bool enabled_whitelist_limit = 24;
   bool inactive = 25;
+  int32 precision = 26;
 }
 
 message ListEarningProductsRequest {
