@@ -510,6 +510,7 @@ export interface EarningProduct {
   descriptionRiskDisclosure: string;
   enabledWhitelistLimit: boolean;
   inactive: boolean;
+  precision: number;
 }
 
 export interface ListEarningProductsRequest {
@@ -2443,6 +2444,7 @@ export const EarningProduct = {
       descriptionRiskDisclosure: "",
       enabledWhitelistLimit: false,
       inactive: false,
+      precision: 0,
     };
   },
 
@@ -2527,6 +2529,9 @@ export const EarningProduct = {
     }
     if (msg.inactive) {
       writer.writeBool(25, msg.inactive);
+    }
+    if (msg.precision) {
+      writer.writeInt32(26, msg.precision);
     }
     return writer;
   },
@@ -2639,6 +2644,10 @@ export const EarningProduct = {
         }
         case 25: {
           msg.inactive = reader.readBool();
+          break;
+        }
+        case 26: {
+          msg.precision = reader.readInt32();
           break;
         }
         default: {
@@ -5789,6 +5798,7 @@ export const EarningProductJSON = {
       descriptionRiskDisclosure: "",
       enabledWhitelistLimit: false,
       inactive: false,
+      precision: 0,
     };
   },
 
@@ -5873,6 +5883,9 @@ export const EarningProductJSON = {
     }
     if (msg.inactive) {
       json.inactive = msg.inactive;
+    }
+    if (msg.precision) {
+      json.precision = msg.precision;
     }
     return json;
   },
@@ -5989,6 +6002,10 @@ export const EarningProductJSON = {
     const _inactive = json.inactive;
     if (_inactive) {
       msg.inactive = _inactive;
+    }
+    const _precision = json.precision;
+    if (_precision) {
+      msg.precision = _precision;
     }
     return msg;
   },
