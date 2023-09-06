@@ -116,13 +116,14 @@ message EarningSnapshotBuyData {
 }
 
 
-// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"b3b4c09c-2421-41ec-b8d4-bdedfbbd58b1","action":2,"params":["int32:1","int64:100000000","uint8:1"]}' -b64 url
-// AgQBs7TAnCQhQey41L3t-71YsQACAAAAAQAAAAAF9eEAAV-_pLo=
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"b3b4c09c-2421-41ec-b8d4-bdedfbbd58b1","action":2,"params":["int32:1","int64:100000000","uint8:1","bool:true"]}' -b64 url
+// AgQBs7TAnCQhQey41L3t-71YsQACAAAAAQAAAAAF9eEAAQH_-Ao2
 
 message EarningSnapshotRedeemData {
   int32 product_id = 1;
   int64 amount = 2;
   EarningProductStatus.Enum product_status = 3;
+  bool redeem_all = 4;
 }
 
 // mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"79c21af4-dbae-4aea-858f-1eaf97823cb3","action":3,"params":["string:08ae8c28-1529-4387-b30d-ed65414587e4"]}' -b64 url
