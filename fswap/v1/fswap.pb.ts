@@ -677,6 +677,7 @@ export interface Pair {
   netRor24h: string;
   netRor7d: string;
   netRor30d: string;
+  profitRate: string;
 }
 
 export interface Deposit {
@@ -715,6 +716,7 @@ export interface Transaction {
   feeValue: string;
   followId: string;
   liquidity: string;
+  groupId: string;
 }
 
 export declare namespace Transaction {
@@ -1143,6 +1145,7 @@ export const Pair = {
       netRor24h: "",
       netRor7d: "",
       netRor30d: "",
+      profitRate: "",
     };
   },
 
@@ -1218,6 +1221,9 @@ export const Pair = {
     }
     if (msg.netRor30d) {
       writer.writeString(22, msg.netRor30d);
+    }
+    if (msg.profitRate) {
+      writer.writeString(23, msg.profitRate);
     }
     return writer;
   },
@@ -1315,6 +1321,10 @@ export const Pair = {
         }
         case 22: {
           msg.netRor30d = reader.readString();
+          break;
+        }
+        case 23: {
+          msg.profitRate = reader.readString();
           break;
         }
         default: {
@@ -1551,6 +1561,7 @@ export const Transaction = {
       feeValue: "",
       followId: "",
       liquidity: "",
+      groupId: "",
     };
   },
 
@@ -1614,6 +1625,9 @@ export const Transaction = {
     }
     if (msg.liquidity) {
       writer.writeString(18, msg.liquidity);
+    }
+    if (msg.groupId) {
+      writer.writeString(19, msg.groupId);
     }
     return writer;
   },
@@ -1695,6 +1709,10 @@ export const Transaction = {
         }
         case 18: {
           msg.liquidity = reader.readString();
+          break;
+        }
+        case 19: {
+          msg.groupId = reader.readString();
           break;
         }
         default: {
@@ -4099,6 +4117,7 @@ export const PairJSON = {
       netRor24h: "",
       netRor7d: "",
       netRor30d: "",
+      profitRate: "",
     };
   },
 
@@ -4172,6 +4191,9 @@ export const PairJSON = {
     }
     if (msg.netRor30d) {
       json.netRor30d = msg.netRor30d;
+    }
+    if (msg.profitRate) {
+      json.profitRate = msg.profitRate;
     }
     return json;
   },
@@ -4268,6 +4290,10 @@ export const PairJSON = {
     const _netRor30d = json.netRor30d ?? json.net_ror_30d;
     if (_netRor30d) {
       msg.netRor30d = _netRor30d;
+    }
+    const _profitRate = json.profitRate ?? json.profit_rate;
+    if (_profitRate) {
+      msg.profitRate = _profitRate;
     }
     return msg;
   },
@@ -4491,6 +4517,7 @@ export const TransactionJSON = {
       feeValue: "",
       followId: "",
       liquidity: "",
+      groupId: "",
     };
   },
 
@@ -4555,6 +4582,9 @@ export const TransactionJSON = {
     }
     if (msg.liquidity) {
       json.liquidity = msg.liquidity;
+    }
+    if (msg.groupId) {
+      json.groupId = msg.groupId;
     }
     return json;
   },
@@ -4636,6 +4666,10 @@ export const TransactionJSON = {
     const _liquidity = json.liquidity;
     if (_liquidity) {
       msg.liquidity = _liquidity;
+    }
+    const _groupId = json.groupId ?? json.group_id;
+    if (_groupId) {
+      msg.groupId = _groupId;
     }
     return msg;
   },

@@ -17,7 +17,15 @@ export type Action =
   | "REMOVE"
   | "SWAP"
   | "EXPIRE_DEPOSIT"
-  | "AUDIT";
+  | "AUDIT"
+  | "SWAPV2";
+
+export interface Header {
+  version: number;
+  userId: string;
+  followId: string;
+  action: Action;
+}
 
 export interface Pair {
   baseAssetId: string;
@@ -40,6 +48,9 @@ export interface Output {
   amount: string;
   sender: string;
   memo: string;
+  transactionHash: string;
+  outputIndex: number;
+  header: Header;
 }
 
 export interface Order {
@@ -97,6 +108,11 @@ export interface Transfer {
   threshold: number;
   memo: string;
   signedTx: string;
+  status: Transfer.Status;
+}
+
+export declare namespace Transfer {
+  export type Status = "PENDING_NOT_SET" | "ASSIGNED" | "HANDLED" | "PASSED";
 }
 
 export interface Audit {
@@ -125,6 +141,7 @@ export const Action = {
   SWAP: "SWAP",
   EXPIRE_DEPOSIT: "EXPIRE_DEPOSIT",
   AUDIT: "AUDIT",
+  SWAPV2: "SWAPV2",
   /**
    * @private
    */
@@ -147,6 +164,9 @@ export const Action = {
       }
       case 5: {
         return "AUDIT";
+      }
+      case 6: {
+        return "SWAPV2";
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -177,6 +197,9 @@ export const Action = {
       case "AUDIT": {
         return 5;
       }
+      case "SWAPV2": {
+        return 6;
+      }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
         return i as unknown as number;
@@ -184,6 +207,88 @@ export const Action = {
     }
   },
 } as const;
+
+export const Header = {
+  /**
+   * Serializes Header to protobuf.
+   */
+  encode: function (msg: Partial<Header>): Uint8Array {
+    return Header._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes Header from protobuf.
+   */
+  decode: function (bytes: ByteSource): Header {
+    return Header._readMessage(Header.initialize(), new BinaryReader(bytes));
+  },
+
+  /**
+   * Initializes Header with all fields set to their default value.
+   */
+  initialize: function (): Header {
+    return {
+      version: 0,
+      userId: "",
+      followId: "",
+      action: Action._fromInt(0),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<Header>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.version) {
+      writer.writeInt32(1, msg.version);
+    }
+    if (msg.userId) {
+      writer.writeString(2, msg.userId);
+    }
+    if (msg.followId) {
+      writer.writeString(3, msg.followId);
+    }
+    if (msg.action && Action._toInt(msg.action)) {
+      writer.writeEnum(4, Action._toInt(msg.action));
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Header, reader: BinaryReader): Header {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.version = reader.readInt32();
+          break;
+        }
+        case 2: {
+          msg.userId = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.followId = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.action = Action._fromInt(reader.readEnum());
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
 
 export const Pair = {
   /**
@@ -349,6 +454,9 @@ export const Output = {
       amount: "",
       sender: "",
       memo: "",
+      transactionHash: "",
+      outputIndex: 0,
+      header: Header.initialize(),
     };
   },
 
@@ -376,6 +484,15 @@ export const Output = {
     }
     if (msg.memo) {
       writer.writeString(6, msg.memo);
+    }
+    if (msg.transactionHash) {
+      writer.writeString(7, msg.transactionHash);
+    }
+    if (msg.outputIndex) {
+      writer.writeInt32(8, msg.outputIndex);
+    }
+    if (msg.header) {
+      writer.writeMessage(9, msg.header, Header._writeMessage);
     }
     return writer;
   },
@@ -409,6 +526,18 @@ export const Output = {
         }
         case 6: {
           msg.memo = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.transactionHash = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.outputIndex = reader.readInt32();
+          break;
+        }
+        case 9: {
+          reader.readMessage(msg.header, Header._readMessage);
           break;
         }
         default: {
@@ -922,6 +1051,7 @@ export const Transfer = {
       threshold: 0,
       memo: "",
       signedTx: "",
+      status: Transfer.Status._fromInt(0),
     };
   },
 
@@ -955,6 +1085,9 @@ export const Transfer = {
     }
     if (msg.signedTx) {
       writer.writeString(8, msg.signedTx);
+    }
+    if (msg.status && Transfer.Status._toInt(msg.status)) {
+      writer.writeEnum(9, Transfer.Status._toInt(msg.status));
     }
     return writer;
   },
@@ -998,6 +1131,10 @@ export const Transfer = {
           msg.signedTx = reader.readString();
           break;
         }
+        case 9: {
+          msg.status = Transfer.Status._fromInt(reader.readEnum());
+          break;
+        }
         default: {
           reader.skipField();
           break;
@@ -1006,6 +1143,59 @@ export const Transfer = {
     }
     return msg;
   },
+
+  Status: {
+    PENDING_NOT_SET: "PENDING_NOT_SET",
+    ASSIGNED: "ASSIGNED",
+    HANDLED: "HANDLED",
+    PASSED: "PASSED",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): Transfer.Status {
+      switch (i) {
+        case 0: {
+          return "PENDING_NOT_SET";
+        }
+        case 1: {
+          return "ASSIGNED";
+        }
+        case 2: {
+          return "HANDLED";
+        }
+        case 3: {
+          return "PASSED";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as Transfer.Status;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: Transfer.Status): number {
+      switch (i) {
+        case "PENDING_NOT_SET": {
+          return 0;
+        }
+        case "ASSIGNED": {
+          return 1;
+        }
+        case "HANDLED": {
+          return 2;
+        }
+        case "PASSED": {
+          return 3;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
 };
 
 export const Audit = {
@@ -1179,6 +1369,7 @@ export const ActionJSON = {
   SWAP: "SWAP",
   EXPIRE_DEPOSIT: "EXPIRE_DEPOSIT",
   AUDIT: "AUDIT",
+  SWAPV2: "SWAPV2",
   /**
    * @private
    */
@@ -1201,6 +1392,9 @@ export const ActionJSON = {
       }
       case 5: {
         return "AUDIT";
+      }
+      case 6: {
+        return "SWAPV2";
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -1231,6 +1425,9 @@ export const ActionJSON = {
       case "AUDIT": {
         return 5;
       }
+      case "SWAPV2": {
+        return 6;
+      }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
         return i as unknown as number;
@@ -1238,6 +1435,77 @@ export const ActionJSON = {
     }
   },
 } as const;
+
+export const HeaderJSON = {
+  /**
+   * Serializes Header to JSON.
+   */
+  encode: function (msg: Partial<Header>): string {
+    return JSON.stringify(HeaderJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes Header from JSON.
+   */
+  decode: function (json: string): Header {
+    return HeaderJSON._readMessage(HeaderJSON.initialize(), JSON.parse(json));
+  },
+
+  /**
+   * Initializes Header with all fields set to their default value.
+   */
+  initialize: function (): Header {
+    return {
+      version: 0,
+      userId: "",
+      followId: "",
+      action: Action._fromInt(0),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<Header>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.version) {
+      json.version = msg.version;
+    }
+    if (msg.userId) {
+      json.userId = msg.userId;
+    }
+    if (msg.followId) {
+      json.followId = msg.followId;
+    }
+    if (msg.action && ActionJSON._toInt(msg.action)) {
+      json.action = msg.action;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Header, json: any): Header {
+    const _version = json.version;
+    if (_version) {
+      msg.version = _version;
+    }
+    const _userId = json.userId ?? json.user_id;
+    if (_userId) {
+      msg.userId = _userId;
+    }
+    const _followId = json.followId ?? json.follow_id;
+    if (_followId) {
+      msg.followId = _followId;
+    }
+    const _action = json.action;
+    if (_action) {
+      msg.action = _action;
+    }
+    return msg;
+  },
+};
 
 export const PairJSON = {
   /**
@@ -1392,6 +1660,9 @@ export const OutputJSON = {
       amount: "",
       sender: "",
       memo: "",
+      transactionHash: "",
+      outputIndex: 0,
+      header: Header.initialize(),
     };
   },
 
@@ -1420,6 +1691,18 @@ export const OutputJSON = {
     }
     if (msg.memo) {
       json.memo = msg.memo;
+    }
+    if (msg.transactionHash) {
+      json.transactionHash = msg.transactionHash;
+    }
+    if (msg.outputIndex) {
+      json.outputIndex = msg.outputIndex;
+    }
+    if (msg.header) {
+      const header = HeaderJSON._writeMessage(msg.header);
+      if (Object.keys(header).length > 0) {
+        json.header = header;
+      }
     }
     return json;
   },
@@ -1453,6 +1736,20 @@ export const OutputJSON = {
     const _memo = json.memo;
     if (_memo) {
       msg.memo = _memo;
+    }
+    const _transactionHash = json.transactionHash ?? json.transaction_hash;
+    if (_transactionHash) {
+      msg.transactionHash = _transactionHash;
+    }
+    const _outputIndex = json.outputIndex ?? json.output_index;
+    if (_outputIndex) {
+      msg.outputIndex = _outputIndex;
+    }
+    const _header = json.header;
+    if (_header) {
+      const m = Header.initialize();
+      HeaderJSON._readMessage(m, _header);
+      msg.header = m;
     }
     return msg;
   },
@@ -1946,6 +2243,7 @@ export const TransferJSON = {
       threshold: 0,
       memo: "",
       signedTx: "",
+      status: Transfer.Status._fromInt(0),
     };
   },
 
@@ -1980,6 +2278,9 @@ export const TransferJSON = {
     }
     if (msg.signedTx) {
       json.signedTx = msg.signedTx;
+    }
+    if (msg.status && TransferJSON.Status._toInt(msg.status)) {
+      json.status = msg.status;
     }
     return json;
   },
@@ -2022,8 +2323,65 @@ export const TransferJSON = {
     if (_signedTx) {
       msg.signedTx = _signedTx;
     }
+    const _status = json.status;
+    if (_status) {
+      msg.status = _status;
+    }
     return msg;
   },
+
+  Status: {
+    PENDING_NOT_SET: "PENDING_NOT_SET",
+    ASSIGNED: "ASSIGNED",
+    HANDLED: "HANDLED",
+    PASSED: "PASSED",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): Transfer.Status {
+      switch (i) {
+        case 0: {
+          return "PENDING_NOT_SET";
+        }
+        case 1: {
+          return "ASSIGNED";
+        }
+        case 2: {
+          return "HANDLED";
+        }
+        case 3: {
+          return "PASSED";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as Transfer.Status;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: Transfer.Status): number {
+      switch (i) {
+        case "PENDING_NOT_SET": {
+          return 0;
+        }
+        case "ASSIGNED": {
+          return 1;
+        }
+        case "HANDLED": {
+          return 2;
+        }
+        case "PASSED": {
+          return 3;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
 };
 
 export const AuditJSON = {

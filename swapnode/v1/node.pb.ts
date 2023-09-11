@@ -120,6 +120,18 @@ export async function FindTransfer(
   return FindTransferResponse.decode(response);
 }
 
+export async function ListTransfers(
+  listTransfersRequest: ListTransfersRequest,
+  config?: ClientConfiguration
+): Promise<ListTransfersResponse> {
+  const response = await PBrequest(
+    "/swapnode.v1.SwapNodeService/ListTransfers",
+    ListTransfersRequest.encode(listTransfersRequest),
+    config
+  );
+  return ListTransfersResponse.decode(response);
+}
+
 export async function FindAudit(
   findAuditRequest: FindAuditRequest,
   config?: ClientConfiguration
@@ -244,6 +256,18 @@ export async function FindTransferJSON(
   return FindTransferResponseJSON.decode(response);
 }
 
+export async function ListTransfersJSON(
+  listTransfersRequest: ListTransfersRequest,
+  config?: ClientConfiguration
+): Promise<ListTransfersResponse> {
+  const response = await JSONrequest(
+    "/swapnode.v1.SwapNodeService/ListTransfers",
+    ListTransfersRequestJSON.encode(listTransfersRequest),
+    config
+  );
+  return ListTransfersResponseJSON.decode(response);
+}
+
 export async function FindAuditJSON(
   findAuditRequest: FindAuditRequest,
   config?: ClientConfiguration
@@ -313,6 +337,10 @@ export interface SwapNodeService<Context = unknown> {
     findTransferRequest: FindTransferRequest,
     context: Context
   ) => Promise<FindTransferResponse> | FindTransferResponse;
+  ListTransfers: (
+    listTransfersRequest: ListTransfersRequest,
+    context: Context
+  ) => Promise<ListTransfersResponse> | ListTransfersResponse;
   FindAudit: (
     findAuditRequest: FindAuditRequest,
     context: Context
@@ -390,6 +418,18 @@ export function createSwapNodeService<Context>(
           json: FindTransferResponseJSON,
         },
       },
+      ListTransfers: {
+        name: "ListTransfers",
+        handler: service.ListTransfers,
+        input: {
+          protobuf: ListTransfersRequest,
+          json: ListTransfersRequestJSON,
+        },
+        output: {
+          protobuf: ListTransfersResponse,
+          json: ListTransfersResponseJSON,
+        },
+      },
       FindAudit: {
         name: "FindAudit",
         handler: service.FindAudit,
@@ -431,6 +471,7 @@ export interface ListPairsResponse {
 export interface ListOutputsRequest {
   cursor: string;
   limit: number;
+  decodeHeader: boolean;
 }
 
 export interface ListOutputsResponse {
@@ -479,6 +520,16 @@ export interface FindTransferRequest {
 
 export interface FindTransferResponse {
   transfer: Transfer;
+}
+
+export interface ListTransfersRequest {
+  cursor: string;
+  limit: number;
+}
+
+export interface ListTransfersResponse {
+  transfers: Transfer[];
+  nextCursor: string;
 }
 
 export interface FindAuditRequest {
@@ -650,6 +701,7 @@ export const ListOutputsRequest = {
     return {
       cursor: "",
       limit: 0,
+      decodeHeader: false,
     };
   },
 
@@ -665,6 +717,9 @@ export const ListOutputsRequest = {
     }
     if (msg.limit) {
       writer.writeInt32(2, msg.limit);
+    }
+    if (msg.decodeHeader) {
+      writer.writeBool(3, msg.decodeHeader);
     }
     return writer;
   },
@@ -685,6 +740,10 @@ export const ListOutputsRequest = {
         }
         case 2: {
           msg.limit = reader.readInt32();
+          break;
+        }
+        case 3: {
+          msg.decodeHeader = reader.readBool();
           break;
         }
         default: {
@@ -1466,6 +1525,162 @@ export const FindTransferResponse = {
   },
 };
 
+export const ListTransfersRequest = {
+  /**
+   * Serializes ListTransfersRequest to protobuf.
+   */
+  encode: function (msg: Partial<ListTransfersRequest>): Uint8Array {
+    return ListTransfersRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ListTransfersRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): ListTransfersRequest {
+    return ListTransfersRequest._readMessage(
+      ListTransfersRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes ListTransfersRequest with all fields set to their default value.
+   */
+  initialize: function (): ListTransfersRequest {
+    return {
+      cursor: "",
+      limit: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListTransfersRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.cursor) {
+      writer.writeString(1, msg.cursor);
+    }
+    if (msg.limit) {
+      writer.writeInt32(2, msg.limit);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListTransfersRequest,
+    reader: BinaryReader
+  ): ListTransfersRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.cursor = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.limit = reader.readInt32();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const ListTransfersResponse = {
+  /**
+   * Serializes ListTransfersResponse to protobuf.
+   */
+  encode: function (msg: Partial<ListTransfersResponse>): Uint8Array {
+    return ListTransfersResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ListTransfersResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): ListTransfersResponse {
+    return ListTransfersResponse._readMessage(
+      ListTransfersResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes ListTransfersResponse with all fields set to their default value.
+   */
+  initialize: function (): ListTransfersResponse {
+    return {
+      transfers: [],
+      nextCursor: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListTransfersResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.transfers?.length) {
+      writer.writeRepeatedMessage(
+        1,
+        msg.transfers as any,
+        Transfer._writeMessage
+      );
+    }
+    if (msg.nextCursor) {
+      writer.writeString(2, msg.nextCursor);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListTransfersResponse,
+    reader: BinaryReader
+  ): ListTransfersResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = Transfer.initialize();
+          reader.readMessage(m, Transfer._readMessage);
+          msg.transfers.push(m);
+          break;
+        }
+        case 2: {
+          msg.nextCursor = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 export const FindAuditRequest = {
   /**
    * Serializes FindAuditRequest to protobuf.
@@ -2011,6 +2226,7 @@ export const ListOutputsRequestJSON = {
     return {
       cursor: "",
       limit: 0,
+      decodeHeader: false,
     };
   },
 
@@ -2026,6 +2242,9 @@ export const ListOutputsRequestJSON = {
     }
     if (msg.limit) {
       json.limit = msg.limit;
+    }
+    if (msg.decodeHeader) {
+      json.decodeHeader = msg.decodeHeader;
     }
     return json;
   },
@@ -2044,6 +2263,10 @@ export const ListOutputsRequestJSON = {
     const _limit = json.limit;
     if (_limit) {
       msg.limit = _limit;
+    }
+    const _decodeHeader = json.decodeHeader ?? json.decode_header;
+    if (_decodeHeader) {
+      msg.decodeHeader = _decodeHeader;
     }
     return msg;
   },
@@ -2698,6 +2921,136 @@ export const FindTransferResponseJSON = {
       const m = Transfer.initialize();
       TransferJSON._readMessage(m, _transfer);
       msg.transfer = m;
+    }
+    return msg;
+  },
+};
+
+export const ListTransfersRequestJSON = {
+  /**
+   * Serializes ListTransfersRequest to JSON.
+   */
+  encode: function (msg: Partial<ListTransfersRequest>): string {
+    return JSON.stringify(ListTransfersRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ListTransfersRequest from JSON.
+   */
+  decode: function (json: string): ListTransfersRequest {
+    return ListTransfersRequestJSON._readMessage(
+      ListTransfersRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes ListTransfersRequest with all fields set to their default value.
+   */
+  initialize: function (): ListTransfersRequest {
+    return {
+      cursor: "",
+      limit: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListTransfersRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.cursor) {
+      json.cursor = msg.cursor;
+    }
+    if (msg.limit) {
+      json.limit = msg.limit;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListTransfersRequest,
+    json: any
+  ): ListTransfersRequest {
+    const _cursor = json.cursor;
+    if (_cursor) {
+      msg.cursor = _cursor;
+    }
+    const _limit = json.limit;
+    if (_limit) {
+      msg.limit = _limit;
+    }
+    return msg;
+  },
+};
+
+export const ListTransfersResponseJSON = {
+  /**
+   * Serializes ListTransfersResponse to JSON.
+   */
+  encode: function (msg: Partial<ListTransfersResponse>): string {
+    return JSON.stringify(ListTransfersResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ListTransfersResponse from JSON.
+   */
+  decode: function (json: string): ListTransfersResponse {
+    return ListTransfersResponseJSON._readMessage(
+      ListTransfersResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes ListTransfersResponse with all fields set to their default value.
+   */
+  initialize: function (): ListTransfersResponse {
+    return {
+      transfers: [],
+      nextCursor: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListTransfersResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.transfers?.length) {
+      json.transfers = msg.transfers.map(TransferJSON._writeMessage);
+    }
+    if (msg.nextCursor) {
+      json.nextCursor = msg.nextCursor;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListTransfersResponse,
+    json: any
+  ): ListTransfersResponse {
+    const _transfers = json.transfers;
+    if (_transfers) {
+      for (const item of _transfers) {
+        const m = Transfer.initialize();
+        TransferJSON._readMessage(m, item);
+        msg.transfers.push(m);
+      }
+    }
+    const _nextCursor = json.nextCursor ?? json.next_cursor;
+    if (_nextCursor) {
+      msg.nextCursor = _nextCursor;
     }
     return msg;
   },
