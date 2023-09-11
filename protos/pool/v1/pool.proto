@@ -215,6 +215,8 @@ message ListAssetsResponse {
 }
 
 message EarningProduct {
+  reserved 25;
+
   int32 id = 1;
   string name = 2;
   string description = 3;
@@ -239,7 +241,7 @@ message EarningProduct {
   string description_rules = 22;
   string description_risk_disclosure = 23;
   bool enabled_whitelist_limit = 24;
-  int32 precision = 25;
+  int32 precision = 26;
 }
 
 message ListEarningProductsRequest {
