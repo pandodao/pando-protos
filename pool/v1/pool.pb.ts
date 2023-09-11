@@ -380,7 +380,8 @@ export declare namespace EventAction {
     | "ADMIN_CANCEL_PLEDGE"
     | "ADMIN_LEGACY_ASSET_MIGRATION"
     | "ADMIN_AUDIT_APPROVE"
-    | "ADMIN_AUDIT_REJECT";
+    | "ADMIN_AUDIT_REJECT"
+    | "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY";
 }
 
 export interface EventStatus {}
@@ -465,6 +466,10 @@ export interface EarningSnapshotAdminAuditRejectData {
   traceId: string;
 }
 
+export interface EarningSnapshotAdminAutoReviseProductCapacityData {
+  productId: number;
+}
+
 export interface ListAssetsRequest {}
 
 export interface Asset {
@@ -509,7 +514,6 @@ export interface EarningProduct {
   descriptionRules: string;
   descriptionRiskDisclosure: string;
   enabledWhitelistLimit: boolean;
-  inactive: boolean;
   precision: number;
 }
 
@@ -902,6 +906,7 @@ export const EventAction = {
     ADMIN_LEGACY_ASSET_MIGRATION: "ADMIN_LEGACY_ASSET_MIGRATION",
     ADMIN_AUDIT_APPROVE: "ADMIN_AUDIT_APPROVE",
     ADMIN_AUDIT_REJECT: "ADMIN_AUDIT_REJECT",
+    ADMIN_AUTO_REVISE_PRODUCT_CAPACITY: "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY",
     /**
      * @private
      */
@@ -948,6 +953,9 @@ export const EventAction = {
         }
         case 107: {
           return "ADMIN_AUDIT_REJECT";
+        }
+        case 108: {
+          return "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -1001,6 +1009,9 @@ export const EventAction = {
         }
         case "ADMIN_AUDIT_REJECT": {
           return 107;
+        }
+        case "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY": {
+          return 108;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -2151,6 +2162,77 @@ export const EarningSnapshotAdminAuditRejectData = {
   },
 };
 
+export const EarningSnapshotAdminAutoReviseProductCapacityData = {
+  /**
+   * Serializes EarningSnapshotAdminAutoReviseProductCapacityData to protobuf.
+   */
+  encode: function (
+    msg: Partial<EarningSnapshotAdminAutoReviseProductCapacityData>
+  ): Uint8Array {
+    return EarningSnapshotAdminAutoReviseProductCapacityData._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes EarningSnapshotAdminAutoReviseProductCapacityData from protobuf.
+   */
+  decode: function (
+    bytes: ByteSource
+  ): EarningSnapshotAdminAutoReviseProductCapacityData {
+    return EarningSnapshotAdminAutoReviseProductCapacityData._readMessage(
+      EarningSnapshotAdminAutoReviseProductCapacityData.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes EarningSnapshotAdminAutoReviseProductCapacityData with all fields set to their default value.
+   */
+  initialize: function (): EarningSnapshotAdminAutoReviseProductCapacityData {
+    return {
+      productId: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<EarningSnapshotAdminAutoReviseProductCapacityData>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.productId) {
+      writer.writeInt32(1, msg.productId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: EarningSnapshotAdminAutoReviseProductCapacityData,
+    reader: BinaryReader
+  ): EarningSnapshotAdminAutoReviseProductCapacityData {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.productId = reader.readInt32();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 export const ListAssetsRequest = {
   /**
    * Serializes ListAssetsRequest to protobuf.
@@ -2443,7 +2525,6 @@ export const EarningProduct = {
       descriptionRules: "",
       descriptionRiskDisclosure: "",
       enabledWhitelistLimit: false,
-      inactive: false,
       precision: 0,
     };
   },
@@ -2526,9 +2607,6 @@ export const EarningProduct = {
     }
     if (msg.enabledWhitelistLimit) {
       writer.writeBool(24, msg.enabledWhitelistLimit);
-    }
-    if (msg.inactive) {
-      writer.writeBool(25, msg.inactive);
     }
     if (msg.precision) {
       writer.writeInt32(26, msg.precision);
@@ -2640,10 +2718,6 @@ export const EarningProduct = {
         }
         case 24: {
           msg.enabledWhitelistLimit = reader.readBool();
-          break;
-        }
-        case 25: {
-          msg.inactive = reader.readBool();
           break;
         }
         case 26: {
@@ -4406,6 +4480,7 @@ export const EventActionJSON = {
     ADMIN_LEGACY_ASSET_MIGRATION: "ADMIN_LEGACY_ASSET_MIGRATION",
     ADMIN_AUDIT_APPROVE: "ADMIN_AUDIT_APPROVE",
     ADMIN_AUDIT_REJECT: "ADMIN_AUDIT_REJECT",
+    ADMIN_AUTO_REVISE_PRODUCT_CAPACITY: "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY",
     /**
      * @private
      */
@@ -4452,6 +4527,9 @@ export const EventActionJSON = {
         }
         case 107: {
           return "ADMIN_AUDIT_REJECT";
+        }
+        case 108: {
+          return "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -4505,6 +4583,9 @@ export const EventActionJSON = {
         }
         case "ADMIN_AUDIT_REJECT": {
           return 107;
+        }
+        case "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY": {
+          return 108;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -5530,6 +5611,67 @@ export const EarningSnapshotAdminAuditRejectDataJSON = {
   },
 };
 
+export const EarningSnapshotAdminAutoReviseProductCapacityDataJSON = {
+  /**
+   * Serializes EarningSnapshotAdminAutoReviseProductCapacityData to JSON.
+   */
+  encode: function (
+    msg: Partial<EarningSnapshotAdminAutoReviseProductCapacityData>
+  ): string {
+    return JSON.stringify(
+      EarningSnapshotAdminAutoReviseProductCapacityDataJSON._writeMessage(msg)
+    );
+  },
+
+  /**
+   * Deserializes EarningSnapshotAdminAutoReviseProductCapacityData from JSON.
+   */
+  decode: function (
+    json: string
+  ): EarningSnapshotAdminAutoReviseProductCapacityData {
+    return EarningSnapshotAdminAutoReviseProductCapacityDataJSON._readMessage(
+      EarningSnapshotAdminAutoReviseProductCapacityDataJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes EarningSnapshotAdminAutoReviseProductCapacityData with all fields set to their default value.
+   */
+  initialize: function (): EarningSnapshotAdminAutoReviseProductCapacityData {
+    return {
+      productId: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<EarningSnapshotAdminAutoReviseProductCapacityData>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.productId) {
+      json.productId = msg.productId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: EarningSnapshotAdminAutoReviseProductCapacityData,
+    json: any
+  ): EarningSnapshotAdminAutoReviseProductCapacityData {
+    const _productId = json.productId ?? json.product_id;
+    if (_productId) {
+      msg.productId = _productId;
+    }
+    return msg;
+  },
+};
+
 export const ListAssetsRequestJSON = {
   /**
    * Serializes ListAssetsRequest to JSON.
@@ -5797,7 +5939,6 @@ export const EarningProductJSON = {
       descriptionRules: "",
       descriptionRiskDisclosure: "",
       enabledWhitelistLimit: false,
-      inactive: false,
       precision: 0,
     };
   },
@@ -5880,9 +6021,6 @@ export const EarningProductJSON = {
     }
     if (msg.enabledWhitelistLimit) {
       json.enabledWhitelistLimit = msg.enabledWhitelistLimit;
-    }
-    if (msg.inactive) {
-      json.inactive = msg.inactive;
     }
     if (msg.precision) {
       json.precision = msg.precision;
@@ -5998,10 +6136,6 @@ export const EarningProductJSON = {
       json.enabledWhitelistLimit ?? json.enabled_whitelist_limit;
     if (_enabledWhitelistLimit) {
       msg.enabledWhitelistLimit = _enabledWhitelistLimit;
-    }
-    const _inactive = json.inactive;
-    if (_inactive) {
-      msg.inactive = _inactive;
     }
     const _precision = json.precision;
     if (_precision) {
