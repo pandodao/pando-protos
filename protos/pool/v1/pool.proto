@@ -74,6 +74,7 @@ message EventAction {
     ADMIN_LEGACY_ASSET_MIGRATION = 105;
     ADMIN_AUDIT_APPROVE = 106;
     ADMIN_AUDIT_REJECT = 107;
+    ADMIN_AUTO_REVISE_PRODUCT_CAPACITY = 108;
   }
 }
 
@@ -190,6 +191,10 @@ message EarningSnapshotAdminAuditRejectData {
   string trace_id = 1;
 } 
 
+message EarningSnapshotAdminAutoReviseProductCapacityData {
+  int32 product_id = 1;
+}
+
 message ListAssetsRequest {}
 
 message Asset {
@@ -210,6 +215,8 @@ message ListAssetsResponse {
 }
 
 message EarningProduct {
+  reserved 25;
+
   int32 id = 1;
   string name = 2;
   string description = 3;
@@ -234,7 +241,6 @@ message EarningProduct {
   string description_rules = 22;
   string description_risk_disclosure = 23;
   bool enabled_whitelist_limit = 24;
-  bool inactive = 25;
   int32 precision = 26;
 }
 
