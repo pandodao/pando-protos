@@ -5,6 +5,11 @@ option go_package = "github.com/fox-one/pando-protos/tradinglab/v1;tradinglab";
 
 import "google/protobuf/timestamp.proto";
 
+message Info {
+    string version = 1;
+    string client_id = 2;
+}
+
 message Asset {
     string id = 1;
     string symbol = 2;
@@ -98,6 +103,12 @@ message Transfer {
     string url = 7;
 }
 
+message GetInfoRequest {}
+
+message GetInfoResponse {
+    Info info = 1;
+}
+
 message PreOrderRequest {
     Order.Type type = 1;
     string pay_asset_id = 2;
@@ -143,6 +154,7 @@ message ListOrdersResponse {
 }
 
 service TradingLabService {
+    rpc GetInfo(GetInfoRequest) returns (GetInfoResponse) {}
     rpc PreOrder(PreOrderRequest) returns (PreOrderResponse) {}
     rpc CancelOrder(CancelOrderRequest) returns (CancelOrderResponse) {}
     rpc GetOrder(GetOrderRequest) returns (GetOrderResponse) {}
