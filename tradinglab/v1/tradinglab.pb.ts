@@ -20,6 +20,18 @@ import { Timestamp, TimestampJSON } from "../../google/protobuf/timestamp.pb";
 //   TradingLabService Protobuf Client    //
 //========================================//
 
+export async function GetInfo(
+  getInfoRequest: GetInfoRequest,
+  config?: ClientConfiguration
+): Promise<GetInfoResponse> {
+  const response = await PBrequest(
+    "/tradinglab.v1.TradingLabService/GetInfo",
+    GetInfoRequest.encode(getInfoRequest),
+    config
+  );
+  return GetInfoResponse.decode(response);
+}
+
 export async function PreOrder(
   preOrderRequest: PreOrderRequest,
   config?: ClientConfiguration
@@ -71,6 +83,18 @@ export async function ListOrders(
 //========================================//
 //     TradingLabService JSON Client      //
 //========================================//
+
+export async function GetInfoJSON(
+  getInfoRequest: GetInfoRequest,
+  config?: ClientConfiguration
+): Promise<GetInfoResponse> {
+  const response = await JSONrequest(
+    "/tradinglab.v1.TradingLabService/GetInfo",
+    GetInfoRequestJSON.encode(getInfoRequest),
+    config
+  );
+  return GetInfoResponseJSON.decode(response);
+}
 
 export async function PreOrderJSON(
   preOrderRequest: PreOrderRequest,
@@ -125,6 +149,10 @@ export async function ListOrdersJSON(
 //========================================//
 
 export interface TradingLabService<Context = unknown> {
+  GetInfo: (
+    getInfoRequest: GetInfoRequest,
+    context: Context
+  ) => Promise<GetInfoResponse> | GetInfoResponse;
   PreOrder: (
     preOrderRequest: PreOrderRequest,
     context: Context
@@ -149,6 +177,12 @@ export function createTradingLabService<Context>(
   return {
     name: "tradinglab.v1.TradingLabService",
     methods: {
+      GetInfo: {
+        name: "GetInfo",
+        handler: service.GetInfo,
+        input: { protobuf: GetInfoRequest, json: GetInfoRequestJSON },
+        output: { protobuf: GetInfoResponse, json: GetInfoResponseJSON },
+      },
       PreOrder: {
         name: "PreOrder",
         handler: service.PreOrder,
@@ -183,6 +217,11 @@ export function createTradingLabService<Context>(
 //========================================//
 //                 Types                  //
 //========================================//
+
+export interface Info {
+  version: string;
+  clientId: string;
+}
 
 export interface Asset {
   id: string;
@@ -271,6 +310,12 @@ export interface Transfer {
   url: string;
 }
 
+export interface GetInfoRequest {}
+
+export interface GetInfoResponse {
+  info: Info;
+}
+
 export interface PreOrderRequest {
   type: Order.Type;
   payAssetId: string;
@@ -318,6 +363,72 @@ export interface ListOrdersResponse {
 //========================================//
 //        Protobuf Encode / Decode        //
 //========================================//
+
+export const Info = {
+  /**
+   * Serializes Info to protobuf.
+   */
+  encode: function (msg: Partial<Info>): Uint8Array {
+    return Info._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes Info from protobuf.
+   */
+  decode: function (bytes: ByteSource): Info {
+    return Info._readMessage(Info.initialize(), new BinaryReader(bytes));
+  },
+
+  /**
+   * Initializes Info with all fields set to their default value.
+   */
+  initialize: function (): Info {
+    return {
+      version: "",
+      clientId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<Info>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.version) {
+      writer.writeString(1, msg.version);
+    }
+    if (msg.clientId) {
+      writer.writeString(2, msg.clientId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Info, reader: BinaryReader): Info {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.version = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.clientId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
 
 export const Asset = {
   /**
@@ -1267,6 +1378,116 @@ export const Transfer = {
   },
 };
 
+export const GetInfoRequest = {
+  /**
+   * Serializes GetInfoRequest to protobuf.
+   */
+  encode: function (_msg?: Partial<GetInfoRequest>): Uint8Array {
+    return new Uint8Array();
+  },
+
+  /**
+   * Deserializes GetInfoRequest from protobuf.
+   */
+  decode: function (_bytes?: ByteSource): GetInfoRequest {
+    return {};
+  },
+
+  /**
+   * Initializes GetInfoRequest with all fields set to their default value.
+   */
+  initialize: function (): GetInfoRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<GetInfoRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    _msg: GetInfoRequest,
+    _reader: BinaryReader
+  ): GetInfoRequest {
+    return _msg;
+  },
+};
+
+export const GetInfoResponse = {
+  /**
+   * Serializes GetInfoResponse to protobuf.
+   */
+  encode: function (msg: Partial<GetInfoResponse>): Uint8Array {
+    return GetInfoResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetInfoResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetInfoResponse {
+    return GetInfoResponse._readMessage(
+      GetInfoResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetInfoResponse with all fields set to their default value.
+   */
+  initialize: function (): GetInfoResponse {
+    return {
+      info: Info.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetInfoResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.info) {
+      writer.writeMessage(1, msg.info, Info._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetInfoResponse,
+    reader: BinaryReader
+  ): GetInfoResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          reader.readMessage(msg.info, Info._readMessage);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 export const PreOrderRequest = {
   /**
    * Serializes PreOrderRequest to protobuf.
@@ -1908,6 +2129,61 @@ export const ListOrdersResponse = {
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
+
+export const InfoJSON = {
+  /**
+   * Serializes Info to JSON.
+   */
+  encode: function (msg: Partial<Info>): string {
+    return JSON.stringify(InfoJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes Info from JSON.
+   */
+  decode: function (json: string): Info {
+    return InfoJSON._readMessage(InfoJSON.initialize(), JSON.parse(json));
+  },
+
+  /**
+   * Initializes Info with all fields set to their default value.
+   */
+  initialize: function (): Info {
+    return {
+      version: "",
+      clientId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<Info>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.version) {
+      json.version = msg.version;
+    }
+    if (msg.clientId) {
+      json.clientId = msg.clientId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Info, json: any): Info {
+    const _version = json.version;
+    if (_version) {
+      msg.version = _version;
+    }
+    const _clientId = json.clientId ?? json.client_id;
+    if (_clientId) {
+      msg.clientId = _clientId;
+    }
+    return msg;
+  },
+};
 
 export const AssetJSON = {
   /**
@@ -2808,6 +3084,102 @@ export const TransferJSON = {
     const _url = json.url;
     if (_url) {
       msg.url = _url;
+    }
+    return msg;
+  },
+};
+
+export const GetInfoRequestJSON = {
+  /**
+   * Serializes GetInfoRequest to JSON.
+   */
+  encode: function (_msg?: Partial<GetInfoRequest>): string {
+    return "{}";
+  },
+
+  /**
+   * Deserializes GetInfoRequest from JSON.
+   */
+  decode: function (_json?: string): GetInfoRequest {
+    return {};
+  },
+
+  /**
+   * Initializes GetInfoRequest with all fields set to their default value.
+   */
+  initialize: function (): GetInfoRequest {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<GetInfoRequest>
+  ): Record<string, unknown> {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: GetInfoRequest, _json: any): GetInfoRequest {
+    return msg;
+  },
+};
+
+export const GetInfoResponseJSON = {
+  /**
+   * Serializes GetInfoResponse to JSON.
+   */
+  encode: function (msg: Partial<GetInfoResponse>): string {
+    return JSON.stringify(GetInfoResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes GetInfoResponse from JSON.
+   */
+  decode: function (json: string): GetInfoResponse {
+    return GetInfoResponseJSON._readMessage(
+      GetInfoResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetInfoResponse with all fields set to their default value.
+   */
+  initialize: function (): GetInfoResponse {
+    return {
+      info: Info.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetInfoResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.info) {
+      const info = InfoJSON._writeMessage(msg.info);
+      if (Object.keys(info).length > 0) {
+        json.info = info;
+      }
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: GetInfoResponse, json: any): GetInfoResponse {
+    const _info = json.info;
+    if (_info) {
+      const m = Info.initialize();
+      InfoJSON._readMessage(m, _info);
+      msg.info = m;
     }
     return msg;
   },
