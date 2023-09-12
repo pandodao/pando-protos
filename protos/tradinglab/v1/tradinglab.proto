@@ -48,6 +48,9 @@ message Order {
     string expects = 13;
     string filled_funds = 14;
     string filled_amount = 15;
+    string min_receive_amount = 16;
+    string fee_asset_id = 17;
+    string fee_amount = 18;
 }
 
 message Trade {
