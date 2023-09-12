@@ -246,6 +246,9 @@ export interface Order {
   expects: string;
   filledFunds: string;
   filledAmount: string;
+  minReceiveAmount: string;
+  feeAssetId: string;
+  feeAmount: string;
 }
 
 export declare namespace Order {
@@ -547,6 +550,9 @@ export const Order = {
       expects: "",
       filledFunds: "",
       filledAmount: "",
+      minReceiveAmount: "",
+      feeAssetId: "",
+      feeAmount: "",
     };
   },
 
@@ -601,6 +607,15 @@ export const Order = {
     }
     if (msg.filledAmount) {
       writer.writeString(15, msg.filledAmount);
+    }
+    if (msg.minReceiveAmount) {
+      writer.writeString(16, msg.minReceiveAmount);
+    }
+    if (msg.feeAssetId) {
+      writer.writeString(17, msg.feeAssetId);
+    }
+    if (msg.feeAmount) {
+      writer.writeString(18, msg.feeAmount);
     }
     return writer;
   },
@@ -670,6 +685,18 @@ export const Order = {
         }
         case 15: {
           msg.filledAmount = reader.readString();
+          break;
+        }
+        case 16: {
+          msg.minReceiveAmount = reader.readString();
+          break;
+        }
+        case 17: {
+          msg.feeAssetId = reader.readString();
+          break;
+        }
+        case 18: {
+          msg.feeAmount = reader.readString();
           break;
         }
         default: {
@@ -2291,6 +2318,9 @@ export const OrderJSON = {
       expects: "",
       filledFunds: "",
       filledAmount: "",
+      minReceiveAmount: "",
+      feeAssetId: "",
+      feeAmount: "",
     };
   },
 
@@ -2358,6 +2388,15 @@ export const OrderJSON = {
     }
     if (msg.filledAmount) {
       json.filledAmount = msg.filledAmount;
+    }
+    if (msg.minReceiveAmount) {
+      json.minReceiveAmount = msg.minReceiveAmount;
+    }
+    if (msg.feeAssetId) {
+      json.feeAssetId = msg.feeAssetId;
+    }
+    if (msg.feeAmount) {
+      json.feeAmount = msg.feeAmount;
     }
     return json;
   },
@@ -2435,6 +2474,18 @@ export const OrderJSON = {
     const _filledAmount = json.filledAmount ?? json.filled_amount;
     if (_filledAmount) {
       msg.filledAmount = _filledAmount;
+    }
+    const _minReceiveAmount = json.minReceiveAmount ?? json.min_receive_amount;
+    if (_minReceiveAmount) {
+      msg.minReceiveAmount = _minReceiveAmount;
+    }
+    const _feeAssetId = json.feeAssetId ?? json.fee_asset_id;
+    if (_feeAssetId) {
+      msg.feeAssetId = _feeAssetId;
+    }
+    const _feeAmount = json.feeAmount ?? json.fee_amount;
+    if (_feeAmount) {
+      msg.feeAmount = _feeAmount;
     }
     return msg;
   },
