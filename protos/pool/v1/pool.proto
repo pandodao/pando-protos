@@ -11,6 +11,7 @@ service PoolService {
   rpc GetEvent(GetEventRequest) returns (GetEventResponse);
   rpc ListEvents(ListEventsRequest) returns (ListEventsResponse);
 
+  rpc GetEarningProduct(GetEarningProductRequest) returns (GetEarningProductResponse);
   rpc ListEarningProducts(ListEarningProductsRequest) returns (ListEarningProductsResponse);
   rpc ListMyEarningProducts(ListMyEarningProductsRequest) returns (ListMyEarningProductsResponse);
   rpc GetMyEarningProduct(GetMyEarningProductRequest) returns (GetMyEarningProductResponse);
@@ -242,6 +243,14 @@ message EarningProduct {
   string description_risk_disclosure = 23;
   bool enabled_whitelist_limit = 24;
   int32 precision = 26;
+}
+
+message GetEarningProductRequest {
+  int32 id = 1;
+}
+
+message GetEarningProductResponse {
+  EarningProduct product = 1;
 }
 
 message ListEarningProductsRequest {
