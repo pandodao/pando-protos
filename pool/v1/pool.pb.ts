@@ -360,7 +360,8 @@ export declare namespace EventError {
     | "USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED"
     | "EOD_ALREADY_APPLIED"
     | "AUDIT_NOT_FOUND"
-    | "AUDIT_STATUS_MISMATCH";
+    | "AUDIT_STATUS_MISMATCH"
+    | "EARNING_PRODUCT_PRECISION_UNSATISFIED";
 }
 
 export interface EventAction {}
@@ -735,6 +736,11 @@ export const EventError = {
      */
     AUDIT_STATUS_MISMATCH: "AUDIT_STATUS_MISMATCH",
     /**
+     * buy / redeem
+     */
+    EARNING_PRODUCT_PRECISION_UNSATISFIED:
+      "EARNING_PRODUCT_PRECISION_UNSATISFIED",
+    /**
      * @private
      */
     _fromInt: function (i: number): EventError.Enum {
@@ -783,6 +789,9 @@ export const EventError = {
         }
         case 14: {
           return "AUDIT_STATUS_MISMATCH";
+        }
+        case 15: {
+          return "EARNING_PRODUCT_PRECISION_UNSATISFIED";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -839,6 +848,9 @@ export const EventError = {
         }
         case "AUDIT_STATUS_MISMATCH": {
           return 14;
+        }
+        case "EARNING_PRODUCT_PRECISION_UNSATISFIED": {
+          return 15;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -4313,6 +4325,11 @@ export const EventErrorJSON = {
      */
     AUDIT_STATUS_MISMATCH: "AUDIT_STATUS_MISMATCH",
     /**
+     * buy / redeem
+     */
+    EARNING_PRODUCT_PRECISION_UNSATISFIED:
+      "EARNING_PRODUCT_PRECISION_UNSATISFIED",
+    /**
      * @private
      */
     _fromInt: function (i: number): EventError.Enum {
@@ -4361,6 +4378,9 @@ export const EventErrorJSON = {
         }
         case 14: {
           return "AUDIT_STATUS_MISMATCH";
+        }
+        case 15: {
+          return "EARNING_PRODUCT_PRECISION_UNSATISFIED";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -4417,6 +4437,9 @@ export const EventErrorJSON = {
         }
         case "AUDIT_STATUS_MISMATCH": {
           return 14;
+        }
+        case "EARNING_PRODUCT_PRECISION_UNSATISFIED": {
+          return 15;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
