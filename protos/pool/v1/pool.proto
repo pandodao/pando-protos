@@ -53,6 +53,8 @@ message EventError {
     AUDIT_NOT_FOUND = 13;
     // admin_audit_approve / admin_audit_reject
     AUDIT_STATUS_MISMATCH = 14;
+    // buy
+    USER_NOT_IN_WHITELIST = 15;
   }
 }
 
