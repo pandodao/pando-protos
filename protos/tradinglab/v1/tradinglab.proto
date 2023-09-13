@@ -119,6 +119,10 @@ message PreOrderRequest {
     string funds = 4;
     repeated string exchanges = 5;
     string filled_amount = 6;
+    // slippage for limit order
+    string slippage = 7;
+    // expire duration for limit order
+    string duration = 8;
 }
 
 message PreOrderResponse {
