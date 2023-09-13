@@ -325,6 +325,7 @@ export interface PreOrderRequest {
   fillAssetId: string;
   funds: string;
   exchanges: string[];
+  filledAmount: string;
 }
 
 export interface PreOrderResponse {
@@ -1546,6 +1547,7 @@ export const PreOrderRequest = {
       fillAssetId: "",
       funds: "",
       exchanges: [],
+      filledAmount: "",
     };
   },
 
@@ -1570,6 +1572,9 @@ export const PreOrderRequest = {
     }
     if (msg.exchanges?.length) {
       writer.writeRepeatedString(5, msg.exchanges);
+    }
+    if (msg.filledAmount) {
+      writer.writeString(6, msg.filledAmount);
     }
     return writer;
   },
@@ -1602,6 +1607,10 @@ export const PreOrderRequest = {
         }
         case 5: {
           msg.exchanges.push(reader.readString());
+          break;
+        }
+        case 6: {
+          msg.filledAmount = reader.readString();
           break;
         }
         default: {
@@ -3264,6 +3273,7 @@ export const PreOrderRequestJSON = {
       fillAssetId: "",
       funds: "",
       exchanges: [],
+      filledAmount: "",
     };
   },
 
@@ -3288,6 +3298,9 @@ export const PreOrderRequestJSON = {
     }
     if (msg.exchanges?.length) {
       json.exchanges = msg.exchanges;
+    }
+    if (msg.filledAmount) {
+      json.filledAmount = msg.filledAmount;
     }
     return json;
   },
@@ -3315,6 +3328,10 @@ export const PreOrderRequestJSON = {
     const _exchanges = json.exchanges;
     if (_exchanges) {
       msg.exchanges = _exchanges;
+    }
+    const _filledAmount = json.filledAmount ?? json.filled_amount;
+    if (_filledAmount) {
+      msg.filledAmount = _filledAmount;
     }
     return msg;
   },
