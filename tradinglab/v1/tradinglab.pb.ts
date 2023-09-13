@@ -326,6 +326,14 @@ export interface PreOrderRequest {
   funds: string;
   exchanges: string[];
   filledAmount: string;
+  /**
+   * slippage for limit order
+   */
+  slippage: string;
+  /**
+   * expire duration for limit order
+   */
+  duration: string;
 }
 
 export interface PreOrderResponse {
@@ -1548,6 +1556,8 @@ export const PreOrderRequest = {
       funds: "",
       exchanges: [],
       filledAmount: "",
+      slippage: "",
+      duration: "",
     };
   },
 
@@ -1575,6 +1585,12 @@ export const PreOrderRequest = {
     }
     if (msg.filledAmount) {
       writer.writeString(6, msg.filledAmount);
+    }
+    if (msg.slippage) {
+      writer.writeString(7, msg.slippage);
+    }
+    if (msg.duration) {
+      writer.writeString(8, msg.duration);
     }
     return writer;
   },
@@ -1611,6 +1627,14 @@ export const PreOrderRequest = {
         }
         case 6: {
           msg.filledAmount = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.slippage = reader.readString();
+          break;
+        }
+        case 8: {
+          msg.duration = reader.readString();
           break;
         }
         default: {
@@ -3274,6 +3298,8 @@ export const PreOrderRequestJSON = {
       funds: "",
       exchanges: [],
       filledAmount: "",
+      slippage: "",
+      duration: "",
     };
   },
 
@@ -3301,6 +3327,12 @@ export const PreOrderRequestJSON = {
     }
     if (msg.filledAmount) {
       json.filledAmount = msg.filledAmount;
+    }
+    if (msg.slippage) {
+      json.slippage = msg.slippage;
+    }
+    if (msg.duration) {
+      json.duration = msg.duration;
     }
     return json;
   },
@@ -3332,6 +3364,14 @@ export const PreOrderRequestJSON = {
     const _filledAmount = json.filledAmount ?? json.filled_amount;
     if (_filledAmount) {
       msg.filledAmount = _filledAmount;
+    }
+    const _slippage = json.slippage;
+    if (_slippage) {
+      msg.slippage = _slippage;
+    }
+    const _duration = json.duration;
+    if (_duration) {
+      msg.duration = _duration;
     }
     return msg;
   },
