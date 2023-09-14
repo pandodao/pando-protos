@@ -3,8 +3,6 @@ syntax = "proto3";
 package tradinglab.v1; 
 option go_package = "github.com/fox-one/pando-protos/tradinglab/v1;tradinglab";
 
-import "google/protobuf/timestamp.proto";
-
 message Info {
     string version = 1;
     string client_id = 2;
@@ -34,9 +32,9 @@ message Order {
     }
 
     string id = 1;
-    google.protobuf.Timestamp created_at = 2;
-    google.protobuf.Timestamp expired_at = 3;
-    google.protobuf.Timestamp cancelled_at = 4;
+    string created_at = 2;
+    string expired_at = 3;
+    string cancelled_at = 4;
     string user_id = 5;
     Type type = 6;
     State state = 7;
@@ -78,7 +76,7 @@ message Trade {
     }
 
     string id = 1;
-    google.protobuf.Timestamp created_at = 2;
+    string created_at = 2;
     string exchange = 3;
     string order_id = 4;
     State state = 5;
