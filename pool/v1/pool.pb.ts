@@ -56,6 +56,18 @@ export async function ListEvents(
   return ListEventsResponse.decode(response);
 }
 
+export async function GetEarningProduct(
+  getEarningProductRequest: GetEarningProductRequest,
+  config?: ClientConfiguration
+): Promise<GetEarningProductResponse> {
+  const response = await PBrequest(
+    "/pool.v1.PoolService/GetEarningProduct",
+    GetEarningProductRequest.encode(getEarningProductRequest),
+    config
+  );
+  return GetEarningProductResponse.decode(response);
+}
+
 export async function ListEarningProducts(
   listEarningProductsRequest: ListEarningProductsRequest,
   config?: ClientConfiguration
@@ -159,6 +171,18 @@ export async function ListEventsJSON(
   return ListEventsResponseJSON.decode(response);
 }
 
+export async function GetEarningProductJSON(
+  getEarningProductRequest: GetEarningProductRequest,
+  config?: ClientConfiguration
+): Promise<GetEarningProductResponse> {
+  const response = await JSONrequest(
+    "/pool.v1.PoolService/GetEarningProduct",
+    GetEarningProductRequestJSON.encode(getEarningProductRequest),
+    config
+  );
+  return GetEarningProductResponseJSON.decode(response);
+}
+
 export async function ListEarningProductsJSON(
   listEarningProductsRequest: ListEarningProductsRequest,
   config?: ClientConfiguration
@@ -239,6 +263,10 @@ export interface PoolService<Context = unknown> {
     listEventsRequest: ListEventsRequest,
     context: Context
   ) => Promise<ListEventsResponse> | ListEventsResponse;
+  GetEarningProduct: (
+    getEarningProductRequest: GetEarningProductRequest,
+    context: Context
+  ) => Promise<GetEarningProductResponse> | GetEarningProductResponse;
   ListEarningProducts: (
     listEarningProductsRequest: ListEarningProductsRequest,
     context: Context
@@ -285,6 +313,18 @@ export function createPoolService<Context>(service: PoolService<Context>) {
         handler: service.ListEvents,
         input: { protobuf: ListEventsRequest, json: ListEventsRequestJSON },
         output: { protobuf: ListEventsResponse, json: ListEventsResponseJSON },
+      },
+      GetEarningProduct: {
+        name: "GetEarningProduct",
+        handler: service.GetEarningProduct,
+        input: {
+          protobuf: GetEarningProductRequest,
+          json: GetEarningProductRequestJSON,
+        },
+        output: {
+          protobuf: GetEarningProductResponse,
+          json: GetEarningProductResponseJSON,
+        },
       },
       ListEarningProducts: {
         name: "ListEarningProducts",
@@ -360,7 +400,9 @@ export declare namespace EventError {
     | "USER_EARNING_PRODUCT_HAS_BEEN_PLEDGED"
     | "EOD_ALREADY_APPLIED"
     | "AUDIT_NOT_FOUND"
-    | "AUDIT_STATUS_MISMATCH";
+    | "AUDIT_STATUS_MISMATCH"
+    | "EARNING_PRODUCT_PRECISION_UNSATISFIED"
+    | "USER_NOT_IN_WHITELIST";
 }
 
 export interface EventAction {}
@@ -515,6 +557,14 @@ export interface EarningProduct {
   descriptionRiskDisclosure: string;
   enabledWhitelistLimit: boolean;
   precision: number;
+}
+
+export interface GetEarningProductRequest {
+  id: number;
+}
+
+export interface GetEarningProductResponse {
+  product: EarningProduct;
 }
 
 export interface ListEarningProductsRequest {
@@ -735,6 +785,15 @@ export const EventError = {
      */
     AUDIT_STATUS_MISMATCH: "AUDIT_STATUS_MISMATCH",
     /**
+     * buy / redeem
+     */
+    EARNING_PRODUCT_PRECISION_UNSATISFIED:
+      "EARNING_PRODUCT_PRECISION_UNSATISFIED",
+    /**
+     * buy
+     */
+    USER_NOT_IN_WHITELIST: "USER_NOT_IN_WHITELIST",
+    /**
      * @private
      */
     _fromInt: function (i: number): EventError.Enum {
@@ -783,6 +842,12 @@ export const EventError = {
         }
         case 14: {
           return "AUDIT_STATUS_MISMATCH";
+        }
+        case 15: {
+          return "EARNING_PRODUCT_PRECISION_UNSATISFIED";
+        }
+        case 16: {
+          return "USER_NOT_IN_WHITELIST";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -839,6 +904,12 @@ export const EventError = {
         }
         case "AUDIT_STATUS_MISMATCH": {
           return 14;
+        }
+        case "EARNING_PRODUCT_PRECISION_UNSATISFIED": {
+          return 15;
+        }
+        case "USER_NOT_IN_WHITELIST": {
+          return 16;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -2734,6 +2805,140 @@ export const EarningProduct = {
   },
 };
 
+export const GetEarningProductRequest = {
+  /**
+   * Serializes GetEarningProductRequest to protobuf.
+   */
+  encode: function (msg: Partial<GetEarningProductRequest>): Uint8Array {
+    return GetEarningProductRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetEarningProductRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetEarningProductRequest {
+    return GetEarningProductRequest._readMessage(
+      GetEarningProductRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetEarningProductRequest with all fields set to their default value.
+   */
+  initialize: function (): GetEarningProductRequest {
+    return {
+      id: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetEarningProductRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.id) {
+      writer.writeInt32(1, msg.id);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetEarningProductRequest,
+    reader: BinaryReader
+  ): GetEarningProductRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readInt32();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const GetEarningProductResponse = {
+  /**
+   * Serializes GetEarningProductResponse to protobuf.
+   */
+  encode: function (msg: Partial<GetEarningProductResponse>): Uint8Array {
+    return GetEarningProductResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetEarningProductResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetEarningProductResponse {
+    return GetEarningProductResponse._readMessage(
+      GetEarningProductResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetEarningProductResponse with all fields set to their default value.
+   */
+  initialize: function (): GetEarningProductResponse {
+    return {
+      product: EarningProduct.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetEarningProductResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.product) {
+      writer.writeMessage(1, msg.product, EarningProduct._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetEarningProductResponse,
+    reader: BinaryReader
+  ): GetEarningProductResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          reader.readMessage(msg.product, EarningProduct._readMessage);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 export const ListEarningProductsRequest = {
   /**
    * Serializes ListEarningProductsRequest to protobuf.
@@ -4313,6 +4518,15 @@ export const EventErrorJSON = {
      */
     AUDIT_STATUS_MISMATCH: "AUDIT_STATUS_MISMATCH",
     /**
+     * buy / redeem
+     */
+    EARNING_PRODUCT_PRECISION_UNSATISFIED:
+      "EARNING_PRODUCT_PRECISION_UNSATISFIED",
+    /**
+     * buy
+     */
+    USER_NOT_IN_WHITELIST: "USER_NOT_IN_WHITELIST",
+    /**
      * @private
      */
     _fromInt: function (i: number): EventError.Enum {
@@ -4361,6 +4575,12 @@ export const EventErrorJSON = {
         }
         case 14: {
           return "AUDIT_STATUS_MISMATCH";
+        }
+        case 15: {
+          return "EARNING_PRODUCT_PRECISION_UNSATISFIED";
+        }
+        case 16: {
+          return "USER_NOT_IN_WHITELIST";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -4417,6 +4637,12 @@ export const EventErrorJSON = {
         }
         case "AUDIT_STATUS_MISMATCH": {
           return 14;
+        }
+        case "EARNING_PRODUCT_PRECISION_UNSATISFIED": {
+          return 15;
+        }
+        case "USER_NOT_IN_WHITELIST": {
+          return 16;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -6140,6 +6366,121 @@ export const EarningProductJSON = {
     const _precision = json.precision;
     if (_precision) {
       msg.precision = _precision;
+    }
+    return msg;
+  },
+};
+
+export const GetEarningProductRequestJSON = {
+  /**
+   * Serializes GetEarningProductRequest to JSON.
+   */
+  encode: function (msg: Partial<GetEarningProductRequest>): string {
+    return JSON.stringify(GetEarningProductRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes GetEarningProductRequest from JSON.
+   */
+  decode: function (json: string): GetEarningProductRequest {
+    return GetEarningProductRequestJSON._readMessage(
+      GetEarningProductRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetEarningProductRequest with all fields set to their default value.
+   */
+  initialize: function (): GetEarningProductRequest {
+    return {
+      id: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetEarningProductRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json.id = msg.id;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetEarningProductRequest,
+    json: any
+  ): GetEarningProductRequest {
+    const _id = json.id;
+    if (_id) {
+      msg.id = _id;
+    }
+    return msg;
+  },
+};
+
+export const GetEarningProductResponseJSON = {
+  /**
+   * Serializes GetEarningProductResponse to JSON.
+   */
+  encode: function (msg: Partial<GetEarningProductResponse>): string {
+    return JSON.stringify(GetEarningProductResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes GetEarningProductResponse from JSON.
+   */
+  decode: function (json: string): GetEarningProductResponse {
+    return GetEarningProductResponseJSON._readMessage(
+      GetEarningProductResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetEarningProductResponse with all fields set to their default value.
+   */
+  initialize: function (): GetEarningProductResponse {
+    return {
+      product: EarningProduct.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetEarningProductResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.product) {
+      const product = EarningProductJSON._writeMessage(msg.product);
+      if (Object.keys(product).length > 0) {
+        json.product = product;
+      }
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetEarningProductResponse,
+    json: any
+  ): GetEarningProductResponse {
+    const _product = json.product;
+    if (_product) {
+      const m = EarningProduct.initialize();
+      EarningProductJSON._readMessage(m, _product);
+      msg.product = m;
     }
     return msg;
   },
