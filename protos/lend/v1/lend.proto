@@ -22,23 +22,16 @@ service LendService {
     rpc GetLiquidation(GetLiquidationRequest) returns (GetLiquidationResponse);
 }
 
-message TransferData {
-  enum Type {
-    NOT_SET = 0;
-    OPERATION = 1;
-    CHARGE = 2;
-    REVIEW = 3;
-  }
-  Type t = 1;
-  string tid = 2;
+enum OperationType {
+  OPERATION_TYPE_NOT_SET = 0;
+  PLEDGE = 1;
+  WITHDRAW = 2;
+  LOAN = 3;
+  REPAY = 4;
+  REFUND = 5;
+  LIQUIDATION = 6;
 
-  OperationType ot = 3;
-  TransferPledgeData p = 4;
-  TransferLoanData l= 5;
-  TransferRepayData r = 6;
-  TransferWithdrawData w = 7;
-
-  ReviewData rd = 20;
+  REVIEW = 100;
 }
 
 message ReviewData {
@@ -81,16 +74,6 @@ enum UserStatus {
   USER_STATUS_NOT_SET = 0;
   NORMAL = 1;
   LIQUIDATING = 2;
-}
-
-enum OperationType {
-  OPERATION_TYPE_NOT_SET = 0;
-  PLEDGE = 1;
-  WITHDRAW = 2;
-  LOAN = 3;
-  REPAY = 4;
-  REFUND = 5;
-  LIQUIDATION = 6;
 }
 
 enum OperationStatus {
