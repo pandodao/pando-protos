@@ -363,9 +363,9 @@ export type OperationStatus =
 export type PledgeType = "PLEDGE_TYPE_NOT_SET" | "NODE" | "POOL" | "LOCAL";
 
 export interface ReviewData {
-  tid: string;
-  p: boolean;
-  fr: string;
+  traceId: string;
+  passed: boolean;
+  failedReason: string;
 }
 
 export interface TransferWithdrawData {
@@ -820,9 +820,9 @@ export const ReviewData = {
    */
   initialize: function (): ReviewData {
     return {
-      tid: "",
-      p: false,
-      fr: "",
+      traceId: "",
+      passed: false,
+      failedReason: "",
     };
   },
 
@@ -833,14 +833,14 @@ export const ReviewData = {
     msg: Partial<ReviewData>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.tid) {
-      writer.writeString(1, msg.tid);
+    if (msg.traceId) {
+      writer.writeString(1, msg.traceId);
     }
-    if (msg.p) {
-      writer.writeBool(2, msg.p);
+    if (msg.passed) {
+      writer.writeBool(2, msg.passed);
     }
-    if (msg.fr) {
-      writer.writeString(3, msg.fr);
+    if (msg.failedReason) {
+      writer.writeString(3, msg.failedReason);
     }
     return writer;
   },
@@ -853,15 +853,15 @@ export const ReviewData = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.tid = reader.readString();
+          msg.traceId = reader.readString();
           break;
         }
         case 2: {
-          msg.p = reader.readBool();
+          msg.passed = reader.readBool();
           break;
         }
         case 3: {
-          msg.fr = reader.readString();
+          msg.failedReason = reader.readString();
           break;
         }
         default: {
@@ -3316,9 +3316,9 @@ export const ReviewDataJSON = {
    */
   initialize: function (): ReviewData {
     return {
-      tid: "",
-      p: false,
-      fr: "",
+      traceId: "",
+      passed: false,
+      failedReason: "",
     };
   },
 
@@ -3327,14 +3327,14 @@ export const ReviewDataJSON = {
    */
   _writeMessage: function (msg: Partial<ReviewData>): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.tid) {
-      json.tid = msg.tid;
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
     }
-    if (msg.p) {
-      json.p = msg.p;
+    if (msg.passed) {
+      json.passed = msg.passed;
     }
-    if (msg.fr) {
-      json.fr = msg.fr;
+    if (msg.failedReason) {
+      json.failedReason = msg.failedReason;
     }
     return json;
   },
@@ -3343,17 +3343,17 @@ export const ReviewDataJSON = {
    * @private
    */
   _readMessage: function (msg: ReviewData, json: any): ReviewData {
-    const _tid = json.tid;
-    if (_tid) {
-      msg.tid = _tid;
+    const _traceId = json.traceId ?? json.trace_id;
+    if (_traceId) {
+      msg.traceId = _traceId;
     }
-    const _p = json.p;
-    if (_p) {
-      msg.p = _p;
+    const _passed = json.passed;
+    if (_passed) {
+      msg.passed = _passed;
     }
-    const _fr = json.fr;
-    if (_fr) {
-      msg.fr = _fr;
+    const _failedReason = json.failedReason ?? json.failed_reason;
+    if (_failedReason) {
+      msg.failedReason = _failedReason;
     }
     return msg;
   },
