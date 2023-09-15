@@ -11,11 +11,9 @@ service LendService {
 
     rpc State(StateRequest) returns (StateResponse);
     rpc Info(InfoRequest) returns (InfoResponse);
-    rpc CreateOperationLog(CreateOperationLogRequest) returns (CreateOperationLogResponse);
     rpc CreatePayment(CreatePaymentRequest) returns (CreatePaymentResponse);
     rpc GetOperationLog(GetOperationLogRequest) returns (GetOperationLogResponse);
     rpc ListOperationLogs(ListOperationLogsRequest) returns (ListOperationLogsResponse);
-    rpc CancelOperationLog(CancelOperationLogRequest) returns (CancelOperationLogResponse);
 
     // for admin
 
@@ -28,33 +26,61 @@ enum OperationType {
   WITHDRAW = 2;
   LOAN = 3;
   REPAY = 4;
-  REFUND = 5;
-  LIQUIDATION = 6;
+  CANCEL = 5;
+
+  // only as logs, created by system
+
+  LIQUIDATION = 50;
+
+  // --- by admins
 
   REVIEW = 100;
+  CHARGE = 101;
 }
 
+// mtgmemo -e '{"version":2,"protocol_id":6,"follow_id":"b3b4c09c-2421-41ec-b8d4-bdedfbbd58b1","action":100,"params":["string:c94ac88f-4671-3976-b60a-09064f1811e8","bool:true","string:"]}' -b64 url
+// AgYBs7TAnCQhQey41L3t-71YsQBkJGM5NGFjODhmLTQ2NzEtMzk3Ni1iNjBhLTA5MDY0ZjE4MTFlOAEAIu3B0g==
+
 message ReviewData {
-  string tid = 1;
-  bool p = 2;
-  string fr = 3;
+  string trace_id = 1;
+  bool passed = 2;
+  string failed_reason = 3;
 }
+
+// mtgmemo -e '{"version":2,"protocol_id":6,"follow_id":"b3b4c09c-2421-41ec-b8d4-bdedfbbd58b1","action":2,"params":["int8:3","string:c94ac88f-4671-3976-b60a-09064f1811e8","string:1"]}' -b64 url
+// AgYBs7TAnCQhQey41L3t-71YsQACAyRjOTRhYzg4Zi00NjcxLTM5NzYtYjYwYS0wOTA2NGYxODExZTgBMWyJkn0=
 
 message TransferWithdrawData {
   PledgeType pt = 1;
-  string aid = 2;
-  string a = 3;
+  string asset_id = 2;
+  string amount = 3;
 }
+
+// mtgmemo -e '{"version":2,"protocol_id":6,"follow_id":"b3b4c09c-2421-41ec-b8d4-bdedfbbd58b1","action":1,"params":["int8:3"]}' -b64 url
+// AgYBs7TAnCQhQey41L3t-71YsQABA88aOMo=
 
 message TransferPledgeData {
   PledgeType pt = 1;
 }
 
+// mtgmemo -e '{"version":2,"protocol_id":6,"follow_id":"b3b4c09c-2421-41ec-b8d4-bdedfbbd58b1","action":3,"params":["string:1"]}' -b64 url
+// AgYBs7TAnCQhQey41L3t-71YsQADATHU2Q9T
+
 message TransferLoanData {
-  string a = 1;
+  string amount = 1;
 }
 
+// mtgmemo -e '{"version":2,"protocol_id":6,"follow_id":"b3b4c09c-2421-41ec-b8d4-bdedfbbd58b1","action":4,"params":[]}' -b64 url
+// AgYBs7TAnCQhQey41L3t-71YsQAEcl7GMw==
+
 message TransferRepayData {}
+
+// mtgmemo -e '{"version":2,"protocol_id":6,"follow_id":"b3b4c09c-2421-41ec-b8d4-bdedfbbd58b1","action":5,"params":["string:12"]}' -b64 url
+// AgYBs7TAnCQhQey41L3t-71YsQAFAjEyMRpxfA==
+
+message TransferCancelData {
+  string id = 1;
+}
 
 message ConfigRequest {}
 
@@ -141,14 +167,6 @@ message InfoResponse {
   UserStatus user_status = 4;
 }
 
-message CreateOperationLogRequest {
-  string memo = 1;
-  string asset_id = 2;
-  string amount = 3;
-}
-
-message CreateOperationLogResponse {}
-
 message CreatePaymentRequest {
   string operation_trace_id = 1;
 
@@ -199,12 +217,6 @@ message ListOperationLogsResponse {
   repeated OperationLog operation_logs = 1;
   Pagination pagination = 2;
 }
-
-message CancelOperationLogRequest {
-  string trace_id = 1;
-}
-
-message CancelOperationLogResponse {}
 
 message GetLiquidationRequest {
   string trace_id = 1;
