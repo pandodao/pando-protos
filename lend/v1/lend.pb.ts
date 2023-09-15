@@ -66,18 +66,6 @@ export async function Info(
   return InfoResponse.decode(response);
 }
 
-export async function CreateOperationLog(
-  createOperationLogRequest: CreateOperationLogRequest,
-  config?: ClientConfiguration
-): Promise<CreateOperationLogResponse> {
-  const response = await PBrequest(
-    "/lend.v1.LendService/CreateOperationLog",
-    CreateOperationLogRequest.encode(createOperationLogRequest),
-    config
-  );
-  return CreateOperationLogResponse.decode(response);
-}
-
 export async function CreatePayment(
   createPaymentRequest: CreatePaymentRequest,
   config?: ClientConfiguration
@@ -112,18 +100,6 @@ export async function ListOperationLogs(
     config
   );
   return ListOperationLogsResponse.decode(response);
-}
-
-export async function CancelOperationLog(
-  cancelOperationLogRequest: CancelOperationLogRequest,
-  config?: ClientConfiguration
-): Promise<CancelOperationLogResponse> {
-  const response = await PBrequest(
-    "/lend.v1.LendService/CancelOperationLog",
-    CancelOperationLogRequest.encode(cancelOperationLogRequest),
-    config
-  );
-  return CancelOperationLogResponse.decode(response);
 }
 
 export async function GetLiquidation(
@@ -190,18 +166,6 @@ export async function InfoJSON(
   return InfoResponseJSON.decode(response);
 }
 
-export async function CreateOperationLogJSON(
-  createOperationLogRequest: CreateOperationLogRequest,
-  config?: ClientConfiguration
-): Promise<CreateOperationLogResponse> {
-  const response = await JSONrequest(
-    "/lend.v1.LendService/CreateOperationLog",
-    CreateOperationLogRequestJSON.encode(createOperationLogRequest),
-    config
-  );
-  return CreateOperationLogResponseJSON.decode(response);
-}
-
 export async function CreatePaymentJSON(
   createPaymentRequest: CreatePaymentRequest,
   config?: ClientConfiguration
@@ -238,18 +202,6 @@ export async function ListOperationLogsJSON(
   return ListOperationLogsResponseJSON.decode(response);
 }
 
-export async function CancelOperationLogJSON(
-  cancelOperationLogRequest: CancelOperationLogRequest,
-  config?: ClientConfiguration
-): Promise<CancelOperationLogResponse> {
-  const response = await JSONrequest(
-    "/lend.v1.LendService/CancelOperationLog",
-    CancelOperationLogRequestJSON.encode(cancelOperationLogRequest),
-    config
-  );
-  return CancelOperationLogResponseJSON.decode(response);
-}
-
 export async function GetLiquidationJSON(
   getLiquidationRequest: GetLiquidationRequest,
   config?: ClientConfiguration
@@ -283,10 +235,6 @@ export interface LendService<Context = unknown> {
     infoRequest: InfoRequest,
     context: Context
   ) => Promise<InfoResponse> | InfoResponse;
-  CreateOperationLog: (
-    createOperationLogRequest: CreateOperationLogRequest,
-    context: Context
-  ) => Promise<CreateOperationLogResponse> | CreateOperationLogResponse;
   CreatePayment: (
     createPaymentRequest: CreatePaymentRequest,
     context: Context
@@ -299,10 +247,6 @@ export interface LendService<Context = unknown> {
     listOperationLogsRequest: ListOperationLogsRequest,
     context: Context
   ) => Promise<ListOperationLogsResponse> | ListOperationLogsResponse;
-  CancelOperationLog: (
-    cancelOperationLogRequest: CancelOperationLogRequest,
-    context: Context
-  ) => Promise<CancelOperationLogResponse> | CancelOperationLogResponse;
   GetLiquidation: (
     getLiquidationRequest: GetLiquidationRequest,
     context: Context
@@ -336,18 +280,6 @@ export function createLendService<Context>(service: LendService<Context>) {
         handler: service.Info,
         input: { protobuf: InfoRequest, json: InfoRequestJSON },
         output: { protobuf: InfoResponse, json: InfoResponseJSON },
-      },
-      CreateOperationLog: {
-        name: "CreateOperationLog",
-        handler: service.CreateOperationLog,
-        input: {
-          protobuf: CreateOperationLogRequest,
-          json: CreateOperationLogRequestJSON,
-        },
-        output: {
-          protobuf: CreateOperationLogResponse,
-          json: CreateOperationLogResponseJSON,
-        },
       },
       CreatePayment: {
         name: "CreatePayment",
@@ -385,18 +317,6 @@ export function createLendService<Context>(service: LendService<Context>) {
           json: ListOperationLogsResponseJSON,
         },
       },
-      CancelOperationLog: {
-        name: "CancelOperationLog",
-        handler: service.CancelOperationLog,
-        input: {
-          protobuf: CancelOperationLogRequest,
-          json: CancelOperationLogRequestJSON,
-        },
-        output: {
-          protobuf: CancelOperationLogResponse,
-          json: CancelOperationLogResponseJSON,
-        },
-      },
       GetLiquidation: {
         name: "GetLiquidation",
         handler: service.GetLiquidation,
@@ -423,9 +343,10 @@ export type OperationType =
   | "WITHDRAW"
   | "LOAN"
   | "REPAY"
-  | "REFUND"
+  | "CANCEL"
   | "LIQUIDATION"
-  | "REVIEW";
+  | "REVIEW"
+  | "CHARGE";
 
 export type UserStatus = "USER_STATUS_NOT_SET" | "NORMAL" | "LIQUIDATING";
 
@@ -449,8 +370,8 @@ export interface ReviewData {
 
 export interface TransferWithdrawData {
   pt: PledgeType;
-  aid: string;
-  a: string;
+  assetId: string;
+  amount: string;
 }
 
 export interface TransferPledgeData {
@@ -458,10 +379,14 @@ export interface TransferPledgeData {
 }
 
 export interface TransferLoanData {
-  a: string;
+  amount: string;
 }
 
 export interface TransferRepayData {}
+
+export interface TransferCancelData {
+  id: string;
+}
 
 export interface ConfigRequest {}
 
@@ -523,14 +448,6 @@ export interface InfoResponse {
   userStatus: UserStatus;
 }
 
-export interface CreateOperationLogRequest {
-  memo: string;
-  assetId: string;
-  amount: string;
-}
-
-export interface CreateOperationLogResponse {}
-
 export interface CreatePaymentRequest {
   operationTraceId: string;
   traceId: string;
@@ -581,12 +498,6 @@ export interface ListOperationLogsResponse {
   pagination: Pagination;
 }
 
-export interface CancelOperationLogRequest {
-  traceId: string;
-}
-
-export interface CancelOperationLogResponse {}
-
 export interface GetLiquidationRequest {
   traceId: string;
 }
@@ -621,9 +532,10 @@ export const OperationType = {
   WITHDRAW: "WITHDRAW",
   LOAN: "LOAN",
   REPAY: "REPAY",
-  REFUND: "REFUND",
+  CANCEL: "CANCEL",
   LIQUIDATION: "LIQUIDATION",
   REVIEW: "REVIEW",
+  CHARGE: "CHARGE",
   /**
    * @private
    */
@@ -645,13 +557,16 @@ export const OperationType = {
         return "REPAY";
       }
       case 5: {
-        return "REFUND";
+        return "CANCEL";
       }
-      case 6: {
+      case 50: {
         return "LIQUIDATION";
       }
       case 100: {
         return "REVIEW";
+      }
+      case 101: {
+        return "CHARGE";
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -679,14 +594,17 @@ export const OperationType = {
       case "REPAY": {
         return 4;
       }
-      case "REFUND": {
+      case "CANCEL": {
         return 5;
       }
       case "LIQUIDATION": {
-        return 6;
+        return 50;
       }
       case "REVIEW": {
         return 100;
+      }
+      case "CHARGE": {
+        return 101;
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -983,8 +901,8 @@ export const TransferWithdrawData = {
   initialize: function (): TransferWithdrawData {
     return {
       pt: PledgeType._fromInt(0),
-      aid: "",
-      a: "",
+      assetId: "",
+      amount: "",
     };
   },
 
@@ -998,11 +916,11 @@ export const TransferWithdrawData = {
     if (msg.pt && PledgeType._toInt(msg.pt)) {
       writer.writeEnum(1, PledgeType._toInt(msg.pt));
     }
-    if (msg.aid) {
-      writer.writeString(2, msg.aid);
+    if (msg.assetId) {
+      writer.writeString(2, msg.assetId);
     }
-    if (msg.a) {
-      writer.writeString(3, msg.a);
+    if (msg.amount) {
+      writer.writeString(3, msg.amount);
     }
     return writer;
   },
@@ -1022,11 +940,11 @@ export const TransferWithdrawData = {
           break;
         }
         case 2: {
-          msg.aid = reader.readString();
+          msg.assetId = reader.readString();
           break;
         }
         case 3: {
-          msg.a = reader.readString();
+          msg.amount = reader.readString();
           break;
         }
         default: {
@@ -1132,7 +1050,7 @@ export const TransferLoanData = {
    */
   initialize: function (): TransferLoanData {
     return {
-      a: "",
+      amount: "",
     };
   },
 
@@ -1143,8 +1061,8 @@ export const TransferLoanData = {
     msg: Partial<TransferLoanData>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.a) {
-      writer.writeString(1, msg.a);
+    if (msg.amount) {
+      writer.writeString(1, msg.amount);
     }
     return writer;
   },
@@ -1160,7 +1078,7 @@ export const TransferLoanData = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.a = reader.readString();
+          msg.amount = reader.readString();
           break;
         }
         default: {
@@ -1213,6 +1131,73 @@ export const TransferRepayData = {
     _reader: BinaryReader
   ): TransferRepayData {
     return _msg;
+  },
+};
+
+export const TransferCancelData = {
+  /**
+   * Serializes TransferCancelData to protobuf.
+   */
+  encode: function (msg: Partial<TransferCancelData>): Uint8Array {
+    return TransferCancelData._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes TransferCancelData from protobuf.
+   */
+  decode: function (bytes: ByteSource): TransferCancelData {
+    return TransferCancelData._readMessage(
+      TransferCancelData.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes TransferCancelData with all fields set to their default value.
+   */
+  initialize: function (): TransferCancelData {
+    return {
+      id: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<TransferCancelData>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.id) {
+      writer.writeString(1, msg.id);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: TransferCancelData,
+    reader: BinaryReader
+  ): TransferCancelData {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
   },
 };
 
@@ -2079,132 +2064,6 @@ export const InfoResponse = {
   },
 };
 
-export const CreateOperationLogRequest = {
-  /**
-   * Serializes CreateOperationLogRequest to protobuf.
-   */
-  encode: function (msg: Partial<CreateOperationLogRequest>): Uint8Array {
-    return CreateOperationLogRequest._writeMessage(
-      msg,
-      new BinaryWriter()
-    ).getResultBuffer();
-  },
-
-  /**
-   * Deserializes CreateOperationLogRequest from protobuf.
-   */
-  decode: function (bytes: ByteSource): CreateOperationLogRequest {
-    return CreateOperationLogRequest._readMessage(
-      CreateOperationLogRequest.initialize(),
-      new BinaryReader(bytes)
-    );
-  },
-
-  /**
-   * Initializes CreateOperationLogRequest with all fields set to their default value.
-   */
-  initialize: function (): CreateOperationLogRequest {
-    return {
-      memo: "",
-      assetId: "",
-      amount: "",
-    };
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    msg: Partial<CreateOperationLogRequest>,
-    writer: BinaryWriter
-  ): BinaryWriter {
-    if (msg.memo) {
-      writer.writeString(1, msg.memo);
-    }
-    if (msg.assetId) {
-      writer.writeString(2, msg.assetId);
-    }
-    if (msg.amount) {
-      writer.writeString(3, msg.amount);
-    }
-    return writer;
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    msg: CreateOperationLogRequest,
-    reader: BinaryReader
-  ): CreateOperationLogRequest {
-    while (reader.nextField()) {
-      const field = reader.getFieldNumber();
-      switch (field) {
-        case 1: {
-          msg.memo = reader.readString();
-          break;
-        }
-        case 2: {
-          msg.assetId = reader.readString();
-          break;
-        }
-        case 3: {
-          msg.amount = reader.readString();
-          break;
-        }
-        default: {
-          reader.skipField();
-          break;
-        }
-      }
-    }
-    return msg;
-  },
-};
-
-export const CreateOperationLogResponse = {
-  /**
-   * Serializes CreateOperationLogResponse to protobuf.
-   */
-  encode: function (_msg?: Partial<CreateOperationLogResponse>): Uint8Array {
-    return new Uint8Array();
-  },
-
-  /**
-   * Deserializes CreateOperationLogResponse from protobuf.
-   */
-  decode: function (_bytes?: ByteSource): CreateOperationLogResponse {
-    return {};
-  },
-
-  /**
-   * Initializes CreateOperationLogResponse with all fields set to their default value.
-   */
-  initialize: function (): CreateOperationLogResponse {
-    return {};
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    _msg: Partial<CreateOperationLogResponse>,
-    writer: BinaryWriter
-  ): BinaryWriter {
-    return writer;
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    _msg: CreateOperationLogResponse,
-    _reader: BinaryReader
-  ): CreateOperationLogResponse {
-    return _msg;
-  },
-};
-
 export const CreatePaymentRequest = {
   /**
    * Serializes CreatePaymentRequest to protobuf.
@@ -2856,116 +2715,6 @@ export const ListOperationLogsResponse = {
   },
 };
 
-export const CancelOperationLogRequest = {
-  /**
-   * Serializes CancelOperationLogRequest to protobuf.
-   */
-  encode: function (msg: Partial<CancelOperationLogRequest>): Uint8Array {
-    return CancelOperationLogRequest._writeMessage(
-      msg,
-      new BinaryWriter()
-    ).getResultBuffer();
-  },
-
-  /**
-   * Deserializes CancelOperationLogRequest from protobuf.
-   */
-  decode: function (bytes: ByteSource): CancelOperationLogRequest {
-    return CancelOperationLogRequest._readMessage(
-      CancelOperationLogRequest.initialize(),
-      new BinaryReader(bytes)
-    );
-  },
-
-  /**
-   * Initializes CancelOperationLogRequest with all fields set to their default value.
-   */
-  initialize: function (): CancelOperationLogRequest {
-    return {
-      traceId: "",
-    };
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    msg: Partial<CancelOperationLogRequest>,
-    writer: BinaryWriter
-  ): BinaryWriter {
-    if (msg.traceId) {
-      writer.writeString(1, msg.traceId);
-    }
-    return writer;
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    msg: CancelOperationLogRequest,
-    reader: BinaryReader
-  ): CancelOperationLogRequest {
-    while (reader.nextField()) {
-      const field = reader.getFieldNumber();
-      switch (field) {
-        case 1: {
-          msg.traceId = reader.readString();
-          break;
-        }
-        default: {
-          reader.skipField();
-          break;
-        }
-      }
-    }
-    return msg;
-  },
-};
-
-export const CancelOperationLogResponse = {
-  /**
-   * Serializes CancelOperationLogResponse to protobuf.
-   */
-  encode: function (_msg?: Partial<CancelOperationLogResponse>): Uint8Array {
-    return new Uint8Array();
-  },
-
-  /**
-   * Deserializes CancelOperationLogResponse from protobuf.
-   */
-  decode: function (_bytes?: ByteSource): CancelOperationLogResponse {
-    return {};
-  },
-
-  /**
-   * Initializes CancelOperationLogResponse with all fields set to their default value.
-   */
-  initialize: function (): CancelOperationLogResponse {
-    return {};
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    _msg: Partial<CancelOperationLogResponse>,
-    writer: BinaryWriter
-  ): BinaryWriter {
-    return writer;
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    _msg: CancelOperationLogResponse,
-    _reader: BinaryReader
-  ): CancelOperationLogResponse {
-    return _msg;
-  },
-};
-
 export const GetLiquidationRequest = {
   /**
    * Serializes GetLiquidationRequest to protobuf.
@@ -3279,9 +3028,10 @@ export const OperationTypeJSON = {
   WITHDRAW: "WITHDRAW",
   LOAN: "LOAN",
   REPAY: "REPAY",
-  REFUND: "REFUND",
+  CANCEL: "CANCEL",
   LIQUIDATION: "LIQUIDATION",
   REVIEW: "REVIEW",
+  CHARGE: "CHARGE",
   /**
    * @private
    */
@@ -3303,13 +3053,16 @@ export const OperationTypeJSON = {
         return "REPAY";
       }
       case 5: {
-        return "REFUND";
+        return "CANCEL";
       }
-      case 6: {
+      case 50: {
         return "LIQUIDATION";
       }
       case 100: {
         return "REVIEW";
+      }
+      case 101: {
+        return "CHARGE";
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -3337,14 +3090,17 @@ export const OperationTypeJSON = {
       case "REPAY": {
         return 4;
       }
-      case "REFUND": {
+      case "CANCEL": {
         return 5;
       }
       case "LIQUIDATION": {
-        return 6;
+        return 50;
       }
       case "REVIEW": {
         return 100;
+      }
+      case "CHARGE": {
+        return 101;
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -3627,8 +3383,8 @@ export const TransferWithdrawDataJSON = {
   initialize: function (): TransferWithdrawData {
     return {
       pt: PledgeType._fromInt(0),
-      aid: "",
-      a: "",
+      assetId: "",
+      amount: "",
     };
   },
 
@@ -3642,11 +3398,11 @@ export const TransferWithdrawDataJSON = {
     if (msg.pt && PledgeTypeJSON._toInt(msg.pt)) {
       json.pt = msg.pt;
     }
-    if (msg.aid) {
-      json.aid = msg.aid;
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
     }
-    if (msg.a) {
-      json.a = msg.a;
+    if (msg.amount) {
+      json.amount = msg.amount;
     }
     return json;
   },
@@ -3662,13 +3418,13 @@ export const TransferWithdrawDataJSON = {
     if (_pt) {
       msg.pt = _pt;
     }
-    const _aid = json.aid;
-    if (_aid) {
-      msg.aid = _aid;
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
     }
-    const _a = json.a;
-    if (_a) {
-      msg.a = _a;
+    const _amount = json.amount;
+    if (_amount) {
+      msg.amount = _amount;
     }
     return msg;
   },
@@ -3752,7 +3508,7 @@ export const TransferLoanDataJSON = {
    */
   initialize: function (): TransferLoanData {
     return {
-      a: "",
+      amount: "",
     };
   },
 
@@ -3763,8 +3519,8 @@ export const TransferLoanDataJSON = {
     msg: Partial<TransferLoanData>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.a) {
-      json.a = msg.a;
+    if (msg.amount) {
+      json.amount = msg.amount;
     }
     return json;
   },
@@ -3773,9 +3529,9 @@ export const TransferLoanDataJSON = {
    * @private
    */
   _readMessage: function (msg: TransferLoanData, json: any): TransferLoanData {
-    const _a = json.a;
-    if (_a) {
-      msg.a = _a;
+    const _amount = json.amount;
+    if (_amount) {
+      msg.amount = _amount;
     }
     return msg;
   },
@@ -3819,6 +3575,61 @@ export const TransferRepayDataJSON = {
     msg: TransferRepayData,
     _json: any
   ): TransferRepayData {
+    return msg;
+  },
+};
+
+export const TransferCancelDataJSON = {
+  /**
+   * Serializes TransferCancelData to JSON.
+   */
+  encode: function (msg: Partial<TransferCancelData>): string {
+    return JSON.stringify(TransferCancelDataJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes TransferCancelData from JSON.
+   */
+  decode: function (json: string): TransferCancelData {
+    return TransferCancelDataJSON._readMessage(
+      TransferCancelDataJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes TransferCancelData with all fields set to their default value.
+   */
+  initialize: function (): TransferCancelData {
+    return {
+      id: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<TransferCancelData>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json.id = msg.id;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: TransferCancelData,
+    json: any
+  ): TransferCancelData {
+    const _id = json.id;
+    if (_id) {
+      msg.id = _id;
+    }
     return msg;
   },
 };
@@ -4566,119 +4377,6 @@ export const InfoResponseJSON = {
   },
 };
 
-export const CreateOperationLogRequestJSON = {
-  /**
-   * Serializes CreateOperationLogRequest to JSON.
-   */
-  encode: function (msg: Partial<CreateOperationLogRequest>): string {
-    return JSON.stringify(CreateOperationLogRequestJSON._writeMessage(msg));
-  },
-
-  /**
-   * Deserializes CreateOperationLogRequest from JSON.
-   */
-  decode: function (json: string): CreateOperationLogRequest {
-    return CreateOperationLogRequestJSON._readMessage(
-      CreateOperationLogRequestJSON.initialize(),
-      JSON.parse(json)
-    );
-  },
-
-  /**
-   * Initializes CreateOperationLogRequest with all fields set to their default value.
-   */
-  initialize: function (): CreateOperationLogRequest {
-    return {
-      memo: "",
-      assetId: "",
-      amount: "",
-    };
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    msg: Partial<CreateOperationLogRequest>
-  ): Record<string, unknown> {
-    const json: Record<string, unknown> = {};
-    if (msg.memo) {
-      json.memo = msg.memo;
-    }
-    if (msg.assetId) {
-      json.assetId = msg.assetId;
-    }
-    if (msg.amount) {
-      json.amount = msg.amount;
-    }
-    return json;
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    msg: CreateOperationLogRequest,
-    json: any
-  ): CreateOperationLogRequest {
-    const _memo = json.memo;
-    if (_memo) {
-      msg.memo = _memo;
-    }
-    const _assetId = json.assetId ?? json.asset_id;
-    if (_assetId) {
-      msg.assetId = _assetId;
-    }
-    const _amount = json.amount;
-    if (_amount) {
-      msg.amount = _amount;
-    }
-    return msg;
-  },
-};
-
-export const CreateOperationLogResponseJSON = {
-  /**
-   * Serializes CreateOperationLogResponse to JSON.
-   */
-  encode: function (_msg?: Partial<CreateOperationLogResponse>): string {
-    return "{}";
-  },
-
-  /**
-   * Deserializes CreateOperationLogResponse from JSON.
-   */
-  decode: function (_json?: string): CreateOperationLogResponse {
-    return {};
-  },
-
-  /**
-   * Initializes CreateOperationLogResponse with all fields set to their default value.
-   */
-  initialize: function (): CreateOperationLogResponse {
-    return {};
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    _msg: Partial<CreateOperationLogResponse>
-  ): Record<string, unknown> {
-    return {};
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    msg: CreateOperationLogResponse,
-    _json: any
-  ): CreateOperationLogResponse {
-    return msg;
-  },
-};
-
 export const CreatePaymentRequestJSON = {
   /**
    * Serializes CreatePaymentRequest to JSON.
@@ -5254,103 +4952,6 @@ export const ListOperationLogsResponseJSON = {
       PaginationJSON._readMessage(m, _pagination);
       msg.pagination = m;
     }
-    return msg;
-  },
-};
-
-export const CancelOperationLogRequestJSON = {
-  /**
-   * Serializes CancelOperationLogRequest to JSON.
-   */
-  encode: function (msg: Partial<CancelOperationLogRequest>): string {
-    return JSON.stringify(CancelOperationLogRequestJSON._writeMessage(msg));
-  },
-
-  /**
-   * Deserializes CancelOperationLogRequest from JSON.
-   */
-  decode: function (json: string): CancelOperationLogRequest {
-    return CancelOperationLogRequestJSON._readMessage(
-      CancelOperationLogRequestJSON.initialize(),
-      JSON.parse(json)
-    );
-  },
-
-  /**
-   * Initializes CancelOperationLogRequest with all fields set to their default value.
-   */
-  initialize: function (): CancelOperationLogRequest {
-    return {
-      traceId: "",
-    };
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    msg: Partial<CancelOperationLogRequest>
-  ): Record<string, unknown> {
-    const json: Record<string, unknown> = {};
-    if (msg.traceId) {
-      json.traceId = msg.traceId;
-    }
-    return json;
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    msg: CancelOperationLogRequest,
-    json: any
-  ): CancelOperationLogRequest {
-    const _traceId = json.traceId ?? json.trace_id;
-    if (_traceId) {
-      msg.traceId = _traceId;
-    }
-    return msg;
-  },
-};
-
-export const CancelOperationLogResponseJSON = {
-  /**
-   * Serializes CancelOperationLogResponse to JSON.
-   */
-  encode: function (_msg?: Partial<CancelOperationLogResponse>): string {
-    return "{}";
-  },
-
-  /**
-   * Deserializes CancelOperationLogResponse from JSON.
-   */
-  decode: function (_json?: string): CancelOperationLogResponse {
-    return {};
-  },
-
-  /**
-   * Initializes CancelOperationLogResponse with all fields set to their default value.
-   */
-  initialize: function (): CancelOperationLogResponse {
-    return {};
-  },
-
-  /**
-   * @private
-   */
-  _writeMessage: function (
-    _msg: Partial<CancelOperationLogResponse>
-  ): Record<string, unknown> {
-    return {};
-  },
-
-  /**
-   * @private
-   */
-  _readMessage: function (
-    msg: CancelOperationLogResponse,
-    _json: any
-  ): CancelOperationLogResponse {
     return msg;
   },
 };
