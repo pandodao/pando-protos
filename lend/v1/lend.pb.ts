@@ -395,6 +395,8 @@ export interface ConfigResponse {
   clearingPledgeRate: string;
   interestRate: string;
   interestDuration: number;
+  multisigReceivers: string[];
+  multisigThreshold: number;
 }
 
 export interface Pagination {
@@ -1273,6 +1275,8 @@ export const ConfigResponse = {
       clearingPledgeRate: "",
       interestRate: "",
       interestDuration: 0,
+      multisigReceivers: [],
+      multisigThreshold: 0,
     };
   },
 
@@ -1294,6 +1298,12 @@ export const ConfigResponse = {
     }
     if (msg.interestDuration) {
       writer.writeUint32(4, msg.interestDuration);
+    }
+    if (msg.multisigReceivers?.length) {
+      writer.writeRepeatedString(5, msg.multisigReceivers);
+    }
+    if (msg.multisigThreshold) {
+      writer.writeUint32(6, msg.multisigThreshold);
     }
     return writer;
   },
@@ -1322,6 +1332,14 @@ export const ConfigResponse = {
         }
         case 4: {
           msg.interestDuration = reader.readUint32();
+          break;
+        }
+        case 5: {
+          msg.multisigReceivers.push(reader.readString());
+          break;
+        }
+        case 6: {
+          msg.multisigThreshold = reader.readUint32();
           break;
         }
         default: {
@@ -3691,6 +3709,8 @@ export const ConfigResponseJSON = {
       clearingPledgeRate: "",
       interestRate: "",
       interestDuration: 0,
+      multisigReceivers: [],
+      multisigThreshold: 0,
     };
   },
 
@@ -3712,6 +3732,12 @@ export const ConfigResponseJSON = {
     }
     if (msg.interestDuration) {
       json.interestDuration = msg.interestDuration;
+    }
+    if (msg.multisigReceivers?.length) {
+      json.multisigReceivers = msg.multisigReceivers;
+    }
+    if (msg.multisigThreshold) {
+      json.multisigThreshold = msg.multisigThreshold;
     }
     return json;
   },
@@ -3737,6 +3763,16 @@ export const ConfigResponseJSON = {
     const _interestDuration = json.interestDuration ?? json.interest_duration;
     if (_interestDuration) {
       msg.interestDuration = _interestDuration;
+    }
+    const _multisigReceivers =
+      json.multisigReceivers ?? json.multisig_receivers;
+    if (_multisigReceivers) {
+      msg.multisigReceivers = _multisigReceivers;
+    }
+    const _multisigThreshold =
+      json.multisigThreshold ?? json.multisig_threshold;
+    if (_multisigThreshold) {
+      msg.multisigThreshold = _multisigThreshold;
     }
     return msg;
   },
