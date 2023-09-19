@@ -449,7 +449,6 @@ export interface InfoResponse {
 }
 
 export interface CreatePaymentRequest {
-  operationTraceId: string;
   traceId: string;
   memo: string;
   assetId: string;
@@ -2090,7 +2089,6 @@ export const CreatePaymentRequest = {
    */
   initialize: function (): CreatePaymentRequest {
     return {
-      operationTraceId: "",
       traceId: "",
       memo: "",
       assetId: "",
@@ -2105,20 +2103,17 @@ export const CreatePaymentRequest = {
     msg: Partial<CreatePaymentRequest>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.operationTraceId) {
-      writer.writeString(1, msg.operationTraceId);
-    }
     if (msg.traceId) {
-      writer.writeString(2, msg.traceId);
+      writer.writeString(1, msg.traceId);
     }
     if (msg.memo) {
-      writer.writeString(3, msg.memo);
+      writer.writeString(2, msg.memo);
     }
     if (msg.assetId) {
-      writer.writeString(4, msg.assetId);
+      writer.writeString(3, msg.assetId);
     }
     if (msg.amount) {
-      writer.writeString(5, msg.amount);
+      writer.writeString(4, msg.amount);
     }
     return writer;
   },
@@ -2134,22 +2129,18 @@ export const CreatePaymentRequest = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.operationTraceId = reader.readString();
-          break;
-        }
-        case 2: {
           msg.traceId = reader.readString();
           break;
         }
-        case 3: {
+        case 2: {
           msg.memo = reader.readString();
           break;
         }
-        case 4: {
+        case 3: {
           msg.assetId = reader.readString();
           break;
         }
-        case 5: {
+        case 4: {
           msg.amount = reader.readString();
           break;
         }
@@ -4400,7 +4391,6 @@ export const CreatePaymentRequestJSON = {
    */
   initialize: function (): CreatePaymentRequest {
     return {
-      operationTraceId: "",
       traceId: "",
       memo: "",
       assetId: "",
@@ -4415,9 +4405,6 @@ export const CreatePaymentRequestJSON = {
     msg: Partial<CreatePaymentRequest>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.operationTraceId) {
-      json.operationTraceId = msg.operationTraceId;
-    }
     if (msg.traceId) {
       json.traceId = msg.traceId;
     }
@@ -4440,10 +4427,6 @@ export const CreatePaymentRequestJSON = {
     msg: CreatePaymentRequest,
     json: any
   ): CreatePaymentRequest {
-    const _operationTraceId = json.operationTraceId ?? json.operation_trace_id;
-    if (_operationTraceId) {
-      msg.operationTraceId = _operationTraceId;
-    }
     const _traceId = json.traceId ?? json.trace_id;
     if (_traceId) {
       msg.traceId = _traceId;
