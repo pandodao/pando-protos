@@ -168,12 +168,10 @@ message InfoResponse {
 }
 
 message CreatePaymentRequest {
-  string operation_trace_id = 1;
-
-  string trace_id = 2;
-  string memo = 3;
-  string asset_id = 4;
-  string amount = 5;
+  string trace_id = 1;
+  string memo = 2;
+  string asset_id = 3;
+  string amount = 4;
 }
 
 message CreatePaymentResponse {
