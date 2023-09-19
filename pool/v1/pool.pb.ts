@@ -104,6 +104,18 @@ export async function GetMyEarningProduct(
   return GetMyEarningProductResponse.decode(response);
 }
 
+export async function GetUserEarningProducts(
+  getUserEarningProductsRequest: GetUserEarningProductsRequest,
+  config?: ClientConfiguration
+): Promise<GetUserEarningProductsResponse> {
+  const response = await PBrequest(
+    "/pool.v1.PoolService/GetUserEarningProducts",
+    GetUserEarningProductsRequest.encode(getUserEarningProductsRequest),
+    config
+  );
+  return GetUserEarningProductsResponse.decode(response);
+}
+
 /**
  * audit
  */
@@ -219,6 +231,18 @@ export async function GetMyEarningProductJSON(
   return GetMyEarningProductResponseJSON.decode(response);
 }
 
+export async function GetUserEarningProductsJSON(
+  getUserEarningProductsRequest: GetUserEarningProductsRequest,
+  config?: ClientConfiguration
+): Promise<GetUserEarningProductsResponse> {
+  const response = await JSONrequest(
+    "/pool.v1.PoolService/GetUserEarningProducts",
+    GetUserEarningProductsRequestJSON.encode(getUserEarningProductsRequest),
+    config
+  );
+  return GetUserEarningProductsResponseJSON.decode(response);
+}
+
 /**
  * audit
  */
@@ -279,6 +303,10 @@ export interface PoolService<Context = unknown> {
     getMyEarningProductRequest: GetMyEarningProductRequest,
     context: Context
   ) => Promise<GetMyEarningProductResponse> | GetMyEarningProductResponse;
+  GetUserEarningProducts: (
+    getUserEarningProductsRequest: GetUserEarningProductsRequest,
+    context: Context
+  ) => Promise<GetUserEarningProductsResponse> | GetUserEarningProductsResponse;
   /**
    * audit
    */
@@ -362,6 +390,18 @@ export function createPoolService<Context>(service: PoolService<Context>) {
           json: GetMyEarningProductResponseJSON,
         },
       },
+      GetUserEarningProducts: {
+        name: "GetUserEarningProducts",
+        handler: service.GetUserEarningProducts,
+        input: {
+          protobuf: GetUserEarningProductsRequest,
+          json: GetUserEarningProductsRequestJSON,
+        },
+        output: {
+          protobuf: GetUserEarningProductsResponse,
+          json: GetUserEarningProductsResponseJSON,
+        },
+      },
       FindAudit: {
         name: "FindAudit",
         handler: service.FindAudit,
@@ -423,7 +463,8 @@ export declare namespace EventAction {
     | "ADMIN_LEGACY_ASSET_MIGRATION"
     | "ADMIN_AUDIT_APPROVE"
     | "ADMIN_AUDIT_REJECT"
-    | "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY";
+    | "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY"
+    | "ADMIN_LIQUIDATION";
 }
 
 export interface EventStatus {}
@@ -498,6 +539,10 @@ export interface EarningSnapshotAdminLegacyAssetMigrationData {
   userId: string;
   productId: number;
   amount: bigint;
+}
+
+export interface EarningSnapshotAdminLiquidationData {
+  userId: number;
 }
 
 export interface EarningSnapshotAdminAuditApproveData {
@@ -676,6 +721,14 @@ export interface ListAuditsRequest {
 
 export interface ListAuditsResponse {
   audits: Audit[];
+}
+
+export interface GetUserEarningProductsRequest {
+  userId: string;
+}
+
+export interface GetUserEarningProductsResponse {
+  products: UserEarningProduct[];
 }
 
 //========================================//
@@ -978,6 +1031,7 @@ export const EventAction = {
     ADMIN_AUDIT_APPROVE: "ADMIN_AUDIT_APPROVE",
     ADMIN_AUDIT_REJECT: "ADMIN_AUDIT_REJECT",
     ADMIN_AUTO_REVISE_PRODUCT_CAPACITY: "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY",
+    ADMIN_LIQUIDATION: "ADMIN_LIQUIDATION",
     /**
      * @private
      */
@@ -1027,6 +1081,9 @@ export const EventAction = {
         }
         case 108: {
           return "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY";
+        }
+        case 109: {
+          return "ADMIN_LIQUIDATION";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -1083,6 +1140,9 @@ export const EventAction = {
         }
         case "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY": {
           return 108;
+        }
+        case "ADMIN_LIQUIDATION": {
+          return 109;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -2083,6 +2143,75 @@ export const EarningSnapshotAdminLegacyAssetMigrationData = {
         }
         case 3: {
           msg.amount = BigInt(reader.readInt64String());
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const EarningSnapshotAdminLiquidationData = {
+  /**
+   * Serializes EarningSnapshotAdminLiquidationData to protobuf.
+   */
+  encode: function (
+    msg: Partial<EarningSnapshotAdminLiquidationData>
+  ): Uint8Array {
+    return EarningSnapshotAdminLiquidationData._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes EarningSnapshotAdminLiquidationData from protobuf.
+   */
+  decode: function (bytes: ByteSource): EarningSnapshotAdminLiquidationData {
+    return EarningSnapshotAdminLiquidationData._readMessage(
+      EarningSnapshotAdminLiquidationData.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes EarningSnapshotAdminLiquidationData with all fields set to their default value.
+   */
+  initialize: function (): EarningSnapshotAdminLiquidationData {
+    return {
+      userId: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<EarningSnapshotAdminLiquidationData>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.userId) {
+      writer.writeInt32(1, msg.userId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: EarningSnapshotAdminLiquidationData,
+    reader: BinaryReader
+  ): EarningSnapshotAdminLiquidationData {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.userId = reader.readInt32();
           break;
         }
         default: {
@@ -4414,6 +4543,146 @@ export const ListAuditsResponse = {
   },
 };
 
+export const GetUserEarningProductsRequest = {
+  /**
+   * Serializes GetUserEarningProductsRequest to protobuf.
+   */
+  encode: function (msg: Partial<GetUserEarningProductsRequest>): Uint8Array {
+    return GetUserEarningProductsRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetUserEarningProductsRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetUserEarningProductsRequest {
+    return GetUserEarningProductsRequest._readMessage(
+      GetUserEarningProductsRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetUserEarningProductsRequest with all fields set to their default value.
+   */
+  initialize: function (): GetUserEarningProductsRequest {
+    return {
+      userId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetUserEarningProductsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.userId) {
+      writer.writeString(1, msg.userId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetUserEarningProductsRequest,
+    reader: BinaryReader
+  ): GetUserEarningProductsRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.userId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const GetUserEarningProductsResponse = {
+  /**
+   * Serializes GetUserEarningProductsResponse to protobuf.
+   */
+  encode: function (msg: Partial<GetUserEarningProductsResponse>): Uint8Array {
+    return GetUserEarningProductsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetUserEarningProductsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetUserEarningProductsResponse {
+    return GetUserEarningProductsResponse._readMessage(
+      GetUserEarningProductsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetUserEarningProductsResponse with all fields set to their default value.
+   */
+  initialize: function (): GetUserEarningProductsResponse {
+    return {
+      products: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetUserEarningProductsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.products?.length) {
+      writer.writeRepeatedMessage(
+        1,
+        msg.products as any,
+        UserEarningProduct._writeMessage
+      );
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetUserEarningProductsResponse,
+    reader: BinaryReader
+  ): GetUserEarningProductsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = UserEarningProduct.initialize();
+          reader.readMessage(m, UserEarningProduct._readMessage);
+          msg.products.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
@@ -4707,6 +4976,7 @@ export const EventActionJSON = {
     ADMIN_AUDIT_APPROVE: "ADMIN_AUDIT_APPROVE",
     ADMIN_AUDIT_REJECT: "ADMIN_AUDIT_REJECT",
     ADMIN_AUTO_REVISE_PRODUCT_CAPACITY: "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY",
+    ADMIN_LIQUIDATION: "ADMIN_LIQUIDATION",
     /**
      * @private
      */
@@ -4756,6 +5026,9 @@ export const EventActionJSON = {
         }
         case 108: {
           return "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY";
+        }
+        case 109: {
+          return "ADMIN_LIQUIDATION";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -4812,6 +5085,9 @@ export const EventActionJSON = {
         }
         case "ADMIN_AUTO_REVISE_PRODUCT_CAPACITY": {
           return 108;
+        }
+        case "ADMIN_LIQUIDATION": {
+          return 109;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -5716,6 +5992,63 @@ export const EarningSnapshotAdminLegacyAssetMigrationDataJSON = {
     const _amount = json.amount;
     if (_amount) {
       msg.amount = BigInt(_amount);
+    }
+    return msg;
+  },
+};
+
+export const EarningSnapshotAdminLiquidationDataJSON = {
+  /**
+   * Serializes EarningSnapshotAdminLiquidationData to JSON.
+   */
+  encode: function (msg: Partial<EarningSnapshotAdminLiquidationData>): string {
+    return JSON.stringify(
+      EarningSnapshotAdminLiquidationDataJSON._writeMessage(msg)
+    );
+  },
+
+  /**
+   * Deserializes EarningSnapshotAdminLiquidationData from JSON.
+   */
+  decode: function (json: string): EarningSnapshotAdminLiquidationData {
+    return EarningSnapshotAdminLiquidationDataJSON._readMessage(
+      EarningSnapshotAdminLiquidationDataJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes EarningSnapshotAdminLiquidationData with all fields set to their default value.
+   */
+  initialize: function (): EarningSnapshotAdminLiquidationData {
+    return {
+      userId: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<EarningSnapshotAdminLiquidationData>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.userId) {
+      json.userId = msg.userId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: EarningSnapshotAdminLiquidationData,
+    json: any
+  ): EarningSnapshotAdminLiquidationData {
+    const _userId = json.userId ?? json.user_id;
+    if (_userId) {
+      msg.userId = _userId;
     }
     return msg;
   },
@@ -7774,6 +8107,122 @@ export const ListAuditsResponseJSON = {
         const m = Audit.initialize();
         AuditJSON._readMessage(m, item);
         msg.audits.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const GetUserEarningProductsRequestJSON = {
+  /**
+   * Serializes GetUserEarningProductsRequest to JSON.
+   */
+  encode: function (msg: Partial<GetUserEarningProductsRequest>): string {
+    return JSON.stringify(GetUserEarningProductsRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes GetUserEarningProductsRequest from JSON.
+   */
+  decode: function (json: string): GetUserEarningProductsRequest {
+    return GetUserEarningProductsRequestJSON._readMessage(
+      GetUserEarningProductsRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetUserEarningProductsRequest with all fields set to their default value.
+   */
+  initialize: function (): GetUserEarningProductsRequest {
+    return {
+      userId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetUserEarningProductsRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.userId) {
+      json.userId = msg.userId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetUserEarningProductsRequest,
+    json: any
+  ): GetUserEarningProductsRequest {
+    const _userId = json.userId ?? json.user_id;
+    if (_userId) {
+      msg.userId = _userId;
+    }
+    return msg;
+  },
+};
+
+export const GetUserEarningProductsResponseJSON = {
+  /**
+   * Serializes GetUserEarningProductsResponse to JSON.
+   */
+  encode: function (msg: Partial<GetUserEarningProductsResponse>): string {
+    return JSON.stringify(
+      GetUserEarningProductsResponseJSON._writeMessage(msg)
+    );
+  },
+
+  /**
+   * Deserializes GetUserEarningProductsResponse from JSON.
+   */
+  decode: function (json: string): GetUserEarningProductsResponse {
+    return GetUserEarningProductsResponseJSON._readMessage(
+      GetUserEarningProductsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetUserEarningProductsResponse with all fields set to their default value.
+   */
+  initialize: function (): GetUserEarningProductsResponse {
+    return {
+      products: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetUserEarningProductsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.products?.length) {
+      json.products = msg.products.map(UserEarningProductJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetUserEarningProductsResponse,
+    json: any
+  ): GetUserEarningProductsResponse {
+    const _products = json.products;
+    if (_products) {
+      for (const item of _products) {
+        const m = UserEarningProduct.initialize();
+        UserEarningProductJSON._readMessage(m, item);
+        msg.products.push(m);
       }
     }
     return msg;
