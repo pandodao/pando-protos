@@ -16,6 +16,8 @@ service PoolService {
   rpc ListMyEarningProducts(ListMyEarningProductsRequest) returns (ListMyEarningProductsResponse);
   rpc GetMyEarningProduct(GetMyEarningProductRequest) returns (GetMyEarningProductResponse);
 
+  rpc GetUserEarningProducts(GetUserEarningProductsRequest) returns (GetUserEarningProductsResponse);
+
   // audit
   rpc FindAudit(FindAuditRequest) returns (FindAuditResponse);
   rpc ListAudits(ListAuditsRequest) returns (ListAuditsResponse);
@@ -80,6 +82,7 @@ message EventAction {
     ADMIN_AUDIT_APPROVE = 106;
     ADMIN_AUDIT_REJECT = 107;
     ADMIN_AUTO_REVISE_PRODUCT_CAPACITY = 108;
+    ADMIN_LIQUIDATION = 109;
   }
 }
 
@@ -186,6 +189,10 @@ message EarningSnapshotAdminLegacyAssetMigrationData {
   string user_id = 1;
   int32 product_id = 2;
   int64 amount = 3;
+}
+
+message EarningSnapshotAdminLiquidationData {
+  int32 user_id = 1;
 }
 
 message EarningSnapshotAdminAuditApproveData {
@@ -366,4 +373,12 @@ message ListAuditsRequest {
 
 message ListAuditsResponse {
   repeated Audit audits = 1;
+}
+
+message GetUserEarningProductsRequest {
+  string user_id = 1;
+}
+
+message GetUserEarningProductsResponse {
+  repeated UserEarningProduct products = 1;
 }
