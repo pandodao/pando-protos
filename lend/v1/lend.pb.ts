@@ -391,8 +391,8 @@ export interface TransferCancelData {
 export interface ConfigRequest {}
 
 export interface ConfigResponse {
-  securityPledgeRate: string;
-  clearingPledgeRate: string;
+  maxLtv: string;
+  liquidationThreshold: string;
   interestRate: string;
   interestDuration: number;
   multisigReceivers: string[];
@@ -1271,8 +1271,8 @@ export const ConfigResponse = {
    */
   initialize: function (): ConfigResponse {
     return {
-      securityPledgeRate: "",
-      clearingPledgeRate: "",
+      maxLtv: "",
+      liquidationThreshold: "",
       interestRate: "",
       interestDuration: 0,
       multisigReceivers: [],
@@ -1287,11 +1287,11 @@ export const ConfigResponse = {
     msg: Partial<ConfigResponse>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.securityPledgeRate) {
-      writer.writeString(1, msg.securityPledgeRate);
+    if (msg.maxLtv) {
+      writer.writeString(1, msg.maxLtv);
     }
-    if (msg.clearingPledgeRate) {
-      writer.writeString(2, msg.clearingPledgeRate);
+    if (msg.liquidationThreshold) {
+      writer.writeString(2, msg.liquidationThreshold);
     }
     if (msg.interestRate) {
       writer.writeString(3, msg.interestRate);
@@ -1319,11 +1319,11 @@ export const ConfigResponse = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.securityPledgeRate = reader.readString();
+          msg.maxLtv = reader.readString();
           break;
         }
         case 2: {
-          msg.clearingPledgeRate = reader.readString();
+          msg.liquidationThreshold = reader.readString();
           break;
         }
         case 3: {
@@ -3705,8 +3705,8 @@ export const ConfigResponseJSON = {
    */
   initialize: function (): ConfigResponse {
     return {
-      securityPledgeRate: "",
-      clearingPledgeRate: "",
+      maxLtv: "",
+      liquidationThreshold: "",
       interestRate: "",
       interestDuration: 0,
       multisigReceivers: [],
@@ -3721,11 +3721,11 @@ export const ConfigResponseJSON = {
     msg: Partial<ConfigResponse>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.securityPledgeRate) {
-      json.securityPledgeRate = msg.securityPledgeRate;
+    if (msg.maxLtv) {
+      json.maxLtv = msg.maxLtv;
     }
-    if (msg.clearingPledgeRate) {
-      json.clearingPledgeRate = msg.clearingPledgeRate;
+    if (msg.liquidationThreshold) {
+      json.liquidationThreshold = msg.liquidationThreshold;
     }
     if (msg.interestRate) {
       json.interestRate = msg.interestRate;
@@ -3746,15 +3746,14 @@ export const ConfigResponseJSON = {
    * @private
    */
   _readMessage: function (msg: ConfigResponse, json: any): ConfigResponse {
-    const _securityPledgeRate =
-      json.securityPledgeRate ?? json.security_pledge_rate;
-    if (_securityPledgeRate) {
-      msg.securityPledgeRate = _securityPledgeRate;
+    const _maxLtv = json.maxLtv ?? json.max_ltv;
+    if (_maxLtv) {
+      msg.maxLtv = _maxLtv;
     }
-    const _clearingPledgeRate =
-      json.clearingPledgeRate ?? json.clearing_pledge_rate;
-    if (_clearingPledgeRate) {
-      msg.clearingPledgeRate = _clearingPledgeRate;
+    const _liquidationThreshold =
+      json.liquidationThreshold ?? json.liquidation_threshold;
+    if (_liquidationThreshold) {
+      msg.liquidationThreshold = _liquidationThreshold;
     }
     const _interestRate = json.interestRate ?? json.interest_rate;
     if (_interestRate) {
