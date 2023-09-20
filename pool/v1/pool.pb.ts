@@ -488,7 +488,8 @@ export declare namespace EventError {
     | "AUDIT_NOT_FOUND"
     | "AUDIT_STATUS_MISMATCH"
     | "EARNING_PRODUCT_PRECISION_UNSATISFIED"
-    | "USER_NOT_IN_WHITELIST";
+    | "USER_NOT_IN_WHITELIST"
+    | "USER_EARNING_PRODUCT_NOT_FOUND";
 }
 
 export interface EventAction {}
@@ -903,6 +904,10 @@ export const EventError = {
      */
     USER_NOT_IN_WHITELIST: "USER_NOT_IN_WHITELIST",
     /**
+     * pledge / cancel_pledge / redeem
+     */
+    USER_EARNING_PRODUCT_NOT_FOUND: "USER_EARNING_PRODUCT_NOT_FOUND",
+    /**
      * @private
      */
     _fromInt: function (i: number): EventError.Enum {
@@ -957,6 +962,9 @@ export const EventError = {
         }
         case 16: {
           return "USER_NOT_IN_WHITELIST";
+        }
+        case 17: {
+          return "USER_EARNING_PRODUCT_NOT_FOUND";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -1019,6 +1027,9 @@ export const EventError = {
         }
         case "USER_NOT_IN_WHITELIST": {
           return 16;
+        }
+        case "USER_EARNING_PRODUCT_NOT_FOUND": {
+          return 17;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -5002,6 +5013,10 @@ export const EventErrorJSON = {
      */
     USER_NOT_IN_WHITELIST: "USER_NOT_IN_WHITELIST",
     /**
+     * pledge / cancel_pledge / redeem
+     */
+    USER_EARNING_PRODUCT_NOT_FOUND: "USER_EARNING_PRODUCT_NOT_FOUND",
+    /**
      * @private
      */
     _fromInt: function (i: number): EventError.Enum {
@@ -5056,6 +5071,9 @@ export const EventErrorJSON = {
         }
         case 16: {
           return "USER_NOT_IN_WHITELIST";
+        }
+        case 17: {
+          return "USER_EARNING_PRODUCT_NOT_FOUND";
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
@@ -5118,6 +5136,9 @@ export const EventErrorJSON = {
         }
         case "USER_NOT_IN_WHITELIST": {
           return 16;
+        }
+        case "USER_EARNING_PRODUCT_NOT_FOUND": {
+          return 17;
         }
         // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
