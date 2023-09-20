@@ -61,6 +61,8 @@ message EventError {
     EARNING_PRODUCT_PRECISION_UNSATISFIED = 15;
     // buy
     USER_NOT_IN_WHITELIST = 16;
+    // pledge / cancel_pledge / redeem
+    USER_EARNING_PRODUCT_NOT_FOUND = 17;
   }
 }
 
