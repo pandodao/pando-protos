@@ -85,8 +85,8 @@ message TransferCancelData {
 message ConfigRequest {}
 
 message ConfigResponse {
-  string security_pledge_rate = 1;
-  string clearing_pledge_rate = 2;
+  string max_ltv = 1;
+  string liquidation_threshold = 2;
   string interest_rate = 3;
   uint32 interest_duration = 4;
   repeated string  multisig_receivers = 5;
