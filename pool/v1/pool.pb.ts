@@ -104,6 +104,9 @@ export async function GetMyEarningProduct(
   return GetMyEarningProductResponse.decode(response);
 }
 
+/**
+ * by admins
+ */
 export async function GetUserEarningProducts(
   getUserEarningProductsRequest: GetUserEarningProductsRequest,
   config?: ClientConfiguration
@@ -114,6 +117,18 @@ export async function GetUserEarningProducts(
     config
   );
   return GetUserEarningProductsResponse.decode(response);
+}
+
+export async function GetUserEvent(
+  getUserEventRequest: GetUserEventRequest,
+  config?: ClientConfiguration
+): Promise<GetUserEventResponse> {
+  const response = await PBrequest(
+    "/pool.v1.PoolService/GetUserEvent",
+    GetUserEventRequest.encode(getUserEventRequest),
+    config
+  );
+  return GetUserEventResponse.decode(response);
 }
 
 /**
@@ -231,6 +246,9 @@ export async function GetMyEarningProductJSON(
   return GetMyEarningProductResponseJSON.decode(response);
 }
 
+/**
+ * by admins
+ */
 export async function GetUserEarningProductsJSON(
   getUserEarningProductsRequest: GetUserEarningProductsRequest,
   config?: ClientConfiguration
@@ -241,6 +259,18 @@ export async function GetUserEarningProductsJSON(
     config
   );
   return GetUserEarningProductsResponseJSON.decode(response);
+}
+
+export async function GetUserEventJSON(
+  getUserEventRequest: GetUserEventRequest,
+  config?: ClientConfiguration
+): Promise<GetUserEventResponse> {
+  const response = await JSONrequest(
+    "/pool.v1.PoolService/GetUserEvent",
+    GetUserEventRequestJSON.encode(getUserEventRequest),
+    config
+  );
+  return GetUserEventResponseJSON.decode(response);
 }
 
 /**
@@ -303,10 +333,17 @@ export interface PoolService<Context = unknown> {
     getMyEarningProductRequest: GetMyEarningProductRequest,
     context: Context
   ) => Promise<GetMyEarningProductResponse> | GetMyEarningProductResponse;
+  /**
+   * by admins
+   */
   GetUserEarningProducts: (
     getUserEarningProductsRequest: GetUserEarningProductsRequest,
     context: Context
   ) => Promise<GetUserEarningProductsResponse> | GetUserEarningProductsResponse;
+  GetUserEvent: (
+    getUserEventRequest: GetUserEventRequest,
+    context: Context
+  ) => Promise<GetUserEventResponse> | GetUserEventResponse;
   /**
    * audit
    */
@@ -400,6 +437,15 @@ export function createPoolService<Context>(service: PoolService<Context>) {
         output: {
           protobuf: GetUserEarningProductsResponse,
           json: GetUserEarningProductsResponseJSON,
+        },
+      },
+      GetUserEvent: {
+        name: "GetUserEvent",
+        handler: service.GetUserEvent,
+        input: { protobuf: GetUserEventRequest, json: GetUserEventRequestJSON },
+        output: {
+          protobuf: GetUserEventResponse,
+          json: GetUserEventResponseJSON,
         },
       },
       FindAudit: {
@@ -529,10 +575,12 @@ export interface EarningSnapshotAdminProductMergeExpansionData {
 
 export interface EarningSnapshotAdminPledgeData {
   userId: string;
+  productId: number;
 }
 
 export interface EarningSnapshotAdminCancelPledgeData {
   userId: string;
+  productId: number;
 }
 
 export interface EarningSnapshotAdminLegacyAssetMigrationData {
@@ -729,6 +777,14 @@ export interface GetUserEarningProductsRequest {
 
 export interface GetUserEarningProductsResponse {
   products: UserEarningProduct[];
+}
+
+export interface GetUserEventRequest {
+  followId: string;
+}
+
+export interface GetUserEventResponse {
+  event: Event;
 }
 
 //========================================//
@@ -1959,6 +2015,7 @@ export const EarningSnapshotAdminPledgeData = {
   initialize: function (): EarningSnapshotAdminPledgeData {
     return {
       userId: "",
+      productId: 0,
     };
   },
 
@@ -1971,6 +2028,9 @@ export const EarningSnapshotAdminPledgeData = {
   ): BinaryWriter {
     if (msg.userId) {
       writer.writeString(1, msg.userId);
+    }
+    if (msg.productId) {
+      writer.writeInt32(2, msg.productId);
     }
     return writer;
   },
@@ -1987,6 +2047,10 @@ export const EarningSnapshotAdminPledgeData = {
       switch (field) {
         case 1: {
           msg.userId = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.productId = reader.readInt32();
           break;
         }
         default: {
@@ -2028,6 +2092,7 @@ export const EarningSnapshotAdminCancelPledgeData = {
   initialize: function (): EarningSnapshotAdminCancelPledgeData {
     return {
       userId: "",
+      productId: 0,
     };
   },
 
@@ -2040,6 +2105,9 @@ export const EarningSnapshotAdminCancelPledgeData = {
   ): BinaryWriter {
     if (msg.userId) {
       writer.writeString(1, msg.userId);
+    }
+    if (msg.productId) {
+      writer.writeInt32(2, msg.productId);
     }
     return writer;
   },
@@ -2056,6 +2124,10 @@ export const EarningSnapshotAdminCancelPledgeData = {
       switch (field) {
         case 1: {
           msg.userId = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.productId = reader.readInt32();
           break;
         }
         default: {
@@ -4683,6 +4755,140 @@ export const GetUserEarningProductsResponse = {
   },
 };
 
+export const GetUserEventRequest = {
+  /**
+   * Serializes GetUserEventRequest to protobuf.
+   */
+  encode: function (msg: Partial<GetUserEventRequest>): Uint8Array {
+    return GetUserEventRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetUserEventRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetUserEventRequest {
+    return GetUserEventRequest._readMessage(
+      GetUserEventRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetUserEventRequest with all fields set to their default value.
+   */
+  initialize: function (): GetUserEventRequest {
+    return {
+      followId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetUserEventRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.followId) {
+      writer.writeString(1, msg.followId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetUserEventRequest,
+    reader: BinaryReader
+  ): GetUserEventRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.followId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const GetUserEventResponse = {
+  /**
+   * Serializes GetUserEventResponse to protobuf.
+   */
+  encode: function (msg: Partial<GetUserEventResponse>): Uint8Array {
+    return GetUserEventResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes GetUserEventResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): GetUserEventResponse {
+    return GetUserEventResponse._readMessage(
+      GetUserEventResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes GetUserEventResponse with all fields set to their default value.
+   */
+  initialize: function (): GetUserEventResponse {
+    return {
+      event: Event.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetUserEventResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.event) {
+      writer.writeMessage(1, msg.event, Event._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetUserEventResponse,
+    reader: BinaryReader
+  ): GetUserEventResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          reader.readMessage(msg.event, Event._readMessage);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
@@ -5830,6 +6036,7 @@ export const EarningSnapshotAdminPledgeDataJSON = {
   initialize: function (): EarningSnapshotAdminPledgeData {
     return {
       userId: "",
+      productId: 0,
     };
   },
 
@@ -5842,6 +6049,9 @@ export const EarningSnapshotAdminPledgeDataJSON = {
     const json: Record<string, unknown> = {};
     if (msg.userId) {
       json.userId = msg.userId;
+    }
+    if (msg.productId) {
+      json.productId = msg.productId;
     }
     return json;
   },
@@ -5856,6 +6066,10 @@ export const EarningSnapshotAdminPledgeDataJSON = {
     const _userId = json.userId ?? json.user_id;
     if (_userId) {
       msg.userId = _userId;
+    }
+    const _productId = json.productId ?? json.product_id;
+    if (_productId) {
+      msg.productId = _productId;
     }
     return msg;
   },
@@ -5889,6 +6103,7 @@ export const EarningSnapshotAdminCancelPledgeDataJSON = {
   initialize: function (): EarningSnapshotAdminCancelPledgeData {
     return {
       userId: "",
+      productId: 0,
     };
   },
 
@@ -5901,6 +6116,9 @@ export const EarningSnapshotAdminCancelPledgeDataJSON = {
     const json: Record<string, unknown> = {};
     if (msg.userId) {
       json.userId = msg.userId;
+    }
+    if (msg.productId) {
+      json.productId = msg.productId;
     }
     return json;
   },
@@ -5915,6 +6133,10 @@ export const EarningSnapshotAdminCancelPledgeDataJSON = {
     const _userId = json.userId ?? json.user_id;
     if (_userId) {
       msg.userId = _userId;
+    }
+    const _productId = json.productId ?? json.product_id;
+    if (_productId) {
+      msg.productId = _productId;
     }
     return msg;
   },
@@ -8224,6 +8446,121 @@ export const GetUserEarningProductsResponseJSON = {
         UserEarningProductJSON._readMessage(m, item);
         msg.products.push(m);
       }
+    }
+    return msg;
+  },
+};
+
+export const GetUserEventRequestJSON = {
+  /**
+   * Serializes GetUserEventRequest to JSON.
+   */
+  encode: function (msg: Partial<GetUserEventRequest>): string {
+    return JSON.stringify(GetUserEventRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes GetUserEventRequest from JSON.
+   */
+  decode: function (json: string): GetUserEventRequest {
+    return GetUserEventRequestJSON._readMessage(
+      GetUserEventRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetUserEventRequest with all fields set to their default value.
+   */
+  initialize: function (): GetUserEventRequest {
+    return {
+      followId: "",
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetUserEventRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.followId) {
+      json.followId = msg.followId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetUserEventRequest,
+    json: any
+  ): GetUserEventRequest {
+    const _followId = json.followId ?? json.follow_id;
+    if (_followId) {
+      msg.followId = _followId;
+    }
+    return msg;
+  },
+};
+
+export const GetUserEventResponseJSON = {
+  /**
+   * Serializes GetUserEventResponse to JSON.
+   */
+  encode: function (msg: Partial<GetUserEventResponse>): string {
+    return JSON.stringify(GetUserEventResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes GetUserEventResponse from JSON.
+   */
+  decode: function (json: string): GetUserEventResponse {
+    return GetUserEventResponseJSON._readMessage(
+      GetUserEventResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetUserEventResponse with all fields set to their default value.
+   */
+  initialize: function (): GetUserEventResponse {
+    return {
+      event: Event.initialize(),
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<GetUserEventResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.event) {
+      const event = EventJSON._writeMessage(msg.event);
+      if (Object.keys(event).length > 0) {
+        json.event = event;
+      }
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: GetUserEventResponse,
+    json: any
+  ): GetUserEventResponse {
+    const _event = json.event;
+    if (_event) {
+      const m = Event.initialize();
+      EventJSON._readMessage(m, _event);
+      msg.event = m;
     }
     return msg;
   },

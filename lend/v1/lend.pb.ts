@@ -360,22 +360,28 @@ export type OperationStatus =
   | "FAILED"
   | "CANCELLED";
 
-export type PledgeType = "PLEDGE_TYPE_NOT_SET" | "NODE" | "POOL" | "LOCAL";
+export type PledgeType = "PLEDGE_TYPE_NOT_SET" | "LOCAL" | "POOL";
 
-export interface ReviewData {
-  traceId: string;
-  passed: boolean;
-  failedReason: string;
+export interface ErrorCode {}
+
+export declare namespace ErrorCode {
+  export type Enum =
+    | "NOT_SET"
+    | "UNEXPECTED_ASSET"
+    | "REVIEW_REJECTED"
+    | "UPSTREAM_ERROR";
 }
 
 export interface TransferWithdrawData {
   pt: PledgeType;
   assetId: string;
   amount: string;
+  contractId: string;
 }
 
 export interface TransferPledgeData {
   pt: PledgeType;
+  contractId: string;
 }
 
 export interface TransferLoanData {
@@ -387,6 +393,13 @@ export interface TransferRepayData {}
 export interface TransferCancelData {
   id: string;
 }
+
+export interface TransferReviewData {
+  traceId: string;
+  passed: boolean;
+}
+
+export interface TransferChargeData {}
 
 export interface ConfigRequest {}
 
@@ -425,16 +438,17 @@ export interface PledgeItem {
   asset: Asset;
   amount: string;
   name: string;
+  active: boolean;
+  contractId: string;
 }
 
 export interface PledgeGroup {
   pledgeType: PledgeType;
-  active: boolean;
   items: PledgeItem[];
 }
 
 export interface StateRequest {
-  operationId: bigint;
+  operationId: string;
 }
 
 export interface StateResponse {
@@ -466,23 +480,22 @@ export interface GetOperationLogRequest {
 }
 
 export interface OperationLog {
-  id: bigint;
+  id: string;
   traceId: string;
   operationType: OperationType;
   loanAmount: string;
   repayAmount: string;
   pledgeType: PledgeType;
+  pledgeContractId: string;
   pledgeAmount: string;
   pledgeAsset: Asset;
   status: OperationStatus;
   createdAt: number;
-  failedReason: string;
-  transferMemo: string;
-  transferAssetId: string;
-  transferAmount: string;
+  /**
+   * set only when status is FAILED
+   */
+  errorCode: ErrorCode.Enum;
   isSystem: boolean;
-  beforeLoanAmount: string;
-  afterLoanAmount: string;
 }
 
 export interface GetOperationLogResponse {
@@ -490,8 +503,8 @@ export interface GetOperationLogResponse {
 }
 
 export interface ListOperationLogsRequest {
-  cursor: bigint;
-  limit: bigint;
+  cursor: string;
+  limit: number;
 }
 
 export interface ListOperationLogsResponse {
@@ -504,7 +517,7 @@ export interface GetLiquidationRequest {
 }
 
 export interface LiquidationPledge {
-  id: bigint;
+  id: string;
   userId: string;
   type: PledgeType;
   assetId: string;
@@ -747,9 +760,8 @@ export const OperationStatus = {
 
 export const PledgeType = {
   PLEDGE_TYPE_NOT_SET: "PLEDGE_TYPE_NOT_SET",
-  NODE: "NODE",
-  POOL: "POOL",
   LOCAL: "LOCAL",
+  POOL: "POOL",
   /**
    * @private
    */
@@ -759,13 +771,10 @@ export const PledgeType = {
         return "PLEDGE_TYPE_NOT_SET";
       }
       case 1: {
-        return "NODE";
+        return "LOCAL";
       }
       case 2: {
         return "POOL";
-      }
-      case 3: {
-        return "LOCAL";
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -781,14 +790,11 @@ export const PledgeType = {
       case "PLEDGE_TYPE_NOT_SET": {
         return 0;
       }
-      case "NODE": {
+      case "LOCAL": {
         return 1;
       }
       case "POOL": {
         return 2;
-      }
-      case "LOCAL": {
-        return 3;
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -798,81 +804,103 @@ export const PledgeType = {
   },
 } as const;
 
-export const ReviewData = {
+export const ErrorCode = {
   /**
-   * Serializes ReviewData to protobuf.
+   * Serializes ErrorCode to protobuf.
    */
-  encode: function (msg: Partial<ReviewData>): Uint8Array {
-    return ReviewData._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  encode: function (_msg?: Partial<ErrorCode>): Uint8Array {
+    return new Uint8Array();
   },
 
   /**
-   * Deserializes ReviewData from protobuf.
+   * Deserializes ErrorCode from protobuf.
    */
-  decode: function (bytes: ByteSource): ReviewData {
-    return ReviewData._readMessage(
-      ReviewData.initialize(),
-      new BinaryReader(bytes)
-    );
+  decode: function (_bytes?: ByteSource): ErrorCode {
+    return {};
   },
 
   /**
-   * Initializes ReviewData with all fields set to their default value.
+   * Initializes ErrorCode with all fields set to their default value.
    */
-  initialize: function (): ReviewData {
-    return {
-      traceId: "",
-      passed: false,
-      failedReason: "",
-    };
+  initialize: function (): ErrorCode {
+    return {};
   },
 
   /**
    * @private
    */
   _writeMessage: function (
-    msg: Partial<ReviewData>,
+    _msg: Partial<ErrorCode>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.traceId) {
-      writer.writeString(1, msg.traceId);
-    }
-    if (msg.passed) {
-      writer.writeBool(2, msg.passed);
-    }
-    if (msg.failedReason) {
-      writer.writeString(3, msg.failedReason);
-    }
     return writer;
   },
 
   /**
    * @private
    */
-  _readMessage: function (msg: ReviewData, reader: BinaryReader): ReviewData {
-    while (reader.nextField()) {
-      const field = reader.getFieldNumber();
-      switch (field) {
+  _readMessage: function (_msg: ErrorCode, _reader: BinaryReader): ErrorCode {
+    return _msg;
+  },
+
+  Enum: {
+    NOT_SET: "NOT_SET",
+    /**
+     * pledge / loan / repay
+     */
+    UNEXPECTED_ASSET: "UNEXPECTED_ASSET",
+    REVIEW_REJECTED: "REVIEW_REJECTED",
+    /**
+     * pledge / withdraw
+     */
+    UPSTREAM_ERROR: "UPSTREAM_ERROR",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): ErrorCode.Enum {
+      switch (i) {
+        case 0: {
+          return "NOT_SET";
+        }
         case 1: {
-          msg.traceId = reader.readString();
-          break;
+          return "UNEXPECTED_ASSET";
         }
         case 2: {
-          msg.passed = reader.readBool();
-          break;
+          return "REVIEW_REJECTED";
         }
         case 3: {
-          msg.failedReason = reader.readString();
-          break;
+          return "UPSTREAM_ERROR";
         }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
         default: {
-          reader.skipField();
-          break;
+          return i as unknown as ErrorCode.Enum;
         }
       }
-    }
-    return msg;
-  },
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: ErrorCode.Enum): number {
+      switch (i) {
+        case "NOT_SET": {
+          return 0;
+        }
+        case "UNEXPECTED_ASSET": {
+          return 1;
+        }
+        case "REVIEW_REJECTED": {
+          return 2;
+        }
+        case "UPSTREAM_ERROR": {
+          return 3;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
 };
 
 export const TransferWithdrawData = {
@@ -904,6 +932,7 @@ export const TransferWithdrawData = {
       pt: PledgeType._fromInt(0),
       assetId: "",
       amount: "",
+      contractId: "",
     };
   },
 
@@ -922,6 +951,9 @@ export const TransferWithdrawData = {
     }
     if (msg.amount) {
       writer.writeString(3, msg.amount);
+    }
+    if (msg.contractId) {
+      writer.writeString(4, msg.contractId);
     }
     return writer;
   },
@@ -946,6 +978,10 @@ export const TransferWithdrawData = {
         }
         case 3: {
           msg.amount = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.contractId = reader.readString();
           break;
         }
         default: {
@@ -985,6 +1021,7 @@ export const TransferPledgeData = {
   initialize: function (): TransferPledgeData {
     return {
       pt: PledgeType._fromInt(0),
+      contractId: "",
     };
   },
 
@@ -997,6 +1034,9 @@ export const TransferPledgeData = {
   ): BinaryWriter {
     if (msg.pt && PledgeType._toInt(msg.pt)) {
       writer.writeEnum(1, PledgeType._toInt(msg.pt));
+    }
+    if (msg.contractId) {
+      writer.writeString(2, msg.contractId);
     }
     return writer;
   },
@@ -1013,6 +1053,10 @@ export const TransferPledgeData = {
       switch (field) {
         case 1: {
           msg.pt = PledgeType._fromInt(reader.readEnum());
+          break;
+        }
+        case 2: {
+          msg.contractId = reader.readString();
           break;
         }
         default: {
@@ -1199,6 +1243,124 @@ export const TransferCancelData = {
       }
     }
     return msg;
+  },
+};
+
+export const TransferReviewData = {
+  /**
+   * Serializes TransferReviewData to protobuf.
+   */
+  encode: function (msg: Partial<TransferReviewData>): Uint8Array {
+    return TransferReviewData._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes TransferReviewData from protobuf.
+   */
+  decode: function (bytes: ByteSource): TransferReviewData {
+    return TransferReviewData._readMessage(
+      TransferReviewData.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes TransferReviewData with all fields set to their default value.
+   */
+  initialize: function (): TransferReviewData {
+    return {
+      traceId: "",
+      passed: false,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<TransferReviewData>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.traceId) {
+      writer.writeString(1, msg.traceId);
+    }
+    if (msg.passed) {
+      writer.writeBool(2, msg.passed);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: TransferReviewData,
+    reader: BinaryReader
+  ): TransferReviewData {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.traceId = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.passed = reader.readBool();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const TransferChargeData = {
+  /**
+   * Serializes TransferChargeData to protobuf.
+   */
+  encode: function (_msg?: Partial<TransferChargeData>): Uint8Array {
+    return new Uint8Array();
+  },
+
+  /**
+   * Deserializes TransferChargeData from protobuf.
+   */
+  decode: function (_bytes?: ByteSource): TransferChargeData {
+    return {};
+  },
+
+  /**
+   * Initializes TransferChargeData with all fields set to their default value.
+   */
+  initialize: function (): TransferChargeData {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<TransferChargeData>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    _msg: TransferChargeData,
+    _reader: BinaryReader
+  ): TransferChargeData {
+    return _msg;
   },
 };
 
@@ -1673,6 +1835,8 @@ export const PledgeItem = {
       asset: Asset.initialize(),
       amount: "",
       name: "",
+      active: false,
+      contractId: "",
     };
   },
 
@@ -1691,6 +1855,12 @@ export const PledgeItem = {
     }
     if (msg.name) {
       writer.writeString(3, msg.name);
+    }
+    if (msg.active) {
+      writer.writeBool(4, msg.active);
+    }
+    if (msg.contractId) {
+      writer.writeString(5, msg.contractId);
     }
     return writer;
   },
@@ -1712,6 +1882,14 @@ export const PledgeItem = {
         }
         case 3: {
           msg.name = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.active = reader.readBool();
+          break;
+        }
+        case 5: {
+          msg.contractId = reader.readString();
           break;
         }
         default: {
@@ -1748,7 +1926,6 @@ export const PledgeGroup = {
   initialize: function (): PledgeGroup {
     return {
       pledgeType: PledgeType._fromInt(0),
-      active: false,
       items: [],
     };
   },
@@ -1763,12 +1940,9 @@ export const PledgeGroup = {
     if (msg.pledgeType && PledgeType._toInt(msg.pledgeType)) {
       writer.writeEnum(1, PledgeType._toInt(msg.pledgeType));
     }
-    if (msg.active) {
-      writer.writeBool(2, msg.active);
-    }
     if (msg.items?.length) {
       writer.writeRepeatedMessage(
-        3,
+        2,
         msg.items as any,
         PledgeItem._writeMessage
       );
@@ -1788,10 +1962,6 @@ export const PledgeGroup = {
           break;
         }
         case 2: {
-          msg.active = reader.readBool();
-          break;
-        }
-        case 3: {
           const m = PledgeItem.initialize();
           reader.readMessage(m, PledgeItem._readMessage);
           msg.items.push(m);
@@ -1833,7 +2003,7 @@ export const StateRequest = {
    */
   initialize: function (): StateRequest {
     return {
-      operationId: 0n,
+      operationId: "",
     };
   },
 
@@ -1845,7 +2015,7 @@ export const StateRequest = {
     writer: BinaryWriter
   ): BinaryWriter {
     if (msg.operationId) {
-      writer.writeUint64String(1, msg.operationId.toString() as any);
+      writer.writeString(1, msg.operationId);
     }
     return writer;
   },
@@ -1861,7 +2031,7 @@ export const StateRequest = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.operationId = BigInt(reader.readUint64String());
+          msg.operationId = reader.readString();
           break;
         }
         default: {
@@ -2332,23 +2502,19 @@ export const OperationLog = {
    */
   initialize: function (): OperationLog {
     return {
-      id: 0n,
+      id: "",
       traceId: "",
       operationType: OperationType._fromInt(0),
       loanAmount: "",
       repayAmount: "",
       pledgeType: PledgeType._fromInt(0),
+      pledgeContractId: "",
       pledgeAmount: "",
       pledgeAsset: Asset.initialize(),
       status: OperationStatus._fromInt(0),
       createdAt: 0,
-      failedReason: "",
-      transferMemo: "",
-      transferAssetId: "",
-      transferAmount: "",
+      errorCode: ErrorCode.Enum._fromInt(0),
       isSystem: false,
-      beforeLoanAmount: "",
-      afterLoanAmount: "",
     };
   },
 
@@ -2360,55 +2526,43 @@ export const OperationLog = {
     writer: BinaryWriter
   ): BinaryWriter {
     if (msg.id) {
-      writer.writeUint64String(17, msg.id.toString() as any);
+      writer.writeString(1, msg.id);
     }
     if (msg.traceId) {
-      writer.writeString(1, msg.traceId);
+      writer.writeString(2, msg.traceId);
     }
     if (msg.operationType && OperationType._toInt(msg.operationType)) {
-      writer.writeEnum(2, OperationType._toInt(msg.operationType));
+      writer.writeEnum(3, OperationType._toInt(msg.operationType));
     }
     if (msg.loanAmount) {
-      writer.writeString(3, msg.loanAmount);
+      writer.writeString(4, msg.loanAmount);
     }
     if (msg.repayAmount) {
-      writer.writeString(4, msg.repayAmount);
+      writer.writeString(5, msg.repayAmount);
     }
     if (msg.pledgeType && PledgeType._toInt(msg.pledgeType)) {
-      writer.writeEnum(5, PledgeType._toInt(msg.pledgeType));
+      writer.writeEnum(6, PledgeType._toInt(msg.pledgeType));
+    }
+    if (msg.pledgeContractId) {
+      writer.writeString(7, msg.pledgeContractId);
     }
     if (msg.pledgeAmount) {
-      writer.writeString(6, msg.pledgeAmount);
+      writer.writeString(8, msg.pledgeAmount);
     }
     if (msg.pledgeAsset) {
-      writer.writeMessage(7, msg.pledgeAsset, Asset._writeMessage);
+      writer.writeMessage(9, msg.pledgeAsset, Asset._writeMessage);
     }
     if (msg.status && OperationStatus._toInt(msg.status)) {
-      writer.writeEnum(8, OperationStatus._toInt(msg.status));
+      writer.writeEnum(10, OperationStatus._toInt(msg.status));
     }
     if (msg.createdAt) {
-      writer.writeInt32(9, msg.createdAt);
+      writer.writeInt32(11, msg.createdAt);
     }
-    if (msg.failedReason) {
-      writer.writeString(10, msg.failedReason);
-    }
-    if (msg.transferMemo) {
-      writer.writeString(11, msg.transferMemo);
-    }
-    if (msg.transferAssetId) {
-      writer.writeString(12, msg.transferAssetId);
-    }
-    if (msg.transferAmount) {
-      writer.writeString(13, msg.transferAmount);
+    if (msg.errorCode && ErrorCode.Enum._toInt(msg.errorCode)) {
+      writer.writeEnum(12, ErrorCode.Enum._toInt(msg.errorCode));
     }
     if (msg.isSystem) {
-      writer.writeBool(14, msg.isSystem);
-    }
-    if (msg.beforeLoanAmount) {
-      writer.writeString(15, msg.beforeLoanAmount);
-    }
-    if (msg.afterLoanAmount) {
-      writer.writeString(16, msg.afterLoanAmount);
+      writer.writeBool(13, msg.isSystem);
     }
     return writer;
   },
@@ -2423,72 +2577,56 @@ export const OperationLog = {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
-        case 17: {
-          msg.id = BigInt(reader.readUint64String());
-          break;
-        }
         case 1: {
-          msg.traceId = reader.readString();
+          msg.id = reader.readString();
           break;
         }
         case 2: {
-          msg.operationType = OperationType._fromInt(reader.readEnum());
+          msg.traceId = reader.readString();
           break;
         }
         case 3: {
-          msg.loanAmount = reader.readString();
+          msg.operationType = OperationType._fromInt(reader.readEnum());
           break;
         }
         case 4: {
-          msg.repayAmount = reader.readString();
+          msg.loanAmount = reader.readString();
           break;
         }
         case 5: {
-          msg.pledgeType = PledgeType._fromInt(reader.readEnum());
+          msg.repayAmount = reader.readString();
           break;
         }
         case 6: {
-          msg.pledgeAmount = reader.readString();
+          msg.pledgeType = PledgeType._fromInt(reader.readEnum());
           break;
         }
         case 7: {
-          reader.readMessage(msg.pledgeAsset, Asset._readMessage);
+          msg.pledgeContractId = reader.readString();
           break;
         }
         case 8: {
-          msg.status = OperationStatus._fromInt(reader.readEnum());
+          msg.pledgeAmount = reader.readString();
           break;
         }
         case 9: {
-          msg.createdAt = reader.readInt32();
+          reader.readMessage(msg.pledgeAsset, Asset._readMessage);
           break;
         }
         case 10: {
-          msg.failedReason = reader.readString();
+          msg.status = OperationStatus._fromInt(reader.readEnum());
           break;
         }
         case 11: {
-          msg.transferMemo = reader.readString();
+          msg.createdAt = reader.readInt32();
           break;
         }
         case 12: {
-          msg.transferAssetId = reader.readString();
+          msg.errorCode = ErrorCode.Enum._fromInt(reader.readEnum());
           break;
         }
         case 13: {
-          msg.transferAmount = reader.readString();
-          break;
-        }
-        case 14: {
           msg.isSystem = reader.readBool();
-          break;
-        }
-        case 15: {
-          msg.beforeLoanAmount = reader.readString();
-          break;
-        }
-        case 16: {
-          msg.afterLoanAmount = reader.readString();
           break;
         }
         default: {
@@ -2594,8 +2732,8 @@ export const ListOperationLogsRequest = {
    */
   initialize: function (): ListOperationLogsRequest {
     return {
-      cursor: 0n,
-      limit: 0n,
+      cursor: "",
+      limit: 0,
     };
   },
 
@@ -2607,10 +2745,10 @@ export const ListOperationLogsRequest = {
     writer: BinaryWriter
   ): BinaryWriter {
     if (msg.cursor) {
-      writer.writeInt64String(1, msg.cursor.toString() as any);
+      writer.writeString(1, msg.cursor);
     }
     if (msg.limit) {
-      writer.writeInt64String(2, msg.limit.toString() as any);
+      writer.writeInt32(2, msg.limit);
     }
     return writer;
   },
@@ -2626,11 +2764,11 @@ export const ListOperationLogsRequest = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.cursor = BigInt(reader.readInt64String());
+          msg.cursor = reader.readString();
           break;
         }
         case 2: {
-          msg.limit = BigInt(reader.readInt64String());
+          msg.limit = reader.readInt32();
           break;
         }
         default: {
@@ -2817,7 +2955,7 @@ export const LiquidationPledge = {
    */
   initialize: function (): LiquidationPledge {
     return {
-      id: 0n,
+      id: "",
       userId: "",
       type: PledgeType._fromInt(0),
       assetId: "",
@@ -2840,7 +2978,7 @@ export const LiquidationPledge = {
     writer: BinaryWriter
   ): BinaryWriter {
     if (msg.id) {
-      writer.writeInt64String(1, msg.id.toString() as any);
+      writer.writeString(1, msg.id);
     }
     if (msg.userId) {
       writer.writeString(2, msg.userId);
@@ -2889,7 +3027,7 @@ export const LiquidationPledge = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.id = BigInt(reader.readInt64String());
+          msg.id = reader.readString();
           break;
         }
         case 2: {
@@ -3251,9 +3389,8 @@ export const OperationStatusJSON = {
 
 export const PledgeTypeJSON = {
   PLEDGE_TYPE_NOT_SET: "PLEDGE_TYPE_NOT_SET",
-  NODE: "NODE",
-  POOL: "POOL",
   LOCAL: "LOCAL",
+  POOL: "POOL",
   /**
    * @private
    */
@@ -3263,13 +3400,10 @@ export const PledgeTypeJSON = {
         return "PLEDGE_TYPE_NOT_SET";
       }
       case 1: {
-        return "NODE";
+        return "LOCAL";
       }
       case 2: {
         return "POOL";
-      }
-      case 3: {
-        return "LOCAL";
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -3285,14 +3419,11 @@ export const PledgeTypeJSON = {
       case "PLEDGE_TYPE_NOT_SET": {
         return 0;
       }
-      case "NODE": {
+      case "LOCAL": {
         return 1;
       }
       case "POOL": {
         return 2;
-      }
-      case "LOCAL": {
-        return 3;
       }
       // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
       default: {
@@ -3302,70 +3433,100 @@ export const PledgeTypeJSON = {
   },
 } as const;
 
-export const ReviewDataJSON = {
+export const ErrorCodeJSON = {
   /**
-   * Serializes ReviewData to JSON.
+   * Serializes ErrorCode to JSON.
    */
-  encode: function (msg: Partial<ReviewData>): string {
-    return JSON.stringify(ReviewDataJSON._writeMessage(msg));
+  encode: function (_msg?: Partial<ErrorCode>): string {
+    return "{}";
   },
 
   /**
-   * Deserializes ReviewData from JSON.
+   * Deserializes ErrorCode from JSON.
    */
-  decode: function (json: string): ReviewData {
-    return ReviewDataJSON._readMessage(
-      ReviewDataJSON.initialize(),
-      JSON.parse(json)
-    );
+  decode: function (_json?: string): ErrorCode {
+    return {};
   },
 
   /**
-   * Initializes ReviewData with all fields set to their default value.
+   * Initializes ErrorCode with all fields set to their default value.
    */
-  initialize: function (): ReviewData {
-    return {
-      traceId: "",
-      passed: false,
-      failedReason: "",
-    };
+  initialize: function (): ErrorCode {
+    return {};
   },
 
   /**
    * @private
    */
-  _writeMessage: function (msg: Partial<ReviewData>): Record<string, unknown> {
-    const json: Record<string, unknown> = {};
-    if (msg.traceId) {
-      json.traceId = msg.traceId;
-    }
-    if (msg.passed) {
-      json.passed = msg.passed;
-    }
-    if (msg.failedReason) {
-      json.failedReason = msg.failedReason;
-    }
-    return json;
+  _writeMessage: function (_msg: Partial<ErrorCode>): Record<string, unknown> {
+    return {};
   },
 
   /**
    * @private
    */
-  _readMessage: function (msg: ReviewData, json: any): ReviewData {
-    const _traceId = json.traceId ?? json.trace_id;
-    if (_traceId) {
-      msg.traceId = _traceId;
-    }
-    const _passed = json.passed;
-    if (_passed) {
-      msg.passed = _passed;
-    }
-    const _failedReason = json.failedReason ?? json.failed_reason;
-    if (_failedReason) {
-      msg.failedReason = _failedReason;
-    }
+  _readMessage: function (msg: ErrorCode, _json: any): ErrorCode {
     return msg;
   },
+
+  Enum: {
+    NOT_SET: "NOT_SET",
+    /**
+     * pledge / loan / repay
+     */
+    UNEXPECTED_ASSET: "UNEXPECTED_ASSET",
+    REVIEW_REJECTED: "REVIEW_REJECTED",
+    /**
+     * pledge / withdraw
+     */
+    UPSTREAM_ERROR: "UPSTREAM_ERROR",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): ErrorCode.Enum {
+      switch (i) {
+        case 0: {
+          return "NOT_SET";
+        }
+        case 1: {
+          return "UNEXPECTED_ASSET";
+        }
+        case 2: {
+          return "REVIEW_REJECTED";
+        }
+        case 3: {
+          return "UPSTREAM_ERROR";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as ErrorCode.Enum;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: ErrorCode.Enum): number {
+      switch (i) {
+        case "NOT_SET": {
+          return 0;
+        }
+        case "UNEXPECTED_ASSET": {
+          return 1;
+        }
+        case "REVIEW_REJECTED": {
+          return 2;
+        }
+        case "UPSTREAM_ERROR": {
+          return 3;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
 };
 
 export const TransferWithdrawDataJSON = {
@@ -3394,6 +3555,7 @@ export const TransferWithdrawDataJSON = {
       pt: PledgeType._fromInt(0),
       assetId: "",
       amount: "",
+      contractId: "",
     };
   },
 
@@ -3412,6 +3574,9 @@ export const TransferWithdrawDataJSON = {
     }
     if (msg.amount) {
       json.amount = msg.amount;
+    }
+    if (msg.contractId) {
+      json.contractId = msg.contractId;
     }
     return json;
   },
@@ -3434,6 +3599,10 @@ export const TransferWithdrawDataJSON = {
     const _amount = json.amount;
     if (_amount) {
       msg.amount = _amount;
+    }
+    const _contractId = json.contractId ?? json.contract_id;
+    if (_contractId) {
+      msg.contractId = _contractId;
     }
     return msg;
   },
@@ -3463,6 +3632,7 @@ export const TransferPledgeDataJSON = {
   initialize: function (): TransferPledgeData {
     return {
       pt: PledgeType._fromInt(0),
+      contractId: "",
     };
   },
 
@@ -3475,6 +3645,9 @@ export const TransferPledgeDataJSON = {
     const json: Record<string, unknown> = {};
     if (msg.pt && PledgeTypeJSON._toInt(msg.pt)) {
       json.pt = msg.pt;
+    }
+    if (msg.contractId) {
+      json.contractId = msg.contractId;
     }
     return json;
   },
@@ -3489,6 +3662,10 @@ export const TransferPledgeDataJSON = {
     const _pt = json.pt;
     if (_pt) {
       msg.pt = _pt;
+    }
+    const _contractId = json.contractId ?? json.contract_id;
+    if (_contractId) {
+      msg.contractId = _contractId;
     }
     return msg;
   },
@@ -3639,6 +3816,111 @@ export const TransferCancelDataJSON = {
     if (_id) {
       msg.id = _id;
     }
+    return msg;
+  },
+};
+
+export const TransferReviewDataJSON = {
+  /**
+   * Serializes TransferReviewData to JSON.
+   */
+  encode: function (msg: Partial<TransferReviewData>): string {
+    return JSON.stringify(TransferReviewDataJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes TransferReviewData from JSON.
+   */
+  decode: function (json: string): TransferReviewData {
+    return TransferReviewDataJSON._readMessage(
+      TransferReviewDataJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes TransferReviewData with all fields set to their default value.
+   */
+  initialize: function (): TransferReviewData {
+    return {
+      traceId: "",
+      passed: false,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<TransferReviewData>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.traceId) {
+      json.traceId = msg.traceId;
+    }
+    if (msg.passed) {
+      json.passed = msg.passed;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: TransferReviewData,
+    json: any
+  ): TransferReviewData {
+    const _traceId = json.traceId ?? json.trace_id;
+    if (_traceId) {
+      msg.traceId = _traceId;
+    }
+    const _passed = json.passed;
+    if (_passed) {
+      msg.passed = _passed;
+    }
+    return msg;
+  },
+};
+
+export const TransferChargeDataJSON = {
+  /**
+   * Serializes TransferChargeData to JSON.
+   */
+  encode: function (_msg?: Partial<TransferChargeData>): string {
+    return "{}";
+  },
+
+  /**
+   * Deserializes TransferChargeData from JSON.
+   */
+  decode: function (_json?: string): TransferChargeData {
+    return {};
+  },
+
+  /**
+   * Initializes TransferChargeData with all fields set to their default value.
+   */
+  initialize: function (): TransferChargeData {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: Partial<TransferChargeData>
+  ): Record<string, unknown> {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: TransferChargeData,
+    _json: any
+  ): TransferChargeData {
     return msg;
   },
 };
@@ -4065,6 +4347,8 @@ export const PledgeItemJSON = {
       asset: Asset.initialize(),
       amount: "",
       name: "",
+      active: false,
+      contractId: "",
     };
   },
 
@@ -4084,6 +4368,12 @@ export const PledgeItemJSON = {
     }
     if (msg.name) {
       json.name = msg.name;
+    }
+    if (msg.active) {
+      json.active = msg.active;
+    }
+    if (msg.contractId) {
+      json.contractId = msg.contractId;
     }
     return json;
   },
@@ -4105,6 +4395,14 @@ export const PledgeItemJSON = {
     const _name = json.name;
     if (_name) {
       msg.name = _name;
+    }
+    const _active = json.active;
+    if (_active) {
+      msg.active = _active;
+    }
+    const _contractId = json.contractId ?? json.contract_id;
+    if (_contractId) {
+      msg.contractId = _contractId;
     }
     return msg;
   },
@@ -4134,7 +4432,6 @@ export const PledgeGroupJSON = {
   initialize: function (): PledgeGroup {
     return {
       pledgeType: PledgeType._fromInt(0),
-      active: false,
       items: [],
     };
   },
@@ -4146,9 +4443,6 @@ export const PledgeGroupJSON = {
     const json: Record<string, unknown> = {};
     if (msg.pledgeType && PledgeTypeJSON._toInt(msg.pledgeType)) {
       json.pledgeType = msg.pledgeType;
-    }
-    if (msg.active) {
-      json.active = msg.active;
     }
     if (msg.items?.length) {
       json.items = msg.items.map(PledgeItemJSON._writeMessage);
@@ -4163,10 +4457,6 @@ export const PledgeGroupJSON = {
     const _pledgeType = json.pledgeType ?? json.pledge_type;
     if (_pledgeType) {
       msg.pledgeType = _pledgeType;
-    }
-    const _active = json.active;
-    if (_active) {
-      msg.active = _active;
     }
     const _items = json.items;
     if (_items) {
@@ -4203,7 +4493,7 @@ export const StateRequestJSON = {
    */
   initialize: function (): StateRequest {
     return {
-      operationId: 0n,
+      operationId: "",
     };
   },
 
@@ -4215,7 +4505,7 @@ export const StateRequestJSON = {
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.operationId) {
-      json.operationId = msg.operationId.toString();
+      json.operationId = msg.operationId;
     }
     return json;
   },
@@ -4226,7 +4516,7 @@ export const StateRequestJSON = {
   _readMessage: function (msg: StateRequest, json: any): StateRequest {
     const _operationId = json.operationId ?? json.operation_id;
     if (_operationId) {
-      msg.operationId = BigInt(_operationId);
+      msg.operationId = _operationId;
     }
     return msg;
   },
@@ -4615,23 +4905,19 @@ export const OperationLogJSON = {
    */
   initialize: function (): OperationLog {
     return {
-      id: 0n,
+      id: "",
       traceId: "",
       operationType: OperationType._fromInt(0),
       loanAmount: "",
       repayAmount: "",
       pledgeType: PledgeType._fromInt(0),
+      pledgeContractId: "",
       pledgeAmount: "",
       pledgeAsset: Asset.initialize(),
       status: OperationStatus._fromInt(0),
       createdAt: 0,
-      failedReason: "",
-      transferMemo: "",
-      transferAssetId: "",
-      transferAmount: "",
+      errorCode: ErrorCode.Enum._fromInt(0),
       isSystem: false,
-      beforeLoanAmount: "",
-      afterLoanAmount: "",
     };
   },
 
@@ -4643,7 +4929,7 @@ export const OperationLogJSON = {
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.id) {
-      json.id = msg.id.toString();
+      json.id = msg.id;
     }
     if (msg.traceId) {
       json.traceId = msg.traceId;
@@ -4660,6 +4946,9 @@ export const OperationLogJSON = {
     if (msg.pledgeType && PledgeTypeJSON._toInt(msg.pledgeType)) {
       json.pledgeType = msg.pledgeType;
     }
+    if (msg.pledgeContractId) {
+      json.pledgeContractId = msg.pledgeContractId;
+    }
     if (msg.pledgeAmount) {
       json.pledgeAmount = msg.pledgeAmount;
     }
@@ -4675,26 +4964,11 @@ export const OperationLogJSON = {
     if (msg.createdAt) {
       json.createdAt = msg.createdAt;
     }
-    if (msg.failedReason) {
-      json.failedReason = msg.failedReason;
-    }
-    if (msg.transferMemo) {
-      json.transferMemo = msg.transferMemo;
-    }
-    if (msg.transferAssetId) {
-      json.transferAssetId = msg.transferAssetId;
-    }
-    if (msg.transferAmount) {
-      json.transferAmount = msg.transferAmount;
+    if (msg.errorCode && ErrorCodeJSON.Enum._toInt(msg.errorCode)) {
+      json.errorCode = msg.errorCode;
     }
     if (msg.isSystem) {
       json.isSystem = msg.isSystem;
-    }
-    if (msg.beforeLoanAmount) {
-      json.beforeLoanAmount = msg.beforeLoanAmount;
-    }
-    if (msg.afterLoanAmount) {
-      json.afterLoanAmount = msg.afterLoanAmount;
     }
     return json;
   },
@@ -4705,7 +4979,7 @@ export const OperationLogJSON = {
   _readMessage: function (msg: OperationLog, json: any): OperationLog {
     const _id = json.id;
     if (_id) {
-      msg.id = BigInt(_id);
+      msg.id = _id;
     }
     const _traceId = json.traceId ?? json.trace_id;
     if (_traceId) {
@@ -4727,6 +5001,10 @@ export const OperationLogJSON = {
     if (_pledgeType) {
       msg.pledgeType = _pledgeType;
     }
+    const _pledgeContractId = json.pledgeContractId ?? json.pledge_contract_id;
+    if (_pledgeContractId) {
+      msg.pledgeContractId = _pledgeContractId;
+    }
     const _pledgeAmount = json.pledgeAmount ?? json.pledge_amount;
     if (_pledgeAmount) {
       msg.pledgeAmount = _pledgeAmount;
@@ -4745,33 +5023,13 @@ export const OperationLogJSON = {
     if (_createdAt) {
       msg.createdAt = _createdAt;
     }
-    const _failedReason = json.failedReason ?? json.failed_reason;
-    if (_failedReason) {
-      msg.failedReason = _failedReason;
-    }
-    const _transferMemo = json.transferMemo ?? json.transfer_memo;
-    if (_transferMemo) {
-      msg.transferMemo = _transferMemo;
-    }
-    const _transferAssetId = json.transferAssetId ?? json.transfer_asset_id;
-    if (_transferAssetId) {
-      msg.transferAssetId = _transferAssetId;
-    }
-    const _transferAmount = json.transferAmount ?? json.transfer_amount;
-    if (_transferAmount) {
-      msg.transferAmount = _transferAmount;
+    const _errorCode = json.errorCode ?? json.error_code;
+    if (_errorCode) {
+      msg.errorCode = _errorCode;
     }
     const _isSystem = json.isSystem ?? json.is_system;
     if (_isSystem) {
       msg.isSystem = _isSystem;
-    }
-    const _beforeLoanAmount = json.beforeLoanAmount ?? json.before_loan_amount;
-    if (_beforeLoanAmount) {
-      msg.beforeLoanAmount = _beforeLoanAmount;
-    }
-    const _afterLoanAmount = json.afterLoanAmount ?? json.after_loan_amount;
-    if (_afterLoanAmount) {
-      msg.afterLoanAmount = _afterLoanAmount;
     }
     return msg;
   },
@@ -4860,8 +5118,8 @@ export const ListOperationLogsRequestJSON = {
    */
   initialize: function (): ListOperationLogsRequest {
     return {
-      cursor: 0n,
-      limit: 0n,
+      cursor: "",
+      limit: 0,
     };
   },
 
@@ -4873,10 +5131,10 @@ export const ListOperationLogsRequestJSON = {
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.cursor) {
-      json.cursor = msg.cursor.toString();
+      json.cursor = msg.cursor;
     }
     if (msg.limit) {
-      json.limit = msg.limit.toString();
+      json.limit = msg.limit;
     }
     return json;
   },
@@ -4890,11 +5148,11 @@ export const ListOperationLogsRequestJSON = {
   ): ListOperationLogsRequest {
     const _cursor = json.cursor;
     if (_cursor) {
-      msg.cursor = BigInt(_cursor);
+      msg.cursor = _cursor;
     }
     const _limit = json.limit;
     if (_limit) {
-      msg.limit = BigInt(_limit);
+      msg.limit = _limit;
     }
     return msg;
   },
@@ -5052,7 +5310,7 @@ export const LiquidationPledgeJSON = {
    */
   initialize: function (): LiquidationPledge {
     return {
-      id: 0n,
+      id: "",
       userId: "",
       type: PledgeType._fromInt(0),
       assetId: "",
@@ -5075,7 +5333,7 @@ export const LiquidationPledgeJSON = {
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.id) {
-      json.id = msg.id.toString();
+      json.id = msg.id;
     }
     if (msg.userId) {
       json.userId = msg.userId;
@@ -5122,7 +5380,7 @@ export const LiquidationPledgeJSON = {
   ): LiquidationPledge {
     const _id = json.id;
     if (_id) {
-      msg.id = BigInt(_id);
+      msg.id = _id;
     }
     const _userId = json.userId ?? json.user_id;
     if (_userId) {
