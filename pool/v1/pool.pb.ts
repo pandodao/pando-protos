@@ -773,7 +773,6 @@ export interface ListAuditsResponse {
 }
 
 export interface UserVault {
-  id: number;
   userId: string;
   productId: number;
   productName: string;
@@ -787,7 +786,7 @@ export interface GetUserVaultsRequest {
 }
 
 export interface GetUserVaultsResponse {
-  products: UserEarningProduct[];
+  vaults: UserVault[];
 }
 
 export interface GetUserEventRequest {
@@ -4659,7 +4658,6 @@ export const UserVault = {
    */
   initialize: function (): UserVault {
     return {
-      id: 0,
       userId: "",
       productId: 0,
       productName: "",
@@ -4676,26 +4674,23 @@ export const UserVault = {
     msg: Partial<UserVault>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.id) {
-      writer.writeInt32(1, msg.id);
-    }
     if (msg.userId) {
-      writer.writeString(2, msg.userId);
+      writer.writeString(1, msg.userId);
     }
     if (msg.productId) {
-      writer.writeInt32(3, msg.productId);
+      writer.writeInt32(2, msg.productId);
     }
     if (msg.productName) {
-      writer.writeString(4, msg.productName);
+      writer.writeString(3, msg.productName);
     }
     if (msg.assetId) {
-      writer.writeString(5, msg.assetId);
+      writer.writeString(4, msg.assetId);
     }
     if (msg.amount) {
-      writer.writeString(6, msg.amount);
+      writer.writeString(5, msg.amount);
     }
     if (msg.pledged) {
-      writer.writeBool(7, msg.pledged);
+      writer.writeBool(6, msg.pledged);
     }
     return writer;
   },
@@ -4708,30 +4703,26 @@ export const UserVault = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.id = reader.readInt32();
-          break;
-        }
-        case 2: {
           msg.userId = reader.readString();
           break;
         }
-        case 3: {
+        case 2: {
           msg.productId = reader.readInt32();
           break;
         }
-        case 4: {
+        case 3: {
           msg.productName = reader.readString();
           break;
         }
-        case 5: {
+        case 4: {
           msg.assetId = reader.readString();
           break;
         }
-        case 6: {
+        case 5: {
           msg.amount = reader.readString();
           break;
         }
-        case 7: {
+        case 6: {
           msg.pledged = reader.readBool();
           break;
         }
@@ -4838,7 +4829,7 @@ export const GetUserVaultsResponse = {
    */
   initialize: function (): GetUserVaultsResponse {
     return {
-      products: [],
+      vaults: [],
     };
   },
 
@@ -4849,11 +4840,11 @@ export const GetUserVaultsResponse = {
     msg: Partial<GetUserVaultsResponse>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.products?.length) {
+    if (msg.vaults?.length) {
       writer.writeRepeatedMessage(
         1,
-        msg.products as any,
-        UserEarningProduct._writeMessage
+        msg.vaults as any,
+        UserVault._writeMessage
       );
     }
     return writer;
@@ -4870,9 +4861,9 @@ export const GetUserVaultsResponse = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          const m = UserEarningProduct.initialize();
-          reader.readMessage(m, UserEarningProduct._readMessage);
-          msg.products.push(m);
+          const m = UserVault.initialize();
+          reader.readMessage(m, UserVault._readMessage);
+          msg.vaults.push(m);
           break;
         }
         default: {
@@ -8498,7 +8489,6 @@ export const UserVaultJSON = {
    */
   initialize: function (): UserVault {
     return {
-      id: 0,
       userId: "",
       productId: 0,
       productName: "",
@@ -8513,9 +8503,6 @@ export const UserVaultJSON = {
    */
   _writeMessage: function (msg: Partial<UserVault>): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.id) {
-      json.id = msg.id;
-    }
     if (msg.userId) {
       json.userId = msg.userId;
     }
@@ -8541,10 +8528,6 @@ export const UserVaultJSON = {
    * @private
    */
   _readMessage: function (msg: UserVault, json: any): UserVault {
-    const _id = json.id;
-    if (_id) {
-      msg.id = _id;
-    }
     const _userId = json.userId ?? json.user_id;
     if (_userId) {
       msg.userId = _userId;
@@ -8651,7 +8634,7 @@ export const GetUserVaultsResponseJSON = {
    */
   initialize: function (): GetUserVaultsResponse {
     return {
-      products: [],
+      vaults: [],
     };
   },
 
@@ -8662,8 +8645,8 @@ export const GetUserVaultsResponseJSON = {
     msg: Partial<GetUserVaultsResponse>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.products?.length) {
-      json.products = msg.products.map(UserEarningProductJSON._writeMessage);
+    if (msg.vaults?.length) {
+      json.vaults = msg.vaults.map(UserVaultJSON._writeMessage);
     }
     return json;
   },
@@ -8675,12 +8658,12 @@ export const GetUserVaultsResponseJSON = {
     msg: GetUserVaultsResponse,
     json: any
   ): GetUserVaultsResponse {
-    const _products = json.products;
-    if (_products) {
-      for (const item of _products) {
-        const m = UserEarningProduct.initialize();
-        UserEarningProductJSON._readMessage(m, item);
-        msg.products.push(m);
+    const _vaults = json.vaults;
+    if (_vaults) {
+      for (const item of _vaults) {
+        const m = UserVault.initialize();
+        UserVaultJSON._readMessage(m, item);
+        msg.vaults.push(m);
       }
     }
     return msg;
