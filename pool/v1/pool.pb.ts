@@ -591,7 +591,8 @@ export interface EarningSnapshotAdminLegacyAssetMigrationData {
 }
 
 export interface EarningSnapshotAdminLiquidationData {
-  userId: number;
+  userId: string;
+  productId: number;
 }
 
 export interface EarningSnapshotAdminAuditApproveData {
@@ -2275,7 +2276,8 @@ export const EarningSnapshotAdminLiquidationData = {
    */
   initialize: function (): EarningSnapshotAdminLiquidationData {
     return {
-      userId: 0,
+      userId: "",
+      productId: 0,
     };
   },
 
@@ -2287,7 +2289,10 @@ export const EarningSnapshotAdminLiquidationData = {
     writer: BinaryWriter
   ): BinaryWriter {
     if (msg.userId) {
-      writer.writeInt32(1, msg.userId);
+      writer.writeString(1, msg.userId);
+    }
+    if (msg.productId) {
+      writer.writeInt32(2, msg.productId);
     }
     return writer;
   },
@@ -2303,7 +2308,11 @@ export const EarningSnapshotAdminLiquidationData = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.userId = reader.readInt32();
+          msg.userId = reader.readString();
+          break;
+        }
+        case 2: {
+          msg.productId = reader.readInt32();
           break;
         }
         default: {
@@ -6375,7 +6384,8 @@ export const EarningSnapshotAdminLiquidationDataJSON = {
    */
   initialize: function (): EarningSnapshotAdminLiquidationData {
     return {
-      userId: 0,
+      userId: "",
+      productId: 0,
     };
   },
 
@@ -6388,6 +6398,9 @@ export const EarningSnapshotAdminLiquidationDataJSON = {
     const json: Record<string, unknown> = {};
     if (msg.userId) {
       json.userId = msg.userId;
+    }
+    if (msg.productId) {
+      json.productId = msg.productId;
     }
     return json;
   },
@@ -6402,6 +6415,10 @@ export const EarningSnapshotAdminLiquidationDataJSON = {
     const _userId = json.userId ?? json.user_id;
     if (_userId) {
       msg.userId = _userId;
+    }
+    const _productId = json.productId ?? json.product_id;
+    if (_productId) {
+      msg.productId = _productId;
     }
     return msg;
   },
