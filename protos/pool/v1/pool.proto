@@ -17,7 +17,7 @@ service PoolService {
   rpc GetMyEarningProduct(GetMyEarningProductRequest) returns (GetMyEarningProductResponse);
 
   // by admins
-  rpc GetUserEarningProducts(GetUserEarningProductsRequest) returns (GetUserEarningProductsResponse);
+  rpc GetUserVaults(GetUserVaultsRequest) returns (GetUserVaultsResponse);
   rpc GetUserEvent(GetUserEventRequest) returns (GetUserEventResponse);
 
   // audit
@@ -380,12 +380,21 @@ message ListAuditsResponse {
   repeated Audit audits = 1;
 }
 
-message GetUserEarningProductsRequest {
+message UserVault {
+  string user_id = 1;
+  int32 product_id = 2;
+  string product_name = 3;
+  string asset_id = 4;
+  string amount = 5;
+  bool pledged = 6;
+}
+
+message GetUserVaultsRequest {
   string user_id = 1;
 }
 
-message GetUserEarningProductsResponse {
-  repeated UserEarningProduct products = 1;
+message  GetUserVaultsResponse {
+  repeated UserVault vaults = 1;
 }
 
 
