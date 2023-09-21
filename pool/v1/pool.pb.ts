@@ -107,16 +107,16 @@ export async function GetMyEarningProduct(
 /**
  * by admins
  */
-export async function GetUserEarningProducts(
-  getUserEarningProductsRequest: GetUserEarningProductsRequest,
+export async function GetUserVaults(
+  getUserVaultsRequest: GetUserVaultsRequest,
   config?: ClientConfiguration
-): Promise<GetUserEarningProductsResponse> {
+): Promise<GetUserVaultsResponse> {
   const response = await PBrequest(
-    "/pool.v1.PoolService/GetUserEarningProducts",
-    GetUserEarningProductsRequest.encode(getUserEarningProductsRequest),
+    "/pool.v1.PoolService/GetUserVaults",
+    GetUserVaultsRequest.encode(getUserVaultsRequest),
     config
   );
-  return GetUserEarningProductsResponse.decode(response);
+  return GetUserVaultsResponse.decode(response);
 }
 
 export async function GetUserEvent(
@@ -249,16 +249,16 @@ export async function GetMyEarningProductJSON(
 /**
  * by admins
  */
-export async function GetUserEarningProductsJSON(
-  getUserEarningProductsRequest: GetUserEarningProductsRequest,
+export async function GetUserVaultsJSON(
+  getUserVaultsRequest: GetUserVaultsRequest,
   config?: ClientConfiguration
-): Promise<GetUserEarningProductsResponse> {
+): Promise<GetUserVaultsResponse> {
   const response = await JSONrequest(
-    "/pool.v1.PoolService/GetUserEarningProducts",
-    GetUserEarningProductsRequestJSON.encode(getUserEarningProductsRequest),
+    "/pool.v1.PoolService/GetUserVaults",
+    GetUserVaultsRequestJSON.encode(getUserVaultsRequest),
     config
   );
-  return GetUserEarningProductsResponseJSON.decode(response);
+  return GetUserVaultsResponseJSON.decode(response);
 }
 
 export async function GetUserEventJSON(
@@ -336,10 +336,10 @@ export interface PoolService<Context = unknown> {
   /**
    * by admins
    */
-  GetUserEarningProducts: (
-    getUserEarningProductsRequest: GetUserEarningProductsRequest,
+  GetUserVaults: (
+    getUserVaultsRequest: GetUserVaultsRequest,
     context: Context
-  ) => Promise<GetUserEarningProductsResponse> | GetUserEarningProductsResponse;
+  ) => Promise<GetUserVaultsResponse> | GetUserVaultsResponse;
   GetUserEvent: (
     getUserEventRequest: GetUserEventRequest,
     context: Context
@@ -427,16 +427,16 @@ export function createPoolService<Context>(service: PoolService<Context>) {
           json: GetMyEarningProductResponseJSON,
         },
       },
-      GetUserEarningProducts: {
-        name: "GetUserEarningProducts",
-        handler: service.GetUserEarningProducts,
+      GetUserVaults: {
+        name: "GetUserVaults",
+        handler: service.GetUserVaults,
         input: {
-          protobuf: GetUserEarningProductsRequest,
-          json: GetUserEarningProductsRequestJSON,
+          protobuf: GetUserVaultsRequest,
+          json: GetUserVaultsRequestJSON,
         },
         output: {
-          protobuf: GetUserEarningProductsResponse,
-          json: GetUserEarningProductsResponseJSON,
+          protobuf: GetUserVaultsResponse,
+          json: GetUserVaultsResponseJSON,
         },
       },
       GetUserEvent: {
@@ -772,11 +772,21 @@ export interface ListAuditsResponse {
   audits: Audit[];
 }
 
-export interface GetUserEarningProductsRequest {
+export interface UserVault {
+  id: number;
+  userId: string;
+  productId: number;
+  productName: string;
+  assetId: string;
+  amount: string;
+  pledged: boolean;
+}
+
+export interface GetUserVaultsRequest {
   userId: string;
 }
 
-export interface GetUserEarningProductsResponse {
+export interface GetUserVaultsResponse {
   products: UserEarningProduct[];
 }
 
@@ -4626,31 +4636,140 @@ export const ListAuditsResponse = {
   },
 };
 
-export const GetUserEarningProductsRequest = {
+export const UserVault = {
   /**
-   * Serializes GetUserEarningProductsRequest to protobuf.
+   * Serializes UserVault to protobuf.
    */
-  encode: function (msg: Partial<GetUserEarningProductsRequest>): Uint8Array {
-    return GetUserEarningProductsRequest._writeMessage(
+  encode: function (msg: Partial<UserVault>): Uint8Array {
+    return UserVault._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  },
+
+  /**
+   * Deserializes UserVault from protobuf.
+   */
+  decode: function (bytes: ByteSource): UserVault {
+    return UserVault._readMessage(
+      UserVault.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes UserVault with all fields set to their default value.
+   */
+  initialize: function (): UserVault {
+    return {
+      id: 0,
+      userId: "",
+      productId: 0,
+      productName: "",
+      assetId: "",
+      amount: "",
+      pledged: false,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<UserVault>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.id) {
+      writer.writeInt32(1, msg.id);
+    }
+    if (msg.userId) {
+      writer.writeString(2, msg.userId);
+    }
+    if (msg.productId) {
+      writer.writeInt32(3, msg.productId);
+    }
+    if (msg.productName) {
+      writer.writeString(4, msg.productName);
+    }
+    if (msg.assetId) {
+      writer.writeString(5, msg.assetId);
+    }
+    if (msg.amount) {
+      writer.writeString(6, msg.amount);
+    }
+    if (msg.pledged) {
+      writer.writeBool(7, msg.pledged);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: UserVault, reader: BinaryReader): UserVault {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readInt32();
+          break;
+        }
+        case 2: {
+          msg.userId = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.productId = reader.readInt32();
+          break;
+        }
+        case 4: {
+          msg.productName = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.amount = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.pledged = reader.readBool();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const GetUserVaultsRequest = {
+  /**
+   * Serializes GetUserVaultsRequest to protobuf.
+   */
+  encode: function (msg: Partial<GetUserVaultsRequest>): Uint8Array {
+    return GetUserVaultsRequest._writeMessage(
       msg,
       new BinaryWriter()
     ).getResultBuffer();
   },
 
   /**
-   * Deserializes GetUserEarningProductsRequest from protobuf.
+   * Deserializes GetUserVaultsRequest from protobuf.
    */
-  decode: function (bytes: ByteSource): GetUserEarningProductsRequest {
-    return GetUserEarningProductsRequest._readMessage(
-      GetUserEarningProductsRequest.initialize(),
+  decode: function (bytes: ByteSource): GetUserVaultsRequest {
+    return GetUserVaultsRequest._readMessage(
+      GetUserVaultsRequest.initialize(),
       new BinaryReader(bytes)
     );
   },
 
   /**
-   * Initializes GetUserEarningProductsRequest with all fields set to their default value.
+   * Initializes GetUserVaultsRequest with all fields set to their default value.
    */
-  initialize: function (): GetUserEarningProductsRequest {
+  initialize: function (): GetUserVaultsRequest {
     return {
       userId: "",
     };
@@ -4660,7 +4779,7 @@ export const GetUserEarningProductsRequest = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<GetUserEarningProductsRequest>,
+    msg: Partial<GetUserVaultsRequest>,
     writer: BinaryWriter
   ): BinaryWriter {
     if (msg.userId) {
@@ -4673,9 +4792,9 @@ export const GetUserEarningProductsRequest = {
    * @private
    */
   _readMessage: function (
-    msg: GetUserEarningProductsRequest,
+    msg: GetUserVaultsRequest,
     reader: BinaryReader
-  ): GetUserEarningProductsRequest {
+  ): GetUserVaultsRequest {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -4693,31 +4812,31 @@ export const GetUserEarningProductsRequest = {
   },
 };
 
-export const GetUserEarningProductsResponse = {
+export const GetUserVaultsResponse = {
   /**
-   * Serializes GetUserEarningProductsResponse to protobuf.
+   * Serializes GetUserVaultsResponse to protobuf.
    */
-  encode: function (msg: Partial<GetUserEarningProductsResponse>): Uint8Array {
-    return GetUserEarningProductsResponse._writeMessage(
+  encode: function (msg: Partial<GetUserVaultsResponse>): Uint8Array {
+    return GetUserVaultsResponse._writeMessage(
       msg,
       new BinaryWriter()
     ).getResultBuffer();
   },
 
   /**
-   * Deserializes GetUserEarningProductsResponse from protobuf.
+   * Deserializes GetUserVaultsResponse from protobuf.
    */
-  decode: function (bytes: ByteSource): GetUserEarningProductsResponse {
-    return GetUserEarningProductsResponse._readMessage(
-      GetUserEarningProductsResponse.initialize(),
+  decode: function (bytes: ByteSource): GetUserVaultsResponse {
+    return GetUserVaultsResponse._readMessage(
+      GetUserVaultsResponse.initialize(),
       new BinaryReader(bytes)
     );
   },
 
   /**
-   * Initializes GetUserEarningProductsResponse with all fields set to their default value.
+   * Initializes GetUserVaultsResponse with all fields set to their default value.
    */
-  initialize: function (): GetUserEarningProductsResponse {
+  initialize: function (): GetUserVaultsResponse {
     return {
       products: [],
     };
@@ -4727,7 +4846,7 @@ export const GetUserEarningProductsResponse = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<GetUserEarningProductsResponse>,
+    msg: Partial<GetUserVaultsResponse>,
     writer: BinaryWriter
   ): BinaryWriter {
     if (msg.products?.length) {
@@ -4744,9 +4863,9 @@ export const GetUserEarningProductsResponse = {
    * @private
    */
   _readMessage: function (
-    msg: GetUserEarningProductsResponse,
+    msg: GetUserVaultsResponse,
     reader: BinaryReader
-  ): GetUserEarningProductsResponse {
+  ): GetUserVaultsResponse {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -8356,28 +8475,126 @@ export const ListAuditsResponseJSON = {
   },
 };
 
-export const GetUserEarningProductsRequestJSON = {
+export const UserVaultJSON = {
   /**
-   * Serializes GetUserEarningProductsRequest to JSON.
+   * Serializes UserVault to JSON.
    */
-  encode: function (msg: Partial<GetUserEarningProductsRequest>): string {
-    return JSON.stringify(GetUserEarningProductsRequestJSON._writeMessage(msg));
+  encode: function (msg: Partial<UserVault>): string {
+    return JSON.stringify(UserVaultJSON._writeMessage(msg));
   },
 
   /**
-   * Deserializes GetUserEarningProductsRequest from JSON.
+   * Deserializes UserVault from JSON.
    */
-  decode: function (json: string): GetUserEarningProductsRequest {
-    return GetUserEarningProductsRequestJSON._readMessage(
-      GetUserEarningProductsRequestJSON.initialize(),
+  decode: function (json: string): UserVault {
+    return UserVaultJSON._readMessage(
+      UserVaultJSON.initialize(),
       JSON.parse(json)
     );
   },
 
   /**
-   * Initializes GetUserEarningProductsRequest with all fields set to their default value.
+   * Initializes UserVault with all fields set to their default value.
    */
-  initialize: function (): GetUserEarningProductsRequest {
+  initialize: function (): UserVault {
+    return {
+      id: 0,
+      userId: "",
+      productId: 0,
+      productName: "",
+      assetId: "",
+      amount: "",
+      pledged: false,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: Partial<UserVault>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json.id = msg.id;
+    }
+    if (msg.userId) {
+      json.userId = msg.userId;
+    }
+    if (msg.productId) {
+      json.productId = msg.productId;
+    }
+    if (msg.productName) {
+      json.productName = msg.productName;
+    }
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    if (msg.amount) {
+      json.amount = msg.amount;
+    }
+    if (msg.pledged) {
+      json.pledged = msg.pledged;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: UserVault, json: any): UserVault {
+    const _id = json.id;
+    if (_id) {
+      msg.id = _id;
+    }
+    const _userId = json.userId ?? json.user_id;
+    if (_userId) {
+      msg.userId = _userId;
+    }
+    const _productId = json.productId ?? json.product_id;
+    if (_productId) {
+      msg.productId = _productId;
+    }
+    const _productName = json.productName ?? json.product_name;
+    if (_productName) {
+      msg.productName = _productName;
+    }
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    const _amount = json.amount;
+    if (_amount) {
+      msg.amount = _amount;
+    }
+    const _pledged = json.pledged;
+    if (_pledged) {
+      msg.pledged = _pledged;
+    }
+    return msg;
+  },
+};
+
+export const GetUserVaultsRequestJSON = {
+  /**
+   * Serializes GetUserVaultsRequest to JSON.
+   */
+  encode: function (msg: Partial<GetUserVaultsRequest>): string {
+    return JSON.stringify(GetUserVaultsRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes GetUserVaultsRequest from JSON.
+   */
+  decode: function (json: string): GetUserVaultsRequest {
+    return GetUserVaultsRequestJSON._readMessage(
+      GetUserVaultsRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes GetUserVaultsRequest with all fields set to their default value.
+   */
+  initialize: function (): GetUserVaultsRequest {
     return {
       userId: "",
     };
@@ -8387,7 +8604,7 @@ export const GetUserEarningProductsRequestJSON = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<GetUserEarningProductsRequest>
+    msg: Partial<GetUserVaultsRequest>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.userId) {
@@ -8400,9 +8617,9 @@ export const GetUserEarningProductsRequestJSON = {
    * @private
    */
   _readMessage: function (
-    msg: GetUserEarningProductsRequest,
+    msg: GetUserVaultsRequest,
     json: any
-  ): GetUserEarningProductsRequest {
+  ): GetUserVaultsRequest {
     const _userId = json.userId ?? json.user_id;
     if (_userId) {
       msg.userId = _userId;
@@ -8411,30 +8628,28 @@ export const GetUserEarningProductsRequestJSON = {
   },
 };
 
-export const GetUserEarningProductsResponseJSON = {
+export const GetUserVaultsResponseJSON = {
   /**
-   * Serializes GetUserEarningProductsResponse to JSON.
+   * Serializes GetUserVaultsResponse to JSON.
    */
-  encode: function (msg: Partial<GetUserEarningProductsResponse>): string {
-    return JSON.stringify(
-      GetUserEarningProductsResponseJSON._writeMessage(msg)
-    );
+  encode: function (msg: Partial<GetUserVaultsResponse>): string {
+    return JSON.stringify(GetUserVaultsResponseJSON._writeMessage(msg));
   },
 
   /**
-   * Deserializes GetUserEarningProductsResponse from JSON.
+   * Deserializes GetUserVaultsResponse from JSON.
    */
-  decode: function (json: string): GetUserEarningProductsResponse {
-    return GetUserEarningProductsResponseJSON._readMessage(
-      GetUserEarningProductsResponseJSON.initialize(),
+  decode: function (json: string): GetUserVaultsResponse {
+    return GetUserVaultsResponseJSON._readMessage(
+      GetUserVaultsResponseJSON.initialize(),
       JSON.parse(json)
     );
   },
 
   /**
-   * Initializes GetUserEarningProductsResponse with all fields set to their default value.
+   * Initializes GetUserVaultsResponse with all fields set to their default value.
    */
-  initialize: function (): GetUserEarningProductsResponse {
+  initialize: function (): GetUserVaultsResponse {
     return {
       products: [],
     };
@@ -8444,7 +8659,7 @@ export const GetUserEarningProductsResponseJSON = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<GetUserEarningProductsResponse>
+    msg: Partial<GetUserVaultsResponse>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.products?.length) {
@@ -8457,9 +8672,9 @@ export const GetUserEarningProductsResponseJSON = {
    * @private
    */
   _readMessage: function (
-    msg: GetUserEarningProductsResponse,
+    msg: GetUserVaultsResponse,
     json: any
-  ): GetUserEarningProductsResponse {
+  ): GetUserVaultsResponse {
     const _products = json.products;
     if (_products) {
       for (const item of _products) {
