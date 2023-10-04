@@ -247,6 +247,8 @@ message EarningProduct {
   string description_risk_disclosure = 23;
   bool enabled_whitelist_limit = 24;
   int32 precision = 26;
+  bool buy_disabled = 27;
+  bool redeem_disabled = 28;
 }
 
 message GetEarningProductRequest {
