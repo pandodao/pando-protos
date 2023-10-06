@@ -590,6 +590,8 @@ export interface UserEarningProduct {
   totalRevenue: string;
   pledged: boolean;
   expandBuyAmount: string;
+  buyDisabled: boolean;
+  redeemDisabled: boolean;
 }
 
 export interface ListMyEarningProductsRequest {}
@@ -3135,6 +3137,8 @@ export const UserEarningProduct = {
       totalRevenue: "",
       pledged: false,
       expandBuyAmount: "",
+      buyDisabled: false,
+      redeemDisabled: false,
     };
   },
 
@@ -3180,6 +3184,12 @@ export const UserEarningProduct = {
     }
     if (msg.expandBuyAmount) {
       writer.writeString(12, msg.expandBuyAmount);
+    }
+    if (msg.buyDisabled) {
+      writer.writeBool(13, msg.buyDisabled);
+    }
+    if (msg.redeemDisabled) {
+      writer.writeBool(14, msg.redeemDisabled);
     }
     return writer;
   },
@@ -3240,6 +3250,14 @@ export const UserEarningProduct = {
         }
         case 12: {
           msg.expandBuyAmount = reader.readString();
+          break;
+        }
+        case 13: {
+          msg.buyDisabled = reader.readBool();
+          break;
+        }
+        case 14: {
+          msg.redeemDisabled = reader.readBool();
           break;
         }
         default: {
@@ -6669,6 +6687,8 @@ export const UserEarningProductJSON = {
       totalRevenue: "",
       pledged: false,
       expandBuyAmount: "",
+      buyDisabled: false,
+      redeemDisabled: false,
     };
   },
 
@@ -6714,6 +6734,12 @@ export const UserEarningProductJSON = {
     }
     if (msg.expandBuyAmount) {
       json.expandBuyAmount = msg.expandBuyAmount;
+    }
+    if (msg.buyDisabled) {
+      json.buyDisabled = msg.buyDisabled;
+    }
+    if (msg.redeemDisabled) {
+      json.redeemDisabled = msg.redeemDisabled;
     }
     return json;
   },
@@ -6773,6 +6799,14 @@ export const UserEarningProductJSON = {
     const _expandBuyAmount = json.expandBuyAmount ?? json.expand_buy_amount;
     if (_expandBuyAmount) {
       msg.expandBuyAmount = _expandBuyAmount;
+    }
+    const _buyDisabled = json.buyDisabled ?? json.buy_disabled;
+    if (_buyDisabled) {
+      msg.buyDisabled = _buyDisabled;
+    }
+    const _redeemDisabled = json.redeemDisabled ?? json.redeem_disabled;
+    if (_redeemDisabled) {
+      msg.redeemDisabled = _redeemDisabled;
     }
     return msg;
   },
