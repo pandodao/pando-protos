@@ -557,6 +557,8 @@ export interface EarningProduct {
   descriptionRiskDisclosure: string;
   enabledWhitelistLimit: boolean;
   precision: number;
+  buyDisabled: boolean;
+  redeemDisabled: boolean;
 }
 
 export interface GetEarningProductRequest {
@@ -2597,6 +2599,8 @@ export const EarningProduct = {
       descriptionRiskDisclosure: "",
       enabledWhitelistLimit: false,
       precision: 0,
+      buyDisabled: false,
+      redeemDisabled: false,
     };
   },
 
@@ -2681,6 +2685,12 @@ export const EarningProduct = {
     }
     if (msg.precision) {
       writer.writeInt32(26, msg.precision);
+    }
+    if (msg.buyDisabled) {
+      writer.writeBool(27, msg.buyDisabled);
+    }
+    if (msg.redeemDisabled) {
+      writer.writeBool(28, msg.redeemDisabled);
     }
     return writer;
   },
@@ -2793,6 +2803,14 @@ export const EarningProduct = {
         }
         case 26: {
           msg.precision = reader.readInt32();
+          break;
+        }
+        case 27: {
+          msg.buyDisabled = reader.readBool();
+          break;
+        }
+        case 28: {
+          msg.redeemDisabled = reader.readBool();
           break;
         }
         default: {
@@ -6166,6 +6184,8 @@ export const EarningProductJSON = {
       descriptionRiskDisclosure: "",
       enabledWhitelistLimit: false,
       precision: 0,
+      buyDisabled: false,
+      redeemDisabled: false,
     };
   },
 
@@ -6250,6 +6270,12 @@ export const EarningProductJSON = {
     }
     if (msg.precision) {
       json.precision = msg.precision;
+    }
+    if (msg.buyDisabled) {
+      json.buyDisabled = msg.buyDisabled;
+    }
+    if (msg.redeemDisabled) {
+      json.redeemDisabled = msg.redeemDisabled;
     }
     return json;
   },
@@ -6366,6 +6392,14 @@ export const EarningProductJSON = {
     const _precision = json.precision;
     if (_precision) {
       msg.precision = _precision;
+    }
+    const _buyDisabled = json.buyDisabled ?? json.buy_disabled;
+    if (_buyDisabled) {
+      msg.buyDisabled = _buyDisabled;
+    }
+    const _redeemDisabled = json.redeemDisabled ?? json.redeem_disabled;
+    if (_redeemDisabled) {
+      msg.redeemDisabled = _redeemDisabled;
     }
     return msg;
   },
