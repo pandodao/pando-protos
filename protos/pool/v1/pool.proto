@@ -280,6 +280,8 @@ message UserEarningProduct {
   string total_revenue = 10;
   bool pledged = 11;
   string expand_buy_amount = 12;
+  bool buy_disabled = 13;
+  bool redeem_disabled = 14;
 }
 
 message ListMyEarningProductsRequest {}
