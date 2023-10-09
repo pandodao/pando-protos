@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package sweeper.v1;
+option go_package = "github.com/fox-one/pando-protos/sweeper/v1;sweeper";
+
+import "google/protobuf/timestamp.proto";
+
+message Transfer {
+    enum Status {
+        NOT_SET = 0;
+        PENDING = 1;
+        HANDLED = 2;
+        SPENT = 3;
+    }
+
+    string trace_id = 1;
+    string asset_id = 2;
+    string amount = 3;
+    repeated string opponents = 4;
+    uint32 threshold = 5;
+    string memo = 6;
+    Status status = 7;  
+    string tx_hash = 8;
+    uint32 protocol_id = 9;
+}
+
+message Balance {
+    string asset_id = 1;
+    string amount = 2;
+}
+
+message Snapshot {
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    string asset_id = 3;
+    string amount = 4;
+    string opponent_id = 5;
+    string memo = 6;
+}
+
+message SendTransferRequest {
+    string trace_id = 1;
+    string asset_id = 2;
+    string amount = 3;
+    repeated string opponents = 4;
+    uint32 threshold = 5;
+    string memo = 6;
+    uint32 protocol_id = 7;
+}
+
+message SendTransferResponse {
+    Transfer transfer = 1;
+}
+
+message GetTransferRequest {
+    string trace_id = 1;
+}
+
+message GetTransferResponse {
+    Transfer transfer = 1;
+}
+
+message ListBalancesRequest {
+    uint32 protocol_id = 1;
+}
+
+message ListBalancesResponse {
+    repeated Balance balances = 1;
+}
+
+message ListSnapshotsRequest {
+    google.protobuf.Timestamp offset = 1;
+    int32 limit = 2;
+}
+
+message ListSnapshotsResponse {
+    repeated Snapshot snapshots = 1;
+}
+
+message ClaimSnapshotRequest {
+    string id = 1;
+    uint32 protocol_id = 2;
+}
+
+message ClaimSnapshotResponse {
+    Snapshot snapshot = 1;
+}
+
+service SweeperService {
+  rpc SendTransfer(SendTransferRequest) returns (SendTransferResponse);
+  rpc GetTransfer(GetTransferRequest) returns (GetTransferResponse);
+  rpc ListBalances(ListBalancesRequest) returns (ListBalancesResponse);
+  rpc ListSnapshots(ListSnapshotsRequest) returns (ListSnapshotsResponse);
+  rpc ClaimSnapshot(ClaimSnapshotRequest) returns (ClaimSnapshotResponse);
+}
