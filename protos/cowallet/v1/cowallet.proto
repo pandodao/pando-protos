@@ -28,12 +28,14 @@ message GetMembersResponse {
 }
 
 message CreateTransferRequest {
-    string trace_id = 1;
-    string asset_id = 2;
-    string amount = 3;
-    repeated string receivers = 4;
-    uint32 threshold = 5;
-    string memo = 6;
+    repeated string members = 1;
+    uint32 threshold = 2;
+    string trace_id = 3;
+    string asset_id = 4;
+    string amount = 5;
+    repeated string receivers = 6;
+    uint32 receiver_threshold = 7;
+    string memo = 8;
 }
 
 message CreateTransferResponse {
