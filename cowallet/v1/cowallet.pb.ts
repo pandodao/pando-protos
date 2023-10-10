@@ -142,11 +142,13 @@ export interface GetMembersResponse {
 }
 
 export interface CreateTransferRequest {
+  members: string[];
+  threshold: number;
   traceId: string;
   assetId: string;
   amount: string;
   receivers: string[];
-  threshold: number;
+  receiverThreshold: number;
   memo: string;
 }
 
@@ -513,11 +515,13 @@ export const CreateTransferRequest = {
    */
   initialize: function (): CreateTransferRequest {
     return {
+      members: [],
+      threshold: 0,
       traceId: "",
       assetId: "",
       amount: "",
       receivers: [],
-      threshold: 0,
+      receiverThreshold: 0,
       memo: "",
     };
   },
@@ -529,23 +533,29 @@ export const CreateTransferRequest = {
     msg: Partial<CreateTransferRequest>,
     writer: BinaryWriter
   ): BinaryWriter {
-    if (msg.traceId) {
-      writer.writeString(1, msg.traceId);
-    }
-    if (msg.assetId) {
-      writer.writeString(2, msg.assetId);
-    }
-    if (msg.amount) {
-      writer.writeString(3, msg.amount);
-    }
-    if (msg.receivers?.length) {
-      writer.writeRepeatedString(4, msg.receivers);
+    if (msg.members?.length) {
+      writer.writeRepeatedString(1, msg.members);
     }
     if (msg.threshold) {
-      writer.writeUint32(5, msg.threshold);
+      writer.writeUint32(2, msg.threshold);
+    }
+    if (msg.traceId) {
+      writer.writeString(3, msg.traceId);
+    }
+    if (msg.assetId) {
+      writer.writeString(4, msg.assetId);
+    }
+    if (msg.amount) {
+      writer.writeString(5, msg.amount);
+    }
+    if (msg.receivers?.length) {
+      writer.writeRepeatedString(6, msg.receivers);
+    }
+    if (msg.receiverThreshold) {
+      writer.writeUint32(7, msg.receiverThreshold);
     }
     if (msg.memo) {
-      writer.writeString(6, msg.memo);
+      writer.writeString(8, msg.memo);
     }
     return writer;
   },
@@ -561,26 +571,34 @@ export const CreateTransferRequest = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.traceId = reader.readString();
+          msg.members.push(reader.readString());
           break;
         }
         case 2: {
-          msg.assetId = reader.readString();
-          break;
-        }
-        case 3: {
-          msg.amount = reader.readString();
-          break;
-        }
-        case 4: {
-          msg.receivers.push(reader.readString());
-          break;
-        }
-        case 5: {
           msg.threshold = reader.readUint32();
           break;
         }
+        case 3: {
+          msg.traceId = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.amount = reader.readString();
+          break;
+        }
         case 6: {
+          msg.receivers.push(reader.readString());
+          break;
+        }
+        case 7: {
+          msg.receiverThreshold = reader.readUint32();
+          break;
+        }
+        case 8: {
           msg.memo = reader.readString();
           break;
         }
@@ -967,11 +985,13 @@ export const CreateTransferRequestJSON = {
    */
   initialize: function (): CreateTransferRequest {
     return {
+      members: [],
+      threshold: 0,
       traceId: "",
       assetId: "",
       amount: "",
       receivers: [],
-      threshold: 0,
+      receiverThreshold: 0,
       memo: "",
     };
   },
@@ -983,6 +1003,12 @@ export const CreateTransferRequestJSON = {
     msg: Partial<CreateTransferRequest>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
+    if (msg.members?.length) {
+      json.members = msg.members;
+    }
+    if (msg.threshold) {
+      json.threshold = msg.threshold;
+    }
     if (msg.traceId) {
       json.traceId = msg.traceId;
     }
@@ -995,8 +1021,8 @@ export const CreateTransferRequestJSON = {
     if (msg.receivers?.length) {
       json.receivers = msg.receivers;
     }
-    if (msg.threshold) {
-      json.threshold = msg.threshold;
+    if (msg.receiverThreshold) {
+      json.receiverThreshold = msg.receiverThreshold;
     }
     if (msg.memo) {
       json.memo = msg.memo;
@@ -1011,6 +1037,14 @@ export const CreateTransferRequestJSON = {
     msg: CreateTransferRequest,
     json: any
   ): CreateTransferRequest {
+    const _members = json.members;
+    if (_members) {
+      msg.members = _members;
+    }
+    const _threshold = json.threshold;
+    if (_threshold) {
+      msg.threshold = _threshold;
+    }
     const _traceId = json.traceId ?? json.trace_id;
     if (_traceId) {
       msg.traceId = _traceId;
@@ -1027,9 +1061,10 @@ export const CreateTransferRequestJSON = {
     if (_receivers) {
       msg.receivers = _receivers;
     }
-    const _threshold = json.threshold;
-    if (_threshold) {
-      msg.threshold = _threshold;
+    const _receiverThreshold =
+      json.receiverThreshold ?? json.receiver_threshold;
+    if (_receiverThreshold) {
+      msg.receiverThreshold = _receiverThreshold;
     }
     const _memo = json.memo;
     if (_memo) {
