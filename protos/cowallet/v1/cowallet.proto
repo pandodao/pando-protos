@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package cowallet.v1;
+option go_package = "github.com/fox-one/pando-protos/cowallet/v1;cowallet";
+
+message Balance {
+    string asset_id = 1;
+    string amount = 2;
+    string unspent_amount = 3;
+    string signed_amount = 4;
+}
+
+message Transaction {
+    string asset_id = 1;
+    string amount = 2;
+    string hash = 3;
+    string tx = 4;
+}
+
+message GetMembersRequest {
+    repeated string members = 1;
+    uint32 threshold = 2;
+}
+
+message GetMembersResponse {
+    repeated Balance balances = 1;
+    repeated Transaction transactions = 2;
+}
+
+message CreateTransferRequest {
+    string trace_id = 1;
+    string asset_id = 2;
+    string amount = 3;
+    repeated string receivers = 4;
+    uint32 threshold = 5;
+    string memo = 6;
+}
+
+message CreateTransferResponse {
+    Transaction transaction = 1;
+}
+
+service CoWalletService {
+    rpc GetMembers(GetMembersRequest) returns (GetMembersResponse);
+    rpc CreateTransfer(CreateTransferRequest) returns (CreateTransferResponse);
+}
