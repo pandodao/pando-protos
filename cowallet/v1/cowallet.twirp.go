@@ -33,9 +33,11 @@ const _ = twirp.TwirpPackageMinVersion_8_1_0
 // =========================
 
 type CoWalletService interface {
-	GetMembers(context.Context, *GetMembersRequest) (*GetMembersResponse, error)
+	GetMultisigGroup(context.Context, *GetMultisigGroupRequest) (*GetMultisigGroupResponse, error)
 
 	CreateTransfer(context.Context, *CreateTransferRequest) (*CreateTransferResponse, error)
+
+	ListTransactions(context.Context, *ListTransactionsRequest) (*ListTransactionsResponse, error)
 }
 
 // ===============================
@@ -44,7 +46,7 @@ type CoWalletService interface {
 
 type coWalletServiceProtobufClient struct {
 	client      HTTPClient
-	urls        [2]string
+	urls        [3]string
 	interceptor twirp.Interceptor
 	opts        twirp.ClientOptions
 }
@@ -72,9 +74,10 @@ func NewCoWalletServiceProtobufClient(baseURL string, client HTTPClient, opts ..
 	// Build method URLs: <baseURL>[<prefix>]/<package>.<Service>/<Method>
 	serviceURL := sanitizeBaseURL(baseURL)
 	serviceURL += baseServicePath(pathPrefix, "cowallet.v1", "CoWalletService")
-	urls := [2]string{
-		serviceURL + "GetMembers",
+	urls := [3]string{
+		serviceURL + "GetMultisigGroup",
 		serviceURL + "CreateTransfer",
+		serviceURL + "ListTransactions",
 	}
 
 	return &coWalletServiceProtobufClient{
@@ -85,26 +88,26 @@ func NewCoWalletServiceProtobufClient(baseURL string, client HTTPClient, opts ..
 	}
 }
 
-func (c *coWalletServiceProtobufClient) GetMembers(ctx context.Context, in *GetMembersRequest) (*GetMembersResponse, error) {
+func (c *coWalletServiceProtobufClient) GetMultisigGroup(ctx context.Context, in *GetMultisigGroupRequest) (*GetMultisigGroupResponse, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "cowallet.v1")
 	ctx = ctxsetters.WithServiceName(ctx, "CoWalletService")
-	ctx = ctxsetters.WithMethodName(ctx, "GetMembers")
-	caller := c.callGetMembers
+	ctx = ctxsetters.WithMethodName(ctx, "GetMultisigGroup")
+	caller := c.callGetMultisigGroup
 	if c.interceptor != nil {
-		caller = func(ctx context.Context, req *GetMembersRequest) (*GetMembersResponse, error) {
+		caller = func(ctx context.Context, req *GetMultisigGroupRequest) (*GetMultisigGroupResponse, error) {
 			resp, err := c.interceptor(
 				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*GetMembersRequest)
+					typedReq, ok := req.(*GetMultisigGroupRequest)
 					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*GetMembersRequest) when calling interceptor")
+						return nil, twirp.InternalError("failed type assertion req.(*GetMultisigGroupRequest) when calling interceptor")
 					}
-					return c.callGetMembers(ctx, typedReq)
+					return c.callGetMultisigGroup(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
-				typedResp, ok := resp.(*GetMembersResponse)
+				typedResp, ok := resp.(*GetMultisigGroupResponse)
 				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*GetMembersResponse) when calling interceptor")
+					return nil, twirp.InternalError("failed type assertion resp.(*GetMultisigGroupResponse) when calling interceptor")
 				}
 				return typedResp, err
 			}
@@ -114,8 +117,8 @@ func (c *coWalletServiceProtobufClient) GetMembers(ctx context.Context, in *GetM
 	return caller(ctx, in)
 }
 
-func (c *coWalletServiceProtobufClient) callGetMembers(ctx context.Context, in *GetMembersRequest) (*GetMembersResponse, error) {
-	out := new(GetMembersResponse)
+func (c *coWalletServiceProtobufClient) callGetMultisigGroup(ctx context.Context, in *GetMultisigGroupRequest) (*GetMultisigGroupResponse, error) {
+	out := new(GetMultisigGroupResponse)
 	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -177,13 +180,59 @@ func (c *coWalletServiceProtobufClient) callCreateTransfer(ctx context.Context, 
 	return out, nil
 }
 
+func (c *coWalletServiceProtobufClient) ListTransactions(ctx context.Context, in *ListTransactionsRequest) (*ListTransactionsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "cowallet.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "CoWalletService")
+	ctx = ctxsetters.WithMethodName(ctx, "ListTransactions")
+	caller := c.callListTransactions
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *ListTransactionsRequest) (*ListTransactionsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ListTransactionsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ListTransactionsRequest) when calling interceptor")
+					}
+					return c.callListTransactions(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ListTransactionsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ListTransactionsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *coWalletServiceProtobufClient) callListTransactions(ctx context.Context, in *ListTransactionsRequest) (*ListTransactionsResponse, error) {
+	out := new(ListTransactionsResponse)
+	ctx, err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
 // ===========================
 // CoWalletService JSON Client
 // ===========================
 
 type coWalletServiceJSONClient struct {
 	client      HTTPClient
-	urls        [2]string
+	urls        [3]string
 	interceptor twirp.Interceptor
 	opts        twirp.ClientOptions
 }
@@ -211,9 +260,10 @@ func NewCoWalletServiceJSONClient(baseURL string, client HTTPClient, opts ...twi
 	// Build method URLs: <baseURL>[<prefix>]/<package>.<Service>/<Method>
 	serviceURL := sanitizeBaseURL(baseURL)
 	serviceURL += baseServicePath(pathPrefix, "cowallet.v1", "CoWalletService")
-	urls := [2]string{
-		serviceURL + "GetMembers",
+	urls := [3]string{
+		serviceURL + "GetMultisigGroup",
 		serviceURL + "CreateTransfer",
+		serviceURL + "ListTransactions",
 	}
 
 	return &coWalletServiceJSONClient{
@@ -224,26 +274,26 @@ func NewCoWalletServiceJSONClient(baseURL string, client HTTPClient, opts ...twi
 	}
 }
 
-func (c *coWalletServiceJSONClient) GetMembers(ctx context.Context, in *GetMembersRequest) (*GetMembersResponse, error) {
+func (c *coWalletServiceJSONClient) GetMultisigGroup(ctx context.Context, in *GetMultisigGroupRequest) (*GetMultisigGroupResponse, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "cowallet.v1")
 	ctx = ctxsetters.WithServiceName(ctx, "CoWalletService")
-	ctx = ctxsetters.WithMethodName(ctx, "GetMembers")
-	caller := c.callGetMembers
+	ctx = ctxsetters.WithMethodName(ctx, "GetMultisigGroup")
+	caller := c.callGetMultisigGroup
 	if c.interceptor != nil {
-		caller = func(ctx context.Context, req *GetMembersRequest) (*GetMembersResponse, error) {
+		caller = func(ctx context.Context, req *GetMultisigGroupRequest) (*GetMultisigGroupResponse, error) {
 			resp, err := c.interceptor(
 				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*GetMembersRequest)
+					typedReq, ok := req.(*GetMultisigGroupRequest)
 					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*GetMembersRequest) when calling interceptor")
+						return nil, twirp.InternalError("failed type assertion req.(*GetMultisigGroupRequest) when calling interceptor")
 					}
-					return c.callGetMembers(ctx, typedReq)
+					return c.callGetMultisigGroup(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
-				typedResp, ok := resp.(*GetMembersResponse)
+				typedResp, ok := resp.(*GetMultisigGroupResponse)
 				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*GetMembersResponse) when calling interceptor")
+					return nil, twirp.InternalError("failed type assertion resp.(*GetMultisigGroupResponse) when calling interceptor")
 				}
 				return typedResp, err
 			}
@@ -253,8 +303,8 @@ func (c *coWalletServiceJSONClient) GetMembers(ctx context.Context, in *GetMembe
 	return caller(ctx, in)
 }
 
-func (c *coWalletServiceJSONClient) callGetMembers(ctx context.Context, in *GetMembersRequest) (*GetMembersResponse, error) {
-	out := new(GetMembersResponse)
+func (c *coWalletServiceJSONClient) callGetMultisigGroup(ctx context.Context, in *GetMultisigGroupRequest) (*GetMultisigGroupResponse, error) {
+	out := new(GetMultisigGroupResponse)
 	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -302,6 +352,52 @@ func (c *coWalletServiceJSONClient) CreateTransfer(ctx context.Context, in *Crea
 func (c *coWalletServiceJSONClient) callCreateTransfer(ctx context.Context, in *CreateTransferRequest) (*CreateTransferResponse, error) {
 	out := new(CreateTransferResponse)
 	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *coWalletServiceJSONClient) ListTransactions(ctx context.Context, in *ListTransactionsRequest) (*ListTransactionsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "cowallet.v1")
+	ctx = ctxsetters.WithServiceName(ctx, "CoWalletService")
+	ctx = ctxsetters.WithMethodName(ctx, "ListTransactions")
+	caller := c.callListTransactions
+	if c.interceptor != nil {
+		caller = func(ctx context.Context, req *ListTransactionsRequest) (*ListTransactionsResponse, error) {
+			resp, err := c.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ListTransactionsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ListTransactionsRequest) when calling interceptor")
+					}
+					return c.callListTransactions(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ListTransactionsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ListTransactionsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+	return caller(ctx, in)
+}
+
+func (c *coWalletServiceJSONClient) callListTransactions(ctx context.Context, in *ListTransactionsRequest) (*ListTransactionsResponse, error) {
+	out := new(ListTransactionsResponse)
+	ctx, err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -413,11 +509,14 @@ func (s *coWalletServiceServer) ServeHTTP(resp http.ResponseWriter, req *http.Re
 	}
 
 	switch method {
-	case "GetMembers":
-		s.serveGetMembers(ctx, resp, req)
+	case "GetMultisigGroup":
+		s.serveGetMultisigGroup(ctx, resp, req)
 		return
 	case "CreateTransfer":
 		s.serveCreateTransfer(ctx, resp, req)
+		return
+	case "ListTransactions":
+		s.serveListTransactions(ctx, resp, req)
 		return
 	default:
 		msg := fmt.Sprintf("no handler for path %q", req.URL.Path)
@@ -426,7 +525,7 @@ func (s *coWalletServiceServer) ServeHTTP(resp http.ResponseWriter, req *http.Re
 	}
 }
 
-func (s *coWalletServiceServer) serveGetMembers(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *coWalletServiceServer) serveGetMultisigGroup(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	header := req.Header.Get("Content-Type")
 	i := strings.Index(header, ";")
 	if i == -1 {
@@ -434,9 +533,9 @@ func (s *coWalletServiceServer) serveGetMembers(ctx context.Context, resp http.R
 	}
 	switch strings.TrimSpace(strings.ToLower(header[:i])) {
 	case "application/json":
-		s.serveGetMembersJSON(ctx, resp, req)
+		s.serveGetMultisigGroupJSON(ctx, resp, req)
 	case "application/protobuf":
-		s.serveGetMembersProtobuf(ctx, resp, req)
+		s.serveGetMultisigGroupProtobuf(ctx, resp, req)
 	default:
 		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
 		twerr := badRouteError(msg, req.Method, req.URL.Path)
@@ -444,9 +543,9 @@ func (s *coWalletServiceServer) serveGetMembers(ctx context.Context, resp http.R
 	}
 }
 
-func (s *coWalletServiceServer) serveGetMembersJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *coWalletServiceServer) serveGetMultisigGroupJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
-	ctx = ctxsetters.WithMethodName(ctx, "GetMembers")
+	ctx = ctxsetters.WithMethodName(ctx, "GetMultisigGroup")
 	ctx, err = callRequestRouted(ctx, s.hooks)
 	if err != nil {
 		s.writeError(ctx, resp, err)
@@ -459,29 +558,29 @@ func (s *coWalletServiceServer) serveGetMembersJSON(ctx context.Context, resp ht
 		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
 		return
 	}
-	reqContent := new(GetMembersRequest)
+	reqContent := new(GetMultisigGroupRequest)
 	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
 	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
 		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
 		return
 	}
 
-	handler := s.CoWalletService.GetMembers
+	handler := s.CoWalletService.GetMultisigGroup
 	if s.interceptor != nil {
-		handler = func(ctx context.Context, req *GetMembersRequest) (*GetMembersResponse, error) {
+		handler = func(ctx context.Context, req *GetMultisigGroupRequest) (*GetMultisigGroupResponse, error) {
 			resp, err := s.interceptor(
 				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*GetMembersRequest)
+					typedReq, ok := req.(*GetMultisigGroupRequest)
 					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*GetMembersRequest) when calling interceptor")
+						return nil, twirp.InternalError("failed type assertion req.(*GetMultisigGroupRequest) when calling interceptor")
 					}
-					return s.CoWalletService.GetMembers(ctx, typedReq)
+					return s.CoWalletService.GetMultisigGroup(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
-				typedResp, ok := resp.(*GetMembersResponse)
+				typedResp, ok := resp.(*GetMultisigGroupResponse)
 				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*GetMembersResponse) when calling interceptor")
+					return nil, twirp.InternalError("failed type assertion resp.(*GetMultisigGroupResponse) when calling interceptor")
 				}
 				return typedResp, err
 			}
@@ -490,7 +589,7 @@ func (s *coWalletServiceServer) serveGetMembersJSON(ctx context.Context, resp ht
 	}
 
 	// Call service method
-	var respContent *GetMembersResponse
+	var respContent *GetMultisigGroupResponse
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = handler(ctx, reqContent)
@@ -501,7 +600,7 @@ func (s *coWalletServiceServer) serveGetMembersJSON(ctx context.Context, resp ht
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *GetMembersResponse and nil error while calling GetMembers. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *GetMultisigGroupResponse and nil error while calling GetMultisigGroup. nil responses are not supported"))
 		return
 	}
 
@@ -527,9 +626,9 @@ func (s *coWalletServiceServer) serveGetMembersJSON(ctx context.Context, resp ht
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *coWalletServiceServer) serveGetMembersProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+func (s *coWalletServiceServer) serveGetMultisigGroupProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	var err error
-	ctx = ctxsetters.WithMethodName(ctx, "GetMembers")
+	ctx = ctxsetters.WithMethodName(ctx, "GetMultisigGroup")
 	ctx, err = callRequestRouted(ctx, s.hooks)
 	if err != nil {
 		s.writeError(ctx, resp, err)
@@ -541,28 +640,28 @@ func (s *coWalletServiceServer) serveGetMembersProtobuf(ctx context.Context, res
 		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
 		return
 	}
-	reqContent := new(GetMembersRequest)
+	reqContent := new(GetMultisigGroupRequest)
 	if err = proto.Unmarshal(buf, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
 		return
 	}
 
-	handler := s.CoWalletService.GetMembers
+	handler := s.CoWalletService.GetMultisigGroup
 	if s.interceptor != nil {
-		handler = func(ctx context.Context, req *GetMembersRequest) (*GetMembersResponse, error) {
+		handler = func(ctx context.Context, req *GetMultisigGroupRequest) (*GetMultisigGroupResponse, error) {
 			resp, err := s.interceptor(
 				func(ctx context.Context, req interface{}) (interface{}, error) {
-					typedReq, ok := req.(*GetMembersRequest)
+					typedReq, ok := req.(*GetMultisigGroupRequest)
 					if !ok {
-						return nil, twirp.InternalError("failed type assertion req.(*GetMembersRequest) when calling interceptor")
+						return nil, twirp.InternalError("failed type assertion req.(*GetMultisigGroupRequest) when calling interceptor")
 					}
-					return s.CoWalletService.GetMembers(ctx, typedReq)
+					return s.CoWalletService.GetMultisigGroup(ctx, typedReq)
 				},
 			)(ctx, req)
 			if resp != nil {
-				typedResp, ok := resp.(*GetMembersResponse)
+				typedResp, ok := resp.(*GetMultisigGroupResponse)
 				if !ok {
-					return nil, twirp.InternalError("failed type assertion resp.(*GetMembersResponse) when calling interceptor")
+					return nil, twirp.InternalError("failed type assertion resp.(*GetMultisigGroupResponse) when calling interceptor")
 				}
 				return typedResp, err
 			}
@@ -571,7 +670,7 @@ func (s *coWalletServiceServer) serveGetMembersProtobuf(ctx context.Context, res
 	}
 
 	// Call service method
-	var respContent *GetMembersResponse
+	var respContent *GetMultisigGroupResponse
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = handler(ctx, reqContent)
@@ -582,7 +681,7 @@ func (s *coWalletServiceServer) serveGetMembersProtobuf(ctx context.Context, res
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *GetMembersResponse and nil error while calling GetMembers. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *GetMultisigGroupResponse and nil error while calling GetMultisigGroup. nil responses are not supported"))
 		return
 	}
 
@@ -763,6 +862,186 @@ func (s *coWalletServiceServer) serveCreateTransferProtobuf(ctx context.Context,
 	}
 	if respContent == nil {
 		s.writeError(ctx, resp, twirp.InternalError("received a nil *CreateTransferResponse and nil error while calling CreateTransfer. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *coWalletServiceServer) serveListTransactions(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveListTransactionsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveListTransactionsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *coWalletServiceServer) serveListTransactionsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "ListTransactions")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	d := json.NewDecoder(req.Body)
+	rawReqBody := json.RawMessage{}
+	if err := d.Decode(&rawReqBody); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+	reqContent := new(ListTransactionsRequest)
+	unmarshaler := protojson.UnmarshalOptions{DiscardUnknown: true}
+	if err = unmarshaler.Unmarshal(rawReqBody, reqContent); err != nil {
+		s.handleRequestBodyError(ctx, resp, "the json request could not be decoded", err)
+		return
+	}
+
+	handler := s.CoWalletService.ListTransactions
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *ListTransactionsRequest) (*ListTransactionsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ListTransactionsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ListTransactionsRequest) when calling interceptor")
+					}
+					return s.CoWalletService.ListTransactions(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ListTransactionsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ListTransactionsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *ListTransactionsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *ListTransactionsResponse and nil error while calling ListTransactions. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	marshaler := &protojson.MarshalOptions{UseProtoNames: !s.jsonCamelCase, EmitUnpopulated: !s.jsonSkipDefaults}
+	respBytes, err := marshaler.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		ctx = callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *coWalletServiceServer) serveListTransactionsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "ListTransactions")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.handleRequestBodyError(ctx, resp, "failed to read request body", err)
+		return
+	}
+	reqContent := new(ListTransactionsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	handler := s.CoWalletService.ListTransactions
+	if s.interceptor != nil {
+		handler = func(ctx context.Context, req *ListTransactionsRequest) (*ListTransactionsResponse, error) {
+			resp, err := s.interceptor(
+				func(ctx context.Context, req interface{}) (interface{}, error) {
+					typedReq, ok := req.(*ListTransactionsRequest)
+					if !ok {
+						return nil, twirp.InternalError("failed type assertion req.(*ListTransactionsRequest) when calling interceptor")
+					}
+					return s.CoWalletService.ListTransactions(ctx, typedReq)
+				},
+			)(ctx, req)
+			if resp != nil {
+				typedResp, ok := resp.(*ListTransactionsResponse)
+				if !ok {
+					return nil, twirp.InternalError("failed type assertion resp.(*ListTransactionsResponse) when calling interceptor")
+				}
+				return typedResp, err
+			}
+			return nil, err
+		}
+	}
+
+	// Call service method
+	var respContent *ListTransactionsResponse
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = handler(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *ListTransactionsResponse and nil error while calling ListTransactions. nil responses are not supported"))
 		return
 	}
 
@@ -1364,35 +1643,41 @@ func callClientError(ctx context.Context, h *twirp.ClientHooks, err twirp.Error)
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 478 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0x4d, 0x6f, 0xd3, 0x40,
-	0x10, 0x95, 0xd3, 0x10, 0x27, 0x93, 0x26, 0xa8, 0x23, 0xa8, 0x4c, 0x54, 0x41, 0xe5, 0x0a, 0x89,
-	0x4b, 0x62, 0x5a, 0x10, 0x07, 0xe0, 0x42, 0x7b, 0x40, 0x15, 0xea, 0xc5, 0x44, 0x42, 0x70, 0x89,
-	0x36, 0xf6, 0xb4, 0xb6, 0x14, 0xef, 0x06, 0xef, 0x26, 0xe4, 0x07, 0x70, 0xe0, 0x3f, 0xf1, 0xdf,
-	0x10, 0xf2, 0xee, 0x3a, 0xb6, 0x81, 0xe6, 0x40, 0x6f, 0xf3, 0xf1, 0x76, 0xf6, 0xcd, 0x7b, 0xab,
-	0x85, 0x51, 0x24, 0xbe, 0xb1, 0xc5, 0x82, 0x54, 0xb0, 0x3e, 0x0d, 0xca, 0x78, 0xb2, 0xcc, 0x85,
-	0x12, 0xd8, 0xdf, 0xe6, 0xeb, 0x53, 0xff, 0x87, 0x03, 0xee, 0x39, 0x5b, 0x30, 0x1e, 0x11, 0x3e,
-	0x82, 0x2e, 0x93, 0x92, 0xd4, 0x2c, 0x8d, 0x3d, 0xe7, 0xd8, 0x79, 0xd6, 0x0b, 0x5d, 0x9d, 0x5f,
-	0xc6, 0x78, 0x08, 0x1d, 0x96, 0x89, 0x15, 0x57, 0x5e, 0x4b, 0x37, 0x6c, 0x86, 0x4f, 0x61, 0xb8,
-	0xe2, 0x72, 0x49, 0x5c, 0xcd, 0x6c, 0x7f, 0x4f, 0xf7, 0x07, 0xb6, 0xfa, 0xce, 0xc0, 0x4e, 0x60,
-	0x20, 0xd3, 0x1b, 0x4e, 0x71, 0x89, 0x6a, 0x6b, 0xd4, 0xbe, 0x29, 0x1a, 0x90, 0x1f, 0x43, 0x7f,
-	0x9a, 0x33, 0x2e, 0x59, 0xa4, 0x52, 0xc1, 0xff, 0x87, 0x0d, 0x42, 0x3b, 0x61, 0x32, 0xb1, 0x1c,
-	0x74, 0x8c, 0x43, 0x68, 0xa9, 0x8d, 0xbd, 0xaf, 0xa5, 0x36, 0xfe, 0x07, 0x38, 0x78, 0x4f, 0xea,
-	0x8a, 0xb2, 0x39, 0xe5, 0x32, 0xa4, 0xaf, 0x2b, 0x92, 0x0a, 0x3d, 0x70, 0x33, 0x53, 0xf1, 0x9c,
-	0xe3, 0xbd, 0xe2, 0x2a, 0x9b, 0xe2, 0x11, 0xf4, 0x54, 0x92, 0x93, 0x4c, 0xc4, 0x22, 0xd6, 0xb7,
-	0x0d, 0xc2, 0xaa, 0xe0, 0x7f, 0x77, 0x00, 0xeb, 0xd3, 0xe4, 0x52, 0x70, 0x49, 0xf8, 0x1c, 0xba,
-	0x73, 0xa3, 0xa9, 0x99, 0xd7, 0x3f, 0x7b, 0x30, 0xa9, 0x89, 0x3e, 0xb1, 0x82, 0x87, 0x5b, 0x14,
-	0xbe, 0x85, 0x7d, 0x55, 0xed, 0x2e, 0xbd, 0x96, 0x3e, 0xe5, 0x35, 0x4e, 0xd5, 0xc4, 0x09, 0x1b,
-	0x68, 0xff, 0x97, 0x03, 0x0f, 0x2f, 0x72, 0x62, 0x8a, 0x34, 0xe6, 0x9a, 0xf2, 0x3b, 0x2e, 0x56,
-	0x88, 0xaf, 0x72, 0x16, 0x51, 0x21, 0xbe, 0x51, 0xd3, 0xd5, 0xf9, 0x65, 0xdc, 0xf0, 0xa5, 0x7d,
-	0x9b, 0x2f, 0xf7, 0x1a, 0xbe, 0x1c, 0x41, 0x2f, 0xa7, 0x88, 0xd2, 0x75, 0xc1, 0xa3, 0xa3, 0x79,
-	0x54, 0x05, 0x1c, 0x03, 0x96, 0xc9, 0xac, 0xa2, 0xe4, 0x6a, 0x4a, 0x07, 0x65, 0x67, 0xba, 0xa5,
-	0x86, 0xd0, 0xce, 0x28, 0x13, 0x5e, 0xd7, 0x98, 0x5c, 0xc4, 0xfe, 0x14, 0x0e, 0xff, 0xdc, 0xdf,
-	0x5a, 0xf1, 0x1a, 0xfa, 0x35, 0xa9, 0xf4, 0x43, 0xda, 0xa5, 0x6b, 0x1d, 0x7c, 0xf6, 0xd3, 0x81,
-	0xfb, 0x17, 0xe2, 0x93, 0x06, 0x7e, 0xa4, 0x7c, 0x9d, 0x46, 0x84, 0x57, 0x00, 0x95, 0xe1, 0xf8,
-	0xb8, 0x31, 0xe8, 0xaf, 0x77, 0x35, 0x7a, 0x72, 0x6b, 0xdf, 0xd2, 0xfb, 0x0c, 0xc3, 0x26, 0x71,
-	0xf4, 0x1b, 0x47, 0xfe, 0xe9, 0xea, 0xe8, 0x64, 0x27, 0xc6, 0x8c, 0x3e, 0x7f, 0xf5, 0xe5, 0xe5,
-	0x4d, 0xaa, 0x92, 0xd5, 0x7c, 0x12, 0x89, 0x2c, 0xb8, 0x16, 0x9b, 0xb1, 0xe0, 0x14, 0x2c, 0x19,
-	0x8f, 0xc5, 0x58, 0x7f, 0x04, 0x32, 0xa8, 0x7d, 0x12, 0x6f, 0xca, 0x78, 0xde, 0xd1, 0xcd, 0x17,
-	0xbf, 0x03, 0x00, 0x00, 0xff, 0xff, 0xc0, 0x95, 0x6d, 0xd0, 0x43, 0x04, 0x00, 0x00,
+	// 574 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xcd, 0x6e, 0xd3, 0x4c,
+	0x14, 0x95, 0xd3, 0xfc, 0xde, 0x34, 0xf9, 0xfa, 0x8d, 0x4a, 0x6b, 0xa2, 0x22, 0x55, 0x2e, 0x95,
+	0xd8, 0x24, 0xa1, 0x05, 0xb1, 0x00, 0x36, 0x6d, 0x17, 0x55, 0x25, 0x58, 0x60, 0x22, 0xf1, 0xb3,
+	0x89, 0x26, 0xf6, 0x6d, 0x32, 0x92, 0x3d, 0x63, 0x3c, 0xe3, 0x90, 0x3d, 0x1b, 0xc4, 0x13, 0xf0,
+	0x14, 0x3c, 0x22, 0x42, 0x1e, 0x4f, 0x12, 0xdb, 0x25, 0x45, 0xfc, 0xec, 0xe6, 0xdc, 0x7b, 0xe6,
+	0xe6, 0xcc, 0x39, 0x37, 0x86, 0x9e, 0x27, 0x3e, 0xd2, 0x20, 0x40, 0x35, 0x9c, 0x9f, 0x0c, 0x97,
+	0xe7, 0x41, 0x14, 0x0b, 0x25, 0x48, 0x7b, 0x85, 0xe7, 0x27, 0xce, 0x67, 0x0b, 0x1a, 0xe7, 0x34,
+	0xa0, 0xdc, 0x43, 0x72, 0x17, 0x9a, 0x54, 0x4a, 0x54, 0x63, 0xe6, 0xdb, 0xd6, 0xa1, 0xf5, 0xa0,
+	0xe5, 0x36, 0x34, 0xbe, 0xf2, 0xc9, 0x1e, 0xd4, 0x69, 0x28, 0x12, 0xae, 0xec, 0x8a, 0x6e, 0x18,
+	0x44, 0x8e, 0xa1, 0x9b, 0x70, 0x19, 0x21, 0x57, 0x63, 0xd3, 0xdf, 0xd2, 0xfd, 0x8e, 0xa9, 0x9e,
+	0x65, 0xb4, 0x23, 0xe8, 0x48, 0x36, 0xe5, 0xe8, 0x2f, 0x59, 0x55, 0xcd, 0xda, 0xce, 0x8a, 0x19,
+	0xc9, 0xf9, 0x64, 0x41, 0x7b, 0x14, 0x53, 0x2e, 0xa9, 0xa7, 0x98, 0xe0, 0x7f, 0x22, 0x87, 0x40,
+	0x75, 0x46, 0xe5, 0xcc, 0x88, 0xd0, 0x67, 0xd2, 0x85, 0x8a, 0x5a, 0x98, 0x1f, 0xac, 0xa8, 0x05,
+	0xb9, 0x07, 0x90, 0x44, 0x3e, 0x55, 0xa9, 0x18, 0x65, 0xd7, 0x74, 0xbd, 0x65, 0x2a, 0x67, 0xca,
+	0x79, 0x05, 0xfb, 0x97, 0xa8, 0x5e, 0x26, 0x81, 0x62, 0x92, 0x4d, 0x2f, 0x63, 0x91, 0x44, 0x2e,
+	0x7e, 0x48, 0x50, 0x2a, 0x62, 0x43, 0x23, 0xc4, 0x70, 0x82, 0xb1, 0xb4, 0xad, 0xc3, 0xad, 0x54,
+	0x8f, 0x81, 0xe4, 0x00, 0x5a, 0x6a, 0x16, 0xa3, 0x9c, 0x89, 0xc0, 0xd7, 0x92, 0x3a, 0xee, 0xba,
+	0xe0, 0x7c, 0xb1, 0xc0, 0xbe, 0x39, 0x53, 0x46, 0x82, 0x4b, 0x24, 0x0f, 0xa1, 0x39, 0xc9, 0xfc,
+	0xcf, 0xa6, 0xb6, 0x4f, 0x77, 0x07, 0xb9, 0x80, 0x06, 0x26, 0x1c, 0x77, 0xc5, 0x22, 0xcf, 0x61,
+	0x5b, 0xad, 0x6d, 0x92, 0x76, 0x45, 0xdf, 0xb2, 0x0b, 0xb7, 0x72, 0x3e, 0xba, 0x05, 0xb6, 0xf3,
+	0xdd, 0x82, 0x3b, 0x17, 0x31, 0x52, 0x85, 0x9a, 0x73, 0x8d, 0xf1, 0x5f, 0x3e, 0x2f, 0xcd, 0x49,
+	0xc5, 0xd4, 0xc3, 0x34, 0xa7, 0xcc, 0xf8, 0x86, 0xc6, 0x57, 0x7e, 0x21, 0xc2, 0xea, 0xa6, 0x08,
+	0x6b, 0x85, 0x08, 0x0f, 0xa0, 0x15, 0xa3, 0x87, 0x6c, 0x9e, 0xea, 0xa8, 0x6b, 0x1d, 0xeb, 0x02,
+	0xe9, 0x03, 0x59, 0x82, 0xf1, 0x5a, 0x52, 0x43, 0x4b, 0xfa, 0x7f, 0xd9, 0x19, 0xad, 0xa4, 0x11,
+	0xa8, 0x86, 0x18, 0x0a, 0xbb, 0x99, 0xed, 0x43, 0x7a, 0x76, 0x46, 0xb0, 0x57, 0x7e, 0xbf, 0x89,
+	0xe2, 0x29, 0xb4, 0x73, 0x56, 0xe9, 0x9d, 0xbb, 0xcd, 0xd7, 0x3c, 0xd9, 0xf9, 0x6a, 0xc1, 0xfe,
+	0x0b, 0x26, 0x55, 0x8e, 0x20, 0xff, 0x81, 0xb1, 0x2b, 0xf7, 0xb6, 0x8a, 0xee, 0xed, 0x42, 0x4d,
+	0x32, 0xee, 0xa1, 0x71, 0x35, 0x03, 0x69, 0x35, 0x60, 0x21, 0xcb, 0x2c, 0xad, 0xb9, 0x19, 0x70,
+	0xde, 0x82, 0x7d, 0x53, 0x99, 0x79, 0x72, 0x79, 0x97, 0xac, 0xdf, 0xd9, 0xa5, 0xd3, 0x6f, 0x15,
+	0xf8, 0xef, 0x42, 0xbc, 0xd1, 0xcc, 0xd7, 0x18, 0xcf, 0x99, 0x87, 0x64, 0x0c, 0x3b, 0xe5, 0x5d,
+	0x27, 0xf7, 0x0b, 0xf3, 0x36, 0xfc, 0xbd, 0x7a, 0xc7, 0xbf, 0x60, 0x19, 0xc9, 0xef, 0xa0, 0x5b,
+	0xcc, 0x8f, 0x38, 0x85, 0x8b, 0x3f, 0x5d, 0xee, 0xde, 0xd1, 0xad, 0x1c, 0x33, 0x7a, 0x0c, 0x3b,
+	0x65, 0xa7, 0x4a, 0xda, 0x37, 0x44, 0x5c, 0xd2, 0xbe, 0xc9, 0xee, 0xf3, 0x27, 0xef, 0x1f, 0x4f,
+	0x99, 0x9a, 0x25, 0x93, 0x81, 0x27, 0xc2, 0xe1, 0xb5, 0x58, 0xf4, 0x05, 0xc7, 0x61, 0x44, 0xb9,
+	0x2f, 0xfa, 0xfa, 0xe3, 0x2c, 0x87, 0xb9, 0x0f, 0xf7, 0xb3, 0xe5, 0x79, 0x52, 0xd7, 0xcd, 0x47,
+	0x3f, 0x02, 0x00, 0x00, 0xff, 0xff, 0x4e, 0xa3, 0x7c, 0xba, 0xd7, 0x05, 0x00, 0x00,
 }
