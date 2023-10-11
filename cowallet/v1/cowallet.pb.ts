@@ -18,16 +18,16 @@ export { MIN_SUPPORTED_VERSION_0_0_56 } from "twirpscript";
 //    CoWalletService Protobuf Client     //
 //========================================//
 
-export async function GetMembers(
-  getMembersRequest: GetMembersRequest,
+export async function GetMultisigGroup(
+  getMultisigGroupRequest: GetMultisigGroupRequest,
   config?: ClientConfiguration
-): Promise<GetMembersResponse> {
+): Promise<GetMultisigGroupResponse> {
   const response = await PBrequest(
-    "/cowallet.v1.CoWalletService/GetMembers",
-    GetMembersRequest.encode(getMembersRequest),
+    "/cowallet.v1.CoWalletService/GetMultisigGroup",
+    GetMultisigGroupRequest.encode(getMultisigGroupRequest),
     config
   );
-  return GetMembersResponse.decode(response);
+  return GetMultisigGroupResponse.decode(response);
 }
 
 export async function CreateTransfer(
@@ -42,20 +42,32 @@ export async function CreateTransfer(
   return CreateTransferResponse.decode(response);
 }
 
+export async function ListTransactions(
+  listTransactionsRequest: ListTransactionsRequest,
+  config?: ClientConfiguration
+): Promise<ListTransactionsResponse> {
+  const response = await PBrequest(
+    "/cowallet.v1.CoWalletService/ListTransactions",
+    ListTransactionsRequest.encode(listTransactionsRequest),
+    config
+  );
+  return ListTransactionsResponse.decode(response);
+}
+
 //========================================//
 //      CoWalletService JSON Client       //
 //========================================//
 
-export async function GetMembersJSON(
-  getMembersRequest: GetMembersRequest,
+export async function GetMultisigGroupJSON(
+  getMultisigGroupRequest: GetMultisigGroupRequest,
   config?: ClientConfiguration
-): Promise<GetMembersResponse> {
+): Promise<GetMultisigGroupResponse> {
   const response = await JSONrequest(
-    "/cowallet.v1.CoWalletService/GetMembers",
-    GetMembersRequestJSON.encode(getMembersRequest),
+    "/cowallet.v1.CoWalletService/GetMultisigGroup",
+    GetMultisigGroupRequestJSON.encode(getMultisigGroupRequest),
     config
   );
-  return GetMembersResponseJSON.decode(response);
+  return GetMultisigGroupResponseJSON.decode(response);
 }
 
 export async function CreateTransferJSON(
@@ -70,19 +82,35 @@ export async function CreateTransferJSON(
   return CreateTransferResponseJSON.decode(response);
 }
 
+export async function ListTransactionsJSON(
+  listTransactionsRequest: ListTransactionsRequest,
+  config?: ClientConfiguration
+): Promise<ListTransactionsResponse> {
+  const response = await JSONrequest(
+    "/cowallet.v1.CoWalletService/ListTransactions",
+    ListTransactionsRequestJSON.encode(listTransactionsRequest),
+    config
+  );
+  return ListTransactionsResponseJSON.decode(response);
+}
+
 //========================================//
 //            CoWalletService             //
 //========================================//
 
 export interface CoWalletService<Context = unknown> {
-  GetMembers: (
-    getMembersRequest: GetMembersRequest,
+  GetMultisigGroup: (
+    getMultisigGroupRequest: GetMultisigGroupRequest,
     context: Context
-  ) => Promise<GetMembersResponse> | GetMembersResponse;
+  ) => Promise<GetMultisigGroupResponse> | GetMultisigGroupResponse;
   CreateTransfer: (
     createTransferRequest: CreateTransferRequest,
     context: Context
   ) => Promise<CreateTransferResponse> | CreateTransferResponse;
+  ListTransactions: (
+    listTransactionsRequest: ListTransactionsRequest,
+    context: Context
+  ) => Promise<ListTransactionsResponse> | ListTransactionsResponse;
 }
 
 export function createCoWalletService<Context>(
@@ -91,11 +119,17 @@ export function createCoWalletService<Context>(
   return {
     name: "cowallet.v1.CoWalletService",
     methods: {
-      GetMembers: {
-        name: "GetMembers",
-        handler: service.GetMembers,
-        input: { protobuf: GetMembersRequest, json: GetMembersRequestJSON },
-        output: { protobuf: GetMembersResponse, json: GetMembersResponseJSON },
+      GetMultisigGroup: {
+        name: "GetMultisigGroup",
+        handler: service.GetMultisigGroup,
+        input: {
+          protobuf: GetMultisigGroupRequest,
+          json: GetMultisigGroupRequestJSON,
+        },
+        output: {
+          protobuf: GetMultisigGroupResponse,
+          json: GetMultisigGroupResponseJSON,
+        },
       },
       CreateTransfer: {
         name: "CreateTransfer",
@@ -107,6 +141,18 @@ export function createCoWalletService<Context>(
         output: {
           protobuf: CreateTransferResponse,
           json: CreateTransferResponseJSON,
+        },
+      },
+      ListTransactions: {
+        name: "ListTransactions",
+        handler: service.ListTransactions,
+        input: {
+          protobuf: ListTransactionsRequest,
+          json: ListTransactionsRequestJSON,
+        },
+        output: {
+          protobuf: ListTransactionsResponse,
+          json: ListTransactionsResponseJSON,
         },
       },
     },
@@ -129,14 +175,15 @@ export interface Transaction {
   amount: string;
   hash: string;
   tx: string;
+  updatedAt: string;
 }
 
-export interface GetMembersRequest {
+export interface GetMultisigGroupRequest {
   members: string[];
   threshold: number;
 }
 
-export interface GetMembersResponse {
+export interface GetMultisigGroupResponse {
   balances: Balance[];
   transactions: Transaction[];
 }
@@ -154,6 +201,18 @@ export interface CreateTransferRequest {
 
 export interface CreateTransferResponse {
   transaction: Transaction;
+}
+
+export interface ListTransactionsRequest {
+  members: string[];
+  threshold: number;
+  assetId: string;
+  since: string;
+  limit: number;
+}
+
+export interface ListTransactionsResponse {
+  transactions: Transaction[];
 }
 
 //========================================//
@@ -269,6 +328,7 @@ export const Transaction = {
       amount: "",
       hash: "",
       tx: "",
+      updatedAt: "",
     };
   },
 
@@ -290,6 +350,9 @@ export const Transaction = {
     }
     if (msg.tx) {
       writer.writeString(4, msg.tx);
+    }
+    if (msg.updatedAt) {
+      writer.writeString(5, msg.updatedAt);
     }
     return writer;
   },
@@ -317,6 +380,10 @@ export const Transaction = {
           msg.tx = reader.readString();
           break;
         }
+        case 5: {
+          msg.updatedAt = reader.readString();
+          break;
+        }
         default: {
           reader.skipField();
           break;
@@ -327,31 +394,31 @@ export const Transaction = {
   },
 };
 
-export const GetMembersRequest = {
+export const GetMultisigGroupRequest = {
   /**
-   * Serializes GetMembersRequest to protobuf.
+   * Serializes GetMultisigGroupRequest to protobuf.
    */
-  encode: function (msg: Partial<GetMembersRequest>): Uint8Array {
-    return GetMembersRequest._writeMessage(
+  encode: function (msg: Partial<GetMultisigGroupRequest>): Uint8Array {
+    return GetMultisigGroupRequest._writeMessage(
       msg,
       new BinaryWriter()
     ).getResultBuffer();
   },
 
   /**
-   * Deserializes GetMembersRequest from protobuf.
+   * Deserializes GetMultisigGroupRequest from protobuf.
    */
-  decode: function (bytes: ByteSource): GetMembersRequest {
-    return GetMembersRequest._readMessage(
-      GetMembersRequest.initialize(),
+  decode: function (bytes: ByteSource): GetMultisigGroupRequest {
+    return GetMultisigGroupRequest._readMessage(
+      GetMultisigGroupRequest.initialize(),
       new BinaryReader(bytes)
     );
   },
 
   /**
-   * Initializes GetMembersRequest with all fields set to their default value.
+   * Initializes GetMultisigGroupRequest with all fields set to their default value.
    */
-  initialize: function (): GetMembersRequest {
+  initialize: function (): GetMultisigGroupRequest {
     return {
       members: [],
       threshold: 0,
@@ -362,7 +429,7 @@ export const GetMembersRequest = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<GetMembersRequest>,
+    msg: Partial<GetMultisigGroupRequest>,
     writer: BinaryWriter
   ): BinaryWriter {
     if (msg.members?.length) {
@@ -378,9 +445,9 @@ export const GetMembersRequest = {
    * @private
    */
   _readMessage: function (
-    msg: GetMembersRequest,
+    msg: GetMultisigGroupRequest,
     reader: BinaryReader
-  ): GetMembersRequest {
+  ): GetMultisigGroupRequest {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -402,31 +469,31 @@ export const GetMembersRequest = {
   },
 };
 
-export const GetMembersResponse = {
+export const GetMultisigGroupResponse = {
   /**
-   * Serializes GetMembersResponse to protobuf.
+   * Serializes GetMultisigGroupResponse to protobuf.
    */
-  encode: function (msg: Partial<GetMembersResponse>): Uint8Array {
-    return GetMembersResponse._writeMessage(
+  encode: function (msg: Partial<GetMultisigGroupResponse>): Uint8Array {
+    return GetMultisigGroupResponse._writeMessage(
       msg,
       new BinaryWriter()
     ).getResultBuffer();
   },
 
   /**
-   * Deserializes GetMembersResponse from protobuf.
+   * Deserializes GetMultisigGroupResponse from protobuf.
    */
-  decode: function (bytes: ByteSource): GetMembersResponse {
-    return GetMembersResponse._readMessage(
-      GetMembersResponse.initialize(),
+  decode: function (bytes: ByteSource): GetMultisigGroupResponse {
+    return GetMultisigGroupResponse._readMessage(
+      GetMultisigGroupResponse.initialize(),
       new BinaryReader(bytes)
     );
   },
 
   /**
-   * Initializes GetMembersResponse with all fields set to their default value.
+   * Initializes GetMultisigGroupResponse with all fields set to their default value.
    */
-  initialize: function (): GetMembersResponse {
+  initialize: function (): GetMultisigGroupResponse {
     return {
       balances: [],
       transactions: [],
@@ -437,7 +504,7 @@ export const GetMembersResponse = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<GetMembersResponse>,
+    msg: Partial<GetMultisigGroupResponse>,
     writer: BinaryWriter
   ): BinaryWriter {
     if (msg.balances?.length) {
@@ -461,9 +528,9 @@ export const GetMembersResponse = {
    * @private
    */
   _readMessage: function (
-    msg: GetMembersResponse,
+    msg: GetMultisigGroupResponse,
     reader: BinaryReader
-  ): GetMembersResponse {
+  ): GetMultisigGroupResponse {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -679,6 +746,178 @@ export const CreateTransferResponse = {
   },
 };
 
+export const ListTransactionsRequest = {
+  /**
+   * Serializes ListTransactionsRequest to protobuf.
+   */
+  encode: function (msg: Partial<ListTransactionsRequest>): Uint8Array {
+    return ListTransactionsRequest._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ListTransactionsRequest from protobuf.
+   */
+  decode: function (bytes: ByteSource): ListTransactionsRequest {
+    return ListTransactionsRequest._readMessage(
+      ListTransactionsRequest.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes ListTransactionsRequest with all fields set to their default value.
+   */
+  initialize: function (): ListTransactionsRequest {
+    return {
+      members: [],
+      threshold: 0,
+      assetId: "",
+      since: "",
+      limit: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListTransactionsRequest>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.members?.length) {
+      writer.writeRepeatedString(1, msg.members);
+    }
+    if (msg.threshold) {
+      writer.writeUint32(2, msg.threshold);
+    }
+    if (msg.assetId) {
+      writer.writeString(3, msg.assetId);
+    }
+    if (msg.since) {
+      writer.writeString(4, msg.since);
+    }
+    if (msg.limit) {
+      writer.writeInt32(5, msg.limit);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListTransactionsRequest,
+    reader: BinaryReader
+  ): ListTransactionsRequest {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.members.push(reader.readString());
+          break;
+        }
+        case 2: {
+          msg.threshold = reader.readUint32();
+          break;
+        }
+        case 3: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.since = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.limit = reader.readInt32();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const ListTransactionsResponse = {
+  /**
+   * Serializes ListTransactionsResponse to protobuf.
+   */
+  encode: function (msg: Partial<ListTransactionsResponse>): Uint8Array {
+    return ListTransactionsResponse._writeMessage(
+      msg,
+      new BinaryWriter()
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ListTransactionsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): ListTransactionsResponse {
+    return ListTransactionsResponse._readMessage(
+      ListTransactionsResponse.initialize(),
+      new BinaryReader(bytes)
+    );
+  },
+
+  /**
+   * Initializes ListTransactionsResponse with all fields set to their default value.
+   */
+  initialize: function (): ListTransactionsResponse {
+    return {
+      transactions: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListTransactionsResponse>,
+    writer: BinaryWriter
+  ): BinaryWriter {
+    if (msg.transactions?.length) {
+      writer.writeRepeatedMessage(
+        1,
+        msg.transactions as any,
+        Transaction._writeMessage
+      );
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListTransactionsResponse,
+    reader: BinaryReader
+  ): ListTransactionsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = Transaction.initialize();
+          reader.readMessage(m, Transaction._readMessage);
+          msg.transactions.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
@@ -781,6 +1020,7 @@ export const TransactionJSON = {
       amount: "",
       hash: "",
       tx: "",
+      updatedAt: "",
     };
   },
 
@@ -800,6 +1040,9 @@ export const TransactionJSON = {
     }
     if (msg.tx) {
       json.tx = msg.tx;
+    }
+    if (msg.updatedAt) {
+      json.updatedAt = msg.updatedAt;
     }
     return json;
   },
@@ -824,32 +1067,36 @@ export const TransactionJSON = {
     if (_tx) {
       msg.tx = _tx;
     }
+    const _updatedAt = json.updatedAt ?? json.updated_at;
+    if (_updatedAt) {
+      msg.updatedAt = _updatedAt;
+    }
     return msg;
   },
 };
 
-export const GetMembersRequestJSON = {
+export const GetMultisigGroupRequestJSON = {
   /**
-   * Serializes GetMembersRequest to JSON.
+   * Serializes GetMultisigGroupRequest to JSON.
    */
-  encode: function (msg: Partial<GetMembersRequest>): string {
-    return JSON.stringify(GetMembersRequestJSON._writeMessage(msg));
+  encode: function (msg: Partial<GetMultisigGroupRequest>): string {
+    return JSON.stringify(GetMultisigGroupRequestJSON._writeMessage(msg));
   },
 
   /**
-   * Deserializes GetMembersRequest from JSON.
+   * Deserializes GetMultisigGroupRequest from JSON.
    */
-  decode: function (json: string): GetMembersRequest {
-    return GetMembersRequestJSON._readMessage(
-      GetMembersRequestJSON.initialize(),
+  decode: function (json: string): GetMultisigGroupRequest {
+    return GetMultisigGroupRequestJSON._readMessage(
+      GetMultisigGroupRequestJSON.initialize(),
       JSON.parse(json)
     );
   },
 
   /**
-   * Initializes GetMembersRequest with all fields set to their default value.
+   * Initializes GetMultisigGroupRequest with all fields set to their default value.
    */
-  initialize: function (): GetMembersRequest {
+  initialize: function (): GetMultisigGroupRequest {
     return {
       members: [],
       threshold: 0,
@@ -860,7 +1107,7 @@ export const GetMembersRequestJSON = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<GetMembersRequest>
+    msg: Partial<GetMultisigGroupRequest>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.members?.length) {
@@ -876,9 +1123,9 @@ export const GetMembersRequestJSON = {
    * @private
    */
   _readMessage: function (
-    msg: GetMembersRequest,
+    msg: GetMultisigGroupRequest,
     json: any
-  ): GetMembersRequest {
+  ): GetMultisigGroupRequest {
     const _members = json.members;
     if (_members) {
       msg.members = _members;
@@ -891,28 +1138,28 @@ export const GetMembersRequestJSON = {
   },
 };
 
-export const GetMembersResponseJSON = {
+export const GetMultisigGroupResponseJSON = {
   /**
-   * Serializes GetMembersResponse to JSON.
+   * Serializes GetMultisigGroupResponse to JSON.
    */
-  encode: function (msg: Partial<GetMembersResponse>): string {
-    return JSON.stringify(GetMembersResponseJSON._writeMessage(msg));
+  encode: function (msg: Partial<GetMultisigGroupResponse>): string {
+    return JSON.stringify(GetMultisigGroupResponseJSON._writeMessage(msg));
   },
 
   /**
-   * Deserializes GetMembersResponse from JSON.
+   * Deserializes GetMultisigGroupResponse from JSON.
    */
-  decode: function (json: string): GetMembersResponse {
-    return GetMembersResponseJSON._readMessage(
-      GetMembersResponseJSON.initialize(),
+  decode: function (json: string): GetMultisigGroupResponse {
+    return GetMultisigGroupResponseJSON._readMessage(
+      GetMultisigGroupResponseJSON.initialize(),
       JSON.parse(json)
     );
   },
 
   /**
-   * Initializes GetMembersResponse with all fields set to their default value.
+   * Initializes GetMultisigGroupResponse with all fields set to their default value.
    */
-  initialize: function (): GetMembersResponse {
+  initialize: function (): GetMultisigGroupResponse {
     return {
       balances: [],
       transactions: [],
@@ -923,7 +1170,7 @@ export const GetMembersResponseJSON = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<GetMembersResponse>
+    msg: Partial<GetMultisigGroupResponse>
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.balances?.length) {
@@ -939,9 +1186,9 @@ export const GetMembersResponseJSON = {
    * @private
    */
   _readMessage: function (
-    msg: GetMembersResponse,
+    msg: GetMultisigGroupResponse,
     json: any
-  ): GetMembersResponse {
+  ): GetMultisigGroupResponse {
     const _balances = json.balances;
     if (_balances) {
       for (const item of _balances) {
@@ -1129,6 +1376,152 @@ export const CreateTransferResponseJSON = {
       const m = Transaction.initialize();
       TransactionJSON._readMessage(m, _transaction);
       msg.transaction = m;
+    }
+    return msg;
+  },
+};
+
+export const ListTransactionsRequestJSON = {
+  /**
+   * Serializes ListTransactionsRequest to JSON.
+   */
+  encode: function (msg: Partial<ListTransactionsRequest>): string {
+    return JSON.stringify(ListTransactionsRequestJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ListTransactionsRequest from JSON.
+   */
+  decode: function (json: string): ListTransactionsRequest {
+    return ListTransactionsRequestJSON._readMessage(
+      ListTransactionsRequestJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes ListTransactionsRequest with all fields set to their default value.
+   */
+  initialize: function (): ListTransactionsRequest {
+    return {
+      members: [],
+      threshold: 0,
+      assetId: "",
+      since: "",
+      limit: 0,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListTransactionsRequest>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.members?.length) {
+      json.members = msg.members;
+    }
+    if (msg.threshold) {
+      json.threshold = msg.threshold;
+    }
+    if (msg.assetId) {
+      json.assetId = msg.assetId;
+    }
+    if (msg.since) {
+      json.since = msg.since;
+    }
+    if (msg.limit) {
+      json.limit = msg.limit;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListTransactionsRequest,
+    json: any
+  ): ListTransactionsRequest {
+    const _members = json.members;
+    if (_members) {
+      msg.members = _members;
+    }
+    const _threshold = json.threshold;
+    if (_threshold) {
+      msg.threshold = _threshold;
+    }
+    const _assetId = json.assetId ?? json.asset_id;
+    if (_assetId) {
+      msg.assetId = _assetId;
+    }
+    const _since = json.since;
+    if (_since) {
+      msg.since = _since;
+    }
+    const _limit = json.limit;
+    if (_limit) {
+      msg.limit = _limit;
+    }
+    return msg;
+  },
+};
+
+export const ListTransactionsResponseJSON = {
+  /**
+   * Serializes ListTransactionsResponse to JSON.
+   */
+  encode: function (msg: Partial<ListTransactionsResponse>): string {
+    return JSON.stringify(ListTransactionsResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ListTransactionsResponse from JSON.
+   */
+  decode: function (json: string): ListTransactionsResponse {
+    return ListTransactionsResponseJSON._readMessage(
+      ListTransactionsResponseJSON.initialize(),
+      JSON.parse(json)
+    );
+  },
+
+  /**
+   * Initializes ListTransactionsResponse with all fields set to their default value.
+   */
+  initialize: function (): ListTransactionsResponse {
+    return {
+      transactions: [],
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: Partial<ListTransactionsResponse>
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.transactions?.length) {
+      json.transactions = msg.transactions.map(TransactionJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListTransactionsResponse,
+    json: any
+  ): ListTransactionsResponse {
+    const _transactions = json.transactions;
+    if (_transactions) {
+      for (const item of _transactions) {
+        const m = Transaction.initialize();
+        TransactionJSON._readMessage(m, item);
+        msg.transactions.push(m);
+      }
     }
     return msg;
   },
