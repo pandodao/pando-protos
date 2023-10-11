@@ -15,14 +15,15 @@ message Transaction {
     string amount = 2;
     string hash = 3;
     string tx = 4;
+    string updated_at = 5;
 }
 
-message GetMembersRequest {
+message GetMultisigGroupRequest {
     repeated string members = 1;
     uint32 threshold = 2;
 }
 
-message GetMembersResponse {
+message GetMultisigGroupResponse {
     repeated Balance balances = 1;
     repeated Transaction transactions = 2;
 }
@@ -42,7 +43,20 @@ message CreateTransferResponse {
     Transaction transaction = 1;
 }
 
+message ListTransactionsRequest {
+    repeated string members = 1;
+    uint32 threshold = 2;
+    string asset_id = 3;
+    string since = 4;
+    int32 limit = 5;
+}
+
+message ListTransactionsResponse {
+    repeated Transaction transactions = 1;
+}
+
 service CoWalletService {
-    rpc GetMembers(GetMembersRequest) returns (GetMembersResponse);
+    rpc GetMultisigGroup(GetMultisigGroupRequest) returns (GetMultisigGroupResponse);
     rpc CreateTransfer(CreateTransferRequest) returns (CreateTransferResponse);
+    rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse);
 }
