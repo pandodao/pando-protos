@@ -16,6 +16,10 @@ service PoolService {
   rpc ListMyEarningProducts(ListMyEarningProductsRequest) returns (ListMyEarningProductsResponse);
   rpc GetMyEarningProduct(GetMyEarningProductRequest) returns (GetMyEarningProductResponse);
 
+  // by admins
+  rpc GetUserVaults(GetUserVaultsRequest) returns (GetUserVaultsResponse);
+  rpc GetUserEvent(GetUserEventRequest) returns (GetUserEventResponse);
+
   // audit
   rpc FindAudit(FindAuditRequest) returns (FindAuditResponse);
   rpc ListAudits(ListAuditsRequest) returns (ListAuditsResponse);
@@ -57,6 +61,8 @@ message EventError {
     EARNING_PRODUCT_PRECISION_UNSATISFIED = 15;
     // buy
     USER_NOT_IN_WHITELIST = 16;
+    // pledge / cancel_pledge / redeem
+    USER_EARNING_PRODUCT_NOT_FOUND = 17;
   }
 }
 
@@ -80,6 +86,7 @@ message EventAction {
     ADMIN_AUDIT_APPROVE = 106;
     ADMIN_AUDIT_REJECT = 107;
     ADMIN_AUTO_REVISE_PRODUCT_CAPACITY = 108;
+    ADMIN_LIQUIDATION = 109;
   }
 }
 
@@ -131,9 +138,8 @@ message EarningSnapshotRedeemData {
   EarningProductStatus.Enum product_status = 3;
 }
 
-// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"79c21af4-dbae-4aea-858f-1eaf97823cb3","action":3,"params":["string:08ae8c28-1529-4387-b30d-ed65414587e4"]}' -b64 url
-// AgQBecIa9NuuSuqFjx6vl4I8swADJDA4YWU4YzI4LTE1MjktNDM4Ny1iMzBkLWVkNjU0MTQ1ODdlNKyXib4=
-
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"79c21af4-dbae-4aea-858f-1eaf97823cb3","action":5,"params":["string:12"]}' -b64 url
+// AgQBecIa9NuuSuqFjx6vl4I8swAFAjEydplnrA==
 
 message EarningSnapshotCancelQueueData {
   string event_id = 1;
@@ -165,18 +171,20 @@ message EarningSnapshotAdminProductMergeExpansionData {
   int32 product_id = 1;
 }
 
-// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":103,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a"]}' -b64 url
-// AgQBGXOmrAcdTmuzE5AKnG6QOgBnJGE4ZDRlMzhlLTkzMTctNDUyOS04Y2E5LTQyODlkNDY2ODA3YZA5O2U=
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":103,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a","int32:1"]}' -b64 url
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBnJGE4ZDRlMzhlLTkzMTctNDUyOS04Y2E5LTQyODlkNDY2ODA3YQAAAAGld7jn
 
 message EarningSnapshotAdminPledgeData {
   string user_id = 1;
+  int32 product_id = 2;
 }
 
-// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":104,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a"]}' -b64 url
-// AgQBGXOmrAcdTmuzE5AKnG6QOgBoJGE4ZDRlMzhlLTkzMTctNDUyOS04Y2E5LTQyODlkNDY2ODA3YUQO7hs=
+// mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"1973a6ac-071d-4e6b-b313-900a9c6e903a","action":104,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a","int32:1"]}' -b64 url
+// AgQBGXOmrAcdTmuzE5AKnG6QOgBoJGE4ZDRlMzhlLTkzMTctNDUyOS04Y2E5LTQyODlkNDY2ODA3YQAAAAE_idXQ
 
 message EarningSnapshotAdminCancelPledgeData {
   string user_id = 1;
+  int32 product_id = 2;
 }
 
 // mtgmemo -e '{"version":2,"protocol_id":4,"follow_id":"33c11af4-dbae-3cea-158f-2eaf97372dc1","action":105,"params":["string:a8d4e38e-9317-4529-8ca9-4289d466807a","int32:3","int64:100000000"]}' -b64 url
@@ -186,6 +194,11 @@ message EarningSnapshotAdminLegacyAssetMigrationData {
   string user_id = 1;
   int32 product_id = 2;
   int64 amount = 3;
+}
+
+message EarningSnapshotAdminLiquidationData {
+  string user_id = 1;
+  int32 product_id = 2;
 }
 
 message EarningSnapshotAdminAuditApproveData {
@@ -370,4 +383,30 @@ message ListAuditsRequest {
 
 message ListAuditsResponse {
   repeated Audit audits = 1;
+}
+
+message UserVault {
+  string user_id = 1;
+  int32 product_id = 2;
+  string product_name = 3;
+  string asset_id = 4;
+  string amount = 5;
+  bool pledged = 6;
+}
+
+message GetUserVaultsRequest {
+  string user_id = 1;
+}
+
+message  GetUserVaultsResponse {
+  repeated UserVault vaults = 1;
+}
+
+
+message GetUserEventRequest {
+  string follow_id = 1;
+}
+
+message GetUserEventResponse {
+  Event event = 1;
 }
