@@ -170,7 +170,7 @@ message Proposal {
     string amount = 8;
     Action action = 9;
     repeated string votes = 10;
-    oneof Content {
+    oneof content {
         AddPair add_pair = 11;
         UpdatePair update_pair = 12;
         SetProperty set_property = 13;
