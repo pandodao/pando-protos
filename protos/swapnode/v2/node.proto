@@ -114,6 +114,7 @@ enum Action {
         WITHDRAW = 9;
         SET_PROPERTY = 10;
         FLUSH_PROFIT = 11;
+        SWAP_METHOD = 12;
     }
 
 message Request {
@@ -160,6 +161,12 @@ message Proposal {
         string amount = 3;
     }
 
+    message SwapMethod {
+        string base_asset = 1;
+        string quote_asset = 2;
+        string method = 3;
+    }
+
     uint64 id = 1;
     google.protobuf.Timestamp created_at = 2;
     google.protobuf.Timestamp updated_at = 3;
@@ -176,6 +183,7 @@ message Proposal {
         SetProperty set_property = 13;
         FlushProfit flush_profit = 14;
         Withdraw withdraw = 15;
+        SwapMethod swap_method = 16;
     }
 }
 
