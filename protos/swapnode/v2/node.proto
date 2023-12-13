@@ -103,20 +103,20 @@ message Order {
 }
 
 enum Action {
-        ACTION_NOT_SET = 0;
-        LIQUIDITY_ADD = 1;
-        LIQUIDITY_REMOVE = 2;
-        LIQUIDITY_SWAP = 3;
-        DEPOSIT_EXPIRE = 4;
-        AUDIT_REVIEW = 5;
-        PROPOSAL_VOTE = 6;
-        ADD_PAIR = 7;
-        UPDATE_PAIR = 8;
-        WITHDRAW = 9;
-        SET_PROPERTY = 10;
-        FLUSH_PROFIT = 11;
-        SWAP_METHOD = 12;
-    }
+    ACTION_NOT_SET = 0;
+    LIQUIDITY_ADD = 1;
+    LIQUIDITY_REMOVE = 2;
+    LIQUIDITY_SWAP = 3;
+    DEPOSIT_EXPIRE = 4;
+    AUDIT_REVIEW = 5;
+    PROPOSAL_VOTE = 6;
+    ADD_PAIR = 7;
+    UPDATE_PAIR = 8;
+    WITHDRAW = 9;
+    SET_PROPERTY = 10;
+    FLUSH_PROFIT = 11;
+    SWAP_METHOD = 12;
+}
 
 message Request {
     uint64 id = 1;
@@ -195,6 +195,7 @@ message GetInfoResponse {
     int32 threshold = 2;
     string version = 3;
     string mix_address = 4;
+    repeated Action blocked_actios = 5;
 }
 
 message ListRequestsRequest {
