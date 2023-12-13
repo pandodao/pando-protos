@@ -260,6 +260,17 @@ message FindProposalResponse {
     Proposal proposal = 1;
 }
 
+message FindPairRequest {
+    uint32 id = 1;
+    string base_asset_id = 2;
+    string quote_asset_id = 3;
+    string liquidity_asset_id = 4;
+}
+
+message FindPairResponse {
+    Pair pair = 1;
+}
+
 service SwapNodeService {
     rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
     rpc ListRequests(ListRequestsRequest) returns (ListRequestsResponse);
@@ -270,5 +281,6 @@ service SwapNodeService {
     rpc ListTransfers(ListTransfersRequest) returns (ListTransfersResponse);
     rpc FindOrder(FindOrderRequest) returns (FindOrderResponse);
     rpc FindProposal(FindProposalRequest) returns (FindProposalResponse);
+    rpc FindPair(FindPairRequest) returns (FindPairResponse);
 }
 
