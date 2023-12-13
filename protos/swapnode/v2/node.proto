@@ -8,6 +8,7 @@ import "google/protobuf/timestamp.proto";
 message User {
     repeated string members = 1;
     uint32 threshold = 2;
+    string unique_id = 3;
 }
 
 message Pair {
