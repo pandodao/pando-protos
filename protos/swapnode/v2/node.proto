@@ -193,6 +193,7 @@ message GetInfoResponse {
     repeated string members = 1;
     int32 threshold = 2;
     string version = 3;
+    string mix_address = 4;
 }
 
 message ListRequestsRequest {
