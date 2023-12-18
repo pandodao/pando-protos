@@ -246,6 +246,14 @@ message ListTransfersResponse {
     repeated Transfer transfers = 1;
 }
 
+message FindTransferRequest {
+    string id = 1;
+}
+
+message FindTransferResponse {
+    Transfer transfer = 1;
+}
+
 message FindOrderRequest {
     uint64 id = 1;
 }
@@ -281,6 +289,7 @@ service SwapNodeService {
     rpc ListPairs(ListPairsRequest) returns (ListPairsResponse);
     rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse);
     rpc ListTransfers(ListTransfersRequest) returns (ListTransfersResponse);
+    rpc FindTransfer(FindTransferRequest) returns (FindTransferResponse);
     rpc FindOrder(FindOrderRequest) returns (FindOrderResponse);
     rpc FindProposal(FindProposalRequest) returns (FindProposalResponse);
     rpc FindPair(FindPairRequest) returns (FindPairResponse);
