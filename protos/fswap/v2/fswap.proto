@@ -1,0 +1,301 @@
+syntax = "proto3";
+
+package fox.fswap.v2.service;
+option go_package = "github.com/fox-one/pando-protos/fswap/v2;fswap";
+
+import "google/protobuf/timestamp.proto";
+
+message Pagination {
+    string next_cursor = 1;
+    bool has_next = 2;
+}
+
+message Asset {
+    string id = 1;
+    string name = 2;
+    string symbol = 3;
+    string logo = 4;
+    string chain_id = 5;
+    Asset chain = 6;
+    string price = 7;
+    string display_symbol = 8;
+    string extra = 9;
+    string tag = 10;
+    string price_change = 11;
+}
+
+message Pair {
+    string base_asset_id = 1;
+    string quote_asset_id = 2;
+    string base_amount = 3;
+    string quote_amount = 4;
+    string share = 5;
+    string liquidity = 6;
+    string liquidity_asset_id = 7;
+    int32 route_id = 8;
+    string fee_percent = 9;
+    string max_liquidity = 10;
+    string base_value = 11;
+    string quote_value = 12;
+    string volume_24h = 13;
+    string fee_24h = 14;
+    int32 transaction_count_24h = 15;
+    string swap_method = 16;
+    int32 version = 17;
+    string base_volume_24h = 18;
+    string quote_volume_24h = 19;
+    string net_ror_24h = 20;
+    string net_ror_7d = 21;
+    string net_ror_30d = 22;
+    string profit_rate = 23;
+}
+
+message Deposit {
+    enum State {
+        _ = 0;
+        Pending = 1;
+        Cancelled = 2;
+        Done = 3;
+    }
+
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    State state = 3;
+    string user_id = 4;
+    string follow_id = 5;
+    string base_asset_id = 6;
+    string base_amount = 7;
+    string quote_asset_id = 8;
+    string quote_amount = 9;
+    string slippage = 10;
+}
+
+message Transaction {
+    enum Type {
+        _ = 0;
+        Add = 1;
+        Remove = 2;
+        Swap = 3;
+    }
+
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    string user_id = 3;
+    Type type = 4;
+    string base_asset_id = 5;
+    string quote_asset_id = 6;
+    string base_amount = 7;
+    string quote_amount = 8;
+    string fee_asset_id = 9;
+    string fee_amount = 10;
+    string pay_asset_id = 11;
+    string filled_asset_id = 12;
+    string funds = 13;
+    string amount = 14;
+    string value = 15;
+    string fee_value = 16;
+    string follow_id = 17;
+    string liquidity = 18;
+    string group_id = 19;
+}
+
+message Order {
+    enum State {
+        _ = 0;
+        Trading = 1;
+        Rejected = 2;
+        Done = 3;
+    }
+
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    string user_id = 3;
+    State state = 4;
+    string pay_asset_id = 5;
+    string fill_asset_id = 6;
+    string pay_amount = 7;
+    string fill_amount = 8;
+    string min_amount = 9;
+    string routes = 10;
+    repeated string route_assets = 11;
+    repeated Transaction transactions = 12;
+    string route_price = 13;
+    string price_impact = 14;
+    string follow_id = 15;
+
+    string funds = 16;
+    string amount = 17;
+}
+
+message Proposal {
+    message Item {
+        string key = 1;
+        string value = 2;
+        string hint = 3;
+        string action = 4;
+    }
+
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    google.protobuf.Timestamp passed_at = 3;
+    string creator = 4;
+    string asset_id = 5;
+    string amount = 6;
+    string action = 7;
+    string data = 8;
+    repeated string votes = 9;
+    repeated Item items = 10;
+}
+
+message Room {
+    string id = 1;
+    string base_asset_id = 2;
+    string quote_asset_id = 3;
+    repeated string admins = 4;
+    string name = 5;
+}
+
+message UniswapReq {
+    message ListAssets {}
+
+    message ReadAsset {
+        string asset_id = 1;
+    }
+
+    message ReadPair {
+        string base_asset_id = 1;
+        string quote_asset_id = 2;
+    }
+
+    message ListPairs {
+        string broker_id = 1;
+    }
+
+    message ReadDeposit{
+        string follow_id = 1;
+    }
+
+    message ListPendingDeposits{
+        uint32 limit = 1;
+    }
+
+    message ReadTransaction {
+        string base_asset_id = 1;
+        string quote_asset_id = 2;
+        string follow_id = 3;
+    }
+
+    message ReadOrder {
+        string follow_id = 1;
+    }
+
+    message PreOrder {
+        string pay_asset_id = 1;
+        string fill_asset_id = 2;
+        string pay_amount = 3;
+        string fill_amount = 4;
+        string min_amount = 5;
+        // deprecated
+        string funds = 6;
+        // deprecated
+        string amount = 7;
+    }
+
+    message ListTransactions {
+        string base_asset_id = 1;
+        string quote_asset_id = 2;
+        string type = 3;
+        string cursor = 4;
+        int64 limit = 5;
+        string user_id = 6;
+        string order = 7;
+    }
+
+    message UpdateRoom {
+        string id = 1;
+        string base_asset_id = 2;
+        string quote_asset_id = 3;
+    }
+
+    message FindRoom {
+        string id = 1;
+    }
+
+    message ListProposals {
+        string cursor = 1;
+        int64 limit = 2;
+    }
+
+    message FindProposal {
+        string id = 1;
+    }
+}
+
+message UniswapResp {
+    message ListAssets {
+        repeated Asset assets = 1;
+    }
+
+    message ListPairs {
+        repeated Pair pairs = 1;
+        int32 pair_count = 2;
+        int32 transaction_count_24h = 3;
+        string liquidity_value = 4;
+        string volume_24h = 5;
+        string fee_24h = 6;
+        double ts = 7;
+        repeated string whitelists = 8;
+    }
+
+    message ListTransactionsSummary {
+        string total_add_base_amount = 1;
+        string total_add_quote_amount = 2;
+        string total_remove_base_amount = 3;
+        string total_remove_quote_amount = 4;
+    }
+
+    message ListTransactions {
+        repeated Transaction transactions = 1;
+        Pagination pagination = 2;
+        ListTransactionsSummary summary = 3;
+    }
+
+    message ListProposals {
+        repeated Proposal proposals = 1;
+        Pagination pagination = 2;
+    }
+
+    message ListPendingDeposits {
+        repeated Deposit deposits = 1;
+    }
+}
+
+service Uniswap {
+    // ReadAsset 查询 asset 详情
+    rpc ReadAsset(UniswapReq.ReadAsset) returns (Asset);
+    // ListAssets 返回 assets 列表
+    rpc ListAssets(UniswapReq.ListAssets) returns (UniswapResp.ListAssets);
+    // ReadPair 读取 pair 详情
+    rpc ReadPair(UniswapReq.ReadPair) returns (Pair);
+    // ListPairs 读取 pair 列表
+    rpc ListPairs(UniswapReq.ListPairs) returns (UniswapResp.ListPairs);
+    // ReadDeposit 读取充值详情
+    rpc ReadDeposit(UniswapReq.ReadDeposit) returns (Deposit);
+    // ListPendingDeposites
+    rpc ListPendingDeposits(UniswapReq.ListPendingDeposits) returns (UniswapResp.ListPendingDeposits);
+    // ReadTransaction 读取 transaction 详情
+    rpc ReadTransaction(UniswapReq.ReadTransaction) returns (Transaction);
+    // ListTransactions 返回 transaction 列表
+    rpc ListTransactions(UniswapReq.ListTransactions) returns (UniswapResp.ListTransactions);
+    // ReadOrder 读取 order 详情
+    rpc ReadOrder(UniswapReq.ReadOrder) returns (Order);
+    // PreOrder 预下单
+    rpc PreOrder(UniswapReq.PreOrder) returns (Order);
+    // UpdateRoom 设置小群默认交易对
+    rpc UpdateRoom(UniswapReq.UpdateRoom) returns (Room);
+    // FindRoom 查看小群默认交易对
+    rpc FindRoom(UniswapReq.FindRoom) returns (Room);
+    // proposals
+    rpc FindProposal(UniswapReq.FindProposal) returns (Proposal);
+    rpc ListProposals(UniswapReq.ListProposals) returns (UniswapResp.ListProposals);
+}
