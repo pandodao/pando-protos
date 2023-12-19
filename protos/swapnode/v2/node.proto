@@ -225,6 +225,16 @@ message FindDepositResponse {
     Deposit deposit = 1;
 }
 
+message ListDepositsRequest {
+    Deposit.Status status = 1;
+    uint64 offset = 2;
+    int32 limit = 3;
+}
+
+message ListDepositsResponse {
+    repeated Deposit deposits = 1;
+}
+
 message ListPairsRequest {}
 
 message ListPairsResponse {
@@ -287,6 +297,7 @@ service SwapNodeService {
     rpc ListRequests(ListRequestsRequest) returns (ListRequestsResponse);
     rpc FindRequest(FindRequestRequest) returns (FindRequestResponse);
     rpc FindDeposit(FindDepositRequest) returns (FindDepositResponse);
+    rpc ListDeposits(ListDepositsRequest) returns (ListDepositsResponse);
     rpc ListPairs(ListPairsRequest) returns (ListPairsResponse);
     rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse);
     rpc ListTransfers(ListTransfersRequest) returns (ListTransfersResponse);
