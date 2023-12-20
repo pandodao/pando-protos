@@ -186,6 +186,7 @@ message Proposal {
         Withdraw withdraw = 15;
         SwapMethod swap_method = 16;
     }
+    google.protobuf.Timestamp expired_at = 17;
 }
 
 message GetInfoRequest {}
