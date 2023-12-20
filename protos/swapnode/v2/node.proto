@@ -252,6 +252,8 @@ message ListTransactionsResponse {
 
 message ListTransfersRequest {
     uint64 group = 1;
+    Transfer.Status status = 2;
+    int32 limit = 3;
 }
 
 message ListTransfersResponse {
