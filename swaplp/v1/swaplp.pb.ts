@@ -292,12 +292,12 @@ export interface ListAssetsResponse {
 export interface CreateOrderRequest {
   baseAssetId: string;
   quoteAssetId: string;
+  swapMethod: string;
 }
 
 export interface CreateOrderResponse {
   order: Order;
   transfer: Transfer;
-  swapMethod: string;
 }
 
 export interface FindOrderRequest {
@@ -1250,6 +1250,7 @@ export const CreateOrderRequest = {
     return {
       baseAssetId: "",
       quoteAssetId: "",
+      swapMethod: "",
     };
   },
 
@@ -1265,6 +1266,9 @@ export const CreateOrderRequest = {
     }
     if (msg.quoteAssetId) {
       writer.writeString(2, msg.quoteAssetId);
+    }
+    if (msg.swapMethod) {
+      writer.writeString(3, msg.swapMethod);
     }
     return writer;
   },
@@ -1285,6 +1289,10 @@ export const CreateOrderRequest = {
         }
         case 2: {
           msg.quoteAssetId = reader.readString();
+          break;
+        }
+        case 3: {
+          msg.swapMethod = reader.readString();
           break;
         }
         default: {
@@ -1325,7 +1333,6 @@ export const CreateOrderResponse = {
     return {
       order: Order.initialize(),
       transfer: Transfer.initialize(),
-      swapMethod: "",
     };
   },
 
@@ -1341,9 +1348,6 @@ export const CreateOrderResponse = {
     }
     if (msg.transfer) {
       writer.writeMessage(2, msg.transfer, Transfer._writeMessage);
-    }
-    if (msg.swapMethod) {
-      writer.writeString(3, msg.swapMethod);
     }
     return writer;
   },
@@ -1364,10 +1368,6 @@ export const CreateOrderResponse = {
         }
         case 2: {
           reader.readMessage(msg.transfer, Transfer._readMessage);
-          break;
-        }
-        case 3: {
-          msg.swapMethod = reader.readString();
           break;
         }
         default: {
@@ -2372,6 +2372,7 @@ export const CreateOrderRequestJSON = {
     return {
       baseAssetId: "",
       quoteAssetId: "",
+      swapMethod: "",
     };
   },
 
@@ -2387,6 +2388,9 @@ export const CreateOrderRequestJSON = {
     }
     if (msg.quoteAssetId) {
       json.quoteAssetId = msg.quoteAssetId;
+    }
+    if (msg.swapMethod) {
+      json.swapMethod = msg.swapMethod;
     }
     return json;
   },
@@ -2405,6 +2409,10 @@ export const CreateOrderRequestJSON = {
     const _quoteAssetId = json.quoteAssetId ?? json.quote_asset_id;
     if (_quoteAssetId) {
       msg.quoteAssetId = _quoteAssetId;
+    }
+    const _swapMethod = json.swapMethod ?? json.swap_method;
+    if (_swapMethod) {
+      msg.swapMethod = _swapMethod;
     }
     return msg;
   },
@@ -2435,7 +2443,6 @@ export const CreateOrderResponseJSON = {
     return {
       order: Order.initialize(),
       transfer: Transfer.initialize(),
-      swapMethod: "",
     };
   },
 
@@ -2458,9 +2465,6 @@ export const CreateOrderResponseJSON = {
         json.transfer = transfer;
       }
     }
-    if (msg.swapMethod) {
-      json.swapMethod = msg.swapMethod;
-    }
     return json;
   },
 
@@ -2482,10 +2486,6 @@ export const CreateOrderResponseJSON = {
       const m = Transfer.initialize();
       TransferJSON._readMessage(m, _transfer);
       msg.transfer = m;
-    }
-    const _swapMethod = json.swapMethod ?? json.swap_method;
-    if (_swapMethod) {
-      msg.swapMethod = _swapMethod;
     }
     return msg;
   },
