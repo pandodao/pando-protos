@@ -3,18 +3,18 @@
 
 
 google-protobuf@^3.20.1:
-  version "3.20.1"
-  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.20.1.tgz#1b255c2b59bcda7c399df46c65206aa3c7a0ce8b"
-  integrity sha512-XMf1+O32FjYIV3CYu6Tuh5PNbfNEU5Xu22X+Xkdb/DUexFlCzhvv7d5Iirm4AOwn8lv4al1YvIhzGrg2j9Zfzw==
+  version "3.21.2"
+  resolved "https://registry.npmjs.org/google-protobuf/-/google-protobuf-3.21.2.tgz"
+  integrity sha512-3MSOYFO5U9mPGikIYCzK0SaThypfGgS6bHqrUGXG3DPHCrb+txNqeEcns1W0lkGfk0rCyNXm7xB9rMxnCiZOoA==
 
 prettier@^2.6.0:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.2.tgz#e26d71a18a74c3d0f0597f55f01fb6c06c206032"
-  integrity sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==
+  version "2.8.8"
+  resolved "https://registry.npmjs.org/prettier/-/prettier-2.8.8.tgz"
+  integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
 
 protoscript@0.0.5:
   version "0.0.5"
-  resolved "https://registry.yarnpkg.com/protoscript/-/protoscript-0.0.5.tgz#f6bd4d00d95c217c9015904b5f77171d53a30b3d"
+  resolved "https://registry.npmjs.org/protoscript/-/protoscript-0.0.5.tgz"
   integrity sha512-Oy+WKvD07NKjWQ16bRGejG1zQPlwrR7qjizXHlTVfDCVef3qd1EDWEGiLPUdQ+31MLxpQk8tmzRnCVSUfLpkuw==
   dependencies:
     google-protobuf "^3.20.1"
@@ -22,7 +22,7 @@ protoscript@0.0.5:
 
 twirpscript@^0.0.59:
   version "0.0.59"
-  resolved "https://registry.yarnpkg.com/twirpscript/-/twirpscript-0.0.59.tgz#e9e78980174a6e36be9e0825a2021eefc18bf4a2"
+  resolved "https://registry.npmjs.org/twirpscript/-/twirpscript-0.0.59.tgz"
   integrity sha512-bSI9L7pKkEr1/JxXdNn1vwNTvCz8ErQFU7RsPJYmUuErXU79Rvd0tC69EB6luk5PD0uf34IzkntP8gkphbJlzw==
   dependencies:
     google-protobuf "^3.20.1"
