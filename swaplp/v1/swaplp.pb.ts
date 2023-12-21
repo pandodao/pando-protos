@@ -260,6 +260,7 @@ export interface Order {
   lpSymbol: string;
   lpSupply: bigint;
   state: Order.State;
+  swapMethod: string;
 }
 
 export declare namespace Order {
@@ -296,6 +297,7 @@ export interface CreateOrderRequest {
 export interface CreateOrderResponse {
   order: Order;
   transfer: Transfer;
+  swapMethod: string;
 }
 
 export interface FindOrderRequest {
@@ -739,6 +741,7 @@ export const Order = {
       lpSymbol: "",
       lpSupply: 0n,
       state: Order.State._fromInt(0),
+      swapMethod: "",
     };
   },
 
@@ -772,6 +775,9 @@ export const Order = {
     }
     if (msg.state && Order.State._toInt(msg.state)) {
       writer.writeEnum(8, Order.State._toInt(msg.state));
+    }
+    if (msg.swapMethod) {
+      writer.writeString(9, msg.swapMethod);
     }
     return writer;
   },
@@ -813,6 +819,10 @@ export const Order = {
         }
         case 8: {
           msg.state = Order.State._fromInt(reader.readEnum());
+          break;
+        }
+        case 9: {
+          msg.swapMethod = reader.readString();
           break;
         }
         default: {
@@ -1315,6 +1325,7 @@ export const CreateOrderResponse = {
     return {
       order: Order.initialize(),
       transfer: Transfer.initialize(),
+      swapMethod: "",
     };
   },
 
@@ -1330,6 +1341,9 @@ export const CreateOrderResponse = {
     }
     if (msg.transfer) {
       writer.writeMessage(2, msg.transfer, Transfer._writeMessage);
+    }
+    if (msg.swapMethod) {
+      writer.writeString(3, msg.swapMethod);
     }
     return writer;
   },
@@ -1350,6 +1364,10 @@ export const CreateOrderResponse = {
         }
         case 2: {
           reader.readMessage(msg.transfer, Transfer._readMessage);
+          break;
+        }
+        case 3: {
+          msg.swapMethod = reader.readString();
           break;
         }
         default: {
@@ -1890,6 +1908,7 @@ export const OrderJSON = {
       lpSymbol: "",
       lpSupply: 0n,
       state: Order.State._fromInt(0),
+      swapMethod: "",
     };
   },
 
@@ -1924,6 +1943,9 @@ export const OrderJSON = {
     }
     if (msg.state && OrderJSON.State._toInt(msg.state)) {
       json.state = msg.state;
+    }
+    if (msg.swapMethod) {
+      json.swapMethod = msg.swapMethod;
     }
     return json;
   },
@@ -1965,6 +1987,10 @@ export const OrderJSON = {
     const _state = json.state;
     if (_state) {
       msg.state = _state;
+    }
+    const _swapMethod = json.swapMethod ?? json.swap_method;
+    if (_swapMethod) {
+      msg.swapMethod = _swapMethod;
     }
     return msg;
   },
@@ -2409,6 +2435,7 @@ export const CreateOrderResponseJSON = {
     return {
       order: Order.initialize(),
       transfer: Transfer.initialize(),
+      swapMethod: "",
     };
   },
 
@@ -2431,6 +2458,9 @@ export const CreateOrderResponseJSON = {
         json.transfer = transfer;
       }
     }
+    if (msg.swapMethod) {
+      json.swapMethod = msg.swapMethod;
+    }
     return json;
   },
 
@@ -2452,6 +2482,10 @@ export const CreateOrderResponseJSON = {
       const m = Transfer.initialize();
       TransferJSON._readMessage(m, _transfer);
       msg.transfer = m;
+    }
+    const _swapMethod = json.swapMethod ?? json.swap_method;
+    if (_swapMethod) {
+      msg.swapMethod = _swapMethod;
     }
     return msg;
   },
