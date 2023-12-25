@@ -2,10 +2,8 @@
 // Source: swapnode/v1/core.proto
 /* eslint-disable */
 
-import type { ByteSource } from "twirpscript";
-import { BinaryReader, BinaryWriter } from "twirpscript";
-
-import { Timestamp, TimestampJSON } from "../../google/protobuf/timestamp.pb";
+import type { ByteSource, PartialDeep } from "protoscript";
+import * as protoscript from "protoscript";
 
 //========================================//
 //                 Types                  //
@@ -43,7 +41,7 @@ export interface Pair {
 
 export interface Output {
   id: string;
-  createdAt: Timestamp;
+  createdAt: protoscript.Timestamp;
   assetId: string;
   amount: string;
   sender: string;
@@ -55,7 +53,7 @@ export interface Output {
 
 export interface Order {
   id: string;
-  createdAt: Timestamp;
+  createdAt: protoscript.Timestamp;
   userId: string;
   followId: string;
   payAssetId: string;
@@ -68,8 +66,8 @@ export interface Order {
 
 export interface Deposit {
   id: string;
-  createdAt: Timestamp;
-  expiredAt: Timestamp;
+  createdAt: protoscript.Timestamp;
+  expiredAt: protoscript.Timestamp;
   userId: string;
   followId: string;
   status: Deposit.Status;
@@ -86,7 +84,7 @@ export declare namespace Deposit {
 
 export interface Transaction {
   id: string;
-  createdAt: Timestamp;
+  createdAt: protoscript.Timestamp;
   userId: string;
   followId: string;
   action: Action;
@@ -101,7 +99,7 @@ export interface Transaction {
 
 export interface Transfer {
   id: string;
-  createdAt: Timestamp;
+  createdAt: protoscript.Timestamp;
   assetId: string;
   amount: string;
   opponents: string[];
@@ -117,7 +115,7 @@ export declare namespace Transfer {
 
 export interface Audit {
   id: string;
-  createdAt: Timestamp;
+  createdAt: protoscript.Timestamp;
   assetId: string;
   amount: string;
   userId: string;
@@ -212,26 +210,33 @@ export const Header = {
   /**
    * Serializes Header to protobuf.
    */
-  encode: function (msg: Partial<Header>): Uint8Array {
-    return Header._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  encode: function (msg: PartialDeep<Header>): Uint8Array {
+    return Header._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
   },
 
   /**
    * Deserializes Header from protobuf.
    */
   decode: function (bytes: ByteSource): Header {
-    return Header._readMessage(Header.initialize(), new BinaryReader(bytes));
+    return Header._readMessage(
+      Header.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
   },
 
   /**
    * Initializes Header with all fields set to their default value.
    */
-  initialize: function (): Header {
+  initialize: function (msg?: Partial<Header>): Header {
     return {
       version: 0,
       userId: "",
       followId: "",
       action: Action._fromInt(0),
+      ...msg,
     };
   },
 
@@ -239,9 +244,9 @@ export const Header = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<Header>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<Header>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.version) {
       writer.writeInt32(1, msg.version);
     }
@@ -260,7 +265,10 @@ export const Header = {
   /**
    * @private
    */
-  _readMessage: function (msg: Header, reader: BinaryReader): Header {
+  _readMessage: function (
+    msg: Header,
+    reader: protoscript.BinaryReader,
+  ): Header {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -294,21 +302,27 @@ export const Pair = {
   /**
    * Serializes Pair to protobuf.
    */
-  encode: function (msg: Partial<Pair>): Uint8Array {
-    return Pair._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  encode: function (msg: PartialDeep<Pair>): Uint8Array {
+    return Pair._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
   },
 
   /**
    * Deserializes Pair from protobuf.
    */
   decode: function (bytes: ByteSource): Pair {
-    return Pair._readMessage(Pair.initialize(), new BinaryReader(bytes));
+    return Pair._readMessage(
+      Pair.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
   },
 
   /**
    * Initializes Pair with all fields set to their default value.
    */
-  initialize: function (): Pair {
+  initialize: function (msg?: Partial<Pair>): Pair {
     return {
       baseAssetId: "",
       quoteAssetId: "",
@@ -321,6 +335,7 @@ export const Pair = {
       maxLiquidity: "",
       swapMethod: "",
       version: 0,
+      ...msg,
     };
   },
 
@@ -328,9 +343,9 @@ export const Pair = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<Pair>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<Pair>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.baseAssetId) {
       writer.writeString(1, msg.baseAssetId);
     }
@@ -370,7 +385,7 @@ export const Pair = {
   /**
    * @private
    */
-  _readMessage: function (msg: Pair, reader: BinaryReader): Pair {
+  _readMessage: function (msg: Pair, reader: protoscript.BinaryReader): Pair {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -432,24 +447,30 @@ export const Output = {
   /**
    * Serializes Output to protobuf.
    */
-  encode: function (msg: Partial<Output>): Uint8Array {
-    return Output._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  encode: function (msg: PartialDeep<Output>): Uint8Array {
+    return Output._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
   },
 
   /**
    * Deserializes Output from protobuf.
    */
   decode: function (bytes: ByteSource): Output {
-    return Output._readMessage(Output.initialize(), new BinaryReader(bytes));
+    return Output._readMessage(
+      Output.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
   },
 
   /**
    * Initializes Output with all fields set to their default value.
    */
-  initialize: function (): Output {
+  initialize: function (msg?: Partial<Output>): Output {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
+      createdAt: protoscript.Timestamp.initialize(),
       assetId: "",
       amount: "",
       sender: "",
@@ -457,6 +478,7 @@ export const Output = {
       transactionHash: "",
       outputIndex: 0,
       header: Header.initialize(),
+      ...msg,
     };
   },
 
@@ -464,14 +486,18 @@ export const Output = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<Output>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<Output>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.id) {
       writer.writeString(1, msg.id);
     }
     if (msg.createdAt) {
-      writer.writeMessage(2, msg.createdAt, Timestamp._writeMessage);
+      writer.writeMessage(
+        2,
+        msg.createdAt,
+        protoscript.Timestamp._writeMessage,
+      );
     }
     if (msg.assetId) {
       writer.writeString(3, msg.assetId);
@@ -500,7 +526,10 @@ export const Output = {
   /**
    * @private
    */
-  _readMessage: function (msg: Output, reader: BinaryReader): Output {
+  _readMessage: function (
+    msg: Output,
+    reader: protoscript.BinaryReader,
+  ): Output {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -509,7 +538,7 @@ export const Output = {
           break;
         }
         case 2: {
-          reader.readMessage(msg.createdAt, Timestamp._readMessage);
+          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
           break;
         }
         case 3: {
@@ -554,24 +583,30 @@ export const Order = {
   /**
    * Serializes Order to protobuf.
    */
-  encode: function (msg: Partial<Order>): Uint8Array {
-    return Order._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  encode: function (msg: PartialDeep<Order>): Uint8Array {
+    return Order._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
   },
 
   /**
    * Deserializes Order from protobuf.
    */
   decode: function (bytes: ByteSource): Order {
-    return Order._readMessage(Order.initialize(), new BinaryReader(bytes));
+    return Order._readMessage(
+      Order.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
   },
 
   /**
    * Initializes Order with all fields set to their default value.
    */
-  initialize: function (): Order {
+  initialize: function (msg?: Partial<Order>): Order {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
+      createdAt: protoscript.Timestamp.initialize(),
       userId: "",
       followId: "",
       payAssetId: "",
@@ -580,6 +615,7 @@ export const Order = {
       fillAmount: "",
       minAmount: "",
       routes: "",
+      ...msg,
     };
   },
 
@@ -587,14 +623,18 @@ export const Order = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<Order>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<Order>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.id) {
       writer.writeString(1, msg.id);
     }
     if (msg.createdAt) {
-      writer.writeMessage(2, msg.createdAt, Timestamp._writeMessage);
+      writer.writeMessage(
+        2,
+        msg.createdAt,
+        protoscript.Timestamp._writeMessage,
+      );
     }
     if (msg.userId) {
       writer.writeString(3, msg.userId);
@@ -626,7 +666,7 @@ export const Order = {
   /**
    * @private
    */
-  _readMessage: function (msg: Order, reader: BinaryReader): Order {
+  _readMessage: function (msg: Order, reader: protoscript.BinaryReader): Order {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -635,7 +675,7 @@ export const Order = {
           break;
         }
         case 2: {
-          reader.readMessage(msg.createdAt, Timestamp._readMessage);
+          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
           break;
         }
         case 3: {
@@ -684,25 +724,31 @@ export const Deposit = {
   /**
    * Serializes Deposit to protobuf.
    */
-  encode: function (msg: Partial<Deposit>): Uint8Array {
-    return Deposit._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  encode: function (msg: PartialDeep<Deposit>): Uint8Array {
+    return Deposit._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
   },
 
   /**
    * Deserializes Deposit from protobuf.
    */
   decode: function (bytes: ByteSource): Deposit {
-    return Deposit._readMessage(Deposit.initialize(), new BinaryReader(bytes));
+    return Deposit._readMessage(
+      Deposit.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
   },
 
   /**
    * Initializes Deposit with all fields set to their default value.
    */
-  initialize: function (): Deposit {
+  initialize: function (msg?: Partial<Deposit>): Deposit {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
-      expiredAt: Timestamp.initialize(),
+      createdAt: protoscript.Timestamp.initialize(),
+      expiredAt: protoscript.Timestamp.initialize(),
       userId: "",
       followId: "",
       status: Deposit.Status._fromInt(0),
@@ -711,6 +757,7 @@ export const Deposit = {
       quoteAssetId: "",
       quoteAmount: "",
       slippage: "",
+      ...msg,
     };
   },
 
@@ -718,17 +765,25 @@ export const Deposit = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<Deposit>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<Deposit>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.id) {
       writer.writeString(1, msg.id);
     }
     if (msg.createdAt) {
-      writer.writeMessage(2, msg.createdAt, Timestamp._writeMessage);
+      writer.writeMessage(
+        2,
+        msg.createdAt,
+        protoscript.Timestamp._writeMessage,
+      );
     }
     if (msg.expiredAt) {
-      writer.writeMessage(3, msg.expiredAt, Timestamp._writeMessage);
+      writer.writeMessage(
+        3,
+        msg.expiredAt,
+        protoscript.Timestamp._writeMessage,
+      );
     }
     if (msg.userId) {
       writer.writeString(4, msg.userId);
@@ -760,7 +815,10 @@ export const Deposit = {
   /**
    * @private
    */
-  _readMessage: function (msg: Deposit, reader: BinaryReader): Deposit {
+  _readMessage: function (
+    msg: Deposit,
+    reader: protoscript.BinaryReader,
+  ): Deposit {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -769,11 +827,11 @@ export const Deposit = {
           break;
         }
         case 2: {
-          reader.readMessage(msg.createdAt, Timestamp._readMessage);
+          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
           break;
         }
         case 3: {
-          reader.readMessage(msg.expiredAt, Timestamp._readMessage);
+          reader.readMessage(msg.expiredAt, protoscript.Timestamp._readMessage);
           break;
         }
         case 4: {
@@ -875,8 +933,11 @@ export const Transaction = {
   /**
    * Serializes Transaction to protobuf.
    */
-  encode: function (msg: Partial<Transaction>): Uint8Array {
-    return Transaction._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  encode: function (msg: PartialDeep<Transaction>): Uint8Array {
+    return Transaction._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
   },
 
   /**
@@ -885,17 +946,17 @@ export const Transaction = {
   decode: function (bytes: ByteSource): Transaction {
     return Transaction._readMessage(
       Transaction.initialize(),
-      new BinaryReader(bytes)
+      new protoscript.BinaryReader(bytes),
     );
   },
 
   /**
    * Initializes Transaction with all fields set to their default value.
    */
-  initialize: function (): Transaction {
+  initialize: function (msg?: Partial<Transaction>): Transaction {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
+      createdAt: protoscript.Timestamp.initialize(),
       userId: "",
       followId: "",
       action: Action._fromInt(0),
@@ -906,6 +967,7 @@ export const Transaction = {
       feeAssetId: "",
       feeAmount: "",
       liquidityAmount: "",
+      ...msg,
     };
   },
 
@@ -913,14 +975,18 @@ export const Transaction = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<Transaction>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<Transaction>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.id) {
       writer.writeString(1, msg.id);
     }
     if (msg.createdAt) {
-      writer.writeMessage(2, msg.createdAt, Timestamp._writeMessage);
+      writer.writeMessage(
+        2,
+        msg.createdAt,
+        protoscript.Timestamp._writeMessage,
+      );
     }
     if (msg.userId) {
       writer.writeString(3, msg.userId);
@@ -958,7 +1024,10 @@ export const Transaction = {
   /**
    * @private
    */
-  _readMessage: function (msg: Transaction, reader: BinaryReader): Transaction {
+  _readMessage: function (
+    msg: Transaction,
+    reader: protoscript.BinaryReader,
+  ): Transaction {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -967,7 +1036,7 @@ export const Transaction = {
           break;
         }
         case 2: {
-          reader.readMessage(msg.createdAt, Timestamp._readMessage);
+          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
           break;
         }
         case 3: {
@@ -1024,8 +1093,11 @@ export const Transfer = {
   /**
    * Serializes Transfer to protobuf.
    */
-  encode: function (msg: Partial<Transfer>): Uint8Array {
-    return Transfer._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  encode: function (msg: PartialDeep<Transfer>): Uint8Array {
+    return Transfer._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
   },
 
   /**
@@ -1034,17 +1106,17 @@ export const Transfer = {
   decode: function (bytes: ByteSource): Transfer {
     return Transfer._readMessage(
       Transfer.initialize(),
-      new BinaryReader(bytes)
+      new protoscript.BinaryReader(bytes),
     );
   },
 
   /**
    * Initializes Transfer with all fields set to their default value.
    */
-  initialize: function (): Transfer {
+  initialize: function (msg?: Partial<Transfer>): Transfer {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
+      createdAt: protoscript.Timestamp.initialize(),
       assetId: "",
       amount: "",
       opponents: [],
@@ -1052,6 +1124,7 @@ export const Transfer = {
       memo: "",
       signedTx: "",
       status: Transfer.Status._fromInt(0),
+      ...msg,
     };
   },
 
@@ -1059,14 +1132,18 @@ export const Transfer = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<Transfer>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<Transfer>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.id) {
       writer.writeString(1, msg.id);
     }
     if (msg.createdAt) {
-      writer.writeMessage(2, msg.createdAt, Timestamp._writeMessage);
+      writer.writeMessage(
+        2,
+        msg.createdAt,
+        protoscript.Timestamp._writeMessage,
+      );
     }
     if (msg.assetId) {
       writer.writeString(3, msg.assetId);
@@ -1095,7 +1172,10 @@ export const Transfer = {
   /**
    * @private
    */
-  _readMessage: function (msg: Transfer, reader: BinaryReader): Transfer {
+  _readMessage: function (
+    msg: Transfer,
+    reader: protoscript.BinaryReader,
+  ): Transfer {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -1104,7 +1184,7 @@ export const Transfer = {
           break;
         }
         case 2: {
-          reader.readMessage(msg.createdAt, Timestamp._readMessage);
+          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
           break;
         }
         case 3: {
@@ -1202,30 +1282,37 @@ export const Audit = {
   /**
    * Serializes Audit to protobuf.
    */
-  encode: function (msg: Partial<Audit>): Uint8Array {
-    return Audit._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  encode: function (msg: PartialDeep<Audit>): Uint8Array {
+    return Audit._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
   },
 
   /**
    * Deserializes Audit from protobuf.
    */
   decode: function (bytes: ByteSource): Audit {
-    return Audit._readMessage(Audit.initialize(), new BinaryReader(bytes));
+    return Audit._readMessage(
+      Audit.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
   },
 
   /**
    * Initializes Audit with all fields set to their default value.
    */
-  initialize: function (): Audit {
+  initialize: function (msg?: Partial<Audit>): Audit {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
+      createdAt: protoscript.Timestamp.initialize(),
       assetId: "",
       amount: "",
       userId: "",
       status: Audit.Status._fromInt(0),
       memo: "",
       reviewedBy: "",
+      ...msg,
     };
   },
 
@@ -1233,14 +1320,18 @@ export const Audit = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<Audit>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<Audit>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.id) {
       writer.writeString(1, msg.id);
     }
     if (msg.createdAt) {
-      writer.writeMessage(2, msg.createdAt, Timestamp._writeMessage);
+      writer.writeMessage(
+        2,
+        msg.createdAt,
+        protoscript.Timestamp._writeMessage,
+      );
     }
     if (msg.assetId) {
       writer.writeString(3, msg.assetId);
@@ -1266,7 +1357,7 @@ export const Audit = {
   /**
    * @private
    */
-  _readMessage: function (msg: Audit, reader: BinaryReader): Audit {
+  _readMessage: function (msg: Audit, reader: protoscript.BinaryReader): Audit {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -1275,7 +1366,7 @@ export const Audit = {
           break;
         }
         case 2: {
-          reader.readMessage(msg.createdAt, Timestamp._readMessage);
+          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
           break;
         }
         case 3: {
@@ -1440,7 +1531,7 @@ export const HeaderJSON = {
   /**
    * Serializes Header to JSON.
    */
-  encode: function (msg: Partial<Header>): string {
+  encode: function (msg: PartialDeep<Header>): string {
     return JSON.stringify(HeaderJSON._writeMessage(msg));
   },
 
@@ -1454,31 +1545,32 @@ export const HeaderJSON = {
   /**
    * Initializes Header with all fields set to their default value.
    */
-  initialize: function (): Header {
+  initialize: function (msg?: Partial<Header>): Header {
     return {
       version: 0,
       userId: "",
       followId: "",
       action: Action._fromInt(0),
+      ...msg,
     };
   },
 
   /**
    * @private
    */
-  _writeMessage: function (msg: Partial<Header>): Record<string, unknown> {
+  _writeMessage: function (msg: PartialDeep<Header>): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.version) {
-      json.version = msg.version;
+      json["version"] = msg.version;
     }
     if (msg.userId) {
-      json.userId = msg.userId;
+      json["userId"] = msg.userId;
     }
     if (msg.followId) {
-      json.followId = msg.followId;
+      json["followId"] = msg.followId;
     }
     if (msg.action && ActionJSON._toInt(msg.action)) {
-      json.action = msg.action;
+      json["action"] = msg.action;
     }
     return json;
   },
@@ -1487,21 +1579,21 @@ export const HeaderJSON = {
    * @private
    */
   _readMessage: function (msg: Header, json: any): Header {
-    const _version = json.version;
-    if (_version) {
-      msg.version = _version;
+    const _version_ = json["version"];
+    if (_version_) {
+      msg.version = protoscript.parseNumber(_version_);
     }
-    const _userId = json.userId ?? json.user_id;
-    if (_userId) {
-      msg.userId = _userId;
+    const _userId_ = json["userId"] ?? json["user_id"];
+    if (_userId_) {
+      msg.userId = _userId_;
     }
-    const _followId = json.followId ?? json.follow_id;
-    if (_followId) {
-      msg.followId = _followId;
+    const _followId_ = json["followId"] ?? json["follow_id"];
+    if (_followId_) {
+      msg.followId = _followId_;
     }
-    const _action = json.action;
-    if (_action) {
-      msg.action = _action;
+    const _action_ = json["action"];
+    if (_action_) {
+      msg.action = Action._fromInt(_action_);
     }
     return msg;
   },
@@ -1511,7 +1603,7 @@ export const PairJSON = {
   /**
    * Serializes Pair to JSON.
    */
-  encode: function (msg: Partial<Pair>): string {
+  encode: function (msg: PartialDeep<Pair>): string {
     return JSON.stringify(PairJSON._writeMessage(msg));
   },
 
@@ -1525,7 +1617,7 @@ export const PairJSON = {
   /**
    * Initializes Pair with all fields set to their default value.
    */
-  initialize: function (): Pair {
+  initialize: function (msg?: Partial<Pair>): Pair {
     return {
       baseAssetId: "",
       quoteAssetId: "",
@@ -1538,46 +1630,47 @@ export const PairJSON = {
       maxLiquidity: "",
       swapMethod: "",
       version: 0,
+      ...msg,
     };
   },
 
   /**
    * @private
    */
-  _writeMessage: function (msg: Partial<Pair>): Record<string, unknown> {
+  _writeMessage: function (msg: PartialDeep<Pair>): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.baseAssetId) {
-      json.baseAssetId = msg.baseAssetId;
+      json["baseAssetId"] = msg.baseAssetId;
     }
     if (msg.quoteAssetId) {
-      json.quoteAssetId = msg.quoteAssetId;
+      json["quoteAssetId"] = msg.quoteAssetId;
     }
     if (msg.baseAmount) {
-      json.baseAmount = msg.baseAmount;
+      json["baseAmount"] = msg.baseAmount;
     }
     if (msg.quoteAmount) {
-      json.quoteAmount = msg.quoteAmount;
+      json["quoteAmount"] = msg.quoteAmount;
     }
     if (msg.liquidity) {
-      json.liquidity = msg.liquidity;
+      json["liquidity"] = msg.liquidity;
     }
     if (msg.liquidityAssetId) {
-      json.liquidityAssetId = msg.liquidityAssetId;
+      json["liquidityAssetId"] = msg.liquidityAssetId;
     }
     if (msg.routeId) {
-      json.routeId = msg.routeId;
+      json["routeId"] = msg.routeId;
     }
     if (msg.feePercent) {
-      json.feePercent = msg.feePercent;
+      json["feePercent"] = msg.feePercent;
     }
     if (msg.maxLiquidity) {
-      json.maxLiquidity = msg.maxLiquidity;
+      json["maxLiquidity"] = msg.maxLiquidity;
     }
     if (msg.swapMethod) {
-      json.swapMethod = msg.swapMethod;
+      json["swapMethod"] = msg.swapMethod;
     }
     if (msg.version) {
-      json.version = msg.version;
+      json["version"] = msg.version;
     }
     return json;
   },
@@ -1586,49 +1679,50 @@ export const PairJSON = {
    * @private
    */
   _readMessage: function (msg: Pair, json: any): Pair {
-    const _baseAssetId = json.baseAssetId ?? json.base_asset_id;
-    if (_baseAssetId) {
-      msg.baseAssetId = _baseAssetId;
+    const _baseAssetId_ = json["baseAssetId"] ?? json["base_asset_id"];
+    if (_baseAssetId_) {
+      msg.baseAssetId = _baseAssetId_;
     }
-    const _quoteAssetId = json.quoteAssetId ?? json.quote_asset_id;
-    if (_quoteAssetId) {
-      msg.quoteAssetId = _quoteAssetId;
+    const _quoteAssetId_ = json["quoteAssetId"] ?? json["quote_asset_id"];
+    if (_quoteAssetId_) {
+      msg.quoteAssetId = _quoteAssetId_;
     }
-    const _baseAmount = json.baseAmount ?? json.base_amount;
-    if (_baseAmount) {
-      msg.baseAmount = _baseAmount;
+    const _baseAmount_ = json["baseAmount"] ?? json["base_amount"];
+    if (_baseAmount_) {
+      msg.baseAmount = _baseAmount_;
     }
-    const _quoteAmount = json.quoteAmount ?? json.quote_amount;
-    if (_quoteAmount) {
-      msg.quoteAmount = _quoteAmount;
+    const _quoteAmount_ = json["quoteAmount"] ?? json["quote_amount"];
+    if (_quoteAmount_) {
+      msg.quoteAmount = _quoteAmount_;
     }
-    const _liquidity = json.liquidity;
-    if (_liquidity) {
-      msg.liquidity = _liquidity;
+    const _liquidity_ = json["liquidity"];
+    if (_liquidity_) {
+      msg.liquidity = _liquidity_;
     }
-    const _liquidityAssetId = json.liquidityAssetId ?? json.liquidity_asset_id;
-    if (_liquidityAssetId) {
-      msg.liquidityAssetId = _liquidityAssetId;
+    const _liquidityAssetId_ =
+      json["liquidityAssetId"] ?? json["liquidity_asset_id"];
+    if (_liquidityAssetId_) {
+      msg.liquidityAssetId = _liquidityAssetId_;
     }
-    const _routeId = json.routeId ?? json.route_id;
-    if (_routeId) {
-      msg.routeId = _routeId;
+    const _routeId_ = json["routeId"] ?? json["route_id"];
+    if (_routeId_) {
+      msg.routeId = protoscript.parseNumber(_routeId_);
     }
-    const _feePercent = json.feePercent ?? json.fee_percent;
-    if (_feePercent) {
-      msg.feePercent = _feePercent;
+    const _feePercent_ = json["feePercent"] ?? json["fee_percent"];
+    if (_feePercent_) {
+      msg.feePercent = _feePercent_;
     }
-    const _maxLiquidity = json.maxLiquidity ?? json.max_liquidity;
-    if (_maxLiquidity) {
-      msg.maxLiquidity = _maxLiquidity;
+    const _maxLiquidity_ = json["maxLiquidity"] ?? json["max_liquidity"];
+    if (_maxLiquidity_) {
+      msg.maxLiquidity = _maxLiquidity_;
     }
-    const _swapMethod = json.swapMethod ?? json.swap_method;
-    if (_swapMethod) {
-      msg.swapMethod = _swapMethod;
+    const _swapMethod_ = json["swapMethod"] ?? json["swap_method"];
+    if (_swapMethod_) {
+      msg.swapMethod = _swapMethod_;
     }
-    const _version = json.version;
-    if (_version) {
-      msg.version = _version;
+    const _version_ = json["version"];
+    if (_version_) {
+      msg.version = protoscript.parseNumber(_version_);
     }
     return msg;
   },
@@ -1638,7 +1732,7 @@ export const OutputJSON = {
   /**
    * Serializes Output to JSON.
    */
-  encode: function (msg: Partial<Output>): string {
+  encode: function (msg: PartialDeep<Output>): string {
     return JSON.stringify(OutputJSON._writeMessage(msg));
   },
 
@@ -1652,56 +1746,54 @@ export const OutputJSON = {
   /**
    * Initializes Output with all fields set to their default value.
    */
-  initialize: function (): Output {
+  initialize: function (msg?: Partial<Output>): Output {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
+      createdAt: protoscript.TimestampJSON.initialize(),
       assetId: "",
       amount: "",
       sender: "",
       memo: "",
       transactionHash: "",
       outputIndex: 0,
-      header: Header.initialize(),
+      header: HeaderJSON.initialize(),
+      ...msg,
     };
   },
 
   /**
    * @private
    */
-  _writeMessage: function (msg: Partial<Output>): Record<string, unknown> {
+  _writeMessage: function (msg: PartialDeep<Output>): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.id) {
-      json.id = msg.id;
+      json["id"] = msg.id;
     }
-    if (msg.createdAt) {
-      const createdAt = TimestampJSON._writeMessage(msg.createdAt);
-      if (Object.keys(createdAt).length > 0) {
-        json.createdAt = createdAt;
-      }
+    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
+      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
     }
     if (msg.assetId) {
-      json.assetId = msg.assetId;
+      json["assetId"] = msg.assetId;
     }
     if (msg.amount) {
-      json.amount = msg.amount;
+      json["amount"] = msg.amount;
     }
     if (msg.sender) {
-      json.sender = msg.sender;
+      json["sender"] = msg.sender;
     }
     if (msg.memo) {
-      json.memo = msg.memo;
+      json["memo"] = msg.memo;
     }
     if (msg.transactionHash) {
-      json.transactionHash = msg.transactionHash;
+      json["transactionHash"] = msg.transactionHash;
     }
     if (msg.outputIndex) {
-      json.outputIndex = msg.outputIndex;
+      json["outputIndex"] = msg.outputIndex;
     }
     if (msg.header) {
-      const header = HeaderJSON._writeMessage(msg.header);
-      if (Object.keys(header).length > 0) {
-        json.header = header;
+      const _header_ = HeaderJSON._writeMessage(msg.header);
+      if (Object.keys(_header_).length > 0) {
+        json["header"] = _header_;
       }
     }
     return json;
@@ -1711,45 +1803,42 @@ export const OutputJSON = {
    * @private
    */
   _readMessage: function (msg: Output, json: any): Output {
-    const _id = json.id;
-    if (_id) {
-      msg.id = _id;
+    const _id_ = json["id"];
+    if (_id_) {
+      msg.id = _id_;
     }
-    const _createdAt = json.createdAt ?? json.created_at;
-    if (_createdAt) {
-      const m = Timestamp.initialize();
-      TimestampJSON._readMessage(m, _createdAt);
-      msg.createdAt = m;
+    const _createdAt_ = json["createdAt"] ?? json["created_at"];
+    if (_createdAt_) {
+      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
     }
-    const _assetId = json.assetId ?? json.asset_id;
-    if (_assetId) {
-      msg.assetId = _assetId;
+    const _assetId_ = json["assetId"] ?? json["asset_id"];
+    if (_assetId_) {
+      msg.assetId = _assetId_;
     }
-    const _amount = json.amount;
-    if (_amount) {
-      msg.amount = _amount;
+    const _amount_ = json["amount"];
+    if (_amount_) {
+      msg.amount = _amount_;
     }
-    const _sender = json.sender;
-    if (_sender) {
-      msg.sender = _sender;
+    const _sender_ = json["sender"];
+    if (_sender_) {
+      msg.sender = _sender_;
     }
-    const _memo = json.memo;
-    if (_memo) {
-      msg.memo = _memo;
+    const _memo_ = json["memo"];
+    if (_memo_) {
+      msg.memo = _memo_;
     }
-    const _transactionHash = json.transactionHash ?? json.transaction_hash;
-    if (_transactionHash) {
-      msg.transactionHash = _transactionHash;
+    const _transactionHash_ =
+      json["transactionHash"] ?? json["transaction_hash"];
+    if (_transactionHash_) {
+      msg.transactionHash = _transactionHash_;
     }
-    const _outputIndex = json.outputIndex ?? json.output_index;
-    if (_outputIndex) {
-      msg.outputIndex = _outputIndex;
+    const _outputIndex_ = json["outputIndex"] ?? json["output_index"];
+    if (_outputIndex_) {
+      msg.outputIndex = protoscript.parseNumber(_outputIndex_);
     }
-    const _header = json.header;
-    if (_header) {
-      const m = Header.initialize();
-      HeaderJSON._readMessage(m, _header);
-      msg.header = m;
+    const _header_ = json["header"];
+    if (_header_) {
+      HeaderJSON._readMessage(msg.header, _header_);
     }
     return msg;
   },
@@ -1759,7 +1848,7 @@ export const OrderJSON = {
   /**
    * Serializes Order to JSON.
    */
-  encode: function (msg: Partial<Order>): string {
+  encode: function (msg: PartialDeep<Order>): string {
     return JSON.stringify(OrderJSON._writeMessage(msg));
   },
 
@@ -1773,10 +1862,10 @@ export const OrderJSON = {
   /**
    * Initializes Order with all fields set to their default value.
    */
-  initialize: function (): Order {
+  initialize: function (msg?: Partial<Order>): Order {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
+      createdAt: protoscript.TimestampJSON.initialize(),
       userId: "",
       followId: "",
       payAssetId: "",
@@ -1785,46 +1874,44 @@ export const OrderJSON = {
       fillAmount: "",
       minAmount: "",
       routes: "",
+      ...msg,
     };
   },
 
   /**
    * @private
    */
-  _writeMessage: function (msg: Partial<Order>): Record<string, unknown> {
+  _writeMessage: function (msg: PartialDeep<Order>): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.id) {
-      json.id = msg.id;
+      json["id"] = msg.id;
     }
-    if (msg.createdAt) {
-      const createdAt = TimestampJSON._writeMessage(msg.createdAt);
-      if (Object.keys(createdAt).length > 0) {
-        json.createdAt = createdAt;
-      }
+    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
+      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
     }
     if (msg.userId) {
-      json.userId = msg.userId;
+      json["userId"] = msg.userId;
     }
     if (msg.followId) {
-      json.followId = msg.followId;
+      json["followId"] = msg.followId;
     }
     if (msg.payAssetId) {
-      json.payAssetId = msg.payAssetId;
+      json["payAssetId"] = msg.payAssetId;
     }
     if (msg.payAmount) {
-      json.payAmount = msg.payAmount;
+      json["payAmount"] = msg.payAmount;
     }
     if (msg.fillAssetId) {
-      json.fillAssetId = msg.fillAssetId;
+      json["fillAssetId"] = msg.fillAssetId;
     }
     if (msg.fillAmount) {
-      json.fillAmount = msg.fillAmount;
+      json["fillAmount"] = msg.fillAmount;
     }
     if (msg.minAmount) {
-      json.minAmount = msg.minAmount;
+      json["minAmount"] = msg.minAmount;
     }
     if (msg.routes) {
-      json.routes = msg.routes;
+      json["routes"] = msg.routes;
     }
     return json;
   },
@@ -1833,47 +1920,45 @@ export const OrderJSON = {
    * @private
    */
   _readMessage: function (msg: Order, json: any): Order {
-    const _id = json.id;
-    if (_id) {
-      msg.id = _id;
+    const _id_ = json["id"];
+    if (_id_) {
+      msg.id = _id_;
     }
-    const _createdAt = json.createdAt ?? json.created_at;
-    if (_createdAt) {
-      const m = Timestamp.initialize();
-      TimestampJSON._readMessage(m, _createdAt);
-      msg.createdAt = m;
+    const _createdAt_ = json["createdAt"] ?? json["created_at"];
+    if (_createdAt_) {
+      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
     }
-    const _userId = json.userId ?? json.user_id;
-    if (_userId) {
-      msg.userId = _userId;
+    const _userId_ = json["userId"] ?? json["user_id"];
+    if (_userId_) {
+      msg.userId = _userId_;
     }
-    const _followId = json.followId ?? json.follow_id;
-    if (_followId) {
-      msg.followId = _followId;
+    const _followId_ = json["followId"] ?? json["follow_id"];
+    if (_followId_) {
+      msg.followId = _followId_;
     }
-    const _payAssetId = json.payAssetId ?? json.pay_asset_id;
-    if (_payAssetId) {
-      msg.payAssetId = _payAssetId;
+    const _payAssetId_ = json["payAssetId"] ?? json["pay_asset_id"];
+    if (_payAssetId_) {
+      msg.payAssetId = _payAssetId_;
     }
-    const _payAmount = json.payAmount ?? json.pay_amount;
-    if (_payAmount) {
-      msg.payAmount = _payAmount;
+    const _payAmount_ = json["payAmount"] ?? json["pay_amount"];
+    if (_payAmount_) {
+      msg.payAmount = _payAmount_;
     }
-    const _fillAssetId = json.fillAssetId ?? json.fill_asset_id;
-    if (_fillAssetId) {
-      msg.fillAssetId = _fillAssetId;
+    const _fillAssetId_ = json["fillAssetId"] ?? json["fill_asset_id"];
+    if (_fillAssetId_) {
+      msg.fillAssetId = _fillAssetId_;
     }
-    const _fillAmount = json.fillAmount ?? json.fill_amount;
-    if (_fillAmount) {
-      msg.fillAmount = _fillAmount;
+    const _fillAmount_ = json["fillAmount"] ?? json["fill_amount"];
+    if (_fillAmount_) {
+      msg.fillAmount = _fillAmount_;
     }
-    const _minAmount = json.minAmount ?? json.min_amount;
-    if (_minAmount) {
-      msg.minAmount = _minAmount;
+    const _minAmount_ = json["minAmount"] ?? json["min_amount"];
+    if (_minAmount_) {
+      msg.minAmount = _minAmount_;
     }
-    const _routes = json.routes;
-    if (_routes) {
-      msg.routes = _routes;
+    const _routes_ = json["routes"];
+    if (_routes_) {
+      msg.routes = _routes_;
     }
     return msg;
   },
@@ -1883,7 +1968,7 @@ export const DepositJSON = {
   /**
    * Serializes Deposit to JSON.
    */
-  encode: function (msg: Partial<Deposit>): string {
+  encode: function (msg: PartialDeep<Deposit>): string {
     return JSON.stringify(DepositJSON._writeMessage(msg));
   },
 
@@ -1897,11 +1982,11 @@ export const DepositJSON = {
   /**
    * Initializes Deposit with all fields set to their default value.
    */
-  initialize: function (): Deposit {
+  initialize: function (msg?: Partial<Deposit>): Deposit {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
-      expiredAt: Timestamp.initialize(),
+      createdAt: protoscript.TimestampJSON.initialize(),
+      expiredAt: protoscript.TimestampJSON.initialize(),
       userId: "",
       followId: "",
       status: Deposit.Status._fromInt(0),
@@ -1910,52 +1995,47 @@ export const DepositJSON = {
       quoteAssetId: "",
       quoteAmount: "",
       slippage: "",
+      ...msg,
     };
   },
 
   /**
    * @private
    */
-  _writeMessage: function (msg: Partial<Deposit>): Record<string, unknown> {
+  _writeMessage: function (msg: PartialDeep<Deposit>): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.id) {
-      json.id = msg.id;
+      json["id"] = msg.id;
     }
-    if (msg.createdAt) {
-      const createdAt = TimestampJSON._writeMessage(msg.createdAt);
-      if (Object.keys(createdAt).length > 0) {
-        json.createdAt = createdAt;
-      }
+    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
+      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
     }
-    if (msg.expiredAt) {
-      const expiredAt = TimestampJSON._writeMessage(msg.expiredAt);
-      if (Object.keys(expiredAt).length > 0) {
-        json.expiredAt = expiredAt;
-      }
+    if (msg.expiredAt && msg.expiredAt.seconds && msg.expiredAt.nanos) {
+      json["expiredAt"] = protoscript.serializeTimestamp(msg.expiredAt);
     }
     if (msg.userId) {
-      json.userId = msg.userId;
+      json["userId"] = msg.userId;
     }
     if (msg.followId) {
-      json.followId = msg.followId;
+      json["followId"] = msg.followId;
     }
     if (msg.status && DepositJSON.Status._toInt(msg.status)) {
-      json.status = msg.status;
+      json["status"] = msg.status;
     }
     if (msg.baseAssetId) {
-      json.baseAssetId = msg.baseAssetId;
+      json["baseAssetId"] = msg.baseAssetId;
     }
     if (msg.baseAmount) {
-      json.baseAmount = msg.baseAmount;
+      json["baseAmount"] = msg.baseAmount;
     }
     if (msg.quoteAssetId) {
-      json.quoteAssetId = msg.quoteAssetId;
+      json["quoteAssetId"] = msg.quoteAssetId;
     }
     if (msg.quoteAmount) {
-      json.quoteAmount = msg.quoteAmount;
+      json["quoteAmount"] = msg.quoteAmount;
     }
     if (msg.slippage) {
-      json.slippage = msg.slippage;
+      json["slippage"] = msg.slippage;
     }
     return json;
   },
@@ -1964,53 +2044,49 @@ export const DepositJSON = {
    * @private
    */
   _readMessage: function (msg: Deposit, json: any): Deposit {
-    const _id = json.id;
-    if (_id) {
-      msg.id = _id;
+    const _id_ = json["id"];
+    if (_id_) {
+      msg.id = _id_;
     }
-    const _createdAt = json.createdAt ?? json.created_at;
-    if (_createdAt) {
-      const m = Timestamp.initialize();
-      TimestampJSON._readMessage(m, _createdAt);
-      msg.createdAt = m;
+    const _createdAt_ = json["createdAt"] ?? json["created_at"];
+    if (_createdAt_) {
+      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
     }
-    const _expiredAt = json.expiredAt ?? json.expired_at;
-    if (_expiredAt) {
-      const m = Timestamp.initialize();
-      TimestampJSON._readMessage(m, _expiredAt);
-      msg.expiredAt = m;
+    const _expiredAt_ = json["expiredAt"] ?? json["expired_at"];
+    if (_expiredAt_) {
+      msg.expiredAt = protoscript.parseTimestamp(_expiredAt_);
     }
-    const _userId = json.userId ?? json.user_id;
-    if (_userId) {
-      msg.userId = _userId;
+    const _userId_ = json["userId"] ?? json["user_id"];
+    if (_userId_) {
+      msg.userId = _userId_;
     }
-    const _followId = json.followId ?? json.follow_id;
-    if (_followId) {
-      msg.followId = _followId;
+    const _followId_ = json["followId"] ?? json["follow_id"];
+    if (_followId_) {
+      msg.followId = _followId_;
     }
-    const _status = json.status;
-    if (_status) {
-      msg.status = _status;
+    const _status_ = json["status"];
+    if (_status_) {
+      msg.status = Deposit.Status._fromInt(_status_);
     }
-    const _baseAssetId = json.baseAssetId ?? json.base_asset_id;
-    if (_baseAssetId) {
-      msg.baseAssetId = _baseAssetId;
+    const _baseAssetId_ = json["baseAssetId"] ?? json["base_asset_id"];
+    if (_baseAssetId_) {
+      msg.baseAssetId = _baseAssetId_;
     }
-    const _baseAmount = json.baseAmount ?? json.base_amount;
-    if (_baseAmount) {
-      msg.baseAmount = _baseAmount;
+    const _baseAmount_ = json["baseAmount"] ?? json["base_amount"];
+    if (_baseAmount_) {
+      msg.baseAmount = _baseAmount_;
     }
-    const _quoteAssetId = json.quoteAssetId ?? json.quote_asset_id;
-    if (_quoteAssetId) {
-      msg.quoteAssetId = _quoteAssetId;
+    const _quoteAssetId_ = json["quoteAssetId"] ?? json["quote_asset_id"];
+    if (_quoteAssetId_) {
+      msg.quoteAssetId = _quoteAssetId_;
     }
-    const _quoteAmount = json.quoteAmount ?? json.quote_amount;
-    if (_quoteAmount) {
-      msg.quoteAmount = _quoteAmount;
+    const _quoteAmount_ = json["quoteAmount"] ?? json["quote_amount"];
+    if (_quoteAmount_) {
+      msg.quoteAmount = _quoteAmount_;
     }
-    const _slippage = json.slippage;
-    if (_slippage) {
-      msg.slippage = _slippage;
+    const _slippage_ = json["slippage"];
+    if (_slippage_) {
+      msg.slippage = _slippage_;
     }
     return msg;
   },
@@ -2073,7 +2149,7 @@ export const TransactionJSON = {
   /**
    * Serializes Transaction to JSON.
    */
-  encode: function (msg: Partial<Transaction>): string {
+  encode: function (msg: PartialDeep<Transaction>): string {
     return JSON.stringify(TransactionJSON._writeMessage(msg));
   },
 
@@ -2083,17 +2159,17 @@ export const TransactionJSON = {
   decode: function (json: string): Transaction {
     return TransactionJSON._readMessage(
       TransactionJSON.initialize(),
-      JSON.parse(json)
+      JSON.parse(json),
     );
   },
 
   /**
    * Initializes Transaction with all fields set to their default value.
    */
-  initialize: function (): Transaction {
+  initialize: function (msg?: Partial<Transaction>): Transaction {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
+      createdAt: protoscript.TimestampJSON.initialize(),
       userId: "",
       followId: "",
       action: Action._fromInt(0),
@@ -2104,52 +2180,52 @@ export const TransactionJSON = {
       feeAssetId: "",
       feeAmount: "",
       liquidityAmount: "",
+      ...msg,
     };
   },
 
   /**
    * @private
    */
-  _writeMessage: function (msg: Partial<Transaction>): Record<string, unknown> {
+  _writeMessage: function (
+    msg: PartialDeep<Transaction>,
+  ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.id) {
-      json.id = msg.id;
+      json["id"] = msg.id;
     }
-    if (msg.createdAt) {
-      const createdAt = TimestampJSON._writeMessage(msg.createdAt);
-      if (Object.keys(createdAt).length > 0) {
-        json.createdAt = createdAt;
-      }
+    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
+      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
     }
     if (msg.userId) {
-      json.userId = msg.userId;
+      json["userId"] = msg.userId;
     }
     if (msg.followId) {
-      json.followId = msg.followId;
+      json["followId"] = msg.followId;
     }
     if (msg.action && ActionJSON._toInt(msg.action)) {
-      json.action = msg.action;
+      json["action"] = msg.action;
     }
     if (msg.baseAssetId) {
-      json.baseAssetId = msg.baseAssetId;
+      json["baseAssetId"] = msg.baseAssetId;
     }
     if (msg.baseAmount) {
-      json.baseAmount = msg.baseAmount;
+      json["baseAmount"] = msg.baseAmount;
     }
     if (msg.quoteAssetId) {
-      json.quoteAssetId = msg.quoteAssetId;
+      json["quoteAssetId"] = msg.quoteAssetId;
     }
     if (msg.quoteAmount) {
-      json.quoteAmount = msg.quoteAmount;
+      json["quoteAmount"] = msg.quoteAmount;
     }
     if (msg.feeAssetId) {
-      json.feeAssetId = msg.feeAssetId;
+      json["feeAssetId"] = msg.feeAssetId;
     }
     if (msg.feeAmount) {
-      json.feeAmount = msg.feeAmount;
+      json["feeAmount"] = msg.feeAmount;
     }
     if (msg.liquidityAmount) {
-      json.liquidityAmount = msg.liquidityAmount;
+      json["liquidityAmount"] = msg.liquidityAmount;
     }
     return json;
   },
@@ -2158,55 +2234,54 @@ export const TransactionJSON = {
    * @private
    */
   _readMessage: function (msg: Transaction, json: any): Transaction {
-    const _id = json.id;
-    if (_id) {
-      msg.id = _id;
+    const _id_ = json["id"];
+    if (_id_) {
+      msg.id = _id_;
     }
-    const _createdAt = json.createdAt ?? json.created_at;
-    if (_createdAt) {
-      const m = Timestamp.initialize();
-      TimestampJSON._readMessage(m, _createdAt);
-      msg.createdAt = m;
+    const _createdAt_ = json["createdAt"] ?? json["created_at"];
+    if (_createdAt_) {
+      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
     }
-    const _userId = json.userId ?? json.user_id;
-    if (_userId) {
-      msg.userId = _userId;
+    const _userId_ = json["userId"] ?? json["user_id"];
+    if (_userId_) {
+      msg.userId = _userId_;
     }
-    const _followId = json.followId ?? json.follow_id;
-    if (_followId) {
-      msg.followId = _followId;
+    const _followId_ = json["followId"] ?? json["follow_id"];
+    if (_followId_) {
+      msg.followId = _followId_;
     }
-    const _action = json.action;
-    if (_action) {
-      msg.action = _action;
+    const _action_ = json["action"];
+    if (_action_) {
+      msg.action = Action._fromInt(_action_);
     }
-    const _baseAssetId = json.baseAssetId ?? json.base_asset_id;
-    if (_baseAssetId) {
-      msg.baseAssetId = _baseAssetId;
+    const _baseAssetId_ = json["baseAssetId"] ?? json["base_asset_id"];
+    if (_baseAssetId_) {
+      msg.baseAssetId = _baseAssetId_;
     }
-    const _baseAmount = json.baseAmount ?? json.base_amount;
-    if (_baseAmount) {
-      msg.baseAmount = _baseAmount;
+    const _baseAmount_ = json["baseAmount"] ?? json["base_amount"];
+    if (_baseAmount_) {
+      msg.baseAmount = _baseAmount_;
     }
-    const _quoteAssetId = json.quoteAssetId ?? json.quote_asset_id;
-    if (_quoteAssetId) {
-      msg.quoteAssetId = _quoteAssetId;
+    const _quoteAssetId_ = json["quoteAssetId"] ?? json["quote_asset_id"];
+    if (_quoteAssetId_) {
+      msg.quoteAssetId = _quoteAssetId_;
     }
-    const _quoteAmount = json.quoteAmount ?? json.quote_amount;
-    if (_quoteAmount) {
-      msg.quoteAmount = _quoteAmount;
+    const _quoteAmount_ = json["quoteAmount"] ?? json["quote_amount"];
+    if (_quoteAmount_) {
+      msg.quoteAmount = _quoteAmount_;
     }
-    const _feeAssetId = json.feeAssetId ?? json.fee_asset_id;
-    if (_feeAssetId) {
-      msg.feeAssetId = _feeAssetId;
+    const _feeAssetId_ = json["feeAssetId"] ?? json["fee_asset_id"];
+    if (_feeAssetId_) {
+      msg.feeAssetId = _feeAssetId_;
     }
-    const _feeAmount = json.feeAmount ?? json.fee_amount;
-    if (_feeAmount) {
-      msg.feeAmount = _feeAmount;
+    const _feeAmount_ = json["feeAmount"] ?? json["fee_amount"];
+    if (_feeAmount_) {
+      msg.feeAmount = _feeAmount_;
     }
-    const _liquidityAmount = json.liquidityAmount ?? json.liquidity_amount;
-    if (_liquidityAmount) {
-      msg.liquidityAmount = _liquidityAmount;
+    const _liquidityAmount_ =
+      json["liquidityAmount"] ?? json["liquidity_amount"];
+    if (_liquidityAmount_) {
+      msg.liquidityAmount = _liquidityAmount_;
     }
     return msg;
   },
@@ -2216,7 +2291,7 @@ export const TransferJSON = {
   /**
    * Serializes Transfer to JSON.
    */
-  encode: function (msg: Partial<Transfer>): string {
+  encode: function (msg: PartialDeep<Transfer>): string {
     return JSON.stringify(TransferJSON._writeMessage(msg));
   },
 
@@ -2226,17 +2301,17 @@ export const TransferJSON = {
   decode: function (json: string): Transfer {
     return TransferJSON._readMessage(
       TransferJSON.initialize(),
-      JSON.parse(json)
+      JSON.parse(json),
     );
   },
 
   /**
    * Initializes Transfer with all fields set to their default value.
    */
-  initialize: function (): Transfer {
+  initialize: function (msg?: Partial<Transfer>): Transfer {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
+      createdAt: protoscript.TimestampJSON.initialize(),
       assetId: "",
       amount: "",
       opponents: [],
@@ -2244,43 +2319,43 @@ export const TransferJSON = {
       memo: "",
       signedTx: "",
       status: Transfer.Status._fromInt(0),
+      ...msg,
     };
   },
 
   /**
    * @private
    */
-  _writeMessage: function (msg: Partial<Transfer>): Record<string, unknown> {
+  _writeMessage: function (
+    msg: PartialDeep<Transfer>,
+  ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.id) {
-      json.id = msg.id;
+      json["id"] = msg.id;
     }
-    if (msg.createdAt) {
-      const createdAt = TimestampJSON._writeMessage(msg.createdAt);
-      if (Object.keys(createdAt).length > 0) {
-        json.createdAt = createdAt;
-      }
+    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
+      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
     }
     if (msg.assetId) {
-      json.assetId = msg.assetId;
+      json["assetId"] = msg.assetId;
     }
     if (msg.amount) {
-      json.amount = msg.amount;
+      json["amount"] = msg.amount;
     }
     if (msg.opponents?.length) {
-      json.opponents = msg.opponents;
+      json["opponents"] = msg.opponents;
     }
     if (msg.threshold) {
-      json.threshold = msg.threshold;
+      json["threshold"] = msg.threshold;
     }
     if (msg.memo) {
-      json.memo = msg.memo;
+      json["memo"] = msg.memo;
     }
     if (msg.signedTx) {
-      json.signedTx = msg.signedTx;
+      json["signedTx"] = msg.signedTx;
     }
     if (msg.status && TransferJSON.Status._toInt(msg.status)) {
-      json.status = msg.status;
+      json["status"] = msg.status;
     }
     return json;
   },
@@ -2289,43 +2364,41 @@ export const TransferJSON = {
    * @private
    */
   _readMessage: function (msg: Transfer, json: any): Transfer {
-    const _id = json.id;
-    if (_id) {
-      msg.id = _id;
+    const _id_ = json["id"];
+    if (_id_) {
+      msg.id = _id_;
     }
-    const _createdAt = json.createdAt ?? json.created_at;
-    if (_createdAt) {
-      const m = Timestamp.initialize();
-      TimestampJSON._readMessage(m, _createdAt);
-      msg.createdAt = m;
+    const _createdAt_ = json["createdAt"] ?? json["created_at"];
+    if (_createdAt_) {
+      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
     }
-    const _assetId = json.assetId ?? json.asset_id;
-    if (_assetId) {
-      msg.assetId = _assetId;
+    const _assetId_ = json["assetId"] ?? json["asset_id"];
+    if (_assetId_) {
+      msg.assetId = _assetId_;
     }
-    const _amount = json.amount;
-    if (_amount) {
-      msg.amount = _amount;
+    const _amount_ = json["amount"];
+    if (_amount_) {
+      msg.amount = _amount_;
     }
-    const _opponents = json.opponents;
-    if (_opponents) {
-      msg.opponents = _opponents;
+    const _opponents_ = json["opponents"];
+    if (_opponents_) {
+      msg.opponents = _opponents_;
     }
-    const _threshold = json.threshold;
-    if (_threshold) {
-      msg.threshold = _threshold;
+    const _threshold_ = json["threshold"];
+    if (_threshold_) {
+      msg.threshold = protoscript.parseNumber(_threshold_);
     }
-    const _memo = json.memo;
-    if (_memo) {
-      msg.memo = _memo;
+    const _memo_ = json["memo"];
+    if (_memo_) {
+      msg.memo = _memo_;
     }
-    const _signedTx = json.signedTx ?? json.signed_tx;
-    if (_signedTx) {
-      msg.signedTx = _signedTx;
+    const _signedTx_ = json["signedTx"] ?? json["signed_tx"];
+    if (_signedTx_) {
+      msg.signedTx = _signedTx_;
     }
-    const _status = json.status;
-    if (_status) {
-      msg.status = _status;
+    const _status_ = json["status"];
+    if (_status_) {
+      msg.status = Transfer.Status._fromInt(_status_);
     }
     return msg;
   },
@@ -2388,7 +2461,7 @@ export const AuditJSON = {
   /**
    * Serializes Audit to JSON.
    */
-  encode: function (msg: Partial<Audit>): string {
+  encode: function (msg: PartialDeep<Audit>): string {
     return JSON.stringify(AuditJSON._writeMessage(msg));
   },
 
@@ -2402,50 +2475,48 @@ export const AuditJSON = {
   /**
    * Initializes Audit with all fields set to their default value.
    */
-  initialize: function (): Audit {
+  initialize: function (msg?: Partial<Audit>): Audit {
     return {
       id: "",
-      createdAt: Timestamp.initialize(),
+      createdAt: protoscript.TimestampJSON.initialize(),
       assetId: "",
       amount: "",
       userId: "",
       status: Audit.Status._fromInt(0),
       memo: "",
       reviewedBy: "",
+      ...msg,
     };
   },
 
   /**
    * @private
    */
-  _writeMessage: function (msg: Partial<Audit>): Record<string, unknown> {
+  _writeMessage: function (msg: PartialDeep<Audit>): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.id) {
-      json.id = msg.id;
+      json["id"] = msg.id;
     }
-    if (msg.createdAt) {
-      const createdAt = TimestampJSON._writeMessage(msg.createdAt);
-      if (Object.keys(createdAt).length > 0) {
-        json.createdAt = createdAt;
-      }
+    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
+      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
     }
     if (msg.assetId) {
-      json.assetId = msg.assetId;
+      json["assetId"] = msg.assetId;
     }
     if (msg.amount) {
-      json.amount = msg.amount;
+      json["amount"] = msg.amount;
     }
     if (msg.userId) {
-      json.userId = msg.userId;
+      json["userId"] = msg.userId;
     }
     if (msg.status && AuditJSON.Status._toInt(msg.status)) {
-      json.status = msg.status;
+      json["status"] = msg.status;
     }
     if (msg.memo) {
-      json.memo = msg.memo;
+      json["memo"] = msg.memo;
     }
     if (msg.reviewedBy) {
-      json.reviewedBy = msg.reviewedBy;
+      json["reviewedBy"] = msg.reviewedBy;
     }
     return json;
   },
@@ -2454,39 +2525,37 @@ export const AuditJSON = {
    * @private
    */
   _readMessage: function (msg: Audit, json: any): Audit {
-    const _id = json.id;
-    if (_id) {
-      msg.id = _id;
+    const _id_ = json["id"];
+    if (_id_) {
+      msg.id = _id_;
     }
-    const _createdAt = json.createdAt ?? json.created_at;
-    if (_createdAt) {
-      const m = Timestamp.initialize();
-      TimestampJSON._readMessage(m, _createdAt);
-      msg.createdAt = m;
+    const _createdAt_ = json["createdAt"] ?? json["created_at"];
+    if (_createdAt_) {
+      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
     }
-    const _assetId = json.assetId ?? json.asset_id;
-    if (_assetId) {
-      msg.assetId = _assetId;
+    const _assetId_ = json["assetId"] ?? json["asset_id"];
+    if (_assetId_) {
+      msg.assetId = _assetId_;
     }
-    const _amount = json.amount;
-    if (_amount) {
-      msg.amount = _amount;
+    const _amount_ = json["amount"];
+    if (_amount_) {
+      msg.amount = _amount_;
     }
-    const _userId = json.userId ?? json.user_id;
-    if (_userId) {
-      msg.userId = _userId;
+    const _userId_ = json["userId"] ?? json["user_id"];
+    if (_userId_) {
+      msg.userId = _userId_;
     }
-    const _status = json.status;
-    if (_status) {
-      msg.status = _status;
+    const _status_ = json["status"];
+    if (_status_) {
+      msg.status = Audit.Status._fromInt(_status_);
     }
-    const _memo = json.memo;
-    if (_memo) {
-      msg.memo = _memo;
+    const _memo_ = json["memo"];
+    if (_memo_) {
+      msg.memo = _memo_;
     }
-    const _reviewedBy = json.reviewedBy ?? json.reviewed_by;
-    if (_reviewedBy) {
-      msg.reviewedBy = _reviewedBy;
+    const _reviewedBy_ = json["reviewedBy"] ?? json["reviewed_by"];
+    if (_reviewedBy_) {
+      msg.reviewedBy = _reviewedBy_;
     }
     return msg;
   },

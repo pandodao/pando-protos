@@ -2,8 +2,8 @@
 // Source: common/v1/common.proto
 /* eslint-disable */
 
-import type { ByteSource } from "twirpscript";
-import { BinaryReader, BinaryWriter } from "twirpscript";
+import type { ByteSource, PartialDeep } from "protoscript";
+import * as protoscript from "protoscript";
 
 //========================================//
 //                 Types                  //
@@ -36,21 +36,27 @@ export const Asset = {
   /**
    * Serializes Asset to protobuf.
    */
-  encode: function (msg: Partial<Asset>): Uint8Array {
-    return Asset._writeMessage(msg, new BinaryWriter()).getResultBuffer();
+  encode: function (msg: PartialDeep<Asset>): Uint8Array {
+    return Asset._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
   },
 
   /**
    * Deserializes Asset from protobuf.
    */
   decode: function (bytes: ByteSource): Asset {
-    return Asset._readMessage(Asset.initialize(), new BinaryReader(bytes));
+    return Asset._readMessage(
+      Asset.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
   },
 
   /**
    * Initializes Asset with all fields set to their default value.
    */
-  initialize: function (): Asset {
+  initialize: function (msg?: Partial<Asset>): Asset {
     return {
       assetId: "",
       chainId: "",
@@ -58,6 +64,7 @@ export const Asset = {
       name: "",
       logo: "",
       price: "",
+      ...msg,
     };
   },
 
@@ -65,9 +72,9 @@ export const Asset = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<Asset>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<Asset>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.assetId) {
       writer.writeString(1, msg.assetId);
     }
@@ -92,7 +99,7 @@ export const Asset = {
   /**
    * @private
    */
-  _readMessage: function (msg: Asset, reader: BinaryReader): Asset {
+  _readMessage: function (msg: Asset, reader: protoscript.BinaryReader): Asset {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
       switch (field) {
@@ -134,10 +141,10 @@ export const PaginationRequest = {
   /**
    * Serializes PaginationRequest to protobuf.
    */
-  encode: function (msg: Partial<PaginationRequest>): Uint8Array {
+  encode: function (msg: PartialDeep<PaginationRequest>): Uint8Array {
     return PaginationRequest._writeMessage(
       msg,
-      new BinaryWriter()
+      new protoscript.BinaryWriter(),
     ).getResultBuffer();
   },
 
@@ -147,17 +154,18 @@ export const PaginationRequest = {
   decode: function (bytes: ByteSource): PaginationRequest {
     return PaginationRequest._readMessage(
       PaginationRequest.initialize(),
-      new BinaryReader(bytes)
+      new protoscript.BinaryReader(bytes),
     );
   },
 
   /**
    * Initializes PaginationRequest with all fields set to their default value.
    */
-  initialize: function (): PaginationRequest {
+  initialize: function (msg?: Partial<PaginationRequest>): PaginationRequest {
     return {
       cursor: "",
       limit: 0n,
+      ...msg,
     };
   },
 
@@ -165,9 +173,9 @@ export const PaginationRequest = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<PaginationRequest>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<PaginationRequest>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.cursor) {
       writer.writeString(1, msg.cursor);
     }
@@ -182,7 +190,7 @@ export const PaginationRequest = {
    */
   _readMessage: function (
     msg: PaginationRequest,
-    reader: BinaryReader
+    reader: protoscript.BinaryReader,
   ): PaginationRequest {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
@@ -209,10 +217,10 @@ export const PaginationResponse = {
   /**
    * Serializes PaginationResponse to protobuf.
    */
-  encode: function (msg: Partial<PaginationResponse>): Uint8Array {
+  encode: function (msg: PartialDeep<PaginationResponse>): Uint8Array {
     return PaginationResponse._writeMessage(
       msg,
-      new BinaryWriter()
+      new protoscript.BinaryWriter(),
     ).getResultBuffer();
   },
 
@@ -222,17 +230,18 @@ export const PaginationResponse = {
   decode: function (bytes: ByteSource): PaginationResponse {
     return PaginationResponse._readMessage(
       PaginationResponse.initialize(),
-      new BinaryReader(bytes)
+      new protoscript.BinaryReader(bytes),
     );
   },
 
   /**
    * Initializes PaginationResponse with all fields set to their default value.
    */
-  initialize: function (): PaginationResponse {
+  initialize: function (msg?: Partial<PaginationResponse>): PaginationResponse {
     return {
       nextCursor: "",
       hasNext: false,
+      ...msg,
     };
   },
 
@@ -240,9 +249,9 @@ export const PaginationResponse = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<PaginationResponse>,
-    writer: BinaryWriter
-  ): BinaryWriter {
+    msg: PartialDeep<PaginationResponse>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
     if (msg.nextCursor) {
       writer.writeString(1, msg.nextCursor);
     }
@@ -257,7 +266,7 @@ export const PaginationResponse = {
    */
   _readMessage: function (
     msg: PaginationResponse,
-    reader: BinaryReader
+    reader: protoscript.BinaryReader,
   ): PaginationResponse {
     while (reader.nextField()) {
       const field = reader.getFieldNumber();
@@ -288,7 +297,7 @@ export const AssetJSON = {
   /**
    * Serializes Asset to JSON.
    */
-  encode: function (msg: Partial<Asset>): string {
+  encode: function (msg: PartialDeep<Asset>): string {
     return JSON.stringify(AssetJSON._writeMessage(msg));
   },
 
@@ -302,7 +311,7 @@ export const AssetJSON = {
   /**
    * Initializes Asset with all fields set to their default value.
    */
-  initialize: function (): Asset {
+  initialize: function (msg?: Partial<Asset>): Asset {
     return {
       assetId: "",
       chainId: "",
@@ -310,31 +319,32 @@ export const AssetJSON = {
       name: "",
       logo: "",
       price: "",
+      ...msg,
     };
   },
 
   /**
    * @private
    */
-  _writeMessage: function (msg: Partial<Asset>): Record<string, unknown> {
+  _writeMessage: function (msg: PartialDeep<Asset>): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.assetId) {
-      json.assetId = msg.assetId;
+      json["assetId"] = msg.assetId;
     }
     if (msg.chainId) {
-      json.chainId = msg.chainId;
+      json["chainId"] = msg.chainId;
     }
     if (msg.symbol) {
-      json.symbol = msg.symbol;
+      json["symbol"] = msg.symbol;
     }
     if (msg.name) {
-      json.name = msg.name;
+      json["name"] = msg.name;
     }
     if (msg.logo) {
-      json.logo = msg.logo;
+      json["logo"] = msg.logo;
     }
     if (msg.price) {
-      json.price = msg.price;
+      json["price"] = msg.price;
     }
     return json;
   },
@@ -343,29 +353,29 @@ export const AssetJSON = {
    * @private
    */
   _readMessage: function (msg: Asset, json: any): Asset {
-    const _assetId = json.assetId ?? json.asset_id;
-    if (_assetId) {
-      msg.assetId = _assetId;
+    const _assetId_ = json["assetId"] ?? json["asset_id"];
+    if (_assetId_) {
+      msg.assetId = _assetId_;
     }
-    const _chainId = json.chainId ?? json.chain_id;
-    if (_chainId) {
-      msg.chainId = _chainId;
+    const _chainId_ = json["chainId"] ?? json["chain_id"];
+    if (_chainId_) {
+      msg.chainId = _chainId_;
     }
-    const _symbol = json.symbol;
-    if (_symbol) {
-      msg.symbol = _symbol;
+    const _symbol_ = json["symbol"];
+    if (_symbol_) {
+      msg.symbol = _symbol_;
     }
-    const _name = json.name;
-    if (_name) {
-      msg.name = _name;
+    const _name_ = json["name"];
+    if (_name_) {
+      msg.name = _name_;
     }
-    const _logo = json.logo;
-    if (_logo) {
-      msg.logo = _logo;
+    const _logo_ = json["logo"];
+    if (_logo_) {
+      msg.logo = _logo_;
     }
-    const _price = json.price;
-    if (_price) {
-      msg.price = _price;
+    const _price_ = json["price"];
+    if (_price_) {
+      msg.price = _price_;
     }
     return msg;
   },
@@ -375,7 +385,7 @@ export const PaginationRequestJSON = {
   /**
    * Serializes PaginationRequest to JSON.
    */
-  encode: function (msg: Partial<PaginationRequest>): string {
+  encode: function (msg: PartialDeep<PaginationRequest>): string {
     return JSON.stringify(PaginationRequestJSON._writeMessage(msg));
   },
 
@@ -385,17 +395,18 @@ export const PaginationRequestJSON = {
   decode: function (json: string): PaginationRequest {
     return PaginationRequestJSON._readMessage(
       PaginationRequestJSON.initialize(),
-      JSON.parse(json)
+      JSON.parse(json),
     );
   },
 
   /**
    * Initializes PaginationRequest with all fields set to their default value.
    */
-  initialize: function (): PaginationRequest {
+  initialize: function (msg?: Partial<PaginationRequest>): PaginationRequest {
     return {
       cursor: "",
       limit: 0n,
+      ...msg,
     };
   },
 
@@ -403,14 +414,14 @@ export const PaginationRequestJSON = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<PaginationRequest>
+    msg: PartialDeep<PaginationRequest>,
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.cursor) {
-      json.cursor = msg.cursor;
+      json["cursor"] = msg.cursor;
     }
     if (msg.limit) {
-      json.limit = msg.limit.toString();
+      json["limit"] = String(msg.limit);
     }
     return json;
   },
@@ -420,15 +431,15 @@ export const PaginationRequestJSON = {
    */
   _readMessage: function (
     msg: PaginationRequest,
-    json: any
+    json: any,
   ): PaginationRequest {
-    const _cursor = json.cursor;
-    if (_cursor) {
-      msg.cursor = _cursor;
+    const _cursor_ = json["cursor"];
+    if (_cursor_) {
+      msg.cursor = _cursor_;
     }
-    const _limit = json.limit;
-    if (_limit) {
-      msg.limit = BigInt(_limit);
+    const _limit_ = json["limit"];
+    if (_limit_) {
+      msg.limit = BigInt(_limit_);
     }
     return msg;
   },
@@ -438,7 +449,7 @@ export const PaginationResponseJSON = {
   /**
    * Serializes PaginationResponse to JSON.
    */
-  encode: function (msg: Partial<PaginationResponse>): string {
+  encode: function (msg: PartialDeep<PaginationResponse>): string {
     return JSON.stringify(PaginationResponseJSON._writeMessage(msg));
   },
 
@@ -448,17 +459,18 @@ export const PaginationResponseJSON = {
   decode: function (json: string): PaginationResponse {
     return PaginationResponseJSON._readMessage(
       PaginationResponseJSON.initialize(),
-      JSON.parse(json)
+      JSON.parse(json),
     );
   },
 
   /**
    * Initializes PaginationResponse with all fields set to their default value.
    */
-  initialize: function (): PaginationResponse {
+  initialize: function (msg?: Partial<PaginationResponse>): PaginationResponse {
     return {
       nextCursor: "",
       hasNext: false,
+      ...msg,
     };
   },
 
@@ -466,14 +478,14 @@ export const PaginationResponseJSON = {
    * @private
    */
   _writeMessage: function (
-    msg: Partial<PaginationResponse>
+    msg: PartialDeep<PaginationResponse>,
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
     if (msg.nextCursor) {
-      json.nextCursor = msg.nextCursor;
+      json["nextCursor"] = msg.nextCursor;
     }
     if (msg.hasNext) {
-      json.hasNext = msg.hasNext;
+      json["hasNext"] = msg.hasNext;
     }
     return json;
   },
@@ -483,15 +495,15 @@ export const PaginationResponseJSON = {
    */
   _readMessage: function (
     msg: PaginationResponse,
-    json: any
+    json: any,
   ): PaginationResponse {
-    const _nextCursor = json.nextCursor ?? json.next_cursor;
-    if (_nextCursor) {
-      msg.nextCursor = _nextCursor;
+    const _nextCursor_ = json["nextCursor"] ?? json["next_cursor"];
+    if (_nextCursor_) {
+      msg.nextCursor = _nextCursor_;
     }
-    const _hasNext = json.hasNext ?? json.has_next;
-    if (_hasNext) {
-      msg.hasNext = _hasNext;
+    const _hasNext_ = json["hasNext"] ?? json["has_next"];
+    if (_hasNext_) {
+      msg.hasNext = _hasNext_;
     }
     return msg;
   },
