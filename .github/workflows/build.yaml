@@ -37,6 +37,7 @@ jobs:
         run: |
           make gen-go-cmds
           make gen-ts-cmds
+          make gen-py-cmds
       - name: Make
         run: make
       - name: Set environment for branch
