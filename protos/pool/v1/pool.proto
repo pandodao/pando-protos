@@ -68,6 +68,7 @@ message EventAction {
     DEPOSIT = 3;
     INTEREST_PAYMENT = 4;
     CANCEL_QUEUE = 5;
+    MIXIN_MIGRATE = 6;
 
     // for admins
 
