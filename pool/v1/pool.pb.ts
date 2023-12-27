@@ -316,6 +316,22 @@ export interface ListAuditsResponse {
   audits: Audit[];
 }
 
+export interface MixinDebt {
+  id: bigint;
+  createdAt: protoscript.Timestamp;
+  updatedAt: protoscript.Timestamp;
+  userId: string;
+  symbol: string;
+  amount: string;
+  eventId: bigint;
+}
+
+export interface ListMixinDebtsRequest {}
+
+export interface ListMixinDebtsResponse {
+  debts: MixinDebt[];
+}
+
 //========================================//
 //      PoolService Protobuf Client       //
 //========================================//
@@ -429,6 +445,21 @@ export async function ListAudits(
     config,
   );
   return ListAuditsResponse.decode(response);
+}
+
+/**
+ * mixin debts
+ */
+export async function ListMixinDebts(
+  listMixinDebtsRequest: ListMixinDebtsRequest,
+  config?: ClientConfiguration,
+): Promise<ListMixinDebtsResponse> {
+  const response = await PBrequest(
+    "/pool.v1.PoolService/ListMixinDebts",
+    ListMixinDebtsRequest.encode(listMixinDebtsRequest),
+    config,
+  );
+  return ListMixinDebtsResponse.decode(response);
 }
 
 //========================================//
@@ -546,6 +577,21 @@ export async function ListAuditsJSON(
   return ListAuditsResponseJSON.decode(response);
 }
 
+/**
+ * mixin debts
+ */
+export async function ListMixinDebtsJSON(
+  listMixinDebtsRequest: ListMixinDebtsRequest,
+  config?: ClientConfiguration,
+): Promise<ListMixinDebtsResponse> {
+  const response = await JSONrequest(
+    "/pool.v1.PoolService/ListMixinDebts",
+    ListMixinDebtsRequestJSON.encode(listMixinDebtsRequest),
+    config,
+  );
+  return ListMixinDebtsResponseJSON.decode(response);
+}
+
 //========================================//
 //              PoolService               //
 //========================================//
@@ -590,6 +636,13 @@ export interface PoolService<Context = unknown> {
     listAuditsRequest: ListAuditsRequest,
     context: Context,
   ) => Promise<ListAuditsResponse> | ListAuditsResponse;
+  /**
+   * mixin debts
+   */
+  ListMixinDebts: (
+    listMixinDebtsRequest: ListMixinDebtsRequest,
+    context: Context,
+  ) => Promise<ListMixinDebtsResponse> | ListMixinDebtsResponse;
 }
 
 export function createPoolService<Context>(service: PoolService<Context>) {
@@ -673,6 +726,18 @@ export function createPoolService<Context>(service: PoolService<Context>) {
         handler: service.ListAudits,
         input: { protobuf: ListAuditsRequest, json: ListAuditsRequestJSON },
         output: { protobuf: ListAuditsResponse, json: ListAuditsResponseJSON },
+      },
+      ListMixinDebts: {
+        name: "ListMixinDebts",
+        handler: service.ListMixinDebts,
+        input: {
+          protobuf: ListMixinDebtsRequest,
+          json: ListMixinDebtsRequestJSON,
+        },
+        output: {
+          protobuf: ListMixinDebtsResponse,
+          json: ListMixinDebtsResponseJSON,
+        },
       },
     },
   } as const;
@@ -4575,6 +4640,249 @@ export const ListAuditsResponse = {
   },
 };
 
+export const MixinDebt = {
+  /**
+   * Serializes MixinDebt to protobuf.
+   */
+  encode: function (msg: PartialDeep<MixinDebt>): Uint8Array {
+    return MixinDebt._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes MixinDebt from protobuf.
+   */
+  decode: function (bytes: ByteSource): MixinDebt {
+    return MixinDebt._readMessage(
+      MixinDebt.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
+  },
+
+  /**
+   * Initializes MixinDebt with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<MixinDebt>): MixinDebt {
+    return {
+      id: 0n,
+      createdAt: protoscript.Timestamp.initialize(),
+      updatedAt: protoscript.Timestamp.initialize(),
+      userId: "",
+      symbol: "",
+      amount: "",
+      eventId: 0n,
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<MixinDebt>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
+    if (msg.id) {
+      writer.writeInt64String(1, msg.id.toString() as any);
+    }
+    if (msg.createdAt) {
+      writer.writeMessage(
+        2,
+        msg.createdAt,
+        protoscript.Timestamp._writeMessage,
+      );
+    }
+    if (msg.updatedAt) {
+      writer.writeMessage(
+        3,
+        msg.updatedAt,
+        protoscript.Timestamp._writeMessage,
+      );
+    }
+    if (msg.userId) {
+      writer.writeString(4, msg.userId);
+    }
+    if (msg.symbol) {
+      writer.writeString(5, msg.symbol);
+    }
+    if (msg.amount) {
+      writer.writeString(6, msg.amount);
+    }
+    if (msg.eventId) {
+      writer.writeInt64String(7, msg.eventId.toString() as any);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: MixinDebt,
+    reader: protoscript.BinaryReader,
+  ): MixinDebt {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = BigInt(reader.readInt64String());
+          break;
+        }
+        case 2: {
+          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
+          break;
+        }
+        case 3: {
+          reader.readMessage(msg.updatedAt, protoscript.Timestamp._readMessage);
+          break;
+        }
+        case 4: {
+          msg.userId = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.symbol = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.amount = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.eventId = BigInt(reader.readInt64String());
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const ListMixinDebtsRequest = {
+  /**
+   * Serializes ListMixinDebtsRequest to protobuf.
+   */
+  encode: function (_msg?: PartialDeep<ListMixinDebtsRequest>): Uint8Array {
+    return new Uint8Array();
+  },
+
+  /**
+   * Deserializes ListMixinDebtsRequest from protobuf.
+   */
+  decode: function (_bytes?: ByteSource): ListMixinDebtsRequest {
+    return {};
+  },
+
+  /**
+   * Initializes ListMixinDebtsRequest with all fields set to their default value.
+   */
+  initialize: function (
+    msg?: Partial<ListMixinDebtsRequest>,
+  ): ListMixinDebtsRequest {
+    return {
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: PartialDeep<ListMixinDebtsRequest>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    _msg: ListMixinDebtsRequest,
+    _reader: protoscript.BinaryReader,
+  ): ListMixinDebtsRequest {
+    return _msg;
+  },
+};
+
+export const ListMixinDebtsResponse = {
+  /**
+   * Serializes ListMixinDebtsResponse to protobuf.
+   */
+  encode: function (msg: PartialDeep<ListMixinDebtsResponse>): Uint8Array {
+    return ListMixinDebtsResponse._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes ListMixinDebtsResponse from protobuf.
+   */
+  decode: function (bytes: ByteSource): ListMixinDebtsResponse {
+    return ListMixinDebtsResponse._readMessage(
+      ListMixinDebtsResponse.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
+  },
+
+  /**
+   * Initializes ListMixinDebtsResponse with all fields set to their default value.
+   */
+  initialize: function (
+    msg?: Partial<ListMixinDebtsResponse>,
+  ): ListMixinDebtsResponse {
+    return {
+      debts: [],
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<ListMixinDebtsResponse>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
+    if (msg.debts?.length) {
+      writer.writeRepeatedMessage(1, msg.debts as any, MixinDebt._writeMessage);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListMixinDebtsResponse,
+    reader: protoscript.BinaryReader,
+  ): ListMixinDebtsResponse {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          const m = MixinDebt.initialize();
+          reader.readMessage(m, MixinDebt._readMessage);
+          msg.debts.push(m);
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
@@ -8060,6 +8368,215 @@ export const ListAuditsResponseJSON = {
         const m = AuditJSON.initialize();
         AuditJSON._readMessage(m, item);
         msg.audits.push(m);
+      }
+    }
+    return msg;
+  },
+};
+
+export const MixinDebtJSON = {
+  /**
+   * Serializes MixinDebt to JSON.
+   */
+  encode: function (msg: PartialDeep<MixinDebt>): string {
+    return JSON.stringify(MixinDebtJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes MixinDebt from JSON.
+   */
+  decode: function (json: string): MixinDebt {
+    return MixinDebtJSON._readMessage(
+      MixinDebtJSON.initialize(),
+      JSON.parse(json),
+    );
+  },
+
+  /**
+   * Initializes MixinDebt with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<MixinDebt>): MixinDebt {
+    return {
+      id: 0n,
+      createdAt: protoscript.TimestampJSON.initialize(),
+      updatedAt: protoscript.TimestampJSON.initialize(),
+      userId: "",
+      symbol: "",
+      amount: "",
+      eventId: 0n,
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<MixinDebt>,
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json["id"] = String(msg.id);
+    }
+    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
+      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
+    }
+    if (msg.updatedAt && msg.updatedAt.seconds && msg.updatedAt.nanos) {
+      json["updatedAt"] = protoscript.serializeTimestamp(msg.updatedAt);
+    }
+    if (msg.userId) {
+      json["userId"] = msg.userId;
+    }
+    if (msg.symbol) {
+      json["symbol"] = msg.symbol;
+    }
+    if (msg.amount) {
+      json["amount"] = msg.amount;
+    }
+    if (msg.eventId) {
+      json["eventId"] = String(msg.eventId);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: MixinDebt, json: any): MixinDebt {
+    const _id_ = json["id"];
+    if (_id_) {
+      msg.id = BigInt(_id_);
+    }
+    const _createdAt_ = json["createdAt"] ?? json["created_at"];
+    if (_createdAt_) {
+      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
+    }
+    const _updatedAt_ = json["updatedAt"] ?? json["updated_at"];
+    if (_updatedAt_) {
+      msg.updatedAt = protoscript.parseTimestamp(_updatedAt_);
+    }
+    const _userId_ = json["userId"] ?? json["user_id"];
+    if (_userId_) {
+      msg.userId = _userId_;
+    }
+    const _symbol_ = json["symbol"];
+    if (_symbol_) {
+      msg.symbol = _symbol_;
+    }
+    const _amount_ = json["amount"];
+    if (_amount_) {
+      msg.amount = _amount_;
+    }
+    const _eventId_ = json["eventId"] ?? json["event_id"];
+    if (_eventId_) {
+      msg.eventId = BigInt(_eventId_);
+    }
+    return msg;
+  },
+};
+
+export const ListMixinDebtsRequestJSON = {
+  /**
+   * Serializes ListMixinDebtsRequest to JSON.
+   */
+  encode: function (_msg?: PartialDeep<ListMixinDebtsRequest>): string {
+    return "{}";
+  },
+
+  /**
+   * Deserializes ListMixinDebtsRequest from JSON.
+   */
+  decode: function (_json?: string): ListMixinDebtsRequest {
+    return {};
+  },
+
+  /**
+   * Initializes ListMixinDebtsRequest with all fields set to their default value.
+   */
+  initialize: function (
+    msg?: Partial<ListMixinDebtsRequest>,
+  ): ListMixinDebtsRequest {
+    return {
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    _msg: PartialDeep<ListMixinDebtsRequest>,
+  ): Record<string, unknown> {
+    return {};
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListMixinDebtsRequest,
+    _json: any,
+  ): ListMixinDebtsRequest {
+    return msg;
+  },
+};
+
+export const ListMixinDebtsResponseJSON = {
+  /**
+   * Serializes ListMixinDebtsResponse to JSON.
+   */
+  encode: function (msg: PartialDeep<ListMixinDebtsResponse>): string {
+    return JSON.stringify(ListMixinDebtsResponseJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes ListMixinDebtsResponse from JSON.
+   */
+  decode: function (json: string): ListMixinDebtsResponse {
+    return ListMixinDebtsResponseJSON._readMessage(
+      ListMixinDebtsResponseJSON.initialize(),
+      JSON.parse(json),
+    );
+  },
+
+  /**
+   * Initializes ListMixinDebtsResponse with all fields set to their default value.
+   */
+  initialize: function (
+    msg?: Partial<ListMixinDebtsResponse>,
+  ): ListMixinDebtsResponse {
+    return {
+      debts: [],
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<ListMixinDebtsResponse>,
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.debts?.length) {
+      json["debts"] = msg.debts.map(MixinDebtJSON._writeMessage);
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: ListMixinDebtsResponse,
+    json: any,
+  ): ListMixinDebtsResponse {
+    const _debts_ = json["debts"];
+    if (_debts_) {
+      for (const item of _debts_) {
+        const m = MixinDebtJSON.initialize();
+        MixinDebtJSON._readMessage(m, item);
+        msg.debts.push(m);
       }
     }
     return msg;
