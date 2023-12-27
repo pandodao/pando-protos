@@ -48,6 +48,7 @@ export declare namespace EventAction {
     | "DEPOSIT"
     | "INTEREST_PAYMENT"
     | "CANCEL_QUEUE"
+    | "MIXIN_MIGRATE"
     | "ADMIN_INTEREST_PAYMENT"
     | "ADMIN_PRODUCT_EXPAND"
     | "ADMIN_PRODUCT_MERGE_EXPANSION"
@@ -975,6 +976,7 @@ export const EventAction = {
     DEPOSIT: "DEPOSIT",
     INTEREST_PAYMENT: "INTEREST_PAYMENT",
     CANCEL_QUEUE: "CANCEL_QUEUE",
+    MIXIN_MIGRATE: "MIXIN_MIGRATE",
     ADMIN_INTEREST_PAYMENT: "ADMIN_INTEREST_PAYMENT",
     ADMIN_PRODUCT_EXPAND: "ADMIN_PRODUCT_EXPAND",
     ADMIN_PRODUCT_MERGE_EXPANSION: "ADMIN_PRODUCT_MERGE_EXPANSION",
@@ -1006,6 +1008,9 @@ export const EventAction = {
         }
         case 5: {
           return "CANCEL_QUEUE";
+        }
+        case 6: {
+          return "MIXIN_MIGRATE";
         }
         case 100: {
           return "ADMIN_INTEREST_PAYMENT";
@@ -1062,6 +1067,9 @@ export const EventAction = {
         }
         case "CANCEL_QUEUE": {
           return 5;
+        }
+        case "MIXIN_MIGRATE": {
+          return 6;
         }
         case "ADMIN_INTEREST_PAYMENT": {
           return 100;
@@ -4857,6 +4865,7 @@ export const EventActionJSON = {
     DEPOSIT: "DEPOSIT",
     INTEREST_PAYMENT: "INTEREST_PAYMENT",
     CANCEL_QUEUE: "CANCEL_QUEUE",
+    MIXIN_MIGRATE: "MIXIN_MIGRATE",
     ADMIN_INTEREST_PAYMENT: "ADMIN_INTEREST_PAYMENT",
     ADMIN_PRODUCT_EXPAND: "ADMIN_PRODUCT_EXPAND",
     ADMIN_PRODUCT_MERGE_EXPANSION: "ADMIN_PRODUCT_MERGE_EXPANSION",
@@ -4888,6 +4897,9 @@ export const EventActionJSON = {
         }
         case 5: {
           return "CANCEL_QUEUE";
+        }
+        case 6: {
+          return "MIXIN_MIGRATE";
         }
         case 100: {
           return "ADMIN_INTEREST_PAYMENT";
@@ -4944,6 +4956,9 @@ export const EventActionJSON = {
         }
         case "CANCEL_QUEUE": {
           return 5;
+        }
+        case "MIXIN_MIGRATE": {
+          return 6;
         }
         case "ADMIN_INTEREST_PAYMENT": {
           return 100;
