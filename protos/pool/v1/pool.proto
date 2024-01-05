@@ -72,6 +72,8 @@ message EventAction {
     INTEREST_PAYMENT = 4;
     CANCEL_QUEUE = 5;
     MIXIN_MIGRATE = 6;
+    LIQUIDATE = 7;
+
 
     // for admins
 
