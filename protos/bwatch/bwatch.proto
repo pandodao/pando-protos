@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package bwatch.service;
+option go_package = "github.com/fox-one/pando-protos/bwatch/v1;bwatch";
+
+import "google/protobuf/timestamp.proto";
+
+message Asset {
+    string id = 1;
+    string chain_id = 2;
+    string name = 3;
+    string symbol = 4;
+    string logo = 5;
+    string price = 6;
+}
+
+message Gem {
+    string etf = 1;
+    string asset_id = 2;
+    string share = 3;
+    string balance = 4;
+}
+
+message Etf {
+    int64 id = 1;
+    string asset_id = 2;
+    string name = 3;
+    string symbol = 4;
+    string logo = 5;
+    int64 version = 6;
+    int32 precision = 7;
+    string max_supply = 8;
+    string max_subscription_amount = 9;
+    string min_subscription_amount = 10;
+    string max_redemption_amount = 11;
+    string min_redemption_amount = 12;
+    string redemption_fee_rate = 13;
+    string redemption_fee = 14;
+    string circulating_supply = 15;
+    repeated Gem gems = 16;
+}
+
+message Subscription {
+    enum State {
+        _ = 0;
+        Pending = 1;
+        Cancelled = 2;
+        Done = 3;
+    }
+
+    google.protobuf.Timestamp created_at = 1;
+    google.protobuf.Timestamp updated_at = 2;
+    int64 version = 3;
+    State state = 4;
+    int64 etf = 5;
+    string follow_id = 6;
+    map<string, string> assets = 7;
+}
+
+message Transaction {
+    enum Type {
+        _ = 0;
+        Subscription = 1;
+        Redemption = 2;
+    }
+
+    int64 id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    Type type = 3;
+    string follow_id = 4;
+    string amount = 5;
+    string fee_amount = 6;
+    map<string, string> assets = 7;
+    int64 etf = 8;
+}
+
+message BwatchReq {
+    message ListAssets {}
+
+    message ReadEtf {
+        string etf = 1;
+    }
+
+    message ListEtfs {}
+
+    message ReadSubscription {
+        string follow_id = 1;
+    }
+}
+
+message BwatchResp {
+    message ListAssets {
+        repeated Asset assets = 1;
+    }
+
+    message ListEtfs {
+        repeated Etf etfs = 1;
+    }
+}
+
+service Bwatch {
+    // ListAssets 返回 assets 列表
+    rpc ListAssets(BwatchReq.ListAssets) returns (BwatchResp.ListAssets);
+    
+    // ReadEtf 读取 etf 详情
+    rpc ReadEtf(BwatchReq.ReadEtf) returns (Etf);
+    
+    // ReadSubscription 读取申购详情
+    rpc ReadSubscription(BwatchReq.ReadSubscription) returns (Subscription);
+}
