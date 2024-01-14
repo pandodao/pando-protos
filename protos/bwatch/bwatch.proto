@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package bwatch.service;
+package bwatch.service.v1;
 option go_package = "github.com/fox-one/pando-protos/bwatch/v1;bwatch";
 
 import "google/protobuf/timestamp.proto";
@@ -42,10 +42,10 @@ message Etf {
 
 message Subscription {
     enum State {
-        _ = 0;
-        Pending = 1;
-        Cancelled = 2;
-        Done = 3;
+        UNKNOWN = 0;
+        PENDING = 1;
+        CANCELLED = 2;
+        DONE = 3;
     }
 
     google.protobuf.Timestamp created_at = 1;
@@ -59,9 +59,9 @@ message Subscription {
 
 message Transaction {
     enum Type {
-        _ = 0;
-        Subscription = 1;
-        Redemption = 2;
+        UNKNOWN = 0;
+        SUBSCRIPTION = 1;
+        REDEMPTION = 2;
     }
 
     int64 id = 1;
@@ -75,36 +75,38 @@ message Transaction {
 }
 
 message BwatchReq {
-    message ListAssets {}
+    message ListAssetsRequest {}
 
-    message ReadEtf {
+    message ReadEtfRequest {
         string etf = 1;
     }
 
-    message ListEtfs {}
-
-    message ReadSubscription {
+    message ReadSubscriptionRequest {
         string follow_id = 1;
     }
 }
 
 message BwatchResp {
-    message ListAssets {
+    message ListAssetsResponse {
         repeated Asset assets = 1;
     }
 
-    message ListEtfs {
-        repeated Etf etfs = 1;
+    message ReadEtfResponse {
+        Etf etf = 1;
+    }
+
+    message ReadSubscriptionResponse {
+        Subscription sub = 1;
     }
 }
 
-service Bwatch {
+service BwatchService {
     // ListAssets 返回 assets 列表
-    rpc ListAssets(BwatchReq.ListAssets) returns (BwatchResp.ListAssets);
+    rpc ListAssets(BwatchReq.ListAssetsRequest) returns (BwatchResp.ListAssetsResponse);
     
     // ReadEtf 读取 etf 详情
-    rpc ReadEtf(BwatchReq.ReadEtf) returns (Etf);
+    rpc ReadEtfRequest(BwatchReq.ReadEtfRequest) returns (BwatchResp.ReadEtfResponse);
     
     // ReadSubscription 读取申购详情
-    rpc ReadSubscription(BwatchReq.ReadSubscription) returns (Subscription);
+    rpc ReadSubscription(BwatchReq.ReadSubscriptionRequest) returns (BwatchResp.ReadSubscriptionResponse);
 }
