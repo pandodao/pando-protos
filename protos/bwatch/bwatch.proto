@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package bwatch.service.v1;
+package bwatch.v1;
 option go_package = "github.com/fox-one/pando-protos/bwatch/v1;bwatch";
 
 import "google/protobuf/timestamp.proto";
@@ -42,7 +42,7 @@ message Etf {
 
 message Subscription {
     enum State {
-        UNKNOWN = 0;
+        NOT_SET = 0;
         PENDING = 1;
         CANCELLED = 2;
         DONE = 3;
@@ -59,7 +59,7 @@ message Subscription {
 
 message Transaction {
     enum Type {
-        UNKNOWN = 0;
+        NOT_SET = 0;
         SUBSCRIPTION = 1;
         REDEMPTION = 2;
     }
@@ -105,7 +105,7 @@ service BwatchService {
     rpc ListAssets(BwatchReq.ListAssetsRequest) returns (BwatchResp.ListAssetsResponse);
     
     // ReadEtf 读取 etf 详情
-    rpc ReadEtfRequest(BwatchReq.ReadEtfRequest) returns (BwatchResp.ReadEtfResponse);
+    rpc ReadEtf(BwatchReq.ReadEtfRequest) returns (BwatchResp.ReadEtfResponse);
     
     // ReadSubscription 读取申购详情
     rpc ReadSubscription(BwatchReq.ReadSubscriptionRequest) returns (BwatchResp.ReadSubscriptionResponse);
