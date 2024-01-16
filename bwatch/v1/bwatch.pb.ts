@@ -26,9 +26,9 @@ export interface Asset {
 
 export interface Gem {
   etf: string;
-  assetId: string;
   share: string;
   balance: string;
+  asset: Asset;
 }
 
 export interface Etf {
@@ -58,6 +58,8 @@ export interface Subscription {
   etf: bigint;
   followId: string;
   assets: Record<string, Subscription.Assets["value"] | undefined>;
+  amount: string;
+  feeAmount: string;
 }
 
 export declare namespace Subscription {
@@ -70,14 +72,13 @@ export declare namespace Subscription {
 }
 
 export interface Transaction {
-  id: bigint;
+  group: bigint;
+  index: number;
   createdAt: protoscript.Timestamp;
-  type: Transaction.Type;
-  followId: string;
+  etf: bigint;
   amount: string;
   feeAmount: string;
   assets: Record<string, Transaction.Assets["value"] | undefined>;
-  etf: bigint;
 }
 
 export declare namespace Transaction {
@@ -124,21 +125,6 @@ export declare namespace BwatchResp {
 //========================================//
 
 /**
- * ListAssets 返回 assets 列表
- */
-export async function ListAssets(
-  listAssetsRequest: BwatchReq.ListAssetsRequest,
-  config?: ClientConfiguration,
-): Promise<BwatchResp.ListAssetsResponse> {
-  const response = await PBrequest(
-    "/bwatch.v1.BwatchService/ListAssets",
-    BwatchReq.ListAssetsRequest.encode(listAssetsRequest),
-    config,
-  );
-  return BwatchResp.ListAssetsResponse.decode(response);
-}
-
-/**
  * ReadEtf 读取 etf 详情
  */
 export async function ReadEtf(
@@ -171,21 +157,6 @@ export async function ReadSubscription(
 //========================================//
 //       BwatchService JSON Client        //
 //========================================//
-
-/**
- * ListAssets 返回 assets 列表
- */
-export async function ListAssetsJSON(
-  listAssetsRequest: BwatchReq.ListAssetsRequest,
-  config?: ClientConfiguration,
-): Promise<BwatchResp.ListAssetsResponse> {
-  const response = await JSONrequest(
-    "/bwatch.v1.BwatchService/ListAssets",
-    BwatchReqJSON.ListAssetsRequest.encode(listAssetsRequest),
-    config,
-  );
-  return BwatchRespJSON.ListAssetsResponse.decode(response);
-}
 
 /**
  * ReadEtf 读取 etf 详情
@@ -223,13 +194,6 @@ export async function ReadSubscriptionJSON(
 
 export interface BwatchService<Context = unknown> {
   /**
-   * ListAssets 返回 assets 列表
-   */
-  ListAssets: (
-    listAssetsRequest: BwatchReq.ListAssetsRequest,
-    context: Context,
-  ) => Promise<BwatchResp.ListAssetsResponse> | BwatchResp.ListAssetsResponse;
-  /**
    * ReadEtf 读取 etf 详情
    */
   ReadEtf: (
@@ -251,18 +215,6 @@ export function createBwatchService<Context>(service: BwatchService<Context>) {
   return {
     name: "bwatch.v1.BwatchService",
     methods: {
-      ListAssets: {
-        name: "ListAssets",
-        handler: service.ListAssets,
-        input: {
-          protobuf: BwatchReq.ListAssetsRequest,
-          json: BwatchReqJSON.ListAssetsRequest,
-        },
-        output: {
-          protobuf: BwatchResp.ListAssetsResponse,
-          json: BwatchRespJSON.ListAssetsResponse,
-        },
-      },
       ReadEtf: {
         name: "ReadEtf",
         handler: service.ReadEtf,
@@ -427,9 +379,9 @@ export const Gem = {
   initialize: function (msg?: Partial<Gem>): Gem {
     return {
       etf: "",
-      assetId: "",
       share: "",
       balance: "",
+      asset: Asset.initialize(),
       ...msg,
     };
   },
@@ -444,14 +396,14 @@ export const Gem = {
     if (msg.etf) {
       writer.writeString(1, msg.etf);
     }
-    if (msg.assetId) {
-      writer.writeString(2, msg.assetId);
-    }
     if (msg.share) {
-      writer.writeString(3, msg.share);
+      writer.writeString(2, msg.share);
     }
     if (msg.balance) {
-      writer.writeString(4, msg.balance);
+      writer.writeString(3, msg.balance);
+    }
+    if (msg.asset) {
+      writer.writeMessage(4, msg.asset, Asset._writeMessage);
     }
     return writer;
   },
@@ -468,15 +420,15 @@ export const Gem = {
           break;
         }
         case 2: {
-          msg.assetId = reader.readString();
-          break;
-        }
-        case 3: {
           msg.share = reader.readString();
           break;
         }
-        case 4: {
+        case 3: {
           msg.balance = reader.readString();
+          break;
+        }
+        case 4: {
+          reader.readMessage(msg.asset, Asset._readMessage);
           break;
         }
         default: {
@@ -709,6 +661,8 @@ export const Subscription = {
       etf: 0n,
       followId: "",
       assets: {},
+      amount: "",
+      feeAmount: "",
       ...msg,
     };
   },
@@ -756,6 +710,12 @@ export const Subscription = {
         Subscription.Assets._writeMessage,
       );
     }
+    if (msg.amount) {
+      writer.writeString(8, msg.amount);
+    }
+    if (msg.feeAmount) {
+      writer.writeString(9, msg.feeAmount);
+    }
     return writer;
   },
 
@@ -797,6 +757,14 @@ export const Subscription = {
           const map = {} as Subscription.Assets;
           reader.readMessage(map, Subscription.Assets._readMessage);
           msg.assets[map.key.toString()] = map.value;
+          break;
+        }
+        case 8: {
+          msg.amount = reader.readString();
+          break;
+        }
+        case 9: {
+          msg.feeAmount = reader.readString();
           break;
         }
         default: {
@@ -933,14 +901,13 @@ export const Transaction = {
    */
   initialize: function (msg?: Partial<Transaction>): Transaction {
     return {
-      id: 0n,
+      group: 0n,
+      index: 0,
       createdAt: protoscript.Timestamp.initialize(),
-      type: Transaction.Type._fromInt(0),
-      followId: "",
+      etf: 0n,
       amount: "",
       feeAmount: "",
       assets: {},
-      etf: 0n,
       ...msg,
     };
   },
@@ -952,21 +919,21 @@ export const Transaction = {
     msg: PartialDeep<Transaction>,
     writer: protoscript.BinaryWriter,
   ): protoscript.BinaryWriter {
-    if (msg.id) {
-      writer.writeInt64String(1, msg.id.toString() as any);
+    if (msg.group) {
+      writer.writeInt64String(1, msg.group.toString() as any);
+    }
+    if (msg.index) {
+      writer.writeInt32(2, msg.index);
     }
     if (msg.createdAt) {
       writer.writeMessage(
-        2,
+        3,
         msg.createdAt,
         protoscript.Timestamp._writeMessage,
       );
     }
-    if (msg.type && Transaction.Type._toInt(msg.type)) {
-      writer.writeEnum(3, Transaction.Type._toInt(msg.type));
-    }
-    if (msg.followId) {
-      writer.writeString(4, msg.followId);
+    if (msg.etf) {
+      writer.writeInt64String(4, msg.etf.toString() as any);
     }
     if (msg.amount) {
       writer.writeString(5, msg.amount);
@@ -984,9 +951,6 @@ export const Transaction = {
         Transaction.Assets._writeMessage,
       );
     }
-    if (msg.etf) {
-      writer.writeInt64String(8, msg.etf.toString() as any);
-    }
     return writer;
   },
 
@@ -1001,19 +965,19 @@ export const Transaction = {
       const field = reader.getFieldNumber();
       switch (field) {
         case 1: {
-          msg.id = BigInt(reader.readInt64String());
+          msg.group = BigInt(reader.readInt64String());
           break;
         }
         case 2: {
-          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
+          msg.index = reader.readInt32();
           break;
         }
         case 3: {
-          msg.type = Transaction.Type._fromInt(reader.readEnum());
+          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
           break;
         }
         case 4: {
-          msg.followId = reader.readString();
+          msg.etf = BigInt(reader.readInt64String());
           break;
         }
         case 5: {
@@ -1028,10 +992,6 @@ export const Transaction = {
           const map = {} as Transaction.Assets;
           reader.readMessage(map, Transaction.Assets._readMessage);
           msg.assets[map.key.toString()] = map.value;
-          break;
-        }
-        case 8: {
-          msg.etf = BigInt(reader.readInt64String());
           break;
         }
         default: {
@@ -1747,9 +1707,9 @@ export const GemJSON = {
   initialize: function (msg?: Partial<Gem>): Gem {
     return {
       etf: "",
-      assetId: "",
       share: "",
       balance: "",
+      asset: AssetJSON.initialize(),
       ...msg,
     };
   },
@@ -1762,14 +1722,17 @@ export const GemJSON = {
     if (msg.etf) {
       json["etf"] = msg.etf;
     }
-    if (msg.assetId) {
-      json["assetId"] = msg.assetId;
-    }
     if (msg.share) {
       json["share"] = msg.share;
     }
     if (msg.balance) {
       json["balance"] = msg.balance;
+    }
+    if (msg.asset) {
+      const _asset_ = AssetJSON._writeMessage(msg.asset);
+      if (Object.keys(_asset_).length > 0) {
+        json["asset"] = _asset_;
+      }
     }
     return json;
   },
@@ -1782,10 +1745,6 @@ export const GemJSON = {
     if (_etf_) {
       msg.etf = _etf_;
     }
-    const _assetId_ = json["assetId"] ?? json["asset_id"];
-    if (_assetId_) {
-      msg.assetId = _assetId_;
-    }
     const _share_ = json["share"];
     if (_share_) {
       msg.share = _share_;
@@ -1793,6 +1752,10 @@ export const GemJSON = {
     const _balance_ = json["balance"];
     if (_balance_) {
       msg.balance = _balance_;
+    }
+    const _asset_ = json["asset"];
+    if (_asset_) {
+      AssetJSON._readMessage(msg.asset, _asset_);
     }
     return msg;
   },
@@ -2006,6 +1969,8 @@ export const SubscriptionJSON = {
       etf: 0n,
       followId: "",
       assets: {},
+      amount: "",
+      feeAmount: "",
       ...msg,
     };
   },
@@ -2046,6 +2011,12 @@ export const SubscriptionJSON = {
         json["assets"] = _assets_;
       }
     }
+    if (msg.amount) {
+      json["amount"] = msg.amount;
+    }
+    if (msg.feeAmount) {
+      json["feeAmount"] = msg.feeAmount;
+    }
     return json;
   },
 
@@ -2085,6 +2056,14 @@ export const SubscriptionJSON = {
           .map(SubscriptionJSON.Assets._readMessage)
           .map(({ key, value }) => [key, value]),
       );
+    }
+    const _amount_ = json["amount"];
+    if (_amount_) {
+      msg.amount = _amount_;
+    }
+    const _feeAmount_ = json["feeAmount"] ?? json["fee_amount"];
+    if (_feeAmount_) {
+      msg.feeAmount = _feeAmount_;
     }
     return msg;
   },
@@ -2202,14 +2181,13 @@ export const TransactionJSON = {
    */
   initialize: function (msg?: Partial<Transaction>): Transaction {
     return {
-      id: 0n,
+      group: 0n,
+      index: 0,
       createdAt: protoscript.TimestampJSON.initialize(),
-      type: Transaction.Type._fromInt(0),
-      followId: "",
+      etf: 0n,
       amount: "",
       feeAmount: "",
       assets: {},
-      etf: 0n,
       ...msg,
     };
   },
@@ -2221,17 +2199,17 @@ export const TransactionJSON = {
     msg: PartialDeep<Transaction>,
   ): Record<string, unknown> {
     const json: Record<string, unknown> = {};
-    if (msg.id) {
-      json["id"] = String(msg.id);
+    if (msg.group) {
+      json["group"] = String(msg.group);
+    }
+    if (msg.index) {
+      json["index"] = msg.index;
     }
     if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
       json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
     }
-    if (msg.type && TransactionJSON.Type._toInt(msg.type)) {
-      json["type"] = msg.type;
-    }
-    if (msg.followId) {
-      json["followId"] = msg.followId;
+    if (msg.etf) {
+      json["etf"] = String(msg.etf);
     }
     if (msg.amount) {
       json["amount"] = msg.amount;
@@ -2250,9 +2228,6 @@ export const TransactionJSON = {
         json["assets"] = _assets_;
       }
     }
-    if (msg.etf) {
-      json["etf"] = String(msg.etf);
-    }
     return json;
   },
 
@@ -2260,21 +2235,21 @@ export const TransactionJSON = {
    * @private
    */
   _readMessage: function (msg: Transaction, json: any): Transaction {
-    const _id_ = json["id"];
-    if (_id_) {
-      msg.id = BigInt(_id_);
+    const _group_ = json["group"];
+    if (_group_) {
+      msg.group = BigInt(_group_);
+    }
+    const _index_ = json["index"];
+    if (_index_) {
+      msg.index = protoscript.parseNumber(_index_);
     }
     const _createdAt_ = json["createdAt"] ?? json["created_at"];
     if (_createdAt_) {
       msg.createdAt = protoscript.parseTimestamp(_createdAt_);
     }
-    const _type_ = json["type"];
-    if (_type_) {
-      msg.type = Transaction.Type._fromInt(_type_);
-    }
-    const _followId_ = json["followId"] ?? json["follow_id"];
-    if (_followId_) {
-      msg.followId = _followId_;
+    const _etf_ = json["etf"];
+    if (_etf_) {
+      msg.etf = BigInt(_etf_);
     }
     const _amount_ = json["amount"];
     if (_amount_) {
@@ -2292,10 +2267,6 @@ export const TransactionJSON = {
           .map(TransactionJSON.Assets._readMessage)
           .map(({ key, value }) => [key, value]),
       );
-    }
-    const _etf_ = json["etf"];
-    if (_etf_) {
-      msg.etf = BigInt(_etf_);
     }
     return msg;
   },
