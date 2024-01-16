@@ -16,9 +16,9 @@ message Asset {
 
 message Gem {
     string etf = 1;
-    string asset_id = 2;
-    string share = 3;
-    string balance = 4;
+    string share = 2;
+    string balance = 3;
+    Asset asset = 4;
 }
 
 message Etf {
@@ -55,6 +55,8 @@ message Subscription {
     int64 etf = 5;
     string follow_id = 6;
     map<string, string> assets = 7;
+    string amount = 8;
+    string fee_amount = 9;
 }
 
 message Transaction {
@@ -64,14 +66,13 @@ message Transaction {
         REDEMPTION = 2;
     }
 
-    int64 id = 1;
-    google.protobuf.Timestamp created_at = 2;
-    Type type = 3;
-    string follow_id = 4;
+    int64 group = 1;
+    int32 index = 2;
+    google.protobuf.Timestamp created_at = 3;
+    int64 etf = 4;
     string amount = 5;
     string fee_amount = 6;
     map<string, string> assets = 7;
-    int64 etf = 8;
 }
 
 message BwatchReq {
@@ -101,9 +102,6 @@ message BwatchResp {
 }
 
 service BwatchService {
-    // ListAssets 返回 assets 列表
-    rpc ListAssets(BwatchReq.ListAssetsRequest) returns (BwatchResp.ListAssetsResponse);
-    
     // ReadEtf 读取 etf 详情
     rpc ReadEtf(BwatchReq.ReadEtfRequest) returns (BwatchResp.ReadEtfResponse);
     
