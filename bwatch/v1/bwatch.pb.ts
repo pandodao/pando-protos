@@ -174,7 +174,7 @@ export declare namespace BwatchResp {
     threshold: number;
     version: string;
     mixAddress: string;
-    blockedActios: Action[];
+    blockedActions: Action[];
     country: string;
     countryCode: string;
     restricted: boolean;
@@ -2351,7 +2351,7 @@ export const BwatchResp = {
         threshold: 0,
         version: "",
         mixAddress: "",
-        blockedActios: [],
+        blockedActions: [],
         country: "",
         countryCode: "",
         restricted: false,
@@ -2379,8 +2379,8 @@ export const BwatchResp = {
       if (msg.mixAddress) {
         writer.writeString(4, msg.mixAddress);
       }
-      if (msg.blockedActios?.length) {
-        writer.writePackedEnum(5, msg.blockedActios.map(Action._toInt));
+      if (msg.blockedActions?.length) {
+        writer.writePackedEnum(5, msg.blockedActions.map(Action._toInt));
       }
       if (msg.country) {
         writer.writeString(6, msg.country);
@@ -2425,11 +2425,11 @@ export const BwatchResp = {
           }
           case 5: {
             if (reader.isDelimited()) {
-              msg.blockedActios.push(
+              msg.blockedActions.push(
                 ...reader.readPackedEnum().map(Action._fromInt),
               );
             } else {
-              msg.blockedActios.push(Action._fromInt(reader.readEnum()));
+              msg.blockedActions.push(Action._fromInt(reader.readEnum()));
             }
             break;
           }
@@ -4208,7 +4208,7 @@ export const BwatchRespJSON = {
         threshold: 0,
         version: "",
         mixAddress: "",
-        blockedActios: [],
+        blockedActions: [],
         country: "",
         countryCode: "",
         restricted: false,
@@ -4236,8 +4236,8 @@ export const BwatchRespJSON = {
       if (msg.mixAddress) {
         json["mixAddress"] = msg.mixAddress;
       }
-      if (msg.blockedActios?.length) {
-        json["blockedActios"] = msg.blockedActios;
+      if (msg.blockedActions?.length) {
+        json["blockedActions"] = msg.blockedActions;
       }
       if (msg.country) {
         json["country"] = msg.country;
@@ -4277,9 +4277,10 @@ export const BwatchRespJSON = {
       if (_mixAddress_) {
         msg.mixAddress = _mixAddress_;
       }
-      const _blockedActios_ = json["blockedActios"] ?? json["blocked_actios"];
-      if (_blockedActios_) {
-        msg.blockedActios = _blockedActios_.map(Action._fromInt);
+      const _blockedActions_ =
+        json["blockedActions"] ?? json["blocked_actions"];
+      if (_blockedActions_) {
+        msg.blockedActions = _blockedActions_.map(Action._fromInt);
       }
       const _country_ = json["country"];
       if (_country_) {
