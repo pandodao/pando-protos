@@ -198,6 +198,18 @@ export async function GetInfo(
   return BwatchResp.GetInfoResponse.decode(response);
 }
 
+export async function ListAssets(
+  listAssetsRequest: BwatchReq.ListAssetsRequest,
+  config?: ClientConfiguration,
+): Promise<BwatchResp.ListAssetsResponse> {
+  const response = await PBrequest(
+    "/bwatch.v1.BwatchService/ListAssets",
+    BwatchReq.ListAssetsRequest.encode(listAssetsRequest),
+    config,
+  );
+  return BwatchResp.ListAssetsResponse.decode(response);
+}
+
 /**
  * ReadEtf 读取 etf 详情
  */
@@ -256,6 +268,18 @@ export async function GetInfoJSON(
   return BwatchRespJSON.GetInfoResponse.decode(response);
 }
 
+export async function ListAssetsJSON(
+  listAssetsRequest: BwatchReq.ListAssetsRequest,
+  config?: ClientConfiguration,
+): Promise<BwatchResp.ListAssetsResponse> {
+  const response = await JSONrequest(
+    "/bwatch.v1.BwatchService/ListAssets",
+    BwatchReqJSON.ListAssetsRequest.encode(listAssetsRequest),
+    config,
+  );
+  return BwatchRespJSON.ListAssetsResponse.decode(response);
+}
+
 /**
  * ReadEtf 读取 etf 详情
  */
@@ -307,6 +331,10 @@ export interface BwatchService<Context = unknown> {
     getInfoRequest: BwatchReq.GetInfoRequest,
     context: Context,
   ) => Promise<BwatchResp.GetInfoResponse> | BwatchResp.GetInfoResponse;
+  ListAssets: (
+    listAssetsRequest: BwatchReq.ListAssetsRequest,
+    context: Context,
+  ) => Promise<BwatchResp.ListAssetsResponse> | BwatchResp.ListAssetsResponse;
   /**
    * ReadEtf 读取 etf 详情
    */
@@ -345,6 +373,18 @@ export function createBwatchService<Context>(service: BwatchService<Context>) {
         output: {
           protobuf: BwatchResp.GetInfoResponse,
           json: BwatchRespJSON.GetInfoResponse,
+        },
+      },
+      ListAssets: {
+        name: "ListAssets",
+        handler: service.ListAssets,
+        input: {
+          protobuf: BwatchReq.ListAssetsRequest,
+          json: BwatchReqJSON.ListAssetsRequest,
+        },
+        output: {
+          protobuf: BwatchResp.ListAssetsResponse,
+          json: BwatchRespJSON.ListAssetsResponse,
         },
       },
       ReadEtf: {
