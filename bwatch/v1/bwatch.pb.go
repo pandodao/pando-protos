@@ -21,6 +21,67 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Action int32
+
+const (
+	Action_ACTION_NOT_SET      Action = 0
+	Action_SUBSCRIPTION        Action = 1
+	Action_REDEMPTION          Action = 2
+	Action_GEM_DEPOSIT         Action = 3
+	Action_GEM_WITHDRAW        Action = 4
+	Action_AUDIT_REVIEW        Action = 5
+	Action_EXPIRE_SUBSCRIPTION Action = 6
+)
+
+// Enum value maps for Action.
+var (
+	Action_name = map[int32]string{
+		0: "ACTION_NOT_SET",
+		1: "SUBSCRIPTION",
+		2: "REDEMPTION",
+		3: "GEM_DEPOSIT",
+		4: "GEM_WITHDRAW",
+		5: "AUDIT_REVIEW",
+		6: "EXPIRE_SUBSCRIPTION",
+	}
+	Action_value = map[string]int32{
+		"ACTION_NOT_SET":      0,
+		"SUBSCRIPTION":        1,
+		"REDEMPTION":          2,
+		"GEM_DEPOSIT":         3,
+		"GEM_WITHDRAW":        4,
+		"AUDIT_REVIEW":        5,
+		"EXPIRE_SUBSCRIPTION": 6,
+	}
+)
+
+func (x Action) Enum() *Action {
+	p := new(Action)
+	*p = x
+	return p
+}
+
+func (x Action) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Action) Descriptor() protoreflect.EnumDescriptor {
+	return file_bwatch_v1_bwatch_proto_enumTypes[0].Descriptor()
+}
+
+func (Action) Type() protoreflect.EnumType {
+	return &file_bwatch_v1_bwatch_proto_enumTypes[0]
+}
+
+func (x Action) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Action.Descriptor instead.
+func (Action) EnumDescriptor() ([]byte, []int) {
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{0}
+}
+
 type Subscription_State int32
 
 const (
@@ -57,11 +118,11 @@ func (x Subscription_State) String() string {
 }
 
 func (Subscription_State) Descriptor() protoreflect.EnumDescriptor {
-	return file_bwatch_v1_bwatch_proto_enumTypes[0].Descriptor()
+	return file_bwatch_v1_bwatch_proto_enumTypes[1].Descriptor()
 }
 
 func (Subscription_State) Type() protoreflect.EnumType {
-	return &file_bwatch_v1_bwatch_proto_enumTypes[0]
+	return &file_bwatch_v1_bwatch_proto_enumTypes[1]
 }
 
 func (x Subscription_State) Number() protoreflect.EnumNumber {
@@ -106,11 +167,11 @@ func (x Transaction_Type) String() string {
 }
 
 func (Transaction_Type) Descriptor() protoreflect.EnumDescriptor {
-	return file_bwatch_v1_bwatch_proto_enumTypes[1].Descriptor()
+	return file_bwatch_v1_bwatch_proto_enumTypes[2].Descriptor()
 }
 
 func (Transaction_Type) Type() protoreflect.EnumType {
-	return &file_bwatch_v1_bwatch_proto_enumTypes[1]
+	return &file_bwatch_v1_bwatch_proto_enumTypes[2]
 }
 
 func (x Transaction_Type) Number() protoreflect.EnumNumber {
@@ -120,6 +181,67 @@ func (x Transaction_Type) Number() protoreflect.EnumNumber {
 // Deprecated: Use Transaction_Type.Descriptor instead.
 func (Transaction_Type) EnumDescriptor() ([]byte, []int) {
 	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{4, 0}
+}
+
+type Transfer_Status int32
+
+const (
+	Transfer_STATUS_NOT_SET Transfer_Status = 0
+	Transfer_AUDITING       Transfer_Status = 1
+	Transfer_APPROVED       Transfer_Status = 2
+	Transfer_ASSIGNED       Transfer_Status = 3
+	Transfer_HANDLED        Transfer_Status = 4
+	Transfer_PASSED         Transfer_Status = 5
+	Transfer_REJECTED       Transfer_Status = 6
+)
+
+// Enum value maps for Transfer_Status.
+var (
+	Transfer_Status_name = map[int32]string{
+		0: "STATUS_NOT_SET",
+		1: "AUDITING",
+		2: "APPROVED",
+		3: "ASSIGNED",
+		4: "HANDLED",
+		5: "PASSED",
+		6: "REJECTED",
+	}
+	Transfer_Status_value = map[string]int32{
+		"STATUS_NOT_SET": 0,
+		"AUDITING":       1,
+		"APPROVED":       2,
+		"ASSIGNED":       3,
+		"HANDLED":        4,
+		"PASSED":         5,
+		"REJECTED":       6,
+	}
+)
+
+func (x Transfer_Status) Enum() *Transfer_Status {
+	p := new(Transfer_Status)
+	*p = x
+	return p
+}
+
+func (x Transfer_Status) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Transfer_Status) Descriptor() protoreflect.EnumDescriptor {
+	return file_bwatch_v1_bwatch_proto_enumTypes[3].Descriptor()
+}
+
+func (Transfer_Status) Type() protoreflect.EnumType {
+	return &file_bwatch_v1_bwatch_proto_enumTypes[3]
+}
+
+func (x Transfer_Status) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Transfer_Status.Descriptor instead.
+func (Transfer_Status) EnumDescriptor() ([]byte, []int) {
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{6, 0}
 }
 
 type Asset struct {
@@ -653,6 +775,180 @@ func (x *Transaction) GetAssets() map[string]string {
 	return nil
 }
 
+type User struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Members   []string `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	Threshold uint32   `protobuf:"varint,2,opt,name=threshold,proto3" json:"threshold,omitempty"`
+	UniqueId  string   `protobuf:"bytes,3,opt,name=unique_id,json=uniqueId,proto3" json:"unique_id,omitempty"`
+}
+
+func (x *User) Reset() {
+	*x = User{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *User) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*User) ProtoMessage() {}
+
+func (x *User) ProtoReflect() protoreflect.Message {
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use User.ProtoReflect.Descriptor instead.
+func (*User) Descriptor() ([]byte, []int) {
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *User) GetMembers() []string {
+	if x != nil {
+		return x.Members
+	}
+	return nil
+}
+
+func (x *User) GetThreshold() uint32 {
+	if x != nil {
+		return x.Threshold
+	}
+	return 0
+}
+
+func (x *User) GetUniqueId() string {
+	if x != nil {
+		return x.UniqueId
+	}
+	return ""
+}
+
+type Transfer struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id        string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	Group     uint64                 `protobuf:"varint,3,opt,name=group,proto3" json:"group,omitempty"`
+	AssetId   string                 `protobuf:"bytes,4,opt,name=asset_id,json=assetId,proto3" json:"asset_id,omitempty"`
+	Amount    string                 `protobuf:"bytes,5,opt,name=amount,proto3" json:"amount,omitempty"`
+	Memo      string                 `protobuf:"bytes,6,opt,name=memo,proto3" json:"memo,omitempty"`
+	Status    Transfer_Status        `protobuf:"varint,7,opt,name=status,proto3,enum=bwatch.v1.Transfer_Status" json:"status,omitempty"`
+	Opponent  *User                  `protobuf:"bytes,8,opt,name=opponent,proto3" json:"opponent,omitempty"`
+	TxHash    string                 `protobuf:"bytes,9,opt,name=tx_hash,json=txHash,proto3" json:"tx_hash,omitempty"`
+}
+
+func (x *Transfer) Reset() {
+	*x = Transfer{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Transfer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Transfer) ProtoMessage() {}
+
+func (x *Transfer) ProtoReflect() protoreflect.Message {
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Transfer.ProtoReflect.Descriptor instead.
+func (*Transfer) Descriptor() ([]byte, []int) {
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *Transfer) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Transfer) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *Transfer) GetGroup() uint64 {
+	if x != nil {
+		return x.Group
+	}
+	return 0
+}
+
+func (x *Transfer) GetAssetId() string {
+	if x != nil {
+		return x.AssetId
+	}
+	return ""
+}
+
+func (x *Transfer) GetAmount() string {
+	if x != nil {
+		return x.Amount
+	}
+	return ""
+}
+
+func (x *Transfer) GetMemo() string {
+	if x != nil {
+		return x.Memo
+	}
+	return ""
+}
+
+func (x *Transfer) GetStatus() Transfer_Status {
+	if x != nil {
+		return x.Status
+	}
+	return Transfer_STATUS_NOT_SET
+}
+
+func (x *Transfer) GetOpponent() *User {
+	if x != nil {
+		return x.Opponent
+	}
+	return nil
+}
+
+func (x *Transfer) GetTxHash() string {
+	if x != nil {
+		return x.TxHash
+	}
+	return ""
+}
+
 type BwatchReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -662,7 +958,7 @@ type BwatchReq struct {
 func (x *BwatchReq) Reset() {
 	*x = BwatchReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_bwatch_v1_bwatch_proto_msgTypes[5]
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -675,7 +971,7 @@ func (x *BwatchReq) String() string {
 func (*BwatchReq) ProtoMessage() {}
 
 func (x *BwatchReq) ProtoReflect() protoreflect.Message {
-	mi := &file_bwatch_v1_bwatch_proto_msgTypes[5]
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -688,7 +984,7 @@ func (x *BwatchReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BwatchReq.ProtoReflect.Descriptor instead.
 func (*BwatchReq) Descriptor() ([]byte, []int) {
-	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{5}
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{7}
 }
 
 type BwatchResp struct {
@@ -700,7 +996,7 @@ type BwatchResp struct {
 func (x *BwatchResp) Reset() {
 	*x = BwatchResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_bwatch_v1_bwatch_proto_msgTypes[6]
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -713,7 +1009,7 @@ func (x *BwatchResp) String() string {
 func (*BwatchResp) ProtoMessage() {}
 
 func (x *BwatchResp) ProtoReflect() protoreflect.Message {
-	mi := &file_bwatch_v1_bwatch_proto_msgTypes[6]
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -726,7 +1022,7 @@ func (x *BwatchResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BwatchResp.ProtoReflect.Descriptor instead.
 func (*BwatchResp) Descriptor() ([]byte, []int) {
-	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{6}
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{8}
 }
 
 type BwatchReq_ListAssetsRequest struct {
@@ -738,7 +1034,7 @@ type BwatchReq_ListAssetsRequest struct {
 func (x *BwatchReq_ListAssetsRequest) Reset() {
 	*x = BwatchReq_ListAssetsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_bwatch_v1_bwatch_proto_msgTypes[9]
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -751,7 +1047,7 @@ func (x *BwatchReq_ListAssetsRequest) String() string {
 func (*BwatchReq_ListAssetsRequest) ProtoMessage() {}
 
 func (x *BwatchReq_ListAssetsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_bwatch_v1_bwatch_proto_msgTypes[9]
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -764,7 +1060,7 @@ func (x *BwatchReq_ListAssetsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BwatchReq_ListAssetsRequest.ProtoReflect.Descriptor instead.
 func (*BwatchReq_ListAssetsRequest) Descriptor() ([]byte, []int) {
-	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{5, 0}
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{7, 0}
 }
 
 type BwatchReq_ReadEtfRequest struct {
@@ -778,7 +1074,7 @@ type BwatchReq_ReadEtfRequest struct {
 func (x *BwatchReq_ReadEtfRequest) Reset() {
 	*x = BwatchReq_ReadEtfRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_bwatch_v1_bwatch_proto_msgTypes[10]
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -791,7 +1087,7 @@ func (x *BwatchReq_ReadEtfRequest) String() string {
 func (*BwatchReq_ReadEtfRequest) ProtoMessage() {}
 
 func (x *BwatchReq_ReadEtfRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_bwatch_v1_bwatch_proto_msgTypes[10]
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -804,7 +1100,7 @@ func (x *BwatchReq_ReadEtfRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BwatchReq_ReadEtfRequest.ProtoReflect.Descriptor instead.
 func (*BwatchReq_ReadEtfRequest) Descriptor() ([]byte, []int) {
-	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{5, 1}
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{7, 1}
 }
 
 func (x *BwatchReq_ReadEtfRequest) GetEtf() string {
@@ -825,7 +1121,7 @@ type BwatchReq_ReadSubscriptionRequest struct {
 func (x *BwatchReq_ReadSubscriptionRequest) Reset() {
 	*x = BwatchReq_ReadSubscriptionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_bwatch_v1_bwatch_proto_msgTypes[11]
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -838,7 +1134,7 @@ func (x *BwatchReq_ReadSubscriptionRequest) String() string {
 func (*BwatchReq_ReadSubscriptionRequest) ProtoMessage() {}
 
 func (x *BwatchReq_ReadSubscriptionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_bwatch_v1_bwatch_proto_msgTypes[11]
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -851,7 +1147,7 @@ func (x *BwatchReq_ReadSubscriptionRequest) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use BwatchReq_ReadSubscriptionRequest.ProtoReflect.Descriptor instead.
 func (*BwatchReq_ReadSubscriptionRequest) Descriptor() ([]byte, []int) {
-	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{5, 2}
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{7, 2}
 }
 
 func (x *BwatchReq_ReadSubscriptionRequest) GetFollowId() string {
@@ -859,6 +1155,107 @@ func (x *BwatchReq_ReadSubscriptionRequest) GetFollowId() string {
 		return x.FollowId
 	}
 	return ""
+}
+
+type BwatchReq_ListTransfersRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Group  uint64          `protobuf:"varint,1,opt,name=group,proto3" json:"group,omitempty"`
+	Status Transfer_Status `protobuf:"varint,2,opt,name=status,proto3,enum=bwatch.v1.Transfer_Status" json:"status,omitempty"`
+	Limit  int32           `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
+}
+
+func (x *BwatchReq_ListTransfersRequest) Reset() {
+	*x = BwatchReq_ListTransfersRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BwatchReq_ListTransfersRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BwatchReq_ListTransfersRequest) ProtoMessage() {}
+
+func (x *BwatchReq_ListTransfersRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BwatchReq_ListTransfersRequest.ProtoReflect.Descriptor instead.
+func (*BwatchReq_ListTransfersRequest) Descriptor() ([]byte, []int) {
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{7, 3}
+}
+
+func (x *BwatchReq_ListTransfersRequest) GetGroup() uint64 {
+	if x != nil {
+		return x.Group
+	}
+	return 0
+}
+
+func (x *BwatchReq_ListTransfersRequest) GetStatus() Transfer_Status {
+	if x != nil {
+		return x.Status
+	}
+	return Transfer_STATUS_NOT_SET
+}
+
+func (x *BwatchReq_ListTransfersRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+type BwatchReq_GetInfoRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *BwatchReq_GetInfoRequest) Reset() {
+	*x = BwatchReq_GetInfoRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BwatchReq_GetInfoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BwatchReq_GetInfoRequest) ProtoMessage() {}
+
+func (x *BwatchReq_GetInfoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BwatchReq_GetInfoRequest.ProtoReflect.Descriptor instead.
+func (*BwatchReq_GetInfoRequest) Descriptor() ([]byte, []int) {
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{7, 4}
 }
 
 type BwatchResp_ListAssetsResponse struct {
@@ -872,7 +1269,7 @@ type BwatchResp_ListAssetsResponse struct {
 func (x *BwatchResp_ListAssetsResponse) Reset() {
 	*x = BwatchResp_ListAssetsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_bwatch_v1_bwatch_proto_msgTypes[12]
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -885,7 +1282,7 @@ func (x *BwatchResp_ListAssetsResponse) String() string {
 func (*BwatchResp_ListAssetsResponse) ProtoMessage() {}
 
 func (x *BwatchResp_ListAssetsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_bwatch_v1_bwatch_proto_msgTypes[12]
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -898,7 +1295,7 @@ func (x *BwatchResp_ListAssetsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BwatchResp_ListAssetsResponse.ProtoReflect.Descriptor instead.
 func (*BwatchResp_ListAssetsResponse) Descriptor() ([]byte, []int) {
-	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{6, 0}
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{8, 0}
 }
 
 func (x *BwatchResp_ListAssetsResponse) GetAssets() []*Asset {
@@ -919,7 +1316,7 @@ type BwatchResp_ReadEtfResponse struct {
 func (x *BwatchResp_ReadEtfResponse) Reset() {
 	*x = BwatchResp_ReadEtfResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_bwatch_v1_bwatch_proto_msgTypes[13]
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -932,7 +1329,7 @@ func (x *BwatchResp_ReadEtfResponse) String() string {
 func (*BwatchResp_ReadEtfResponse) ProtoMessage() {}
 
 func (x *BwatchResp_ReadEtfResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_bwatch_v1_bwatch_proto_msgTypes[13]
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -945,7 +1342,7 @@ func (x *BwatchResp_ReadEtfResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BwatchResp_ReadEtfResponse.ProtoReflect.Descriptor instead.
 func (*BwatchResp_ReadEtfResponse) Descriptor() ([]byte, []int) {
-	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{6, 1}
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{8, 1}
 }
 
 func (x *BwatchResp_ReadEtfResponse) GetEtf() *Etf {
@@ -966,7 +1363,7 @@ type BwatchResp_ReadSubscriptionResponse struct {
 func (x *BwatchResp_ReadSubscriptionResponse) Reset() {
 	*x = BwatchResp_ReadSubscriptionResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_bwatch_v1_bwatch_proto_msgTypes[14]
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -979,7 +1376,7 @@ func (x *BwatchResp_ReadSubscriptionResponse) String() string {
 func (*BwatchResp_ReadSubscriptionResponse) ProtoMessage() {}
 
 func (x *BwatchResp_ReadSubscriptionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_bwatch_v1_bwatch_proto_msgTypes[14]
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -992,12 +1389,138 @@ func (x *BwatchResp_ReadSubscriptionResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use BwatchResp_ReadSubscriptionResponse.ProtoReflect.Descriptor instead.
 func (*BwatchResp_ReadSubscriptionResponse) Descriptor() ([]byte, []int) {
-	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{6, 2}
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{8, 2}
 }
 
 func (x *BwatchResp_ReadSubscriptionResponse) GetSub() *Subscription {
 	if x != nil {
 		return x.Sub
+	}
+	return nil
+}
+
+type BwatchResp_ListTransfersResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Transfers []*Transfer `protobuf:"bytes,1,rep,name=transfers,proto3" json:"transfers,omitempty"`
+}
+
+func (x *BwatchResp_ListTransfersResponse) Reset() {
+	*x = BwatchResp_ListTransfersResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BwatchResp_ListTransfersResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BwatchResp_ListTransfersResponse) ProtoMessage() {}
+
+func (x *BwatchResp_ListTransfersResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BwatchResp_ListTransfersResponse.ProtoReflect.Descriptor instead.
+func (*BwatchResp_ListTransfersResponse) Descriptor() ([]byte, []int) {
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{8, 3}
+}
+
+func (x *BwatchResp_ListTransfersResponse) GetTransfers() []*Transfer {
+	if x != nil {
+		return x.Transfers
+	}
+	return nil
+}
+
+type BwatchResp_GetInfoResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Members       []string `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	Threshold     int32    `protobuf:"varint,2,opt,name=threshold,proto3" json:"threshold,omitempty"`
+	Version       string   `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
+	MixAddress    string   `protobuf:"bytes,4,opt,name=mix_address,json=mixAddress,proto3" json:"mix_address,omitempty"`
+	BlockedActios []Action `protobuf:"varint,5,rep,packed,name=blocked_actios,json=blockedActios,proto3,enum=bwatch.v1.Action" json:"blocked_actios,omitempty"`
+}
+
+func (x *BwatchResp_GetInfoResponse) Reset() {
+	*x = BwatchResp_GetInfoResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_bwatch_v1_bwatch_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BwatchResp_GetInfoResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BwatchResp_GetInfoResponse) ProtoMessage() {}
+
+func (x *BwatchResp_GetInfoResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_bwatch_v1_bwatch_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BwatchResp_GetInfoResponse.ProtoReflect.Descriptor instead.
+func (*BwatchResp_GetInfoResponse) Descriptor() ([]byte, []int) {
+	return file_bwatch_v1_bwatch_proto_rawDescGZIP(), []int{8, 4}
+}
+
+func (x *BwatchResp_GetInfoResponse) GetMembers() []string {
+	if x != nil {
+		return x.Members
+	}
+	return nil
+}
+
+func (x *BwatchResp_GetInfoResponse) GetThreshold() int32 {
+	if x != nil {
+		return x.Threshold
+	}
+	return 0
+}
+
+func (x *BwatchResp_GetInfoResponse) GetVersion() string {
+	if x != nil {
+		return x.Version
+	}
+	return ""
+}
+
+func (x *BwatchResp_GetInfoResponse) GetMixAddress() string {
+	if x != nil {
+		return x.MixAddress
+	}
+	return ""
+}
+
+func (x *BwatchResp_GetInfoResponse) GetBlockedActios() []Action {
+	if x != nil {
+		return x.BlockedActios
 	}
 	return nil
 }
@@ -1115,45 +1638,123 @@ var file_bwatch_v1_bwatch_proto_rawDesc = []byte{
 	0x02, 0x38, 0x01, 0x22, 0x35, 0x0a, 0x04, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x4e,
 	0x4f, 0x54, 0x5f, 0x53, 0x45, 0x54, 0x10, 0x00, 0x12, 0x10, 0x0a, 0x0c, 0x53, 0x55, 0x42, 0x53,
 	0x43, 0x52, 0x49, 0x50, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x01, 0x12, 0x0e, 0x0a, 0x0a, 0x52, 0x45,
-	0x44, 0x45, 0x4d, 0x50, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x02, 0x22, 0x7c, 0x0a, 0x09, 0x42, 0x77,
-	0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x1a, 0x13, 0x0a, 0x11, 0x4c, 0x69, 0x73, 0x74, 0x41,
-	0x73, 0x73, 0x65, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x22, 0x0a, 0x0e,
-	0x52, 0x65, 0x61, 0x64, 0x45, 0x74, 0x66, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x10,
-	0x0a, 0x03, 0x65, 0x74, 0x66, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x65, 0x74, 0x66,
-	0x1a, 0x36, 0x0a, 0x17, 0x52, 0x65, 0x61, 0x64, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x70,
-	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x66,
-	0x6f, 0x6c, 0x6c, 0x6f, 0x77, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
-	0x66, 0x6f, 0x6c, 0x6c, 0x6f, 0x77, 0x49, 0x64, 0x22, 0xc8, 0x01, 0x0a, 0x0a, 0x42, 0x77, 0x61,
-	0x74, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x1a, 0x3e, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x41,
-	0x73, 0x73, 0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x28, 0x0a,
-	0x06, 0x61, 0x73, 0x73, 0x65, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e,
-	0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x73, 0x73, 0x65, 0x74, 0x52,
-	0x06, 0x61, 0x73, 0x73, 0x65, 0x74, 0x73, 0x1a, 0x33, 0x0a, 0x0f, 0x52, 0x65, 0x61, 0x64, 0x45,
-	0x74, 0x66, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x20, 0x0a, 0x03, 0x65, 0x74,
-	0x66, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68,
-	0x2e, 0x76, 0x31, 0x2e, 0x45, 0x74, 0x66, 0x52, 0x03, 0x65, 0x74, 0x66, 0x1a, 0x45, 0x0a, 0x18,
+	0x44, 0x45, 0x4d, 0x50, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x02, 0x22, 0x5b, 0x0a, 0x04, 0x55, 0x73,
+	0x65, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20,
+	0x03, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x73, 0x12, 0x1c, 0x0a, 0x09,
+	0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52,
+	0x09, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x12, 0x1b, 0x0a, 0x09, 0x75, 0x6e,
+	0x69, 0x71, 0x75, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75,
+	0x6e, 0x69, 0x71, 0x75, 0x65, 0x49, 0x64, 0x22, 0x9b, 0x03, 0x0a, 0x08, 0x54, 0x72, 0x61, 0x6e,
+	0x73, 0x66, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x02, 0x69, 0x64, 0x12, 0x39, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f,
+	0x61, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
+	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73,
+	0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12,
+	0x14, 0x0a, 0x05, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05,
+	0x67, 0x72, 0x6f, 0x75, 0x70, 0x12, 0x19, 0x0a, 0x08, 0x61, 0x73, 0x73, 0x65, 0x74, 0x5f, 0x69,
+	0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x73, 0x73, 0x65, 0x74, 0x49, 0x64,
+	0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6d, 0x65, 0x6d, 0x6f,
+	0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6d, 0x65, 0x6d, 0x6f, 0x12, 0x32, 0x0a, 0x06,
+	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1a, 0x2e, 0x62,
+	0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65,
+	0x72, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x12, 0x2b, 0x0a, 0x08, 0x6f, 0x70, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x18, 0x08, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x08, 0x6f, 0x70, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x12, 0x17, 0x0a,
+	0x07, 0x74, 0x78, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x74, 0x78, 0x48, 0x61, 0x73, 0x68, 0x22, 0x6d, 0x0a, 0x06, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x12, 0x12, 0x0a, 0x0e, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x4e, 0x4f, 0x54, 0x5f, 0x53,
+	0x45, 0x54, 0x10, 0x00, 0x12, 0x0c, 0x0a, 0x08, 0x41, 0x55, 0x44, 0x49, 0x54, 0x49, 0x4e, 0x47,
+	0x10, 0x01, 0x12, 0x0c, 0x0a, 0x08, 0x41, 0x50, 0x50, 0x52, 0x4f, 0x56, 0x45, 0x44, 0x10, 0x02,
+	0x12, 0x0c, 0x0a, 0x08, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x45, 0x44, 0x10, 0x03, 0x12, 0x0b,
+	0x0a, 0x07, 0x48, 0x41, 0x4e, 0x44, 0x4c, 0x45, 0x44, 0x10, 0x04, 0x12, 0x0a, 0x0a, 0x06, 0x50,
+	0x41, 0x53, 0x53, 0x45, 0x44, 0x10, 0x05, 0x12, 0x0c, 0x0a, 0x08, 0x52, 0x45, 0x4a, 0x45, 0x43,
+	0x54, 0x45, 0x44, 0x10, 0x06, 0x22, 0x86, 0x02, 0x0a, 0x09, 0x42, 0x77, 0x61, 0x74, 0x63, 0x68,
+	0x52, 0x65, 0x71, 0x1a, 0x13, 0x0a, 0x11, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x73, 0x73, 0x65, 0x74,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x22, 0x0a, 0x0e, 0x52, 0x65, 0x61, 0x64,
+	0x45, 0x74, 0x66, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x65, 0x74,
+	0x66, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x65, 0x74, 0x66, 0x1a, 0x36, 0x0a, 0x17,
 	0x52, 0x65, 0x61, 0x64, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x29, 0x0a, 0x03, 0x73, 0x75, 0x62, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76,
-	0x31, 0x2e, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x03,
-	0x73, 0x75, 0x62, 0x32, 0xd8, 0x01, 0x0a, 0x0d, 0x42, 0x77, 0x61, 0x74, 0x63, 0x68, 0x53, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x55, 0x0a, 0x07, 0x52, 0x65, 0x61, 0x64, 0x45, 0x74, 0x66,
-	0x12, 0x23, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x77, 0x61,
-	0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x45, 0x74, 0x66, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76,
-	0x31, 0x2e, 0x42, 0x77, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x2e, 0x52, 0x65, 0x61,
-	0x64, 0x45, 0x74, 0x66, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x70, 0x0a, 0x10,
-	0x52, 0x65, 0x61, 0x64, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e,
-	0x12, 0x2c, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x77, 0x61,
-	0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x53, 0x75, 0x62, 0x73, 0x63,
-	0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x66, 0x6f, 0x6c, 0x6c, 0x6f,
+	0x77, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x66, 0x6f, 0x6c, 0x6c,
+	0x6f, 0x77, 0x49, 0x64, 0x1a, 0x76, 0x0a, 0x14, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x72, 0x61, 0x6e,
+	0x73, 0x66, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05,
+	0x67, 0x72, 0x6f, 0x75, 0x70, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x67, 0x72, 0x6f,
+	0x75, 0x70, 0x12, 0x32, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0e, 0x32, 0x1a, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x54,
+	0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06,
+	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x1a, 0x10, 0x0a, 0x0e,
+	0x47, 0x65, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0xd5,
+	0x03, 0x0a, 0x0a, 0x42, 0x77, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x1a, 0x3e, 0x0a,
+	0x12, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x73, 0x73, 0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x28, 0x0a, 0x06, 0x61, 0x73, 0x73, 0x65, 0x74, 0x73, 0x18, 0x01, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e,
+	0x41, 0x73, 0x73, 0x65, 0x74, 0x52, 0x06, 0x61, 0x73, 0x73, 0x65, 0x74, 0x73, 0x1a, 0x33, 0x0a,
+	0x0f, 0x52, 0x65, 0x61, 0x64, 0x45, 0x74, 0x66, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x20, 0x0a, 0x03, 0x65, 0x74, 0x66, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e,
+	0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x74, 0x66, 0x52, 0x03, 0x65,
+	0x74, 0x66, 0x1a, 0x45, 0x0a, 0x18, 0x52, 0x65, 0x61, 0x64, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72,
+	0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x29,
+	0x0a, 0x03, 0x73, 0x75, 0x62, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x62, 0x77,
+	0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x70,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x03, 0x73, 0x75, 0x62, 0x1a, 0x4a, 0x0a, 0x15, 0x4c, 0x69, 0x73,
+	0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x31, 0x0a, 0x09, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x73, 0x18,
+	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76,
+	0x31, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x09, 0x74, 0x72, 0x61, 0x6e,
+	0x73, 0x66, 0x65, 0x72, 0x73, 0x1a, 0xbe, 0x01, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x49, 0x6e, 0x66,
+	0x6f, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x6d,
+	0x62, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x6d, 0x62,
+	0x65, 0x72, 0x73, 0x12, 0x1c, 0x0a, 0x09, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x09, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c,
+	0x64, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1f, 0x0a, 0x0b, 0x6d,
+	0x69, 0x78, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0a, 0x6d, 0x69, 0x78, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x38, 0x0a, 0x0e,
+	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x65, 0x64, 0x5f, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x73, 0x18, 0x05,
+	0x20, 0x03, 0x28, 0x0e, 0x32, 0x11, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31,
+	0x2e, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x65, 0x64,
+	0x41, 0x63, 0x74, 0x69, 0x6f, 0x73, 0x2a, 0x8c, 0x01, 0x0a, 0x06, 0x41, 0x63, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x12, 0x0a, 0x0e, 0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x4e, 0x4f, 0x54, 0x5f,
+	0x53, 0x45, 0x54, 0x10, 0x00, 0x12, 0x10, 0x0a, 0x0c, 0x53, 0x55, 0x42, 0x53, 0x43, 0x52, 0x49,
+	0x50, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x01, 0x12, 0x0e, 0x0a, 0x0a, 0x52, 0x45, 0x44, 0x45, 0x4d,
+	0x50, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x02, 0x12, 0x0f, 0x0a, 0x0b, 0x47, 0x45, 0x4d, 0x5f, 0x44,
+	0x45, 0x50, 0x4f, 0x53, 0x49, 0x54, 0x10, 0x03, 0x12, 0x10, 0x0a, 0x0c, 0x47, 0x45, 0x4d, 0x5f,
+	0x57, 0x49, 0x54, 0x48, 0x44, 0x52, 0x41, 0x57, 0x10, 0x04, 0x12, 0x10, 0x0a, 0x0c, 0x41, 0x55,
+	0x44, 0x49, 0x54, 0x5f, 0x52, 0x45, 0x56, 0x49, 0x45, 0x57, 0x10, 0x05, 0x12, 0x17, 0x0a, 0x13,
+	0x45, 0x58, 0x50, 0x49, 0x52, 0x45, 0x5f, 0x53, 0x55, 0x42, 0x53, 0x43, 0x52, 0x49, 0x50, 0x54,
+	0x49, 0x4f, 0x4e, 0x10, 0x06, 0x32, 0x98, 0x03, 0x0a, 0x0d, 0x42, 0x77, 0x61, 0x74, 0x63, 0x68,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x55, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x49, 0x6e,
+	0x66, 0x6f, 0x12, 0x23, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x42,
+	0x77, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x2e, 0x47, 0x65, 0x74, 0x49, 0x6e, 0x66, 0x6f,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68,
+	0x2e, 0x76, 0x31, 0x2e, 0x42, 0x77, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x2e, 0x47,
+	0x65, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x55,
+	0x0a, 0x07, 0x52, 0x65, 0x61, 0x64, 0x45, 0x74, 0x66, 0x12, 0x23, 0x2e, 0x62, 0x77, 0x61, 0x74,
+	0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x77, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x2e,
+	0x52, 0x65, 0x61, 0x64, 0x45, 0x74, 0x66, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25,
 	0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x77, 0x61, 0x74, 0x63,
-	0x68, 0x52, 0x65, 0x73, 0x70, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72,
-	0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x32,
-	0x5a, 0x30, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x66, 0x6f, 0x78,
-	0x2d, 0x6f, 0x6e, 0x65, 0x2f, 0x70, 0x61, 0x6e, 0x64, 0x6f, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x73, 0x2f, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2f, 0x76, 0x31, 0x3b, 0x62, 0x77, 0x61, 0x74,
-	0x63, 0x68, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x68, 0x52, 0x65, 0x73, 0x70, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x45, 0x74, 0x66, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x70, 0x0a, 0x10, 0x52, 0x65, 0x61, 0x64, 0x53, 0x75, 0x62,
+	0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x2c, 0x2e, 0x62, 0x77, 0x61, 0x74,
+	0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x77, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x2e,
+	0x52, 0x65, 0x61, 0x64, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68,
+	0x2e, 0x76, 0x31, 0x2e, 0x42, 0x77, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x2e, 0x52,
+	0x65, 0x61, 0x64, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x67, 0x0a, 0x0d, 0x4c, 0x69, 0x73, 0x74, 0x54,
+	0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x73, 0x12, 0x29, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63,
+	0x68, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x77, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x2e, 0x4c,
+	0x69, 0x73, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x76, 0x31, 0x2e,
+	0x42, 0x77, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x54,
+	0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x42, 0x32, 0x5a, 0x30, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x66,
+	0x6f, 0x78, 0x2d, 0x6f, 0x6e, 0x65, 0x2f, 0x70, 0x61, 0x6e, 0x64, 0x6f, 0x2d, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x73, 0x2f, 0x62, 0x77, 0x61, 0x74, 0x63, 0x68, 0x2f, 0x76, 0x31, 0x3b, 0x62, 0x77,
+	0x61, 0x74, 0x63, 0x68, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1168,49 +1769,67 @@ func file_bwatch_v1_bwatch_proto_rawDescGZIP() []byte {
 	return file_bwatch_v1_bwatch_proto_rawDescData
 }
 
-var file_bwatch_v1_bwatch_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_bwatch_v1_bwatch_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_bwatch_v1_bwatch_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
+var file_bwatch_v1_bwatch_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_bwatch_v1_bwatch_proto_goTypes = []interface{}{
-	(Subscription_State)(0),             // 0: bwatch.v1.Subscription.State
-	(Transaction_Type)(0),               // 1: bwatch.v1.Transaction.Type
-	(*Asset)(nil),                       // 2: bwatch.v1.Asset
-	(*Gem)(nil),                         // 3: bwatch.v1.Gem
-	(*Etf)(nil),                         // 4: bwatch.v1.Etf
-	(*Subscription)(nil),                // 5: bwatch.v1.Subscription
-	(*Transaction)(nil),                 // 6: bwatch.v1.Transaction
-	(*BwatchReq)(nil),                   // 7: bwatch.v1.BwatchReq
-	(*BwatchResp)(nil),                  // 8: bwatch.v1.BwatchResp
-	nil,                                 // 9: bwatch.v1.Subscription.AssetsEntry
-	nil,                                 // 10: bwatch.v1.Transaction.AssetsEntry
-	(*BwatchReq_ListAssetsRequest)(nil), // 11: bwatch.v1.BwatchReq.ListAssetsRequest
-	(*BwatchReq_ReadEtfRequest)(nil),    // 12: bwatch.v1.BwatchReq.ReadEtfRequest
-	(*BwatchReq_ReadSubscriptionRequest)(nil),   // 13: bwatch.v1.BwatchReq.ReadSubscriptionRequest
-	(*BwatchResp_ListAssetsResponse)(nil),       // 14: bwatch.v1.BwatchResp.ListAssetsResponse
-	(*BwatchResp_ReadEtfResponse)(nil),          // 15: bwatch.v1.BwatchResp.ReadEtfResponse
-	(*BwatchResp_ReadSubscriptionResponse)(nil), // 16: bwatch.v1.BwatchResp.ReadSubscriptionResponse
-	(*timestamppb.Timestamp)(nil),               // 17: google.protobuf.Timestamp
+	(Action)(0),                         // 0: bwatch.v1.Action
+	(Subscription_State)(0),             // 1: bwatch.v1.Subscription.State
+	(Transaction_Type)(0),               // 2: bwatch.v1.Transaction.Type
+	(Transfer_Status)(0),                // 3: bwatch.v1.Transfer.Status
+	(*Asset)(nil),                       // 4: bwatch.v1.Asset
+	(*Gem)(nil),                         // 5: bwatch.v1.Gem
+	(*Etf)(nil),                         // 6: bwatch.v1.Etf
+	(*Subscription)(nil),                // 7: bwatch.v1.Subscription
+	(*Transaction)(nil),                 // 8: bwatch.v1.Transaction
+	(*User)(nil),                        // 9: bwatch.v1.User
+	(*Transfer)(nil),                    // 10: bwatch.v1.Transfer
+	(*BwatchReq)(nil),                   // 11: bwatch.v1.BwatchReq
+	(*BwatchResp)(nil),                  // 12: bwatch.v1.BwatchResp
+	nil,                                 // 13: bwatch.v1.Subscription.AssetsEntry
+	nil,                                 // 14: bwatch.v1.Transaction.AssetsEntry
+	(*BwatchReq_ListAssetsRequest)(nil), // 15: bwatch.v1.BwatchReq.ListAssetsRequest
+	(*BwatchReq_ReadEtfRequest)(nil),    // 16: bwatch.v1.BwatchReq.ReadEtfRequest
+	(*BwatchReq_ReadSubscriptionRequest)(nil),   // 17: bwatch.v1.BwatchReq.ReadSubscriptionRequest
+	(*BwatchReq_ListTransfersRequest)(nil),      // 18: bwatch.v1.BwatchReq.ListTransfersRequest
+	(*BwatchReq_GetInfoRequest)(nil),            // 19: bwatch.v1.BwatchReq.GetInfoRequest
+	(*BwatchResp_ListAssetsResponse)(nil),       // 20: bwatch.v1.BwatchResp.ListAssetsResponse
+	(*BwatchResp_ReadEtfResponse)(nil),          // 21: bwatch.v1.BwatchResp.ReadEtfResponse
+	(*BwatchResp_ReadSubscriptionResponse)(nil), // 22: bwatch.v1.BwatchResp.ReadSubscriptionResponse
+	(*BwatchResp_ListTransfersResponse)(nil),    // 23: bwatch.v1.BwatchResp.ListTransfersResponse
+	(*BwatchResp_GetInfoResponse)(nil),          // 24: bwatch.v1.BwatchResp.GetInfoResponse
+	(*timestamppb.Timestamp)(nil),               // 25: google.protobuf.Timestamp
 }
 var file_bwatch_v1_bwatch_proto_depIdxs = []int32{
-	2,  // 0: bwatch.v1.Gem.asset:type_name -> bwatch.v1.Asset
-	3,  // 1: bwatch.v1.Etf.gems:type_name -> bwatch.v1.Gem
-	17, // 2: bwatch.v1.Subscription.created_at:type_name -> google.protobuf.Timestamp
-	17, // 3: bwatch.v1.Subscription.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 4: bwatch.v1.Subscription.state:type_name -> bwatch.v1.Subscription.State
-	9,  // 5: bwatch.v1.Subscription.assets:type_name -> bwatch.v1.Subscription.AssetsEntry
-	17, // 6: bwatch.v1.Transaction.created_at:type_name -> google.protobuf.Timestamp
-	10, // 7: bwatch.v1.Transaction.assets:type_name -> bwatch.v1.Transaction.AssetsEntry
-	2,  // 8: bwatch.v1.BwatchResp.ListAssetsResponse.assets:type_name -> bwatch.v1.Asset
-	4,  // 9: bwatch.v1.BwatchResp.ReadEtfResponse.etf:type_name -> bwatch.v1.Etf
-	5,  // 10: bwatch.v1.BwatchResp.ReadSubscriptionResponse.sub:type_name -> bwatch.v1.Subscription
-	12, // 11: bwatch.v1.BwatchService.ReadEtf:input_type -> bwatch.v1.BwatchReq.ReadEtfRequest
-	13, // 12: bwatch.v1.BwatchService.ReadSubscription:input_type -> bwatch.v1.BwatchReq.ReadSubscriptionRequest
-	15, // 13: bwatch.v1.BwatchService.ReadEtf:output_type -> bwatch.v1.BwatchResp.ReadEtfResponse
-	16, // 14: bwatch.v1.BwatchService.ReadSubscription:output_type -> bwatch.v1.BwatchResp.ReadSubscriptionResponse
-	13, // [13:15] is the sub-list for method output_type
-	11, // [11:13] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	4,  // 0: bwatch.v1.Gem.asset:type_name -> bwatch.v1.Asset
+	5,  // 1: bwatch.v1.Etf.gems:type_name -> bwatch.v1.Gem
+	25, // 2: bwatch.v1.Subscription.created_at:type_name -> google.protobuf.Timestamp
+	25, // 3: bwatch.v1.Subscription.updated_at:type_name -> google.protobuf.Timestamp
+	1,  // 4: bwatch.v1.Subscription.state:type_name -> bwatch.v1.Subscription.State
+	13, // 5: bwatch.v1.Subscription.assets:type_name -> bwatch.v1.Subscription.AssetsEntry
+	25, // 6: bwatch.v1.Transaction.created_at:type_name -> google.protobuf.Timestamp
+	14, // 7: bwatch.v1.Transaction.assets:type_name -> bwatch.v1.Transaction.AssetsEntry
+	25, // 8: bwatch.v1.Transfer.created_at:type_name -> google.protobuf.Timestamp
+	3,  // 9: bwatch.v1.Transfer.status:type_name -> bwatch.v1.Transfer.Status
+	9,  // 10: bwatch.v1.Transfer.opponent:type_name -> bwatch.v1.User
+	3,  // 11: bwatch.v1.BwatchReq.ListTransfersRequest.status:type_name -> bwatch.v1.Transfer.Status
+	4,  // 12: bwatch.v1.BwatchResp.ListAssetsResponse.assets:type_name -> bwatch.v1.Asset
+	6,  // 13: bwatch.v1.BwatchResp.ReadEtfResponse.etf:type_name -> bwatch.v1.Etf
+	7,  // 14: bwatch.v1.BwatchResp.ReadSubscriptionResponse.sub:type_name -> bwatch.v1.Subscription
+	10, // 15: bwatch.v1.BwatchResp.ListTransfersResponse.transfers:type_name -> bwatch.v1.Transfer
+	0,  // 16: bwatch.v1.BwatchResp.GetInfoResponse.blocked_actios:type_name -> bwatch.v1.Action
+	19, // 17: bwatch.v1.BwatchService.GetInfo:input_type -> bwatch.v1.BwatchReq.GetInfoRequest
+	16, // 18: bwatch.v1.BwatchService.ReadEtf:input_type -> bwatch.v1.BwatchReq.ReadEtfRequest
+	17, // 19: bwatch.v1.BwatchService.ReadSubscription:input_type -> bwatch.v1.BwatchReq.ReadSubscriptionRequest
+	18, // 20: bwatch.v1.BwatchService.ListTransfers:input_type -> bwatch.v1.BwatchReq.ListTransfersRequest
+	24, // 21: bwatch.v1.BwatchService.GetInfo:output_type -> bwatch.v1.BwatchResp.GetInfoResponse
+	21, // 22: bwatch.v1.BwatchService.ReadEtf:output_type -> bwatch.v1.BwatchResp.ReadEtfResponse
+	22, // 23: bwatch.v1.BwatchService.ReadSubscription:output_type -> bwatch.v1.BwatchResp.ReadSubscriptionResponse
+	23, // 24: bwatch.v1.BwatchService.ListTransfers:output_type -> bwatch.v1.BwatchResp.ListTransfersResponse
+	21, // [21:25] is the sub-list for method output_type
+	17, // [17:21] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_bwatch_v1_bwatch_proto_init() }
@@ -1280,7 +1899,7 @@ func file_bwatch_v1_bwatch_proto_init() {
 			}
 		}
 		file_bwatch_v1_bwatch_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BwatchReq); i {
+			switch v := v.(*User); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1292,6 +1911,30 @@ func file_bwatch_v1_bwatch_proto_init() {
 			}
 		}
 		file_bwatch_v1_bwatch_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Transfer); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_bwatch_v1_bwatch_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BwatchReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_bwatch_v1_bwatch_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BwatchResp); i {
 			case 0:
 				return &v.state
@@ -1303,7 +1946,7 @@ func file_bwatch_v1_bwatch_proto_init() {
 				return nil
 			}
 		}
-		file_bwatch_v1_bwatch_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_bwatch_v1_bwatch_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BwatchReq_ListAssetsRequest); i {
 			case 0:
 				return &v.state
@@ -1315,7 +1958,7 @@ func file_bwatch_v1_bwatch_proto_init() {
 				return nil
 			}
 		}
-		file_bwatch_v1_bwatch_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+		file_bwatch_v1_bwatch_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BwatchReq_ReadEtfRequest); i {
 			case 0:
 				return &v.state
@@ -1327,7 +1970,7 @@ func file_bwatch_v1_bwatch_proto_init() {
 				return nil
 			}
 		}
-		file_bwatch_v1_bwatch_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+		file_bwatch_v1_bwatch_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BwatchReq_ReadSubscriptionRequest); i {
 			case 0:
 				return &v.state
@@ -1339,7 +1982,31 @@ func file_bwatch_v1_bwatch_proto_init() {
 				return nil
 			}
 		}
-		file_bwatch_v1_bwatch_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+		file_bwatch_v1_bwatch_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BwatchReq_ListTransfersRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_bwatch_v1_bwatch_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BwatchReq_GetInfoRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_bwatch_v1_bwatch_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BwatchResp_ListAssetsResponse); i {
 			case 0:
 				return &v.state
@@ -1351,7 +2018,7 @@ func file_bwatch_v1_bwatch_proto_init() {
 				return nil
 			}
 		}
-		file_bwatch_v1_bwatch_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+		file_bwatch_v1_bwatch_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BwatchResp_ReadEtfResponse); i {
 			case 0:
 				return &v.state
@@ -1363,8 +2030,32 @@ func file_bwatch_v1_bwatch_proto_init() {
 				return nil
 			}
 		}
-		file_bwatch_v1_bwatch_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+		file_bwatch_v1_bwatch_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BwatchResp_ReadSubscriptionResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_bwatch_v1_bwatch_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BwatchResp_ListTransfersResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_bwatch_v1_bwatch_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BwatchResp_GetInfoResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1381,8 +2072,8 @@ func file_bwatch_v1_bwatch_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_bwatch_v1_bwatch_proto_rawDesc,
-			NumEnums:      2,
-			NumMessages:   15,
+			NumEnums:      4,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
