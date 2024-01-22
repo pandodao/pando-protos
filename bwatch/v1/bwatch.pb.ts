@@ -15,6 +15,15 @@ import type { ClientConfiguration } from "twirpscript";
 //                 Types                  //
 //========================================//
 
+export type Action =
+  | "ACTION_NOT_SET"
+  | "SUBSCRIPTION"
+  | "REDEMPTION"
+  | "GEM_DEPOSIT"
+  | "GEM_WITHDRAW"
+  | "AUDIT_REVIEW"
+  | "EXPIRE_SUBSCRIPTION";
+
 export interface Asset {
   id: string;
   chainId: string;
@@ -90,6 +99,35 @@ export declare namespace Transaction {
   }
 }
 
+export interface User {
+  members: string[];
+  threshold: number;
+  uniqueId: string;
+}
+
+export interface Transfer {
+  id: string;
+  createdAt: protoscript.Timestamp;
+  group: bigint;
+  assetId: string;
+  amount: string;
+  memo: string;
+  status: Transfer.Status;
+  opponent: User;
+  txHash: string;
+}
+
+export declare namespace Transfer {
+  export type Status =
+    | "STATUS_NOT_SET"
+    | "AUDITING"
+    | "APPROVED"
+    | "ASSIGNED"
+    | "HANDLED"
+    | "PASSED"
+    | "REJECTED";
+}
+
 export interface BwatchReq {}
 
 export declare namespace BwatchReq {
@@ -102,6 +140,14 @@ export declare namespace BwatchReq {
   export interface ReadSubscriptionRequest {
     followId: string;
   }
+
+  export interface ListTransfersRequest {
+    group: bigint;
+    status: Transfer.Status;
+    limit: number;
+  }
+
+  export interface GetInfoRequest {}
 }
 
 export interface BwatchResp {}
@@ -118,11 +164,35 @@ export declare namespace BwatchResp {
   export interface ReadSubscriptionResponse {
     sub: Subscription;
   }
+
+  export interface ListTransfersResponse {
+    transfers: Transfer[];
+  }
+
+  export interface GetInfoResponse {
+    members: string[];
+    threshold: number;
+    version: string;
+    mixAddress: string;
+    blockedActios: Action[];
+  }
 }
 
 //========================================//
 //     BwatchService Protobuf Client      //
 //========================================//
+
+export async function GetInfo(
+  getInfoRequest: BwatchReq.GetInfoRequest,
+  config?: ClientConfiguration,
+): Promise<BwatchResp.GetInfoResponse> {
+  const response = await PBrequest(
+    "/bwatch.v1.BwatchService/GetInfo",
+    BwatchReq.GetInfoRequest.encode(getInfoRequest),
+    config,
+  );
+  return BwatchResp.GetInfoResponse.decode(response);
+}
 
 /**
  * ReadEtf 读取 etf 详情
@@ -154,9 +224,33 @@ export async function ReadSubscription(
   return BwatchResp.ReadSubscriptionResponse.decode(response);
 }
 
+export async function ListTransfers(
+  listTransfersRequest: BwatchReq.ListTransfersRequest,
+  config?: ClientConfiguration,
+): Promise<BwatchResp.ListTransfersResponse> {
+  const response = await PBrequest(
+    "/bwatch.v1.BwatchService/ListTransfers",
+    BwatchReq.ListTransfersRequest.encode(listTransfersRequest),
+    config,
+  );
+  return BwatchResp.ListTransfersResponse.decode(response);
+}
+
 //========================================//
 //       BwatchService JSON Client        //
 //========================================//
+
+export async function GetInfoJSON(
+  getInfoRequest: BwatchReq.GetInfoRequest,
+  config?: ClientConfiguration,
+): Promise<BwatchResp.GetInfoResponse> {
+  const response = await JSONrequest(
+    "/bwatch.v1.BwatchService/GetInfo",
+    BwatchReqJSON.GetInfoRequest.encode(getInfoRequest),
+    config,
+  );
+  return BwatchRespJSON.GetInfoResponse.decode(response);
+}
 
 /**
  * ReadEtf 读取 etf 详情
@@ -188,11 +282,27 @@ export async function ReadSubscriptionJSON(
   return BwatchRespJSON.ReadSubscriptionResponse.decode(response);
 }
 
+export async function ListTransfersJSON(
+  listTransfersRequest: BwatchReq.ListTransfersRequest,
+  config?: ClientConfiguration,
+): Promise<BwatchResp.ListTransfersResponse> {
+  const response = await JSONrequest(
+    "/bwatch.v1.BwatchService/ListTransfers",
+    BwatchReqJSON.ListTransfersRequest.encode(listTransfersRequest),
+    config,
+  );
+  return BwatchRespJSON.ListTransfersResponse.decode(response);
+}
+
 //========================================//
 //             BwatchService              //
 //========================================//
 
 export interface BwatchService<Context = unknown> {
+  GetInfo: (
+    getInfoRequest: BwatchReq.GetInfoRequest,
+    context: Context,
+  ) => Promise<BwatchResp.GetInfoResponse> | BwatchResp.GetInfoResponse;
   /**
    * ReadEtf 读取 etf 详情
    */
@@ -209,12 +319,30 @@ export interface BwatchService<Context = unknown> {
   ) =>
     | Promise<BwatchResp.ReadSubscriptionResponse>
     | BwatchResp.ReadSubscriptionResponse;
+  ListTransfers: (
+    listTransfersRequest: BwatchReq.ListTransfersRequest,
+    context: Context,
+  ) =>
+    | Promise<BwatchResp.ListTransfersResponse>
+    | BwatchResp.ListTransfersResponse;
 }
 
 export function createBwatchService<Context>(service: BwatchService<Context>) {
   return {
     name: "bwatch.v1.BwatchService",
     methods: {
+      GetInfo: {
+        name: "GetInfo",
+        handler: service.GetInfo,
+        input: {
+          protobuf: BwatchReq.GetInfoRequest,
+          json: BwatchReqJSON.GetInfoRequest,
+        },
+        output: {
+          protobuf: BwatchResp.GetInfoResponse,
+          json: BwatchRespJSON.GetInfoResponse,
+        },
+      },
       ReadEtf: {
         name: "ReadEtf",
         handler: service.ReadEtf,
@@ -239,6 +367,18 @@ export function createBwatchService<Context>(service: BwatchService<Context>) {
           json: BwatchRespJSON.ReadSubscriptionResponse,
         },
       },
+      ListTransfers: {
+        name: "ListTransfers",
+        handler: service.ListTransfers,
+        input: {
+          protobuf: BwatchReq.ListTransfersRequest,
+          json: BwatchReqJSON.ListTransfersRequest,
+        },
+        output: {
+          protobuf: BwatchResp.ListTransfersResponse,
+          json: BwatchRespJSON.ListTransfersResponse,
+        },
+      },
     },
   } as const;
 }
@@ -246,6 +386,80 @@ export function createBwatchService<Context>(service: BwatchService<Context>) {
 //========================================//
 //        Protobuf Encode / Decode        //
 //========================================//
+
+export const Action = {
+  ACTION_NOT_SET: "ACTION_NOT_SET",
+  SUBSCRIPTION: "SUBSCRIPTION",
+  REDEMPTION: "REDEMPTION",
+  GEM_DEPOSIT: "GEM_DEPOSIT",
+  GEM_WITHDRAW: "GEM_WITHDRAW",
+  AUDIT_REVIEW: "AUDIT_REVIEW",
+  EXPIRE_SUBSCRIPTION: "EXPIRE_SUBSCRIPTION",
+  /**
+   * @private
+   */
+  _fromInt: function (i: number): Action {
+    switch (i) {
+      case 0: {
+        return "ACTION_NOT_SET";
+      }
+      case 1: {
+        return "SUBSCRIPTION";
+      }
+      case 2: {
+        return "REDEMPTION";
+      }
+      case 3: {
+        return "GEM_DEPOSIT";
+      }
+      case 4: {
+        return "GEM_WITHDRAW";
+      }
+      case 5: {
+        return "AUDIT_REVIEW";
+      }
+      case 6: {
+        return "EXPIRE_SUBSCRIPTION";
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as Action;
+      }
+    }
+  },
+  /**
+   * @private
+   */
+  _toInt: function (i: Action): number {
+    switch (i) {
+      case "ACTION_NOT_SET": {
+        return 0;
+      }
+      case "SUBSCRIPTION": {
+        return 1;
+      }
+      case "REDEMPTION": {
+        return 2;
+      }
+      case "GEM_DEPOSIT": {
+        return 3;
+      }
+      case "GEM_WITHDRAW": {
+        return 4;
+      }
+      case "AUDIT_REVIEW": {
+        return 5;
+      }
+      case "EXPIRE_SUBSCRIPTION": {
+        return 6;
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as number;
+      }
+    }
+  },
+} as const;
 
 export const Asset = {
   /**
@@ -1095,6 +1309,297 @@ export const Transaction = {
   },
 };
 
+export const User = {
+  /**
+   * Serializes User to protobuf.
+   */
+  encode: function (msg: PartialDeep<User>): Uint8Array {
+    return User._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes User from protobuf.
+   */
+  decode: function (bytes: ByteSource): User {
+    return User._readMessage(
+      User.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
+  },
+
+  /**
+   * Initializes User with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<User>): User {
+    return {
+      members: [],
+      threshold: 0,
+      uniqueId: "",
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<User>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
+    if (msg.members?.length) {
+      writer.writeRepeatedString(1, msg.members);
+    }
+    if (msg.threshold) {
+      writer.writeUint32(2, msg.threshold);
+    }
+    if (msg.uniqueId) {
+      writer.writeString(3, msg.uniqueId);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: User, reader: protoscript.BinaryReader): User {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.members.push(reader.readString());
+          break;
+        }
+        case 2: {
+          msg.threshold = reader.readUint32();
+          break;
+        }
+        case 3: {
+          msg.uniqueId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const Transfer = {
+  /**
+   * Serializes Transfer to protobuf.
+   */
+  encode: function (msg: PartialDeep<Transfer>): Uint8Array {
+    return Transfer._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes Transfer from protobuf.
+   */
+  decode: function (bytes: ByteSource): Transfer {
+    return Transfer._readMessage(
+      Transfer.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
+  },
+
+  /**
+   * Initializes Transfer with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<Transfer>): Transfer {
+    return {
+      id: "",
+      createdAt: protoscript.Timestamp.initialize(),
+      group: 0n,
+      assetId: "",
+      amount: "",
+      memo: "",
+      status: Transfer.Status._fromInt(0),
+      opponent: User.initialize(),
+      txHash: "",
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<Transfer>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
+    if (msg.id) {
+      writer.writeString(1, msg.id);
+    }
+    if (msg.createdAt) {
+      writer.writeMessage(
+        2,
+        msg.createdAt,
+        protoscript.Timestamp._writeMessage,
+      );
+    }
+    if (msg.group) {
+      writer.writeUint64String(3, msg.group.toString() as any);
+    }
+    if (msg.assetId) {
+      writer.writeString(4, msg.assetId);
+    }
+    if (msg.amount) {
+      writer.writeString(5, msg.amount);
+    }
+    if (msg.memo) {
+      writer.writeString(6, msg.memo);
+    }
+    if (msg.status && Transfer.Status._toInt(msg.status)) {
+      writer.writeEnum(7, Transfer.Status._toInt(msg.status));
+    }
+    if (msg.opponent) {
+      writer.writeMessage(8, msg.opponent, User._writeMessage);
+    }
+    if (msg.txHash) {
+      writer.writeString(9, msg.txHash);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: Transfer,
+    reader: protoscript.BinaryReader,
+  ): Transfer {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readString();
+          break;
+        }
+        case 2: {
+          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
+          break;
+        }
+        case 3: {
+          msg.group = BigInt(reader.readUint64String());
+          break;
+        }
+        case 4: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.amount = reader.readString();
+          break;
+        }
+        case 6: {
+          msg.memo = reader.readString();
+          break;
+        }
+        case 7: {
+          msg.status = Transfer.Status._fromInt(reader.readEnum());
+          break;
+        }
+        case 8: {
+          reader.readMessage(msg.opponent, User._readMessage);
+          break;
+        }
+        case 9: {
+          msg.txHash = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+
+  Status: {
+    STATUS_NOT_SET: "STATUS_NOT_SET",
+    AUDITING: "AUDITING",
+    APPROVED: "APPROVED",
+    ASSIGNED: "ASSIGNED",
+    HANDLED: "HANDLED",
+    PASSED: "PASSED",
+    REJECTED: "REJECTED",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): Transfer.Status {
+      switch (i) {
+        case 0: {
+          return "STATUS_NOT_SET";
+        }
+        case 1: {
+          return "AUDITING";
+        }
+        case 2: {
+          return "APPROVED";
+        }
+        case 3: {
+          return "ASSIGNED";
+        }
+        case 4: {
+          return "HANDLED";
+        }
+        case 5: {
+          return "PASSED";
+        }
+        case 6: {
+          return "REJECTED";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as Transfer.Status;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: Transfer.Status): number {
+      switch (i) {
+        case "STATUS_NOT_SET": {
+          return 0;
+        }
+        case "AUDITING": {
+          return 1;
+        }
+        case "APPROVED": {
+          return 2;
+        }
+        case "ASSIGNED": {
+          return 3;
+        }
+        case "HANDLED": {
+          return 4;
+        }
+        case "PASSED": {
+          return 5;
+        }
+        case "REJECTED": {
+          return 6;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
 export const BwatchReq = {
   /**
    * Serializes BwatchReq to protobuf.
@@ -1327,6 +1832,143 @@ export const BwatchReq = {
         }
       }
       return msg;
+    },
+  },
+
+  ListTransfersRequest: {
+    /**
+     * Serializes BwatchReq.ListTransfersRequest to protobuf.
+     */
+    encode: function (
+      msg: PartialDeep<BwatchReq.ListTransfersRequest>,
+    ): Uint8Array {
+      return BwatchReq.ListTransfersRequest._writeMessage(
+        msg,
+        new protoscript.BinaryWriter(),
+      ).getResultBuffer();
+    },
+
+    /**
+     * Deserializes BwatchReq.ListTransfersRequest from protobuf.
+     */
+    decode: function (bytes: ByteSource): BwatchReq.ListTransfersRequest {
+      return BwatchReq.ListTransfersRequest._readMessage(
+        BwatchReq.ListTransfersRequest.initialize(),
+        new protoscript.BinaryReader(bytes),
+      );
+    },
+
+    /**
+     * Initializes BwatchReq.ListTransfersRequest with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchReq.ListTransfersRequest>,
+    ): BwatchReq.ListTransfersRequest {
+      return {
+        group: 0n,
+        status: Transfer.Status._fromInt(0),
+        limit: 0,
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: PartialDeep<BwatchReq.ListTransfersRequest>,
+      writer: protoscript.BinaryWriter,
+    ): protoscript.BinaryWriter {
+      if (msg.group) {
+        writer.writeUint64String(1, msg.group.toString() as any);
+      }
+      if (msg.status && Transfer.Status._toInt(msg.status)) {
+        writer.writeEnum(2, Transfer.Status._toInt(msg.status));
+      }
+      if (msg.limit) {
+        writer.writeInt32(3, msg.limit);
+      }
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: BwatchReq.ListTransfersRequest,
+      reader: protoscript.BinaryReader,
+    ): BwatchReq.ListTransfersRequest {
+      while (reader.nextField()) {
+        const field = reader.getFieldNumber();
+        switch (field) {
+          case 1: {
+            msg.group = BigInt(reader.readUint64String());
+            break;
+          }
+          case 2: {
+            msg.status = Transfer.Status._fromInt(reader.readEnum());
+            break;
+          }
+          case 3: {
+            msg.limit = reader.readInt32();
+            break;
+          }
+          default: {
+            reader.skipField();
+            break;
+          }
+        }
+      }
+      return msg;
+    },
+  },
+
+  GetInfoRequest: {
+    /**
+     * Serializes BwatchReq.GetInfoRequest to protobuf.
+     */
+    encode: function (
+      _msg?: PartialDeep<BwatchReq.GetInfoRequest>,
+    ): Uint8Array {
+      return new Uint8Array();
+    },
+
+    /**
+     * Deserializes BwatchReq.GetInfoRequest from protobuf.
+     */
+    decode: function (_bytes?: ByteSource): BwatchReq.GetInfoRequest {
+      return {};
+    },
+
+    /**
+     * Initializes BwatchReq.GetInfoRequest with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchReq.GetInfoRequest>,
+    ): BwatchReq.GetInfoRequest {
+      return {
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      _msg: PartialDeep<BwatchReq.GetInfoRequest>,
+      writer: protoscript.BinaryWriter,
+    ): protoscript.BinaryWriter {
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      _msg: BwatchReq.GetInfoRequest,
+      _reader: protoscript.BinaryReader,
+    ): BwatchReq.GetInfoRequest {
+      return _msg;
     },
   },
 };
@@ -1592,11 +2234,273 @@ export const BwatchResp = {
       return msg;
     },
   },
+
+  ListTransfersResponse: {
+    /**
+     * Serializes BwatchResp.ListTransfersResponse to protobuf.
+     */
+    encode: function (
+      msg: PartialDeep<BwatchResp.ListTransfersResponse>,
+    ): Uint8Array {
+      return BwatchResp.ListTransfersResponse._writeMessage(
+        msg,
+        new protoscript.BinaryWriter(),
+      ).getResultBuffer();
+    },
+
+    /**
+     * Deserializes BwatchResp.ListTransfersResponse from protobuf.
+     */
+    decode: function (bytes: ByteSource): BwatchResp.ListTransfersResponse {
+      return BwatchResp.ListTransfersResponse._readMessage(
+        BwatchResp.ListTransfersResponse.initialize(),
+        new protoscript.BinaryReader(bytes),
+      );
+    },
+
+    /**
+     * Initializes BwatchResp.ListTransfersResponse with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchResp.ListTransfersResponse>,
+    ): BwatchResp.ListTransfersResponse {
+      return {
+        transfers: [],
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: PartialDeep<BwatchResp.ListTransfersResponse>,
+      writer: protoscript.BinaryWriter,
+    ): protoscript.BinaryWriter {
+      if (msg.transfers?.length) {
+        writer.writeRepeatedMessage(
+          1,
+          msg.transfers as any,
+          Transfer._writeMessage,
+        );
+      }
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: BwatchResp.ListTransfersResponse,
+      reader: protoscript.BinaryReader,
+    ): BwatchResp.ListTransfersResponse {
+      while (reader.nextField()) {
+        const field = reader.getFieldNumber();
+        switch (field) {
+          case 1: {
+            const m = Transfer.initialize();
+            reader.readMessage(m, Transfer._readMessage);
+            msg.transfers.push(m);
+            break;
+          }
+          default: {
+            reader.skipField();
+            break;
+          }
+        }
+      }
+      return msg;
+    },
+  },
+
+  GetInfoResponse: {
+    /**
+     * Serializes BwatchResp.GetInfoResponse to protobuf.
+     */
+    encode: function (
+      msg: PartialDeep<BwatchResp.GetInfoResponse>,
+    ): Uint8Array {
+      return BwatchResp.GetInfoResponse._writeMessage(
+        msg,
+        new protoscript.BinaryWriter(),
+      ).getResultBuffer();
+    },
+
+    /**
+     * Deserializes BwatchResp.GetInfoResponse from protobuf.
+     */
+    decode: function (bytes: ByteSource): BwatchResp.GetInfoResponse {
+      return BwatchResp.GetInfoResponse._readMessage(
+        BwatchResp.GetInfoResponse.initialize(),
+        new protoscript.BinaryReader(bytes),
+      );
+    },
+
+    /**
+     * Initializes BwatchResp.GetInfoResponse with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchResp.GetInfoResponse>,
+    ): BwatchResp.GetInfoResponse {
+      return {
+        members: [],
+        threshold: 0,
+        version: "",
+        mixAddress: "",
+        blockedActios: [],
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: PartialDeep<BwatchResp.GetInfoResponse>,
+      writer: protoscript.BinaryWriter,
+    ): protoscript.BinaryWriter {
+      if (msg.members?.length) {
+        writer.writeRepeatedString(1, msg.members);
+      }
+      if (msg.threshold) {
+        writer.writeInt32(2, msg.threshold);
+      }
+      if (msg.version) {
+        writer.writeString(3, msg.version);
+      }
+      if (msg.mixAddress) {
+        writer.writeString(4, msg.mixAddress);
+      }
+      if (msg.blockedActios?.length) {
+        writer.writePackedEnum(5, msg.blockedActios.map(Action._toInt));
+      }
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: BwatchResp.GetInfoResponse,
+      reader: protoscript.BinaryReader,
+    ): BwatchResp.GetInfoResponse {
+      while (reader.nextField()) {
+        const field = reader.getFieldNumber();
+        switch (field) {
+          case 1: {
+            msg.members.push(reader.readString());
+            break;
+          }
+          case 2: {
+            msg.threshold = reader.readInt32();
+            break;
+          }
+          case 3: {
+            msg.version = reader.readString();
+            break;
+          }
+          case 4: {
+            msg.mixAddress = reader.readString();
+            break;
+          }
+          case 5: {
+            if (reader.isDelimited()) {
+              msg.blockedActios.push(
+                ...reader.readPackedEnum().map(Action._fromInt),
+              );
+            } else {
+              msg.blockedActios.push(Action._fromInt(reader.readEnum()));
+            }
+            break;
+          }
+          default: {
+            reader.skipField();
+            break;
+          }
+        }
+      }
+      return msg;
+    },
+  },
 };
 
 //========================================//
 //          JSON Encode / Decode          //
 //========================================//
+
+export const ActionJSON = {
+  ACTION_NOT_SET: "ACTION_NOT_SET",
+  SUBSCRIPTION: "SUBSCRIPTION",
+  REDEMPTION: "REDEMPTION",
+  GEM_DEPOSIT: "GEM_DEPOSIT",
+  GEM_WITHDRAW: "GEM_WITHDRAW",
+  AUDIT_REVIEW: "AUDIT_REVIEW",
+  EXPIRE_SUBSCRIPTION: "EXPIRE_SUBSCRIPTION",
+  /**
+   * @private
+   */
+  _fromInt: function (i: number): Action {
+    switch (i) {
+      case 0: {
+        return "ACTION_NOT_SET";
+      }
+      case 1: {
+        return "SUBSCRIPTION";
+      }
+      case 2: {
+        return "REDEMPTION";
+      }
+      case 3: {
+        return "GEM_DEPOSIT";
+      }
+      case 4: {
+        return "GEM_WITHDRAW";
+      }
+      case 5: {
+        return "AUDIT_REVIEW";
+      }
+      case 6: {
+        return "EXPIRE_SUBSCRIPTION";
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as Action;
+      }
+    }
+  },
+  /**
+   * @private
+   */
+  _toInt: function (i: Action): number {
+    switch (i) {
+      case "ACTION_NOT_SET": {
+        return 0;
+      }
+      case "SUBSCRIPTION": {
+        return 1;
+      }
+      case "REDEMPTION": {
+        return 2;
+      }
+      case "GEM_DEPOSIT": {
+        return 3;
+      }
+      case "GEM_WITHDRAW": {
+        return 4;
+      }
+      case "AUDIT_REVIEW": {
+        return 5;
+      }
+      case "EXPIRE_SUBSCRIPTION": {
+        return 6;
+      }
+      // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+      default: {
+        return i as unknown as number;
+      }
+    }
+  },
+} as const;
 
 export const AssetJSON = {
   /**
@@ -2354,6 +3258,264 @@ export const TransactionJSON = {
   },
 };
 
+export const UserJSON = {
+  /**
+   * Serializes User to JSON.
+   */
+  encode: function (msg: PartialDeep<User>): string {
+    return JSON.stringify(UserJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes User from JSON.
+   */
+  decode: function (json: string): User {
+    return UserJSON._readMessage(UserJSON.initialize(), JSON.parse(json));
+  },
+
+  /**
+   * Initializes User with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<User>): User {
+    return {
+      members: [],
+      threshold: 0,
+      uniqueId: "",
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (msg: PartialDeep<User>): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.members?.length) {
+      json["members"] = msg.members;
+    }
+    if (msg.threshold) {
+      json["threshold"] = msg.threshold;
+    }
+    if (msg.uniqueId) {
+      json["uniqueId"] = msg.uniqueId;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: User, json: any): User {
+    const _members_ = json["members"];
+    if (_members_) {
+      msg.members = _members_;
+    }
+    const _threshold_ = json["threshold"];
+    if (_threshold_) {
+      msg.threshold = protoscript.parseNumber(_threshold_);
+    }
+    const _uniqueId_ = json["uniqueId"] ?? json["unique_id"];
+    if (_uniqueId_) {
+      msg.uniqueId = _uniqueId_;
+    }
+    return msg;
+  },
+};
+
+export const TransferJSON = {
+  /**
+   * Serializes Transfer to JSON.
+   */
+  encode: function (msg: PartialDeep<Transfer>): string {
+    return JSON.stringify(TransferJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes Transfer from JSON.
+   */
+  decode: function (json: string): Transfer {
+    return TransferJSON._readMessage(
+      TransferJSON.initialize(),
+      JSON.parse(json),
+    );
+  },
+
+  /**
+   * Initializes Transfer with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<Transfer>): Transfer {
+    return {
+      id: "",
+      createdAt: protoscript.TimestampJSON.initialize(),
+      group: 0n,
+      assetId: "",
+      amount: "",
+      memo: "",
+      status: Transfer.Status._fromInt(0),
+      opponent: UserJSON.initialize(),
+      txHash: "",
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<Transfer>,
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json["id"] = msg.id;
+    }
+    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
+      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
+    }
+    if (msg.group) {
+      json["group"] = String(msg.group);
+    }
+    if (msg.assetId) {
+      json["assetId"] = msg.assetId;
+    }
+    if (msg.amount) {
+      json["amount"] = msg.amount;
+    }
+    if (msg.memo) {
+      json["memo"] = msg.memo;
+    }
+    if (msg.status && TransferJSON.Status._toInt(msg.status)) {
+      json["status"] = msg.status;
+    }
+    if (msg.opponent) {
+      const _opponent_ = UserJSON._writeMessage(msg.opponent);
+      if (Object.keys(_opponent_).length > 0) {
+        json["opponent"] = _opponent_;
+      }
+    }
+    if (msg.txHash) {
+      json["txHash"] = msg.txHash;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Transfer, json: any): Transfer {
+    const _id_ = json["id"];
+    if (_id_) {
+      msg.id = _id_;
+    }
+    const _createdAt_ = json["createdAt"] ?? json["created_at"];
+    if (_createdAt_) {
+      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
+    }
+    const _group_ = json["group"];
+    if (_group_) {
+      msg.group = BigInt(_group_);
+    }
+    const _assetId_ = json["assetId"] ?? json["asset_id"];
+    if (_assetId_) {
+      msg.assetId = _assetId_;
+    }
+    const _amount_ = json["amount"];
+    if (_amount_) {
+      msg.amount = _amount_;
+    }
+    const _memo_ = json["memo"];
+    if (_memo_) {
+      msg.memo = _memo_;
+    }
+    const _status_ = json["status"];
+    if (_status_) {
+      msg.status = Transfer.Status._fromInt(_status_);
+    }
+    const _opponent_ = json["opponent"];
+    if (_opponent_) {
+      UserJSON._readMessage(msg.opponent, _opponent_);
+    }
+    const _txHash_ = json["txHash"] ?? json["tx_hash"];
+    if (_txHash_) {
+      msg.txHash = _txHash_;
+    }
+    return msg;
+  },
+
+  Status: {
+    STATUS_NOT_SET: "STATUS_NOT_SET",
+    AUDITING: "AUDITING",
+    APPROVED: "APPROVED",
+    ASSIGNED: "ASSIGNED",
+    HANDLED: "HANDLED",
+    PASSED: "PASSED",
+    REJECTED: "REJECTED",
+    /**
+     * @private
+     */
+    _fromInt: function (i: number): Transfer.Status {
+      switch (i) {
+        case 0: {
+          return "STATUS_NOT_SET";
+        }
+        case 1: {
+          return "AUDITING";
+        }
+        case 2: {
+          return "APPROVED";
+        }
+        case 3: {
+          return "ASSIGNED";
+        }
+        case 4: {
+          return "HANDLED";
+        }
+        case 5: {
+          return "PASSED";
+        }
+        case 6: {
+          return "REJECTED";
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as Transfer.Status;
+        }
+      }
+    },
+    /**
+     * @private
+     */
+    _toInt: function (i: Transfer.Status): number {
+      switch (i) {
+        case "STATUS_NOT_SET": {
+          return 0;
+        }
+        case "AUDITING": {
+          return 1;
+        }
+        case "APPROVED": {
+          return 2;
+        }
+        case "ASSIGNED": {
+          return 3;
+        }
+        case "HANDLED": {
+          return 4;
+        }
+        case "PASSED": {
+          return 5;
+        }
+        case "REJECTED": {
+          return 6;
+        }
+        // unknown values are preserved as numbers. this occurs when new enum values are introduced and the generated code is out of date.
+        default: {
+          return i as unknown as number;
+        }
+      }
+    },
+  } as const,
+};
+
 export const BwatchReqJSON = {
   /**
    * Serializes BwatchReq to JSON.
@@ -2556,6 +3718,130 @@ export const BwatchReqJSON = {
       if (_followId_) {
         msg.followId = _followId_;
       }
+      return msg;
+    },
+  },
+
+  ListTransfersRequest: {
+    /**
+     * Serializes BwatchReq.ListTransfersRequest to JSON.
+     */
+    encode: function (
+      msg: PartialDeep<BwatchReq.ListTransfersRequest>,
+    ): string {
+      return JSON.stringify(
+        BwatchReqJSON.ListTransfersRequest._writeMessage(msg),
+      );
+    },
+
+    /**
+     * Deserializes BwatchReq.ListTransfersRequest from JSON.
+     */
+    decode: function (json: string): BwatchReq.ListTransfersRequest {
+      return BwatchReqJSON.ListTransfersRequest._readMessage(
+        BwatchReqJSON.ListTransfersRequest.initialize(),
+        JSON.parse(json),
+      );
+    },
+
+    /**
+     * Initializes BwatchReq.ListTransfersRequest with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchReq.ListTransfersRequest>,
+    ): BwatchReq.ListTransfersRequest {
+      return {
+        group: 0n,
+        status: Transfer.Status._fromInt(0),
+        limit: 0,
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: PartialDeep<BwatchReq.ListTransfersRequest>,
+    ): Record<string, unknown> {
+      const json: Record<string, unknown> = {};
+      if (msg.group) {
+        json["group"] = String(msg.group);
+      }
+      if (msg.status && TransferJSON.Status._toInt(msg.status)) {
+        json["status"] = msg.status;
+      }
+      if (msg.limit) {
+        json["limit"] = msg.limit;
+      }
+      return json;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: BwatchReq.ListTransfersRequest,
+      json: any,
+    ): BwatchReq.ListTransfersRequest {
+      const _group_ = json["group"];
+      if (_group_) {
+        msg.group = BigInt(_group_);
+      }
+      const _status_ = json["status"];
+      if (_status_) {
+        msg.status = Transfer.Status._fromInt(_status_);
+      }
+      const _limit_ = json["limit"];
+      if (_limit_) {
+        msg.limit = protoscript.parseNumber(_limit_);
+      }
+      return msg;
+    },
+  },
+
+  GetInfoRequest: {
+    /**
+     * Serializes BwatchReq.GetInfoRequest to JSON.
+     */
+    encode: function (_msg?: PartialDeep<BwatchReq.GetInfoRequest>): string {
+      return "{}";
+    },
+
+    /**
+     * Deserializes BwatchReq.GetInfoRequest from JSON.
+     */
+    decode: function (_json?: string): BwatchReq.GetInfoRequest {
+      return {};
+    },
+
+    /**
+     * Initializes BwatchReq.GetInfoRequest with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchReq.GetInfoRequest>,
+    ): BwatchReq.GetInfoRequest {
+      return {
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      _msg: PartialDeep<BwatchReq.GetInfoRequest>,
+    ): Record<string, unknown> {
+      return {};
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: BwatchReq.GetInfoRequest,
+      _json: any,
+    ): BwatchReq.GetInfoRequest {
       return msg;
     },
   },
@@ -2786,6 +4072,162 @@ export const BwatchRespJSON = {
       const _sub_ = json["sub"];
       if (_sub_) {
         SubscriptionJSON._readMessage(msg.sub, _sub_);
+      }
+      return msg;
+    },
+  },
+
+  ListTransfersResponse: {
+    /**
+     * Serializes BwatchResp.ListTransfersResponse to JSON.
+     */
+    encode: function (
+      msg: PartialDeep<BwatchResp.ListTransfersResponse>,
+    ): string {
+      return JSON.stringify(
+        BwatchRespJSON.ListTransfersResponse._writeMessage(msg),
+      );
+    },
+
+    /**
+     * Deserializes BwatchResp.ListTransfersResponse from JSON.
+     */
+    decode: function (json: string): BwatchResp.ListTransfersResponse {
+      return BwatchRespJSON.ListTransfersResponse._readMessage(
+        BwatchRespJSON.ListTransfersResponse.initialize(),
+        JSON.parse(json),
+      );
+    },
+
+    /**
+     * Initializes BwatchResp.ListTransfersResponse with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchResp.ListTransfersResponse>,
+    ): BwatchResp.ListTransfersResponse {
+      return {
+        transfers: [],
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: PartialDeep<BwatchResp.ListTransfersResponse>,
+    ): Record<string, unknown> {
+      const json: Record<string, unknown> = {};
+      if (msg.transfers?.length) {
+        json["transfers"] = msg.transfers.map(TransferJSON._writeMessage);
+      }
+      return json;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: BwatchResp.ListTransfersResponse,
+      json: any,
+    ): BwatchResp.ListTransfersResponse {
+      const _transfers_ = json["transfers"];
+      if (_transfers_) {
+        for (const item of _transfers_) {
+          const m = TransferJSON.initialize();
+          TransferJSON._readMessage(m, item);
+          msg.transfers.push(m);
+        }
+      }
+      return msg;
+    },
+  },
+
+  GetInfoResponse: {
+    /**
+     * Serializes BwatchResp.GetInfoResponse to JSON.
+     */
+    encode: function (msg: PartialDeep<BwatchResp.GetInfoResponse>): string {
+      return JSON.stringify(BwatchRespJSON.GetInfoResponse._writeMessage(msg));
+    },
+
+    /**
+     * Deserializes BwatchResp.GetInfoResponse from JSON.
+     */
+    decode: function (json: string): BwatchResp.GetInfoResponse {
+      return BwatchRespJSON.GetInfoResponse._readMessage(
+        BwatchRespJSON.GetInfoResponse.initialize(),
+        JSON.parse(json),
+      );
+    },
+
+    /**
+     * Initializes BwatchResp.GetInfoResponse with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchResp.GetInfoResponse>,
+    ): BwatchResp.GetInfoResponse {
+      return {
+        members: [],
+        threshold: 0,
+        version: "",
+        mixAddress: "",
+        blockedActios: [],
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: PartialDeep<BwatchResp.GetInfoResponse>,
+    ): Record<string, unknown> {
+      const json: Record<string, unknown> = {};
+      if (msg.members?.length) {
+        json["members"] = msg.members;
+      }
+      if (msg.threshold) {
+        json["threshold"] = msg.threshold;
+      }
+      if (msg.version) {
+        json["version"] = msg.version;
+      }
+      if (msg.mixAddress) {
+        json["mixAddress"] = msg.mixAddress;
+      }
+      if (msg.blockedActios?.length) {
+        json["blockedActios"] = msg.blockedActios;
+      }
+      return json;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: BwatchResp.GetInfoResponse,
+      json: any,
+    ): BwatchResp.GetInfoResponse {
+      const _members_ = json["members"];
+      if (_members_) {
+        msg.members = _members_;
+      }
+      const _threshold_ = json["threshold"];
+      if (_threshold_) {
+        msg.threshold = protoscript.parseNumber(_threshold_);
+      }
+      const _version_ = json["version"];
+      if (_version_) {
+        msg.version = _version_;
+      }
+      const _mixAddress_ = json["mixAddress"] ?? json["mix_address"];
+      if (_mixAddress_) {
+        msg.mixAddress = _mixAddress_;
+      }
+      const _blockedActios_ = json["blockedActios"] ?? json["blocked_actios"];
+      if (_blockedActios_) {
+        msg.blockedActios = _blockedActios_.map(Action._fromInt);
       }
       return msg;
     },
