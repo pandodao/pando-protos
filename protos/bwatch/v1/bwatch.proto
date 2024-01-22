@@ -166,6 +166,8 @@ message BwatchResp {
 service BwatchService {
     rpc GetInfo(BwatchReq.GetInfoRequest) returns (BwatchResp.GetInfoResponse);
 
+    rpc ListAssets(BwatchReq.ListAssetsRequest) returns (BwatchResp.ListAssetsResponse);
+
     // ReadEtf 读取 etf 详情
     rpc ReadEtf(BwatchReq.ReadEtfRequest) returns (BwatchResp.ReadEtfResponse);
     
