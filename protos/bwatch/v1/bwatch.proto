@@ -5,6 +5,16 @@ option go_package = "github.com/fox-one/pando-protos/bwatch/v1;bwatch";
 
 import "google/protobuf/timestamp.proto";
 
+enum Action {
+    ACTION_NOT_SET = 0;
+    SUBSCRIPTION = 1;
+    REDEMPTION = 2;
+    GEM_DEPOSIT = 3;
+    GEM_WITHDRAW = 4;
+    AUDIT_REVIEW = 5;
+    EXPIRE_SUBSCRIPTION = 6;
+}
+
 message Asset {
     string id = 1;
     string chain_id = 2;
@@ -75,6 +85,34 @@ message Transaction {
     map<string, string> assets = 7;
 }
 
+message User {
+    repeated string members = 1;
+    uint32 threshold = 2;
+    string unique_id = 3;
+}
+
+message Transfer {
+    enum Status {
+        STATUS_NOT_SET = 0;
+        AUDITING = 1;
+        APPROVED = 2;
+        ASSIGNED = 3;
+        HANDLED = 4;
+        PASSED  = 5;
+        REJECTED = 6;
+    }
+
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    uint64 group = 3;
+    string asset_id = 4;
+    string amount = 5;
+    string memo = 6;
+    Status status = 7;
+    User opponent = 8;
+    string tx_hash = 9;
+}
+
 message BwatchReq {
     message ListAssetsRequest {}
 
@@ -85,6 +123,14 @@ message BwatchReq {
     message ReadSubscriptionRequest {
         string follow_id = 1;
     }
+
+    message ListTransfersRequest {
+        uint64 group = 1;
+        Transfer.Status status = 2;
+        int32 limit = 3;
+    }
+
+    message GetInfoRequest {}
 }
 
 message BwatchResp {
@@ -99,12 +145,28 @@ message BwatchResp {
     message ReadSubscriptionResponse {
         Subscription sub = 1;
     }
+
+    message ListTransfersResponse {
+        repeated Transfer transfers = 1;
+    }
+
+    message GetInfoResponse {
+        repeated string members = 1;
+        int32 threshold = 2;
+        string version = 3;
+        string mix_address = 4;
+        repeated Action blocked_actios = 5;
+    }
 }
 
 service BwatchService {
+    rpc GetInfo(BwatchReq.GetInfoRequest) returns (BwatchResp.GetInfoResponse);
+
     // ReadEtf 读取 etf 详情
     rpc ReadEtf(BwatchReq.ReadEtfRequest) returns (BwatchResp.ReadEtfResponse);
     
     // ReadSubscription 读取申购详情
     rpc ReadSubscription(BwatchReq.ReadSubscriptionRequest) returns (BwatchResp.ReadSubscriptionResponse);
+
+    rpc ListTransfers(BwatchReq.ListTransfersRequest) returns (BwatchResp.ListTransfersResponse);
 }
