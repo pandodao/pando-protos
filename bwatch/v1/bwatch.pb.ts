@@ -175,6 +175,10 @@ export declare namespace BwatchResp {
     version: string;
     mixAddress: string;
     blockedActios: Action[];
+    country: string;
+    countryCode: string;
+    restricted: boolean;
+    ip: string;
   }
 }
 
@@ -2348,6 +2352,10 @@ export const BwatchResp = {
         version: "",
         mixAddress: "",
         blockedActios: [],
+        country: "",
+        countryCode: "",
+        restricted: false,
+        ip: "",
         ...msg,
       };
     },
@@ -2373,6 +2381,18 @@ export const BwatchResp = {
       }
       if (msg.blockedActios?.length) {
         writer.writePackedEnum(5, msg.blockedActios.map(Action._toInt));
+      }
+      if (msg.country) {
+        writer.writeString(6, msg.country);
+      }
+      if (msg.countryCode) {
+        writer.writeString(7, msg.countryCode);
+      }
+      if (msg.restricted) {
+        writer.writeBool(8, msg.restricted);
+      }
+      if (msg.ip) {
+        writer.writeString(9, msg.ip);
       }
       return writer;
     },
@@ -2411,6 +2431,22 @@ export const BwatchResp = {
             } else {
               msg.blockedActios.push(Action._fromInt(reader.readEnum()));
             }
+            break;
+          }
+          case 6: {
+            msg.country = reader.readString();
+            break;
+          }
+          case 7: {
+            msg.countryCode = reader.readString();
+            break;
+          }
+          case 8: {
+            msg.restricted = reader.readBool();
+            break;
+          }
+          case 9: {
+            msg.ip = reader.readString();
             break;
           }
           default: {
@@ -4173,6 +4209,10 @@ export const BwatchRespJSON = {
         version: "",
         mixAddress: "",
         blockedActios: [],
+        country: "",
+        countryCode: "",
+        restricted: false,
+        ip: "",
         ...msg,
       };
     },
@@ -4198,6 +4238,18 @@ export const BwatchRespJSON = {
       }
       if (msg.blockedActios?.length) {
         json["blockedActios"] = msg.blockedActios;
+      }
+      if (msg.country) {
+        json["country"] = msg.country;
+      }
+      if (msg.countryCode) {
+        json["countryCode"] = msg.countryCode;
+      }
+      if (msg.restricted) {
+        json["restricted"] = msg.restricted;
+      }
+      if (msg.ip) {
+        json["ip"] = msg.ip;
       }
       return json;
     },
@@ -4228,6 +4280,22 @@ export const BwatchRespJSON = {
       const _blockedActios_ = json["blockedActios"] ?? json["blocked_actios"];
       if (_blockedActios_) {
         msg.blockedActios = _blockedActios_.map(Action._fromInt);
+      }
+      const _country_ = json["country"];
+      if (_country_) {
+        msg.country = _country_;
+      }
+      const _countryCode_ = json["countryCode"] ?? json["country_code"];
+      if (_countryCode_) {
+        msg.countryCode = _countryCode_;
+      }
+      const _restricted_ = json["restricted"];
+      if (_restricted_) {
+        msg.restricted = _restricted_;
+      }
+      const _ip_ = json["ip"];
+      if (_ip_) {
+        msg.ip = _ip_;
       }
       return msg;
     },
