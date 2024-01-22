@@ -155,7 +155,7 @@ message BwatchResp {
         int32 threshold = 2;
         string version = 3;
         string mix_address = 4;
-        repeated Action blocked_actios = 5;
+        repeated Action blocked_actions = 5;
         string country = 6;
         string country_code = 7;
         bool restricted = 8;
