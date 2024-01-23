@@ -205,7 +205,10 @@ export interface GetInfoResponse {
   threshold: number;
   version: string;
   mixAddress: string;
-  blockedActios: Action[];
+  /**
+   * repeated Action blocked_actios = 5;
+   */
+  blockedActions: Action[];
 }
 
 export interface ListRequestsRequest {
@@ -2906,7 +2909,7 @@ export const GetInfoResponse = {
       threshold: 0,
       version: "",
       mixAddress: "",
-      blockedActios: [],
+      blockedActions: [],
       ...msg,
     };
   },
@@ -2930,8 +2933,8 @@ export const GetInfoResponse = {
     if (msg.mixAddress) {
       writer.writeString(4, msg.mixAddress);
     }
-    if (msg.blockedActios?.length) {
-      writer.writePackedEnum(5, msg.blockedActios.map(Action._toInt));
+    if (msg.blockedActions?.length) {
+      writer.writePackedEnum(6, msg.blockedActions.map(Action._toInt));
     }
     return writer;
   },
@@ -2962,13 +2965,13 @@ export const GetInfoResponse = {
           msg.mixAddress = reader.readString();
           break;
         }
-        case 5: {
+        case 6: {
           if (reader.isDelimited()) {
-            msg.blockedActios.push(
+            msg.blockedActions.push(
               ...reader.readPackedEnum().map(Action._fromInt),
             );
           } else {
-            msg.blockedActios.push(Action._fromInt(reader.readEnum()));
+            msg.blockedActions.push(Action._fromInt(reader.readEnum()));
           }
           break;
         }
@@ -6444,7 +6447,7 @@ export const GetInfoResponseJSON = {
       threshold: 0,
       version: "",
       mixAddress: "",
-      blockedActios: [],
+      blockedActions: [],
       ...msg,
     };
   },
@@ -6468,8 +6471,8 @@ export const GetInfoResponseJSON = {
     if (msg.mixAddress) {
       json["mixAddress"] = msg.mixAddress;
     }
-    if (msg.blockedActios?.length) {
-      json["blockedActios"] = msg.blockedActios;
+    if (msg.blockedActions?.length) {
+      json["blockedActions"] = msg.blockedActions;
     }
     return json;
   },
@@ -6494,9 +6497,9 @@ export const GetInfoResponseJSON = {
     if (_mixAddress_) {
       msg.mixAddress = _mixAddress_;
     }
-    const _blockedActios_ = json["blockedActios"] ?? json["blocked_actios"];
-    if (_blockedActios_) {
-      msg.blockedActios = _blockedActios_.map(Action._fromInt);
+    const _blockedActions_ = json["blockedActions"] ?? json["blocked_actions"];
+    if (_blockedActions_) {
+      msg.blockedActions = _blockedActions_.map(Action._fromInt);
     }
     return msg;
   },
