@@ -198,6 +198,20 @@ message ListTradesResponse {
     repeated Trade trades = 1;
 }
 
+message DeleteTradeRequest {
+    uint64 id = 1;
+}
+
+message DeleteTradeResponse {
+    Trade trade = 1;
+}
+
+message RefreshStatRequest {
+    uint64 plan_id = 1;
+}
+
+message RefreshStatResponse {}
+
 service HfoxService {
     rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
     rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse);
@@ -206,4 +220,8 @@ service HfoxService {
     rpc CreateTick(CreateTickRequest) returns (CreateTickResponse);
     rpc ListBalances(ListBalancesRequest) returns (ListBalancesResponse);
     rpc ListStats(ListStatsRequest) returns (ListStatsResponse);
+    rpc CreateTrade(CreateTradeRequest) returns (CreateTradeResponse);
+    rpc ListTrades(ListTradesRequest) returns (ListTradesResponse);
+    rpc DeleteTrade(DeleteTradeRequest) returns (DeleteTradeResponse);
+    rpc RefreshStat(RefreshStatRequest) returns (RefreshStatResponse);
   }
