@@ -1,0 +1,209 @@
+syntax = "proto3";
+
+package hfox.v1;
+option go_package = "github.com/fox-one/pando-protos/hfox/v1;hfox";
+
+import "google/protobuf/timestamp.proto";
+
+message Asset {
+    string id = 1;
+    string symbol = 2;
+    string name = 3;
+    string logo = 4;
+    string chain_id = 5;
+    Asset chain = 6;
+}
+
+message Gem {
+    string asset_id = 1;
+    Asset asset = 2;
+    string quota = 3;
+    string paid = 4;
+    string filled = 5;
+}
+
+message Period {
+    enum Frequence {
+        FREQUENCE_NOT_SET = 0;
+        HOURLY = 1;
+        DAILY = 2;
+        WEEKLY = 3;
+        MONTHLY = 4;
+    }
+
+    Frequence frequence = 1;
+    uint32 day = 2;
+    uint32 hour = 3;
+    uint32 minute = 4;
+}
+
+message Plan {
+    enum Status {
+        STATUS_NOT_SET = 0;
+        RUNNING = 1;
+        STOPPED = 2;
+    }
+
+    uint64 id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    google.protobuf.Timestamp updated_at = 3;
+    Status status = 4;
+    google.protobuf.Timestamp ticked_at = 5;
+    uint32 tick_number = 6;
+    string name = 7;
+    string user_id = 8;
+    Period period = 9;
+    string pay_asset_id = 10;
+    repeated Gem gems = 11;
+}
+
+message Tick {
+    enum Type {
+        TYPE_NOT_SET = 0;
+        SCHEDULE = 1;
+        MANUAL = 2;
+    }
+
+    enum Status {
+        STATUS_NOT_SET = 0;
+        PENDING = 1;
+        EXPIRED = 2;
+        CANCELLED = 3;
+        HANDLED = 4;
+        FILLED = 5;
+        SETTLED = 6;
+    }
+
+    string id = 1; // trace id
+    google.protobuf.Timestamp created_at = 2;
+    google.protobuf.Timestamp updated_at = 3;
+    google.protobuf.Timestamp expired_at = 4;
+    Type type = 5;
+    Status status = 6;
+    uint64 plan_id = 7;
+    uint32 number = 8;
+    repeated Gem gems = 9;
+}
+
+message Payment {
+    string trace_id = 1;
+    repeated string opponents = 2;
+    uint32 threshold = 3;
+    string asset_id = 4;
+    string amount = 5;
+    string memo = 6;
+}
+
+message CreatePlanRequest {
+    string name = 1;
+    string pay_asset_id = 2;
+    Period period = 3;
+    repeated Gem gems = 4;
+}
+
+message CreatePlanResponse {
+    Plan plan = 1;
+}
+
+message UpdatePlanRequest {
+    uint64 id = 1;
+    string name = 2;
+    string pay_asset_id = 3;
+    Period period = 4;
+    repeated Gem gems = 5;
+    Plan.Status status = 6;
+}
+
+message UpdatePlanResponse {
+    Plan plan = 1;
+}
+
+message ListPlansRequest {}
+
+message ListPlansResponse {
+    repeated Plan plans = 1;
+}
+
+message CreateTickRequest {
+    uint64 plan_id = 1;
+    repeated Gem gems = 2;
+}
+
+message CreateTickResponse {
+    Plan plan = 1;
+    Tick tick = 2;
+    Payment payment = 3;
+}
+
+message ListBalancesRequest {}
+
+message Balance {
+    string asset_id = 1;
+    string amount = 2;
+}
+
+message ListBalancesResponse {
+    repeated Balance balances = 1;
+}
+
+message Point {
+    google.protobuf.Timestamp date = 1;
+    int64 ts = 2;
+    string cost = 3;
+    string filled = 4;
+    string price = 5;
+}
+
+message ListStatsRequest {
+    uint64 plan_id = 1;
+}
+
+message ListStatsResponse {
+    repeated Point points = 1;
+}
+
+message GetInfoRequest {}
+
+message GetInfoResponse {
+    string client_id = 1;
+}
+
+message Trade {
+    uint64 id = 1;
+    uint64 plan_id = 2;
+    google.protobuf.Timestamp date = 3;
+    int64 ts = 4;
+    string asset_id = 5;
+    string paid = 6;
+    string filled = 7;
+}
+
+message CreateTradeRequest {
+    uint64 plan_id = 1;
+    int64 ts = 2;
+    string asset_id = 3;
+    string paid = 4;
+    string filled = 5;
+}
+
+message CreateTradeResponse {
+    Trade trade = 1;
+}
+
+message ListTradesRequest {
+    uint64 plan_id = 1;
+}
+
+message ListTradesResponse {
+    repeated Trade trades = 1;
+}
+
+service HfoxService {
+    rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
+    rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse);
+    rpc UpdatePlan(UpdatePlanRequest) returns (UpdatePlanResponse);
+    rpc ListPlans(ListPlansRequest) returns (ListPlansResponse);
+    rpc CreateTick(CreateTickRequest) returns (CreateTickResponse);
+    rpc ListBalances(ListBalancesRequest) returns (ListBalancesResponse);
+    rpc ListStats(ListStatsRequest) returns (ListStatsResponse);
+  }
