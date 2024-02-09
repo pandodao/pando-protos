@@ -224,4 +224,4 @@ service HfoxService {
     rpc ListTrades(ListTradesRequest) returns (ListTradesResponse);
     rpc DeleteTrade(DeleteTradeRequest) returns (DeleteTradeResponse);
     rpc RefreshStat(RefreshStatRequest) returns (RefreshStatResponse);
-  }
+}
