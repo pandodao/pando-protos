@@ -22,21 +22,6 @@ message Gem {
     string filled = 5;
 }
 
-message Period {
-    enum Frequence {
-        FREQUENCE_NOT_SET = 0;
-        HOURLY = 1;
-        DAILY = 2;
-        WEEKLY = 3;
-        MONTHLY = 4;
-    }
-
-    Frequence frequence = 1;
-    uint32 day = 2;
-    uint32 hour = 3;
-    uint32 minute = 4;
-}
-
 message Plan {
     enum Status {
         STATUS_NOT_SET = 0;
@@ -52,7 +37,7 @@ message Plan {
     uint32 tick_number = 6;
     string name = 7;
     string user_id = 8;
-    Period period = 9;
+    string period = 9;
     string pay_asset_id = 10;
     repeated Gem gems = 11;
 }
@@ -97,7 +82,7 @@ message Payment {
 message CreatePlanRequest {
     string name = 1;
     string pay_asset_id = 2;
-    Period period = 3;
+    string period = 3;
     repeated Gem gems = 4;
 }
 
@@ -109,7 +94,7 @@ message UpdatePlanRequest {
     uint64 id = 1;
     string name = 2;
     string pay_asset_id = 3;
-    Period period = 4;
+    string period = 4;
     repeated Gem gems = 5;
     Plan.Status status = 6;
 }
@@ -166,6 +151,12 @@ message GetInfoRequest {}
 
 message GetInfoResponse {
     string client_id = 1;
+    repeated string pay_asset_ids = 2;
+    string min_amount = 3;
+    string max_amount = 4;
+    repeated string fill_asset_ids = 5;
+    repeated Asset pay_assets = 6;
+    repeated Asset fill_assets = 7;
 }
 
 message Trade {
