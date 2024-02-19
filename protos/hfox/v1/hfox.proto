@@ -223,6 +223,7 @@ service HfoxService {
     rpc UpdatePlan(UpdatePlanRequest) returns (UpdatePlanResponse);
     rpc ListPlans(ListPlansRequest) returns (ListPlansResponse);
     rpc CreateTick(CreateTickRequest) returns (CreateTickResponse);
+    rpc FindTick(FindTickRequest) returns (FindTickResponse);
     rpc ListBalances(ListBalancesRequest) returns (ListBalancesResponse);
     rpc ListStats(ListStatsRequest) returns (ListStatsResponse);
     rpc CreateTrade(CreateTradeRequest) returns (CreateTradeResponse);
