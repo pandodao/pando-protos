@@ -20,9 +20,10 @@ message Gem {
         string quota = 2;
     }
     
-    Asset asset = 3;
-    string paid = 4;
-    string filled = 5;
+    Base base = 1;
+    Asset asset = 2;
+    string paid = 3;
+    string filled = 4;
 }
 
 message Plan {
