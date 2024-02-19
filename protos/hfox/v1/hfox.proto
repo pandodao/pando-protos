@@ -15,9 +15,12 @@ message Asset {
 }
 
 message Gem {
-    string asset_id = 1;
-    Asset asset = 2;
-    string quota = 3;
+    message Base {
+        string asset_id = 1;
+        string quota = 2;
+    }
+    
+    Asset asset = 3;
     string paid = 4;
     string filled = 5;
 }
@@ -27,6 +30,7 @@ message Plan {
         STATUS_NOT_SET = 0;
         RUNNING = 1;
         STOPPED = 2;
+        DELETED = 3;
     }
 
     uint64 id = 1;
@@ -83,7 +87,7 @@ message CreatePlanRequest {
     string name = 1;
     string pay_asset_id = 2;
     string period = 3;
-    repeated Gem gems = 4;
+    repeated Gem.Base gems = 4;
 }
 
 message CreatePlanResponse {
@@ -95,7 +99,7 @@ message UpdatePlanRequest {
     string name = 2;
     string pay_asset_id = 3;
     string period = 4;
-    repeated Gem gems = 5;
+    repeated Gem.Base gems = 5;
     Plan.Status status = 6;
 }
 
@@ -115,6 +119,16 @@ message CreateTickRequest {
 }
 
 message CreateTickResponse {
+    Plan plan = 1;
+    Tick tick = 2;
+    Payment payment = 3;
+}
+
+message FindTickRequest {
+    string tick_id = 1;
+}
+
+message FindTickResponse {
     Plan plan = 1;
     Tick tick = 2;
     Payment payment = 3;
