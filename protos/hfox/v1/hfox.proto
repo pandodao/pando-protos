@@ -3,8 +3,6 @@ syntax = "proto3";
 package hfox.v1;
 option go_package = "github.com/fox-one/pando-protos/hfox/v1;hfox";
 
-import "google/protobuf/timestamp.proto";
-
 message Asset {
     string id = 1;
     string symbol = 2;
@@ -34,17 +32,18 @@ message Plan {
         DELETED = 3;
     }
 
-    uint64 id = 1;
-    google.protobuf.Timestamp created_at = 2;
-    google.protobuf.Timestamp updated_at = 3;
+    string id = 1;
+    string created_at = 2;
+    string updated_at = 3;
     Status status = 4;
-    google.protobuf.Timestamp ticked_at = 5;
-    uint32 tick_number = 6;
-    string name = 7;
-    string user_id = 8;
-    string period = 9;
-    string pay_asset_id = 10;
-    repeated Gem gems = 11;
+    string ticked_at = 5;
+    string next_tick_at = 6;
+    uint32 tick_number = 7;
+    string name = 8;
+    string user_id = 9;
+    string period = 10;
+    string pay_asset_id = 11;
+    repeated Gem gems = 12;
 }
 
 message Tick {
@@ -65,9 +64,9 @@ message Tick {
     }
 
     string id = 1; // trace id
-    google.protobuf.Timestamp created_at = 2;
-    google.protobuf.Timestamp updated_at = 3;
-    google.protobuf.Timestamp expired_at = 4;
+    string created_at = 2;
+    string updated_at = 3;
+    string expired_at = 4;
     Type type = 5;
     Status status = 6;
     uint64 plan_id = 7;
@@ -96,7 +95,7 @@ message CreatePlanResponse {
 }
 
 message UpdatePlanRequest {
-    uint64 id = 1;
+    string id = 1;
     string name = 2;
     string pay_asset_id = 3;
     string period = 4;
@@ -115,7 +114,7 @@ message ListPlansResponse {
 }
 
 message CreateTickRequest {
-    uint64 plan_id = 1;
+    string plan_id = 1;
     repeated Gem gems = 2;
 }
 
@@ -135,6 +134,15 @@ message FindTickResponse {
     Payment payment = 3;
 }
 
+message CancelTickRequest {
+    string tick_id = 1;
+}
+
+message CancelTickResponse {
+    Plan plan = 1;
+    Tick tick = 2;
+}
+
 message ListBalancesRequest {}
 
 message Balance {
@@ -147,7 +155,7 @@ message ListBalancesResponse {
 }
 
 message Point {
-    google.protobuf.Timestamp date = 1;
+    string date = 1;
     int64 ts = 2;
     string cost = 3;
     string filled = 4;
@@ -155,7 +163,7 @@ message Point {
 }
 
 message ListStatsRequest {
-    uint64 plan_id = 1;
+    string plan_id = 1;
 }
 
 message ListStatsResponse {
@@ -174,46 +182,8 @@ message GetInfoResponse {
     repeated Asset fill_assets = 7;
 }
 
-message Trade {
-    uint64 id = 1;
-    uint64 plan_id = 2;
-    google.protobuf.Timestamp date = 3;
-    int64 ts = 4;
-    string asset_id = 5;
-    string paid = 6;
-    string filled = 7;
-}
-
-message CreateTradeRequest {
-    uint64 plan_id = 1;
-    int64 ts = 2;
-    string asset_id = 3;
-    string paid = 4;
-    string filled = 5;
-}
-
-message CreateTradeResponse {
-    Trade trade = 1;
-}
-
-message ListTradesRequest {
-    uint64 plan_id = 1;
-}
-
-message ListTradesResponse {
-    repeated Trade trades = 1;
-}
-
-message DeleteTradeRequest {
-    uint64 id = 1;
-}
-
-message DeleteTradeResponse {
-    Trade trade = 1;
-}
-
 message RefreshStatRequest {
-    uint64 plan_id = 1;
+    string plan_id = 1;
 }
 
 message RefreshStatResponse {}
@@ -225,10 +195,8 @@ service HfoxService {
     rpc ListPlans(ListPlansRequest) returns (ListPlansResponse);
     rpc CreateTick(CreateTickRequest) returns (CreateTickResponse);
     rpc FindTick(FindTickRequest) returns (FindTickResponse);
+    rpc CancelTick(CancelTickRequest) returns (CancelTickResponse);
     rpc ListBalances(ListBalancesRequest) returns (ListBalancesResponse);
     rpc ListStats(ListStatsRequest) returns (ListStatsResponse);
-    rpc CreateTrade(CreateTradeRequest) returns (CreateTradeResponse);
-    rpc ListTrades(ListTradesRequest) returns (ListTradesResponse);
-    rpc DeleteTrade(DeleteTradeRequest) returns (DeleteTradeResponse);
     rpc RefreshStat(RefreshStatRequest) returns (RefreshStatResponse);
 }
