@@ -115,7 +115,7 @@ message ListPlansResponse {
 
 message CreateTickRequest {
     string plan_id = 1;
-    repeated Gem gems = 2;
+    repeated Gem.Base gems = 2;
 }
 
 message CreateTickResponse {
