@@ -197,7 +197,15 @@ message CreateMultisigRequest {
 }
 
 message CreateMultisigResponse {
-    string multisig = 1;
+    string request_id = 1;
+    string tx_hash = 2;
+    string asset_id = 3;
+    string asset_hash = 4;
+    string amount = 5;
+    string extra = 6;
+    string raw_tx = 7;
+    repeated string senders = 8;
+    repeated string signers = 9;
 }
 
 service HfoxService {
