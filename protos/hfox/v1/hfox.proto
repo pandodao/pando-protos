@@ -10,16 +10,17 @@ message Asset {
     string logo = 4;
     string chain_id = 5;
     Asset chain = 6;
+    string hash = 7;
+}
+
+message Quota {
+    string asset_id = 1;
+    string amount = 2;
 }
 
 message Gem {
-    message Base {
-        string asset_id = 1;
-        string quota = 2;
-    }
-    
-    Base base = 1;
-    Asset asset = 2;
+    string asset_id = 1;
+    string quota = 2;
     string paid = 3;
     string filled = 4;
 }
@@ -38,12 +39,14 @@ message Plan {
     Status status = 4;
     string ticked_at = 5;
     string next_tick_at = 6;
-    uint32 tick_number = 7;
+    int32 tick_number = 7;
     string name = 8;
     string user_id = 9;
     string period = 10;
     string pay_asset_id = 11;
-    repeated Gem gems = 12;
+    string pay_amount = 12;
+    repeated Gem gems = 13;
+    repeated Quota quotas = 14;
 }
 
 message Tick {
@@ -58,7 +61,7 @@ message Tick {
         PENDING = 1;
         EXPIRED = 2;
         CANCELLED = 3;
-        HANDLED = 4;
+        PAID = 4;
         FILLED = 5;
         SETTLED = 6;
     }
@@ -69,9 +72,11 @@ message Tick {
     string expired_at = 4;
     Type type = 5;
     Status status = 6;
-    uint64 plan_id = 7;
-    uint32 number = 8;
-    repeated Gem gems = 9;
+    int64 plan_id = 7;
+    int32 number = 8;
+    string pay_asset_id = 9;
+    string pay_amount = 10;
+    repeated Gem gems = 11;
 }
 
 message Payment {
@@ -87,7 +92,7 @@ message CreatePlanRequest {
     string name = 1;
     string pay_asset_id = 2;
     string period = 3;
-    repeated Gem.Base gems = 4;
+    repeated Quota quotas = 4;
 }
 
 message CreatePlanResponse {
@@ -97,10 +102,9 @@ message CreatePlanResponse {
 message UpdatePlanRequest {
     string id = 1;
     string name = 2;
-    string pay_asset_id = 3;
-    string period = 4;
-    repeated Gem.Base gems = 5;
-    Plan.Status status = 6;
+    string period = 3;
+    repeated Quota quotas = 4;
+    Plan.Status status = 5;
 }
 
 message UpdatePlanResponse {
@@ -115,7 +119,7 @@ message ListPlansResponse {
 
 message CreateTickRequest {
     string plan_id = 1;
-    repeated Gem.Base gems = 2;
+    repeated Quota quotas = 2;
 }
 
 message CreateTickResponse {
@@ -157,8 +161,8 @@ message ListBalancesResponse {
 message Point {
     string date = 1;
     int64 ts = 2;
-    string cost = 3;
-    string filled = 4;
+    string paid_value = 3;
+    string filled_value = 4;
     string price = 5;
 }
 
@@ -188,6 +192,14 @@ message RefreshStatRequest {
 
 message RefreshStatResponse {}
 
+message CreateMultisigRequest {
+    Payment payment = 1;
+}
+
+message CreateMultisigResponse {
+    string multisig = 1;
+}
+
 service HfoxService {
     rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
     rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse);
@@ -199,4 +211,5 @@ service HfoxService {
     rpc ListBalances(ListBalancesRequest) returns (ListBalancesResponse);
     rpc ListStats(ListStatsRequest) returns (ListStatsResponse);
     rpc RefreshStat(RefreshStatRequest) returns (RefreshStatResponse);
+    rpc CreateMultisig(CreateMultisigRequest) returns (CreateMultisigResponse);
 }
