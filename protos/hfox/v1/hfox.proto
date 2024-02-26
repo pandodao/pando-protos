@@ -217,6 +217,7 @@ message ListTicksRequest {
 
 message ListTicksResponse {
     repeated Tick ticks = 1;
+    string next_offset = 2;
 }
 
 service HfoxService {
