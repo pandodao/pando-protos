@@ -11,6 +11,7 @@ message Asset {
     string chain_id = 5;
     Asset chain = 6;
     string hash = 7;
+    string price_usd = 8;
 }
 
 message Quota {
@@ -208,6 +209,16 @@ message CreateMultisigResponse {
     repeated string signers = 9;
 }
 
+message ListTicksRequest {
+    string plan_id = 1;
+    string offset = 2;
+    int32 limit = 3;
+}
+
+message ListTicksResponse {
+    repeated Tick ticks = 1;
+}
+
 service HfoxService {
     rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
     rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse);
@@ -216,6 +227,7 @@ service HfoxService {
     rpc CreateTick(CreateTickRequest) returns (CreateTickResponse);
     rpc FindTick(FindTickRequest) returns (FindTickResponse);
     rpc CancelTick(CancelTickRequest) returns (CancelTickResponse);
+    rpc ListTicks(ListTicksRequest) returns (ListTicksResponse);
     rpc ListBalances(ListBalancesRequest) returns (ListBalancesResponse);
     rpc ListStats(ListStatsRequest) returns (ListStatsResponse);
     rpc RefreshStat(RefreshStatRequest) returns (RefreshStatResponse);
