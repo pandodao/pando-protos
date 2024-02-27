@@ -73,7 +73,7 @@ message Tick {
     string expired_at = 4;
     Type type = 5;
     Status status = 6;
-    int64 plan_id = 7;
+    string plan_id = 7;
     int32 number = 8;
     string pay_asset_id = 9;
     string pay_amount = 10;
@@ -161,7 +161,7 @@ message ListBalancesResponse {
 
 message Point {
     string date = 1;
-    int64 ts = 2;
+    string ts = 2;
     string paid_value = 3;
     string filled_value = 4;
     string price = 5;
