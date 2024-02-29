@@ -229,12 +229,23 @@ message ListTicksResponse {
     string next_offset = 2;
 }
 
-message ListTopPlansRequest {
-    string asset_id = 1;
+message ReadRankingListRequest {
+    string name = 1;
 }
 
-message ListTopPlansResponse {
-    repeated Plan plans = 1;
+message PlanStat {
+    Plan plan = 1;
+    string paid_value = 2;
+    string filled_value = 3;
+    string rate = 4;
+    string extra = 5;
+}
+
+message ReadRankingListResponse {
+    string name = 1;
+    string updated_at = 2;
+    string updated_ts = 3;
+    repeated PlanStat plans = 4;
 }
 
 message CopyPlanRequest {
@@ -267,6 +278,6 @@ service HfoxService {
     rpc ListStats(ListStatsRequest) returns (ListStatsResponse);
     rpc RefreshStat(RefreshStatRequest) returns (RefreshStatResponse);
     rpc CreateMultisig(CreateMultisigRequest) returns (CreateMultisigResponse);
-    rpc ListTopPlans(ListTopPlansRequest) returns (ListTopPlansResponse);
+    rpc ReadRankingList(ReadRankingListRequest) returns (ReadRankingListResponse);
     rpc CopyPlan(CopyPlanRequest) returns (CopyPlanResponse);
 }
