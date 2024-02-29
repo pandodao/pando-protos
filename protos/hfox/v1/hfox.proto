@@ -230,7 +230,7 @@ message ListTicksResponse {
 }
 
 message ReadRankingListRequest {
-    string name = 1;
+    string id = 1;
 }
 
 message PlanStat {
@@ -242,10 +242,11 @@ message PlanStat {
 }
 
 message ReadRankingListResponse {
-    string name = 1;
-    string updated_at = 2;
-    string updated_ts = 3;
-    repeated PlanStat plans = 4;
+    string id = 1;
+    string name = 2;
+    string updated_at = 3;
+    string updated_ts = 4;
+    repeated PlanStat plans = 5;
 }
 
 message CopyPlanRequest {
