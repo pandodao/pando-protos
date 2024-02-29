@@ -34,6 +34,12 @@ message Plan {
         DELETED = 3;
     }
 
+    enum Visibility {
+        VISIBILITY_NOT_SET = 0;
+        PRIVATE = 1;
+        PUBLIC = 2;
+    }
+
     string id = 1;
     string created_at = 2;
     string updated_at = 3;
@@ -48,6 +54,7 @@ message Plan {
     string pay_amount = 12;
     repeated Gem gems = 13;
     repeated Quota quotas = 14;
+    Visibility visibility = 15;
 }
 
 message Tick {
@@ -94,6 +101,7 @@ message CreatePlanRequest {
     string pay_asset_id = 2;
     string period = 3;
     repeated Quota quotas = 4;
+    Plan.Visibility visibility = 5;
 }
 
 message CreatePlanResponse {
@@ -106,6 +114,7 @@ message UpdatePlanRequest {
     string period = 3;
     repeated Quota quotas = 4;
     Plan.Status status = 5;
+    Plan.Visibility visibility = 6;
 }
 
 message UpdatePlanResponse {
@@ -220,6 +229,24 @@ message ListTicksResponse {
     string next_offset = 2;
 }
 
+message ListTopPlansRequest {
+    string asset_id = 1;
+    int32 offset = 2;
+    int32 limit = 3;
+}
+
+message ListTopPlansResponse {
+    repeated Plan plans = 1;
+}
+
+message CopyPlanRequest {
+    string plan_id = 1;
+}
+
+message CopyPlanResponse {
+    Plan plan = 1;
+}
+
 service HfoxService {
     rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
     rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse);
@@ -233,4 +260,6 @@ service HfoxService {
     rpc ListStats(ListStatsRequest) returns (ListStatsResponse);
     rpc RefreshStat(RefreshStatRequest) returns (RefreshStatResponse);
     rpc CreateMultisig(CreateMultisigRequest) returns (CreateMultisigResponse);
+    rpc ListTopPlans(ListTopPlansRequest) returns (ListTopPlansResponse);
+    rpc CopyPlan(CopyPlanRequest) returns (CopyPlanResponse);
 }
