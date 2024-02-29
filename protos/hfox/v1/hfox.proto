@@ -247,10 +247,19 @@ message CopyPlanResponse {
     Plan plan = 1;
 }
 
+message FindPlanRequest {
+    string plan_id = 1;
+}
+
+message FindPlanResponse {
+    Plan plan = 1;
+}
+
 service HfoxService {
     rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
     rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse);
     rpc UpdatePlan(UpdatePlanRequest) returns (UpdatePlanResponse);
+    rpc FindPlan(FindPlanRequest) returns (FindPlanResponse);
     rpc ListPlans(ListPlansRequest) returns (ListPlansResponse);
     rpc CreateTick(CreateTickRequest) returns (CreateTickResponse);
     rpc FindTick(FindTickRequest) returns (FindTickResponse);
