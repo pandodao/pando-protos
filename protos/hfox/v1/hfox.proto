@@ -26,6 +26,13 @@ message Gem {
     string filled = 4;
 }
 
+message User {
+    string id = 1;
+    string number = 2;
+    string name = 3;
+    string avatar = 4;
+}
+
 message Plan {
     enum Status {
         STATUS_NOT_SET = 0;
@@ -38,6 +45,7 @@ message Plan {
         VISIBILITY_NOT_SET = 0;
         PRIVATE = 1;
         PUBLIC = 2;
+        ANONYMOUS = 3;
     }
 
     string id = 1;
@@ -55,6 +63,7 @@ message Plan {
     repeated Gem gems = 13;
     repeated Quota quotas = 14;
     Visibility visibility = 15;
+    User user = 16;
 }
 
 message Tick {
