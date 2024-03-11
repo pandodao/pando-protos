@@ -236,6 +236,7 @@ message ListTicksRequest {
 message ListTicksResponse {
     repeated Tick ticks = 1;
     string next_offset = 2;
+    bool has_next = 3;
 }
 
 message ReadRankingListRequest {
