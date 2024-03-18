@@ -3,6 +3,11 @@ syntax = "proto3";
 package hfox.v1;
 option go_package = "github.com/fox-one/pando-protos/hfox/v1;hfox";
 
+message Range {
+    string min_amount = 1;
+    string max_amount = 2;
+}
+
 message Asset {
     string id = 1;
     string symbol = 2;
@@ -12,6 +17,7 @@ message Asset {
     Asset chain = 6;
     string hash = 7;
     string price_usd = 8;
+    Range range = 9;
 }
 
 message Quota {
@@ -198,11 +204,9 @@ message GetInfoRequest {}
 message GetInfoResponse {
     string client_id = 1;
     repeated string pay_asset_ids = 2;
-    string min_amount = 3;
-    string max_amount = 4;
-    repeated string fill_asset_ids = 5;
-    repeated Asset pay_assets = 6;
-    repeated Asset fill_assets = 7;
+    repeated string fill_asset_ids = 3;
+    repeated Asset pay_assets = 4;
+    repeated Asset fill_assets = 5;
 }
 
 message RefreshStatRequest {
