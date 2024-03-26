@@ -1,0 +1,300 @@
+syntax = "proto3";
+
+package hfox.v1;
+option go_package = "github.com/fox-one/pando-protos/hfox/v1;hfox";
+
+message Range {
+    string min_amount = 1;
+    string max_amount = 2;
+}
+
+message Asset {
+    string id = 1;
+    string symbol = 2;
+    string name = 3;
+    string logo = 4;
+    string chain_id = 5;
+    Asset chain = 6;
+    string hash = 7;
+    string price_usd = 8;
+    Range range = 9;
+}
+
+message Quota {
+    string asset_id = 1;
+    string amount = 2;
+}
+
+message Gem {
+    string asset_id = 1;
+    string quota = 2;
+    string paid = 3;
+    string filled = 4;
+}
+
+message User {
+    string id = 1;
+    string number = 2;
+    string name = 3;
+    string avatar = 4;
+}
+
+message Plan {
+    enum Status {
+        STATUS_NOT_SET = 0;
+        RUNNING = 1;
+        STOPPED = 2;
+        DELETED = 3;
+    }
+
+    enum Visibility {
+        VISIBILITY_NOT_SET = 0;
+        PRIVATE = 1;
+        PUBLIC = 2;
+        ANONYMOUS = 3;
+    }
+
+    string id = 1;
+    string created_at = 2;
+    string updated_at = 3;
+    Status status = 4;
+    string ticked_at = 5;
+    string next_tick_at = 6;
+    int32 tick_number = 7;
+    string name = 8;
+    string user_id = 9;
+    string period = 10;
+    string pay_asset_id = 11;
+    string pay_amount = 12;
+    repeated Gem gems = 13;
+    repeated Quota quotas = 14;
+    Visibility visibility = 15;
+    User user = 16;
+}
+
+message Tick {
+    enum Type {
+        TYPE_NOT_SET = 0;
+        SCHEDULE = 1;
+        MANUAL = 2;
+    }
+
+    enum Status {
+        STATUS_NOT_SET = 0;
+        PENDING = 1;
+        EXPIRED = 2;
+        CANCELLED = 3;
+        PAID = 4;
+        FILLED = 5;
+        SETTLED = 6;
+    }
+
+    string id = 1; // trace id
+    string created_at = 2;
+    string updated_at = 3;
+    string expired_at = 4;
+    Type type = 5;
+    Status status = 6;
+    string plan_id = 7;
+    int32 number = 8;
+    string pay_asset_id = 9;
+    string pay_amount = 10;
+    repeated Gem gems = 11;
+}
+
+message Payment {
+    string trace_id = 1;
+    repeated string opponents = 2;
+    uint32 threshold = 3;
+    string asset_id = 4;
+    string amount = 5;
+    string memo = 6;
+}
+
+message CreatePlanRequest {
+    string name = 1;
+    string pay_asset_id = 2;
+    string period = 3;
+    repeated Quota quotas = 4;
+    Plan.Visibility visibility = 5;
+}
+
+message CreatePlanResponse {
+    Plan plan = 1;
+}
+
+message UpdatePlanRequest {
+    string id = 1;
+    optional string name = 2;
+    optional string period = 3;
+    repeated Quota quotas = 4;
+    optional Plan.Status status = 5;
+    optional Plan.Visibility visibility = 6;
+}
+
+message UpdatePlanResponse {
+    Plan plan = 1;
+}
+
+message ListPlansRequest {}
+
+message ListPlansResponse {
+    repeated Plan plans = 1;
+}
+
+message CreateTickRequest {
+    string plan_id = 1;
+    repeated Quota quotas = 2;
+}
+
+message CreateTickResponse {
+    Plan plan = 1;
+    Tick tick = 2;
+    Payment payment = 3;
+}
+
+message FindTickRequest {
+    string tick_id = 1;
+}
+
+message FindTickResponse {
+    Plan plan = 1;
+    Tick tick = 2;
+    Payment payment = 3;
+}
+
+message CancelTickRequest {
+    string tick_id = 1;
+}
+
+message CancelTickResponse {
+    Plan plan = 1;
+    Tick tick = 2;
+}
+
+message ListBalancesRequest {}
+
+message Balance {
+    string asset_id = 1;
+    string amount = 2;
+}
+
+message ListBalancesResponse {
+    repeated Balance balances = 1;
+}
+
+message Point {
+    string date = 1;
+    string ts = 2;
+    string paid_value = 3;
+    string filled_value = 4;
+    string price = 5;
+}
+
+message ListStatsRequest {
+    string plan_id = 1;
+}
+
+message ListStatsResponse {
+    repeated Point points = 1;
+}
+
+message GetInfoRequest {}
+
+message GetInfoResponse {
+    string client_id = 1;
+    repeated string pay_asset_ids = 2;
+    repeated string fill_asset_ids = 3;
+    repeated Asset pay_assets = 4;
+    repeated Asset fill_assets = 5;
+}
+
+message RefreshStatRequest {
+    string plan_id = 1;
+}
+
+message RefreshStatResponse {}
+
+message CreateMultisigRequest {
+    Payment payment = 1;
+}
+
+message CreateMultisigResponse {
+    string request_id = 1;
+    string tx_hash = 2;
+    string asset_id = 3;
+    string asset_hash = 4;
+    string amount = 5;
+    string extra = 6;
+    string raw_tx = 7;
+    repeated string senders = 8;
+    repeated string signers = 9;
+}
+
+message ListTicksRequest {
+    string plan_id = 1;
+    string offset = 2;
+    int32 limit = 3;
+}
+
+message ListTicksResponse {
+    repeated Tick ticks = 1;
+    string next_offset = 2;
+    bool has_next = 3;
+}
+
+message ReadRankingListRequest {
+    string id = 1;
+    int32 page = 2;
+    int32 count = 3;
+}
+
+message PlanStat {
+    Plan plan = 1;
+    string paid_value = 2;
+    string filled_value = 3;
+    string rate = 4;
+    string extra = 5;
+}
+
+message ReadRankingListResponse {
+    string id = 1;
+    string name = 2;
+    string updated_at = 3;
+    string updated_ts = 4;
+    repeated PlanStat plans = 5;
+}
+
+message CopyPlanRequest {
+    string plan_id = 1;
+}
+
+message CopyPlanResponse {
+    Plan plan = 1;
+}
+
+message FindPlanRequest {
+    string plan_id = 1;
+}
+
+message FindPlanResponse {
+    Plan plan = 1;
+}
+
+service HfoxService {
+    rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
+    rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse);
+    rpc UpdatePlan(UpdatePlanRequest) returns (UpdatePlanResponse);
+    rpc FindPlan(FindPlanRequest) returns (FindPlanResponse);
+    rpc ListPlans(ListPlansRequest) returns (ListPlansResponse);
+    rpc CreateTick(CreateTickRequest) returns (CreateTickResponse);
+    rpc FindTick(FindTickRequest) returns (FindTickResponse);
+    rpc CancelTick(CancelTickRequest) returns (CancelTickResponse);
+    rpc ListTicks(ListTicksRequest) returns (ListTicksResponse);
+    rpc ListBalances(ListBalancesRequest) returns (ListBalancesResponse);
+    rpc ListStats(ListStatsRequest) returns (ListStatsResponse);
+    rpc RefreshStat(RefreshStatRequest) returns (RefreshStatResponse);
+    rpc CreateMultisig(CreateMultisigRequest) returns (CreateMultisigResponse);
+    rpc ReadRankingList(ReadRankingListRequest) returns (ReadRankingListResponse);
+    rpc CopyPlan(CopyPlanRequest) returns (CopyPlanResponse);
+}
