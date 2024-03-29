@@ -165,6 +165,7 @@ message UniswapReq {
     message ReadPair {
         string base_asset_id = 1;
         string quote_asset_id = 2;
+        string id = 3;
     }
 
     message ListPairs {
