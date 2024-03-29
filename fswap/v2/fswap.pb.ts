@@ -169,6 +169,7 @@ export declare namespace UniswapReq {
   export interface ReadPair {
     baseAssetId: string;
     quoteAssetId: string;
+    id: string;
   }
 
   export interface ListPairs {
@@ -2665,6 +2666,7 @@ export const UniswapReq = {
       return {
         baseAssetId: "",
         quoteAssetId: "",
+        id: "",
         ...msg,
       };
     },
@@ -2681,6 +2683,9 @@ export const UniswapReq = {
       }
       if (msg.quoteAssetId) {
         writer.writeString(2, msg.quoteAssetId);
+      }
+      if (msg.id) {
+        writer.writeString(3, msg.id);
       }
       return writer;
     },
@@ -2701,6 +2706,10 @@ export const UniswapReq = {
           }
           case 2: {
             msg.quoteAssetId = reader.readString();
+            break;
+          }
+          case 3: {
+            msg.id = reader.readString();
             break;
           }
           default: {
@@ -5768,6 +5777,7 @@ export const UniswapReqJSON = {
       return {
         baseAssetId: "",
         quoteAssetId: "",
+        id: "",
         ...msg,
       };
     },
@@ -5784,6 +5794,9 @@ export const UniswapReqJSON = {
       }
       if (msg.quoteAssetId) {
         json["quoteAssetId"] = msg.quoteAssetId;
+      }
+      if (msg.id) {
+        json["id"] = msg.id;
       }
       return json;
     },
@@ -5802,6 +5815,10 @@ export const UniswapReqJSON = {
       const _quoteAssetId_ = json["quoteAssetId"] ?? json["quote_asset_id"];
       if (_quoteAssetId_) {
         msg.quoteAssetId = _quoteAssetId_;
+      }
+      const _id_ = json["id"];
+      if (_id_) {
+        msg.id = _id_;
       }
       return msg;
     },
