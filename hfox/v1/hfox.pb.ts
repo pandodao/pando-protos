@@ -135,6 +135,7 @@ export interface UpdatePlanRequest {
   quotas: Quota[];
   status?: Plan.Status | null | undefined;
   visibility?: Plan.Visibility | null | undefined;
+  payAssetId?: string | null | undefined;
 }
 
 export interface UpdatePlanResponse {
@@ -2167,6 +2168,7 @@ export const UpdatePlanRequest = {
       quotas: [],
       status: undefined,
       visibility: undefined,
+      payAssetId: undefined,
       ...msg,
     };
   },
@@ -2195,6 +2197,9 @@ export const UpdatePlanRequest = {
     }
     if (msg.visibility != undefined) {
       writer.writeEnum(6, Plan.Visibility._toInt(msg.visibility));
+    }
+    if (msg.payAssetId != undefined) {
+      writer.writeString(7, msg.payAssetId);
     }
     return writer;
   },
@@ -2233,6 +2238,10 @@ export const UpdatePlanRequest = {
         }
         case 6: {
           msg.visibility = Plan.Visibility._fromInt(reader.readEnum());
+          break;
+        }
+        case 7: {
+          msg.payAssetId = reader.readString();
           break;
         }
         default: {
@@ -5708,6 +5717,7 @@ export const UpdatePlanRequestJSON = {
       quotas: [],
       status: undefined,
       visibility: undefined,
+      payAssetId: undefined,
       ...msg,
     };
   },
@@ -5736,6 +5746,9 @@ export const UpdatePlanRequestJSON = {
     }
     if (msg.visibility != undefined) {
       json["visibility"] = msg.visibility;
+    }
+    if (msg.payAssetId != undefined) {
+      json["payAssetId"] = msg.payAssetId;
     }
     return json;
   },
@@ -5774,6 +5787,10 @@ export const UpdatePlanRequestJSON = {
     const _visibility_ = json["visibility"];
     if (_visibility_) {
       msg.visibility = Plan.Visibility._fromInt(_visibility_);
+    }
+    const _payAssetId_ = json["payAssetId"] ?? json["pay_asset_id"];
+    if (_payAssetId_) {
+      msg.payAssetId = _payAssetId_;
     }
     return msg;
   },
