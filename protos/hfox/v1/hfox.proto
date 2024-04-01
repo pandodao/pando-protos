@@ -130,6 +130,7 @@ message UpdatePlanRequest {
     repeated Quota quotas = 4;
     optional Plan.Status status = 5;
     optional Plan.Visibility visibility = 6;
+    optional string pay_asset_id = 7;
 }
 
 message UpdatePlanResponse {
