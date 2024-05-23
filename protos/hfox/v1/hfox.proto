@@ -137,7 +137,9 @@ message UpdatePlanResponse {
     Plan plan = 1;
 }
 
-message ListPlansRequest {}
+message ListPlansRequest {
+    string user_id = 1;
+}
 
 message ListPlansResponse {
     repeated Plan plans = 1;
