@@ -142,7 +142,9 @@ export interface UpdatePlanResponse {
   plan: Plan;
 }
 
-export interface ListPlansRequest {}
+export interface ListPlansRequest {
+  userId: string;
+}
 
 export interface ListPlansResponse {
   plans: Plan[];
@@ -2326,15 +2328,21 @@ export const ListPlansRequest = {
   /**
    * Serializes ListPlansRequest to protobuf.
    */
-  encode: function (_msg?: PartialDeep<ListPlansRequest>): Uint8Array {
-    return new Uint8Array();
+  encode: function (msg: PartialDeep<ListPlansRequest>): Uint8Array {
+    return ListPlansRequest._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
   },
 
   /**
    * Deserializes ListPlansRequest from protobuf.
    */
-  decode: function (_bytes?: ByteSource): ListPlansRequest {
-    return {};
+  decode: function (bytes: ByteSource): ListPlansRequest {
+    return ListPlansRequest._readMessage(
+      ListPlansRequest.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
   },
 
   /**
@@ -2342,6 +2350,7 @@ export const ListPlansRequest = {
    */
   initialize: function (msg?: Partial<ListPlansRequest>): ListPlansRequest {
     return {
+      userId: "",
       ...msg,
     };
   },
@@ -2350,9 +2359,12 @@ export const ListPlansRequest = {
    * @private
    */
   _writeMessage: function (
-    _msg: PartialDeep<ListPlansRequest>,
+    msg: PartialDeep<ListPlansRequest>,
     writer: protoscript.BinaryWriter,
   ): protoscript.BinaryWriter {
+    if (msg.userId) {
+      writer.writeString(1, msg.userId);
+    }
     return writer;
   },
 
@@ -2360,10 +2372,23 @@ export const ListPlansRequest = {
    * @private
    */
   _readMessage: function (
-    _msg: ListPlansRequest,
-    _reader: protoscript.BinaryReader,
+    msg: ListPlansRequest,
+    reader: protoscript.BinaryReader,
   ): ListPlansRequest {
-    return _msg;
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.userId = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
   },
 };
 
@@ -5859,15 +5884,18 @@ export const ListPlansRequestJSON = {
   /**
    * Serializes ListPlansRequest to JSON.
    */
-  encode: function (_msg?: PartialDeep<ListPlansRequest>): string {
-    return "{}";
+  encode: function (msg: PartialDeep<ListPlansRequest>): string {
+    return JSON.stringify(ListPlansRequestJSON._writeMessage(msg));
   },
 
   /**
    * Deserializes ListPlansRequest from JSON.
    */
-  decode: function (_json?: string): ListPlansRequest {
-    return {};
+  decode: function (json: string): ListPlansRequest {
+    return ListPlansRequestJSON._readMessage(
+      ListPlansRequestJSON.initialize(),
+      JSON.parse(json),
+    );
   },
 
   /**
@@ -5875,6 +5903,7 @@ export const ListPlansRequestJSON = {
    */
   initialize: function (msg?: Partial<ListPlansRequest>): ListPlansRequest {
     return {
+      userId: "",
       ...msg,
     };
   },
@@ -5883,15 +5912,23 @@ export const ListPlansRequestJSON = {
    * @private
    */
   _writeMessage: function (
-    _msg: PartialDeep<ListPlansRequest>,
+    msg: PartialDeep<ListPlansRequest>,
   ): Record<string, unknown> {
-    return {};
+    const json: Record<string, unknown> = {};
+    if (msg.userId) {
+      json["userId"] = msg.userId;
+    }
+    return json;
   },
 
   /**
    * @private
    */
-  _readMessage: function (msg: ListPlansRequest, _json: any): ListPlansRequest {
+  _readMessage: function (msg: ListPlansRequest, json: any): ListPlansRequest {
+    const _userId_ = json["userId"] ?? json["user_id"];
+    if (_userId_) {
+      msg.userId = _userId_;
+    }
     return msg;
   },
 };
