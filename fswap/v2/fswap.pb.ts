@@ -103,6 +103,21 @@ export declare namespace Transaction {
   export type Type = "_" | "Add" | "Remove" | "Swap";
 }
 
+export interface MultisigGroup {
+  members: string[];
+  threshold: number;
+}
+
+export interface Transfer {
+  id: string;
+  createdAt: protoscript.Timestamp;
+  assetId: string;
+  amount: string;
+  memo: string;
+  receiver: MultisigGroup;
+  txHash?: string | null | undefined;
+}
+
 export interface Order {
   id: string;
   createdAt: protoscript.Timestamp;
@@ -121,6 +136,7 @@ export interface Order {
   followId: string;
   funds: string;
   amount: string;
+  transfers: Transfer[];
 }
 
 export declare namespace Order {
@@ -1879,6 +1895,202 @@ export const Transaction = {
   } as const,
 };
 
+export const MultisigGroup = {
+  /**
+   * Serializes MultisigGroup to protobuf.
+   */
+  encode: function (msg: PartialDeep<MultisigGroup>): Uint8Array {
+    return MultisigGroup._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes MultisigGroup from protobuf.
+   */
+  decode: function (bytes: ByteSource): MultisigGroup {
+    return MultisigGroup._readMessage(
+      MultisigGroup.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
+  },
+
+  /**
+   * Initializes MultisigGroup with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<MultisigGroup>): MultisigGroup {
+    return {
+      members: [],
+      threshold: 0,
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<MultisigGroup>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
+    if (msg.members?.length) {
+      writer.writeRepeatedString(1, msg.members);
+    }
+    if (msg.threshold) {
+      writer.writeUint32(2, msg.threshold);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: MultisigGroup,
+    reader: protoscript.BinaryReader,
+  ): MultisigGroup {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.members.push(reader.readString());
+          break;
+        }
+        case 2: {
+          msg.threshold = reader.readUint32();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
+export const Transfer = {
+  /**
+   * Serializes Transfer to protobuf.
+   */
+  encode: function (msg: PartialDeep<Transfer>): Uint8Array {
+    return Transfer._writeMessage(
+      msg,
+      new protoscript.BinaryWriter(),
+    ).getResultBuffer();
+  },
+
+  /**
+   * Deserializes Transfer from protobuf.
+   */
+  decode: function (bytes: ByteSource): Transfer {
+    return Transfer._readMessage(
+      Transfer.initialize(),
+      new protoscript.BinaryReader(bytes),
+    );
+  },
+
+  /**
+   * Initializes Transfer with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<Transfer>): Transfer {
+    return {
+      id: "",
+      createdAt: protoscript.Timestamp.initialize(),
+      assetId: "",
+      amount: "",
+      memo: "",
+      receiver: MultisigGroup.initialize(),
+      txHash: undefined,
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<Transfer>,
+    writer: protoscript.BinaryWriter,
+  ): protoscript.BinaryWriter {
+    if (msg.id) {
+      writer.writeString(1, msg.id);
+    }
+    if (msg.createdAt) {
+      writer.writeMessage(
+        2,
+        msg.createdAt,
+        protoscript.Timestamp._writeMessage,
+      );
+    }
+    if (msg.assetId) {
+      writer.writeString(3, msg.assetId);
+    }
+    if (msg.amount) {
+      writer.writeString(4, msg.amount);
+    }
+    if (msg.memo) {
+      writer.writeString(5, msg.memo);
+    }
+    if (msg.receiver) {
+      writer.writeMessage(6, msg.receiver, MultisigGroup._writeMessage);
+    }
+    if (msg.txHash != undefined) {
+      writer.writeString(7, msg.txHash);
+    }
+    return writer;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (
+    msg: Transfer,
+    reader: protoscript.BinaryReader,
+  ): Transfer {
+    while (reader.nextField()) {
+      const field = reader.getFieldNumber();
+      switch (field) {
+        case 1: {
+          msg.id = reader.readString();
+          break;
+        }
+        case 2: {
+          reader.readMessage(msg.createdAt, protoscript.Timestamp._readMessage);
+          break;
+        }
+        case 3: {
+          msg.assetId = reader.readString();
+          break;
+        }
+        case 4: {
+          msg.amount = reader.readString();
+          break;
+        }
+        case 5: {
+          msg.memo = reader.readString();
+          break;
+        }
+        case 6: {
+          reader.readMessage(msg.receiver, MultisigGroup._readMessage);
+          break;
+        }
+        case 7: {
+          msg.txHash = reader.readString();
+          break;
+        }
+        default: {
+          reader.skipField();
+          break;
+        }
+      }
+    }
+    return msg;
+  },
+};
+
 export const Order = {
   /**
    * Serializes Order to protobuf.
@@ -1922,6 +2134,7 @@ export const Order = {
       followId: "",
       funds: "",
       amount: "",
+      transfers: [],
       ...msg,
     };
   },
@@ -1991,6 +2204,13 @@ export const Order = {
     }
     if (msg.amount) {
       writer.writeString(17, msg.amount);
+    }
+    if (msg.transfers?.length) {
+      writer.writeRepeatedMessage(
+        18,
+        msg.transfers as any,
+        Transfer._writeMessage,
+      );
     }
     return writer;
   },
@@ -2070,6 +2290,12 @@ export const Order = {
         }
         case 17: {
           msg.amount = reader.readString();
+          break;
+        }
+        case 18: {
+          const m = Transfer.initialize();
+          reader.readMessage(m, Transfer._readMessage);
+          msg.transfers.push(m);
           break;
         }
         default: {
@@ -5076,6 +5302,171 @@ export const TransactionJSON = {
   } as const,
 };
 
+export const MultisigGroupJSON = {
+  /**
+   * Serializes MultisigGroup to JSON.
+   */
+  encode: function (msg: PartialDeep<MultisigGroup>): string {
+    return JSON.stringify(MultisigGroupJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes MultisigGroup from JSON.
+   */
+  decode: function (json: string): MultisigGroup {
+    return MultisigGroupJSON._readMessage(
+      MultisigGroupJSON.initialize(),
+      JSON.parse(json),
+    );
+  },
+
+  /**
+   * Initializes MultisigGroup with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<MultisigGroup>): MultisigGroup {
+    return {
+      members: [],
+      threshold: 0,
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<MultisigGroup>,
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.members?.length) {
+      json["members"] = msg.members;
+    }
+    if (msg.threshold) {
+      json["threshold"] = msg.threshold;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: MultisigGroup, json: any): MultisigGroup {
+    const _members_ = json["members"];
+    if (_members_) {
+      msg.members = _members_;
+    }
+    const _threshold_ = json["threshold"];
+    if (_threshold_) {
+      msg.threshold = protoscript.parseNumber(_threshold_);
+    }
+    return msg;
+  },
+};
+
+export const TransferJSON = {
+  /**
+   * Serializes Transfer to JSON.
+   */
+  encode: function (msg: PartialDeep<Transfer>): string {
+    return JSON.stringify(TransferJSON._writeMessage(msg));
+  },
+
+  /**
+   * Deserializes Transfer from JSON.
+   */
+  decode: function (json: string): Transfer {
+    return TransferJSON._readMessage(
+      TransferJSON.initialize(),
+      JSON.parse(json),
+    );
+  },
+
+  /**
+   * Initializes Transfer with all fields set to their default value.
+   */
+  initialize: function (msg?: Partial<Transfer>): Transfer {
+    return {
+      id: "",
+      createdAt: protoscript.TimestampJSON.initialize(),
+      assetId: "",
+      amount: "",
+      memo: "",
+      receiver: MultisigGroupJSON.initialize(),
+      txHash: undefined,
+      ...msg,
+    };
+  },
+
+  /**
+   * @private
+   */
+  _writeMessage: function (
+    msg: PartialDeep<Transfer>,
+  ): Record<string, unknown> {
+    const json: Record<string, unknown> = {};
+    if (msg.id) {
+      json["id"] = msg.id;
+    }
+    if (msg.createdAt && msg.createdAt.seconds && msg.createdAt.nanos) {
+      json["createdAt"] = protoscript.serializeTimestamp(msg.createdAt);
+    }
+    if (msg.assetId) {
+      json["assetId"] = msg.assetId;
+    }
+    if (msg.amount) {
+      json["amount"] = msg.amount;
+    }
+    if (msg.memo) {
+      json["memo"] = msg.memo;
+    }
+    if (msg.receiver) {
+      const _receiver_ = MultisigGroupJSON._writeMessage(msg.receiver);
+      if (Object.keys(_receiver_).length > 0) {
+        json["receiver"] = _receiver_;
+      }
+    }
+    if (msg.txHash != undefined) {
+      json["txHash"] = msg.txHash;
+    }
+    return json;
+  },
+
+  /**
+   * @private
+   */
+  _readMessage: function (msg: Transfer, json: any): Transfer {
+    const _id_ = json["id"];
+    if (_id_) {
+      msg.id = _id_;
+    }
+    const _createdAt_ = json["createdAt"] ?? json["created_at"];
+    if (_createdAt_) {
+      msg.createdAt = protoscript.parseTimestamp(_createdAt_);
+    }
+    const _assetId_ = json["assetId"] ?? json["asset_id"];
+    if (_assetId_) {
+      msg.assetId = _assetId_;
+    }
+    const _amount_ = json["amount"];
+    if (_amount_) {
+      msg.amount = _amount_;
+    }
+    const _memo_ = json["memo"];
+    if (_memo_) {
+      msg.memo = _memo_;
+    }
+    const _receiver_ = json["receiver"];
+    if (_receiver_) {
+      MultisigGroupJSON._readMessage(msg.receiver, _receiver_);
+    }
+    const _txHash_ = json["txHash"] ?? json["tx_hash"];
+    if (_txHash_) {
+      msg.txHash = _txHash_;
+    }
+    return msg;
+  },
+};
+
 export const OrderJSON = {
   /**
    * Serializes Order to JSON.
@@ -5113,6 +5504,7 @@ export const OrderJSON = {
       followId: "",
       funds: "",
       amount: "",
+      transfers: [],
       ...msg,
     };
   },
@@ -5174,6 +5566,9 @@ export const OrderJSON = {
     }
     if (msg.amount) {
       json["amount"] = msg.amount;
+    }
+    if (msg.transfers?.length) {
+      json["transfers"] = msg.transfers.map(TransferJSON._writeMessage);
     }
     return json;
   },
@@ -5253,6 +5648,14 @@ export const OrderJSON = {
     const _amount_ = json["amount"];
     if (_amount_) {
       msg.amount = _amount_;
+    }
+    const _transfers_ = json["transfers"];
+    if (_transfers_) {
+      for (const item of _transfers_) {
+        const m = TransferJSON.initialize();
+        TransferJSON._readMessage(m, item);
+        msg.transfers.push(m);
+      }
     }
     return msg;
   },
