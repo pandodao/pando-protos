@@ -115,7 +115,7 @@ export interface Transfer {
   amount: string;
   memo: string;
   receiver: MultisigGroup;
-  txHash?: string | null | undefined;
+  txHash: string;
 }
 
 export interface Order {
@@ -2003,7 +2003,7 @@ export const Transfer = {
       amount: "",
       memo: "",
       receiver: MultisigGroup.initialize(),
-      txHash: undefined,
+      txHash: "",
       ...msg,
     };
   },
@@ -2037,7 +2037,7 @@ export const Transfer = {
     if (msg.receiver) {
       writer.writeMessage(6, msg.receiver, MultisigGroup._writeMessage);
     }
-    if (msg.txHash != undefined) {
+    if (msg.txHash) {
       writer.writeString(7, msg.txHash);
     }
     return writer;
@@ -5392,7 +5392,7 @@ export const TransferJSON = {
       amount: "",
       memo: "",
       receiver: MultisigGroupJSON.initialize(),
-      txHash: undefined,
+      txHash: "",
       ...msg,
     };
   },
@@ -5425,7 +5425,7 @@ export const TransferJSON = {
         json["receiver"] = _receiver_;
       }
     }
-    if (msg.txHash != undefined) {
+    if (msg.txHash) {
       json["txHash"] = msg.txHash;
     }
     return json;
