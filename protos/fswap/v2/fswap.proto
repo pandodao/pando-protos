@@ -111,7 +111,7 @@ message Transfer {
     string amount = 4;
     string memo = 5;
     MultisigGroup receiver = 6;
-    optional string tx_hash = 7;
+    string tx_hash = 7;
 }
 
 message Order {
