@@ -99,6 +99,21 @@ message Transaction {
     string group_id = 19;
 }
 
+message MultisigGroup {
+    repeated string members = 1;
+    uint32 threshold = 2;
+}
+
+message Transfer {
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    string asset_id = 3;
+    string amount = 4;
+    string memo = 5;
+    MultisigGroup receiver = 6;
+    optional string tx_hash = 7;
+}
+
 message Order {
     enum State {
         _ = 0;
@@ -125,6 +140,8 @@ message Order {
 
     string funds = 16;
     string amount = 17;
+
+    repeated Transfer transfers = 18;
 }
 
 message Proposal {
