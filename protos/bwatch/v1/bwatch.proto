@@ -116,6 +116,8 @@ message Transfer {
 message BwatchReq {
     message ListAssetsRequest {}
 
+    message ListEtfsRequest {}
+
     message ReadEtfRequest {
         string etf = 1;
     }
@@ -136,6 +138,10 @@ message BwatchReq {
 message BwatchResp {
     message ListAssetsResponse {
         repeated Asset assets = 1;
+    }
+
+    message ListEtfsResponse {
+        repeated Etf etfs = 1;
     }
 
     message ReadEtfResponse {
@@ -167,6 +173,8 @@ service BwatchService {
     rpc GetInfo(BwatchReq.GetInfoRequest) returns (BwatchResp.GetInfoResponse);
 
     rpc ListAssets(BwatchReq.ListAssetsRequest) returns (BwatchResp.ListAssetsResponse);
+
+    rpc ListEtfs(BwatchReq.ListEtfsRequest) returns (BwatchResp.ListEtfsResponse);
 
     // ReadEtf 读取 etf 详情
     rpc ReadEtf(BwatchReq.ReadEtfRequest) returns (BwatchResp.ReadEtfResponse);
