@@ -133,6 +133,8 @@ export interface BwatchReq {}
 export declare namespace BwatchReq {
   export interface ListAssetsRequest {}
 
+  export interface ListEtfsRequest {}
+
   export interface ReadEtfRequest {
     etf: string;
   }
@@ -155,6 +157,10 @@ export interface BwatchResp {}
 export declare namespace BwatchResp {
   export interface ListAssetsResponse {
     assets: Asset[];
+  }
+
+  export interface ListEtfsResponse {
+    etfs: Etf[];
   }
 
   export interface ReadEtfResponse {
@@ -208,6 +214,18 @@ export async function ListAssets(
     config,
   );
   return BwatchResp.ListAssetsResponse.decode(response);
+}
+
+export async function ListEtfs(
+  listEtfsRequest: BwatchReq.ListEtfsRequest,
+  config?: ClientConfiguration,
+): Promise<BwatchResp.ListEtfsResponse> {
+  const response = await PBrequest(
+    "/bwatch.v1.BwatchService/ListEtfs",
+    BwatchReq.ListEtfsRequest.encode(listEtfsRequest),
+    config,
+  );
+  return BwatchResp.ListEtfsResponse.decode(response);
 }
 
 /**
@@ -280,6 +298,18 @@ export async function ListAssetsJSON(
   return BwatchRespJSON.ListAssetsResponse.decode(response);
 }
 
+export async function ListEtfsJSON(
+  listEtfsRequest: BwatchReq.ListEtfsRequest,
+  config?: ClientConfiguration,
+): Promise<BwatchResp.ListEtfsResponse> {
+  const response = await JSONrequest(
+    "/bwatch.v1.BwatchService/ListEtfs",
+    BwatchReqJSON.ListEtfsRequest.encode(listEtfsRequest),
+    config,
+  );
+  return BwatchRespJSON.ListEtfsResponse.decode(response);
+}
+
 /**
  * ReadEtf 读取 etf 详情
  */
@@ -335,6 +365,10 @@ export interface BwatchService<Context = unknown> {
     listAssetsRequest: BwatchReq.ListAssetsRequest,
     context: Context,
   ) => Promise<BwatchResp.ListAssetsResponse> | BwatchResp.ListAssetsResponse;
+  ListEtfs: (
+    listEtfsRequest: BwatchReq.ListEtfsRequest,
+    context: Context,
+  ) => Promise<BwatchResp.ListEtfsResponse> | BwatchResp.ListEtfsResponse;
   /**
    * ReadEtf 读取 etf 详情
    */
@@ -385,6 +419,18 @@ export function createBwatchService<Context>(service: BwatchService<Context>) {
         output: {
           protobuf: BwatchResp.ListAssetsResponse,
           json: BwatchRespJSON.ListAssetsResponse,
+        },
+      },
+      ListEtfs: {
+        name: "ListEtfs",
+        handler: service.ListEtfs,
+        input: {
+          protobuf: BwatchReq.ListEtfsRequest,
+          json: BwatchReqJSON.ListEtfsRequest,
+        },
+        output: {
+          protobuf: BwatchResp.ListEtfsResponse,
+          json: BwatchRespJSON.ListEtfsResponse,
         },
       },
       ReadEtf: {
@@ -1737,6 +1783,55 @@ export const BwatchReq = {
     },
   },
 
+  ListEtfsRequest: {
+    /**
+     * Serializes BwatchReq.ListEtfsRequest to protobuf.
+     */
+    encode: function (
+      _msg?: PartialDeep<BwatchReq.ListEtfsRequest>,
+    ): Uint8Array {
+      return new Uint8Array();
+    },
+
+    /**
+     * Deserializes BwatchReq.ListEtfsRequest from protobuf.
+     */
+    decode: function (_bytes?: ByteSource): BwatchReq.ListEtfsRequest {
+      return {};
+    },
+
+    /**
+     * Initializes BwatchReq.ListEtfsRequest with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchReq.ListEtfsRequest>,
+    ): BwatchReq.ListEtfsRequest {
+      return {
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      _msg: PartialDeep<BwatchReq.ListEtfsRequest>,
+      writer: protoscript.BinaryWriter,
+    ): protoscript.BinaryWriter {
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      _msg: BwatchReq.ListEtfsRequest,
+      _reader: protoscript.BinaryReader,
+    ): BwatchReq.ListEtfsRequest {
+      return _msg;
+    },
+  },
+
   ReadEtfRequest: {
     /**
      * Serializes BwatchReq.ReadEtfRequest to protobuf.
@@ -2123,6 +2218,80 @@ export const BwatchResp = {
             const m = Asset.initialize();
             reader.readMessage(m, Asset._readMessage);
             msg.assets.push(m);
+            break;
+          }
+          default: {
+            reader.skipField();
+            break;
+          }
+        }
+      }
+      return msg;
+    },
+  },
+
+  ListEtfsResponse: {
+    /**
+     * Serializes BwatchResp.ListEtfsResponse to protobuf.
+     */
+    encode: function (
+      msg: PartialDeep<BwatchResp.ListEtfsResponse>,
+    ): Uint8Array {
+      return BwatchResp.ListEtfsResponse._writeMessage(
+        msg,
+        new protoscript.BinaryWriter(),
+      ).getResultBuffer();
+    },
+
+    /**
+     * Deserializes BwatchResp.ListEtfsResponse from protobuf.
+     */
+    decode: function (bytes: ByteSource): BwatchResp.ListEtfsResponse {
+      return BwatchResp.ListEtfsResponse._readMessage(
+        BwatchResp.ListEtfsResponse.initialize(),
+        new protoscript.BinaryReader(bytes),
+      );
+    },
+
+    /**
+     * Initializes BwatchResp.ListEtfsResponse with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchResp.ListEtfsResponse>,
+    ): BwatchResp.ListEtfsResponse {
+      return {
+        etfs: [],
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: PartialDeep<BwatchResp.ListEtfsResponse>,
+      writer: protoscript.BinaryWriter,
+    ): protoscript.BinaryWriter {
+      if (msg.etfs?.length) {
+        writer.writeRepeatedMessage(1, msg.etfs as any, Etf._writeMessage);
+      }
+      return writer;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: BwatchResp.ListEtfsResponse,
+      reader: protoscript.BinaryReader,
+    ): BwatchResp.ListEtfsResponse {
+      while (reader.nextField()) {
+        const field = reader.getFieldNumber();
+        switch (field) {
+          case 1: {
+            const m = Etf.initialize();
+            reader.readMessage(m, Etf._readMessage);
+            msg.etfs.push(m);
             break;
           }
           default: {
@@ -3678,6 +3847,52 @@ export const BwatchReqJSON = {
     },
   },
 
+  ListEtfsRequest: {
+    /**
+     * Serializes BwatchReq.ListEtfsRequest to JSON.
+     */
+    encode: function (_msg?: PartialDeep<BwatchReq.ListEtfsRequest>): string {
+      return "{}";
+    },
+
+    /**
+     * Deserializes BwatchReq.ListEtfsRequest from JSON.
+     */
+    decode: function (_json?: string): BwatchReq.ListEtfsRequest {
+      return {};
+    },
+
+    /**
+     * Initializes BwatchReq.ListEtfsRequest with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchReq.ListEtfsRequest>,
+    ): BwatchReq.ListEtfsRequest {
+      return {
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      _msg: PartialDeep<BwatchReq.ListEtfsRequest>,
+    ): Record<string, unknown> {
+      return {};
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: BwatchReq.ListEtfsRequest,
+      _json: any,
+    ): BwatchReq.ListEtfsRequest {
+      return msg;
+    },
+  },
+
   ReadEtfRequest: {
     /**
      * Serializes BwatchReq.ReadEtfRequest to JSON.
@@ -4021,6 +4236,68 @@ export const BwatchRespJSON = {
           const m = AssetJSON.initialize();
           AssetJSON._readMessage(m, item);
           msg.assets.push(m);
+        }
+      }
+      return msg;
+    },
+  },
+
+  ListEtfsResponse: {
+    /**
+     * Serializes BwatchResp.ListEtfsResponse to JSON.
+     */
+    encode: function (msg: PartialDeep<BwatchResp.ListEtfsResponse>): string {
+      return JSON.stringify(BwatchRespJSON.ListEtfsResponse._writeMessage(msg));
+    },
+
+    /**
+     * Deserializes BwatchResp.ListEtfsResponse from JSON.
+     */
+    decode: function (json: string): BwatchResp.ListEtfsResponse {
+      return BwatchRespJSON.ListEtfsResponse._readMessage(
+        BwatchRespJSON.ListEtfsResponse.initialize(),
+        JSON.parse(json),
+      );
+    },
+
+    /**
+     * Initializes BwatchResp.ListEtfsResponse with all fields set to their default value.
+     */
+    initialize: function (
+      msg?: Partial<BwatchResp.ListEtfsResponse>,
+    ): BwatchResp.ListEtfsResponse {
+      return {
+        etfs: [],
+        ...msg,
+      };
+    },
+
+    /**
+     * @private
+     */
+    _writeMessage: function (
+      msg: PartialDeep<BwatchResp.ListEtfsResponse>,
+    ): Record<string, unknown> {
+      const json: Record<string, unknown> = {};
+      if (msg.etfs?.length) {
+        json["etfs"] = msg.etfs.map(EtfJSON._writeMessage);
+      }
+      return json;
+    },
+
+    /**
+     * @private
+     */
+    _readMessage: function (
+      msg: BwatchResp.ListEtfsResponse,
+      json: any,
+    ): BwatchResp.ListEtfsResponse {
+      const _etfs_ = json["etfs"];
+      if (_etfs_) {
+        for (const item of _etfs_) {
+          const m = EtfJSON.initialize();
+          EtfJSON._readMessage(m, item);
+          msg.etfs.push(m);
         }
       }
       return msg;
